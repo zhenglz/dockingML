@@ -4,8 +4,8 @@
 # Script for generating contact probability map     #
 # Author: ZHENG Liangzhen                           #
 # Email: LZHENG002@e.ntu.edu.sg                     #
-# Version: V3.2                                    #
-# Date: 15 June 2017                                 #
+# Version: V3.0                                     #
+# Date: 15 Jan 2017                                 #
 #####################################################
 
 import glob
@@ -23,7 +23,18 @@ class ContactMap:
     def __init__(self, hugePDBFile) :
         self.mfPDB = hugePDBFile
 
+    def atomDistance(self, atomCrd1, atomCrd2, sqrt=False):
+
+        if sqrt :
+            return math.sqrt(sum(map(lambda x, y: (x-y)**2, atomCrd1, atomCrd2)))
+        else :
+            return sum(map(lambda x, y: (x-y)**2, atomCrd1, atomCrd2))
+
     def extractReference(self):
+        '''
+        input: None
+        :return: the reference structure of the large pdb file, str
+        '''
         reference = self.mfPDB+"_reference.pdb"
         if not os.path.exists(reference) :
             with open(reference, 'wb') as tofile :
@@ -91,6 +102,17 @@ class ContactMap:
 
         return count
 
+    def getAtomNdxByAtomName(self, singleFramePDB, atomName):
+        '''
+        input a pdb file and return related atom index
+        :param singleFramePDB: input pdb file, str
+        :param resName: residue names, list of str
+        :return: atom index, list of str
+        '''
+        ndx = []
+        with open(singleFramePDB) as lines :
+            ndx = [ s.split()[1] for s in lines if "ATOM" in s and s.split()[2] in atomName ]
+        return ndx
 
     def getResIndex(self, singleFramePDB, chain, resIdList):
         ## get the index of the residues from the pdbfile
@@ -159,9 +181,12 @@ class ContactMap:
                     resndx  = int(s[22:26].strip())
                     chain   = s[21]
                     if len(s) > 76 :
-                        element = s[77]
+                        if s[77] != " " :
+                            element = s[77]
+                        else :
+                            element = s[13]
                     else :
-                        element = 'C'
+                        element = s[13]
 
                     hydrogen = {"H": True}
                     is_hydrogen = hydrogen.get(s[13], False)
@@ -188,7 +213,29 @@ class ContactMap:
 
         return  atominfor
 
+    def findAtomTypePerEle(self, elements, singleFramePDB):
+        '''
+        input a list of elements and a reference pdb file
+        return the related atom names
+        :param elements:
+        :param singleFramePDB:
+        :return:
+        '''
+        atominfor = self.atomInformation(singleFramePDB)
+        atomType = []
+        keys = atominfor.keys()
+        for key in keys :
+            if atominfor[key][-1] in elements and atominfor[key][0] not in atomType :
+                atomType.append(atominfor[key][0])
+        return atomType
+
     def findAtomType(self, information, singleFramePDB):
+        '''
+
+        :param information: a list of subgroup names for protein reisudes
+        :param singleFramePDB: a reference pdb file
+        :return:
+        '''
         atomType = []
 
         if information in ['Alpha-Carbon', 'CA', 'alpha', 'Ca', 'Alpha']:
@@ -198,17 +245,26 @@ class ContactMap:
         elif information in ['back', 'backbone', 'Backbone', 'BackBone']:
             atomType = ['CA', 'N']
 
-        elif information in ['noH', 'non-H', 'non-hydrogen', 'Non-H', 'no-h', 'heavy']:
+        elif information in ['noH', 'non-H', 'non-hydrogen', 'Non-H', 'no-h',
+                             'heavy', 'lig-all_heavy', 'lig-all_noH']:
             with open(singleFramePDB) as lines:
                 for s in lines:
                     if "ATOM" in s and s.split()[2] not in atomType and s[13] != "H" and s[-1] != "H":
                         atomType.append(s.split()[2])
 
-        elif information in ['all', 'all-atom', 'All-Atom', 'ALL']:
+        elif information in ['sidechain', 'side'] :
+            with open(singleFramePDB) as lines:
+                for s in lines:
+                    if "ATOM" in s and s.split()[2] not in atomType and s[13] != "H" :
+                        if s.split()[2] not in ['CA', 'N', 'C', 'O'] :
+                            atomType.append(s.split()[2])
+
+        elif information in ['all', 'all-atom', 'All-Atom', 'ALL', 'lig-all', ]:
             with open(singleFramePDB) as lines:
                 for s in lines:
                     if "ATOM" in s and s.split()[2] not in atomType:
                         atomType.append(s.split()[2])
+                        
         elif len(information):
             atomType = [information]
         else:
@@ -217,24 +273,23 @@ class ContactMap:
 
         return atomType
 
-
     def findAtomNdx(self, pdbfile, resList, chain, atomType, verbose=False):
         '''
         give a pdb file, return the atom ndx needed
         :param pdbfile:
-        :param resList:
-        :param chain:
-        :param atomType:
+        :param resList: a list of index of residues
+        :param chain: chains
+        :param atomType: atom names
         :param verbose:
-        :return:
+        :return: a list of atom ndx, string
         '''
         if verbose :
             print pdbfile, resList, chain, atomType
+
         atomndx = []
-        #append = atomndx.append
         for key in resList.keys() :
             with open(pdbfile) as lines :
-                atomndx = [ s.split()[1]
+                atomndx += [ s.split()[1]
                             for s in lines
                             if len(s.split()) and
                             s[:6].strip() in ["ATOM", "HETATM"] and
@@ -253,9 +308,14 @@ class ContactMap:
                                 pass '''
         return atomndx
 
-    def getPdbCrd(self, singleFramePDB, atomList):
-        # input a pdb file return the atom crds in each residue
-        # in a dictionary format
+    def getPdbCrd(self, singleFramePDB, atomList, perAtom=False):
+        '''
+        input a pdb file return the atom crds in each residue
+        in a dictionary format
+        :param singleFramePDB:
+        :param atomList:
+        :return:
+        '''
         resCrds = []
         resRecord = []
 
@@ -265,13 +325,18 @@ class ContactMap:
                 if s[:5].strip() in ['ATOM', 'HETATM'] and "TER" not in s:
 
                     if s.split()[1] in atomList :
-                        if not len(resRecord):
-                            resRecord.append(s[21] + s[22:26].strip())
-
-                        if (s[21] + s[22:26].strip()) not in resRecord :
-                            resRecord.append(s[21] + s[22:26].strip())
-                            resCrds.append(crdPerRes)
-                            crdPerRes = []
+                        if perAtom :
+                            if s[21] + s.split()[1] not in resRecord :
+                                resRecord.append(s[21] + s.split()[1])
+                                if len(crdPerRes):
+                                    resCrds.append(crdPerRes)
+                                crdPerRes = []
+                        else :
+                            if (s[21] + s[22:26].strip()) not in resRecord :
+                                resRecord.append(s[21] + s[22:26].strip())
+                                if len(crdPerRes) :
+                                    resCrds.append(crdPerRes)
+                                crdPerRes = []
                         # resIndex = s.split()[4 + len(s[21].strip())] + '_' + s[21]
                         crd_list = []
                         crd_list.append(float(s[30:38].strip()))
@@ -286,6 +351,12 @@ class ContactMap:
         return resCrds
 
     def getPdbCrdByNdx(self, singleFramePDB, atomNdx):
+        """
+        input a pdb file and the atom index, return the crd of the atoms
+        :param singleFramePDB: file, string
+        :param atomNdx: atom index, list of strings
+        :return: atom coordinates, list
+        """
         atomCrd = []
         with open(singleFramePDB) as lines :
             lines = [s for s in lines if len(s) > 4 and s[:4] in ["ATOM","HETA"] and s.split()[1] in atomNdx]
@@ -295,10 +366,11 @@ class ContactMap:
     def residueContacts(self, resCrd1, resCrd2,
                         distcutoff, countcutoff=1.0,
                         switch=False, verbose=False,
-                        rank=0
+                        rank=0, NbyN=False,
                         ):
         '''
-
+        read the coordinates of two residue,
+        return whether contacts
         :param resCrd1:
         :param resCrd2:
         :param distcutoff: the squared the distance cutoff
@@ -308,7 +380,6 @@ class ContactMap:
         :return: contact if 1, no contact if zero
         '''
         newlist = []
-        dc = 2 * math.sqrt(distcutoff)
 
         for item1 in resCrd1:
             newlist += [[item1, item2] for item2 in resCrd2]
@@ -317,18 +388,29 @@ class ContactMap:
         if verbose :
             print rank, " DISTANCES ", distances
 
-        if switch:
-            counts = self.switchFuction(math.sqrt(distances[0]), dc)
-            if verbose :
-                print rank, " COUNTS: ", counts
-            return counts
-        else :
+        if NbyN :
+            '''
+            for community analysis
+            fij = N / sqrt(N_i * N_j)
+            '''
             counts = len(filter(lambda x: x <= distcutoff, distances))
+            return float(counts) / np.sqrt(float(len(distances)))
+        else :
+            if switch:
+                dc = 2 * math.sqrt(distcutoff)
+                counts = self.switchFuction(math.sqrt(distances[0]), dc)
+                if verbose :
+                    print rank, " COUNTS: ", counts
+                return counts
+            else :
+                counts = len(filter(lambda x: x <= distcutoff, distances))
 
-            if counts >= countcutoff :
-                return 1.0
-            else:
-                return 0.0
+                if verbose :
+                    print "Counts here ", counts
+                if counts >= countcutoff :
+                    return 1.0
+                else:
+                    return 0.0
 
     def subgroupCmap(self, pdbin, cutoff, atomNdx=[], verbose=False, logifle='log.log'):
         if not os.path.exists(pdbin):
@@ -386,7 +468,24 @@ class ContactMap:
         tofile.close()
 
         return 1
-    def cmap_ca(self, pdbFileList, cutoff, switch=False, atomNdx=[], rank=0, verbose=False, nresidues=0):
+    def cmap_ca(self, pdbFileList, cutoff, switch=False, atomNdx=[],
+                rank=0, verbose=False, nresidues=0,
+                perAtom=[False, False], ccutoff = 0.0, NbyN=False,
+                ):
+        '''
+
+        :param pdbFileList:
+        :param cutoff: distance cutoff in angstrom
+        :param switch: appy a switch function
+        :param atomNdx: atom index
+        :param rank: number of cpu threads
+        :param verbose:
+        :param nresidues:
+        :param perAtom:
+        :param ccutoff: count cutoff
+        :param NbyN: an NbyN contact scheme
+        :return: a list of contacts, dictionary
+        '''
 
         if len(pdbFileList) == 0:
             # raise Exception("Boo! \nNot find PDB files for calculation! ")
@@ -398,15 +497,18 @@ class ContactMap:
 
         distance_cutoff = cutoff ** 2
 
-        if len(atomNdx[0]) * len(atomNdx[-1]) > nresidues :
-            countCutoff = 2.0
-        else:
-            countCutoff = 1.0
-
+        if ccutoff > 0 :
+            countCutoff = ccutoff
+        else :
+            if len(atomNdx[0]) * len(atomNdx[-1]) > nresidues :
+                countCutoff = 2.0
+            else:
+                countCutoff = 1.0
 
         ### start calculate all the pdbfile residue c alpha contact
-        contCountMap = [0] * nresidues
+        #contCountMap = [0] * nresidues
         progress = 0
+        contCountMap = [0.0] * nresidues
         for pdbfile in pdbFileList:
             progress += 1
             print "Rank %d Progress: The %dth File %s out of total %d files" % \
@@ -414,43 +516,55 @@ class ContactMap:
             if verbose :
                 print rank, atomndx_1, atomndx_2
 
-            resCrdDict1 = self.getPdbCrd(pdbfile, atomndx_1)
+            resCrdDict1 = self.getPdbCrd(pdbfile, atomndx_1, perAtom=perAtom[0])
+            resCrdDict2 = self.getPdbCrd(pdbfile, atomndx_2, perAtom=perAtom[1])
 
-            resCrdDict2 = self.getPdbCrd(pdbfile, atomndx_2)
-
-            #mmax = len(resCrdDict1)
             nmax = len(resCrdDict2)
 
             for m in range(len(resCrdDict1)):
                 for n in range(len(resCrdDict2)):
                     if verbose :
                         print rank, " RESIDUES ", m, n, resCrdDict1[m], resCrdDict2[n]
-
                     contCountMap[n + m * nmax] += self.residueContacts(resCrdDict1[m],
                                                                        resCrdDict2[n],
                                                                        distance_cutoff,
                                                                        countCutoff,
                                                                        switch,
                                                                        verbose,
-                                                                       rank
+                                                                       rank,
+                                                                       NbyN=NbyN
                                                                        )
 
             print "PDB file " + str(pdbfile) + " Finished!"
             del resCrdDict1, resCrdDict2
-        return contCountMap, len(pdbFileList)
+        if verbose :
+            print contCountMap
 
-    def getResidueName(self, singleFramePDB, resList, chains):
-        # input a pdb file return the atom crds in each residue
-        # in a dictionary format
+        return contCountMap
+
+    def getResidueName(self, singleFramePDB, resList, chains, perAtom=False, verbose=False):
+        '''
+        input a pdb file, return the residue names, NDX_Chain
+        in a list format
+        :param singleFramePDB:
+        :param resList:
+        :param chains:
+        :return:
+        '''
         used = []
         for key in resList.keys() :
             with open(singleFramePDB) as lines:
                 lines = list(filter(lambda x: ("ATOM" in x or "HETATM" in x) and x[21] in chains, lines))
-                resNames = [ x[22:26].strip() + '_' + x[21] for x in lines if int(x[22:26].strip()) in resList[key] ]
+                if perAtom :
+                    resNames = [x.split()[1] + '_' + x[21] for x in lines if int(x[22:26].strip()) in resList[key]]
+                else :
+                    resNames = [x[22:26].strip() + '_' + x[21] for x in lines if int(x[22:26].strip()) in resList[key]]
 
                 for item in resNames :
                     if item not in used :
                         used.append(item)
+        if verbose :
+            print used, len(used)
         return used
 
     def writeFiles(self, cmap, nFiles,cmapName, resNames1, resNames2, rank):
@@ -530,6 +644,7 @@ if __name__ == "__main__" :
     -lc A 251 251 -cutoff 3.5 -atomtype CA all -np 4
 
     '''
+    # parse arguments
     parser = argparse.ArgumentParser(description=d, formatter_class=RawTextHelpFormatter)
     parser.add_argument('-inp', type=str, help="The input huge PDB file with multiple frames")
     parser.add_argument('-out',type=str, default='ContactMap.dat',
@@ -548,10 +663,11 @@ if __name__ == "__main__" :
     parser.add_argument('-atomtype',type=str,nargs='+', default=[],
                         help="Atom types for Receptor and Ligand in Contact Map Calculation. \n"
                              "Only selected atoms will be considered.\n"
-                             "Options: CA, Backbone, MainChain, All, non-H(All-H). \n"
+                             "Options: CA, Backbone, MainChain, All, non-H(All-H), lig-all. \n"
                              "CA, alpha-carbon atoms. Backbone, backbone atoms in peptides. \n"
                              "MainChain, including CA and N atoms. All, means all atoms.\n"
                              "non-H, non-hydrogen atoms, all the heavy atoms. \n"
+                             "lig-all trys to consider all the atoms of a ligand (H atoms not considered). \n"
                              "Two choices should be provided for receptor and ligand respectively. \n"
                              "If only one atomtype given, the 2nd will be the same as 1st.\n"
                              "Default is: [] \n")
@@ -561,6 +677,9 @@ if __name__ == "__main__" :
     parser.add_argument('-atomname2', type=str, nargs='+', default=[],
                         help="Atom names for Ligand in Contact Map. \n"
                              "Default is []. ")
+    parser.add_argument('-eletype', type=str, nargs="+", default=[],
+                        help="Choose the specific elements for atom indexing to construct the cmap."
+                             "Default is empty.")
     parser.add_argument('-switch', type=str, default='True',
                         help="Apply a switch function for determing Ca-Ca contacts for a smooth transition. \n"
                              "Only work with atomtype as CA. Options: True(T, t. TRUE), False(F, f, FALSE) \n"
@@ -568,26 +687,34 @@ if __name__ == "__main__" :
     parser.add_argument('-np', default=0, type=int,
                         help='Number of Processers for MPI. Interger value expected. \n'
                              'If 4 is given, means using 4 cores or processers.\n'
-                             'If 0 is given, means not using MPI, using only 1 Core.\n'
-                             'Default is 0. ')
+                             'If 1 is given, means not using MPI, using only 1 Core.\n'
+                             'Default is 1. ')
     parser.add_argument('-test', default=0, type=int,
                         help="Do a test with only a number of frames. For example, 4 frames. \n"
                              "Default value is 0. ")
-
-    parser.add_argument('-verbose', default=0 , type=int,
+    parser.add_argument('-NbyN', type=bool, default=False,
+                        help="For community analysis, calculate atom contact number, normalized. \n"
+                             "Default is False.")
+    parser.add_argument('-verbose', default=False , type=bool,
                         help="Verbose. Default is False.")
     parser.add_argument('-details', default=None, type=str,
                         help="Provide detail contact information and write out to a file. \n"
                              "Default is None."
                         )
 
+    parser.add_argument('-opt', default="Separated", type=str,
+                        help="Optional setting controls. \n"
+                             "Separated, using separated files instead of splitting files.\n")
+
     args = parser.parse_args()
 
     if args.np > 0 :
 
+        # load the large mutiple frame pdb file
         cmap = ContactMap(args.inp)
 
         reference = cmap.extractReference()
+
         # decide to print help message
         if len(sys.argv) < 2:
             # no enough arguements, exit now
@@ -595,31 +722,35 @@ if __name__ == "__main__" :
             print "You chose non of the arguement!\nDo nothing and exit now!\n"
             sys.exit(1)
 
+        # setup MPI environment
         comm = MPI.COMM_WORLD
         size = comm.Get_size()
         rank = comm.rank
 
-        #pdbFileList = sorted(glob.glob("./S_*.pdb"))[:12]
-
+        # define the atoms for contact map constructions
         atomType = []
+
         atomName1 = args.atomname1
         atomName2 = args.atomname2
-        if len(args.atomtype) == 1:
-            atomType.append(cmap.findAtomType(args.atomtype[0], args.inp))
-            atomType.append(cmap.findAtomType(args.atomtype[0], args.inp))
-        elif len(args.atomtype) == 2:
-            atomType.append(cmap.findAtomType(args.atomtype[0], args.inp))
-            atomType.append(cmap.findAtomType(args.atomtype[1], args.inp))
-        else:
 
-            atomType = [ args.atomname1, args.atomname2 ]
+        if len(args.atomtype) not in [1, 2]:
+            if len(args.eletype) != 0 :
+                atomType = [ cmap.findAtomTypePerEle(args.eletype, reference), cmap.findAtomTypePerEle(args.eletype, reference) ]
+            elif len(atomName1) and len(atomName2) :
+                atomType = [ args.atomname1, args.atomname2 ]
+            else :
+                print "Define atom indexing failed"
+                sys.exit(0)
+        else :
+            atomType.append(cmap.findAtomType(args.atomtype[0], reference))
+            atomType.append(cmap.findAtomType(args.atomtype[0 + len(args.atomtype) - 1], reference))
 
         if atomType == [['CA'],['CA']] :
             switch = args.switch
         else :
             switch = False
 
-        ## receptor information about residues
+        # receptor information about residues
         rcResNdx = defaultdict(list)
         round = len(args.rc) / 3
         rcChains = []
@@ -627,28 +758,31 @@ if __name__ == "__main__" :
             rcResNdx[args.rc[i * 3]] = range(int(args.rc[i * 3 +1]),int(args.rc[i *3+2]) + 1)
             rcChains.append(args.rc[(i + 1) * 3 - 3])
 
-        #print rcResNdx
+        # ligand information about residues
         lcResNdx = defaultdict(list)
         round = len(args.lc) / 3
         lcChains = []
         for i in range(round):
             lcChains.append(args.lc[i*3])
             lcResNdx[args.lc[i * 3]] = range(int(args.lc[i * 3 + 1]), int(args.lc[i * 3 + 2]) + 1)
-        #print lcResNdx
+
         ## start to construct map
         receptorAtomNdx = cmap.findAtomNdx(reference, rcResNdx, rcChains, atomType[0], args.verbose)
         ligandAtomNdx   = cmap.findAtomNdx(reference, lcResNdx, lcChains, atomType[-1], args.verbose)
 
         if args.verbose :
+            print "ATOM RES AND CHAIN " * 5
+            print lcResNdx, rcResNdx, lcChains, rcChains
             print "ATOM NDX"
             print receptorAtomNdx, ligandAtomNdx
 
+        # report detail interactions, verbose reports
         if args.details :
-            cmap.subgroupCmap(reference, args.cutoff, [receptorAtomNdx, ligandAtomNdx], args.verbose, args.details)
-
-            #sys.exit(1)
+            cmap.subgroupCmap(reference, args.cutoff,
+                              [receptorAtomNdx, ligandAtomNdx],
+                              args.verbose, args.details
+                              )
         else :
-
             if rank == 0:
                 if args.test:
                     pdbFileList = sorted(cmap.splitPdbFile())[: args.test]
@@ -657,11 +791,11 @@ if __name__ == "__main__" :
             else:
                 pdbFileList = None
 
+            # board cast the list of files into different threads
             pdbFileList = comm.bcast(pdbFileList, root=0)
             totalNumOfFiles = len(pdbFileList)
 
             if rank == 0 :
-
                 load4each = int(math.ceil(float(totalNumOfFiles) / float(args.np)))
                 filesList = []
 
@@ -672,22 +806,29 @@ if __name__ == "__main__" :
                 if args.verbose:
                     print "Full File List " * 10, pdbFileList, filesList
 
+                if args.opt in ["S", "Separated", "separated"] :
+                    filesList = [[args.inp,]]
             else :
                 filesList = []
 
-            ## scatter data to sub-processers
+            ## scatter data to sub-processers/threads
             filesList = comm.scatter(filesList, root=0)
 
-            recNames = cmap.getResidueName(filesList[0], rcResNdx, rcChains)
-            ligNames = cmap.getResidueName(filesList[0], lcResNdx, lcChains)
+            if "lig-all" in args.lc[0] :
+                allatoms = [False, True]
+            else :
+                allatoms = [False, False]
 
-            Cmap, nFiles = cmap.cmap_ca(filesList, args.cutoff,
-                                        switch,
-                                        [receptorAtomNdx, ligandAtomNdx],
-                                        rank, args.verbose, len(recNames)*len(ligNames)
-                                        )
+            recNames = cmap.getResidueName(filesList[0], rcResNdx, rcChains, perAtom=allatoms[0])
+            ligNames = cmap.getResidueName(filesList[0], lcResNdx, lcChains, perAtom=allatoms[1])
 
-            cmap.writeFiles(Cmap, nFiles,args.out, recNames, ligNames, rank)
+            Cmap = cmap.cmap_ca(filesList, args.cutoff,switch,
+                                [receptorAtomNdx, ligandAtomNdx],
+                                rank, args.verbose, len(recNames)*len(ligNames),
+                                perAtom=allatoms, ccutoff=1.0, NbyN=args.NbyN
+                                )
+
+            cmap.writeFiles(Cmap, len(filesList), args.out, recNames, ligNames, rank)
 
             overallValuesList = comm.gather(Cmap, root=0)
 
@@ -697,8 +838,6 @@ if __name__ == "__main__" :
                 final = np.zeros(len(Cmap))
                 for rank_values in overallValuesList :
                     final += np.asarray(rank_values)
-
-                final = final / float(size)
 
                 cmap.writeFiles(final, totalNumOfFiles, args.out, recNames, ligNames, rank='all')
 

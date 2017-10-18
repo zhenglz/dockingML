@@ -1,0 +1,5 @@
+
+include README.rst
+include lib/*.dat
+include lib/*.lib
+
