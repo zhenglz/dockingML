@@ -194,32 +194,6 @@ class GoldResults :
             print("input file (or files) missing. exit now")
             sys.exit(0)
 
-    def removeLonePair(self, input, output, shell=True):
-        '''
-        input a pdb file, remove the lone pair electron lines in the file
-        :param input: str, input file name
-        :param output: str, output filename
-        :return:
-        '''
-        if shell :
-            if os.path.exists(input) :
-                job = sp.Popen("awk \'$1 ~ /HETATM/ && $3 !~ /XX/ {print $0}\' %s > %s " % (input, output), shell=shell)
-                job.communicate()
-            else :
-                print("input file %s not exist. exit now"%input)
-                sys.exit(0)
-        else :
-            tofile = open(output, "wb")
-            with open(input) as f :
-                for s in f :
-                    if "XX" not in s and "**" not in s :
-                        tofile.write(s)
-                    else :
-                        pass
-            tofile.close()
-
-        return 1
-
 
 if __name__ == "__main__" :
 
