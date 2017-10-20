@@ -5,6 +5,7 @@ import math
 import argparse
 from argparse import RawTextHelpFormatter
 import sys
+import numpy as np
 
 class BindingFeature:
 
@@ -358,7 +359,7 @@ class BindingFeature:
         return atomTypeCounts
 
     def coulombE(self, alldistpairs, recatomInfor, ligatomInfor,
-                 RecCharges, LigCharges, maxCutoff,
+                 maxCutoff, dielectric,
                  ):
         ## calculate eletrostatic interactions
         ## V = f (q1 * q2 ) / (epsilon * r12 )
@@ -378,8 +379,7 @@ class BindingFeature:
                 recRes.append(res)
                 # get the full residue_seq list
 
-        backElectroEner = {}  # format is : {"ARE175": -1.20 }
-        sideElectroEner = {}  # format is : {"ARE175": -1.20 }
+        backElectroEner, sideElectroEner = {}, {}  # format is : {"ARE175": -1.20 }
         for res in recRes:
             backElectroEner[res] = 0.0
             sideElectroEner[res] = 0.0
@@ -390,18 +390,37 @@ class BindingFeature:
                 recline = recatomInfor[atom.split("+")[0]]
                 ligline = ligatomInfor[atom.split("+")[1]]
                 #residueID = atom.split("+")[0].split("_")[1] + "_" + atom.split("+")[0].split("_")[2]
+                res = atom.split("+")[0].split("_")[1] + "_" + atom.split("+")[0].split("_")[2]
 
-                q1 = RecCharges[ recline[16:20].strip() + "_" + recline[12:16].strip()]
-                q2 = LigCharges[ ligline[16:20].strip() + "_" + ligline[12:16].strip()]
+                #q1 = RecCharges[ recline[16:20].strip() + "_" + recline[12:16].strip()]
+                #q2 = LigCharges[ ligline[16:20].strip() + "_" + ligline[12:16].strip()]
+                q1 = float(recline.split()[-2])
+                q2 = float(ligline.split()[-2])
 
                 if atom.split("+")[0].split("_")[0] in backboneAtoms :
-                    backElectroEner += f * q1 * q2 / alldistpairs[atom]
+                    backElectroEner[res] += f * q1 * q2 /(alldistpairs[atom] * dielectric)
                 else :
-                    sideElectroEner += f * q1 * q2 / alldistpairs[atom]
+                    sideElectroEner[res] += f * q1 * q2 /(alldistpairs[atom] * dielectric)
 
         return  recRes, backElectroEner, sideElectroEner
 
-    def extractFeatures(self, inputfile="input.txt", outputfile="output.dat") :
+    def extractFeatures(self, inputfile="input.txt",
+                        outputfile="output.dat",
+                        vdwCountCutoff=6.0,
+                        vdwEnerCutoff=12.0,
+                        colEnerCutoff=12.0,
+                        dielec=4.0
+                        ) :
+        """
+        extract necessary short range interaction features
+        :param inputfile:
+        :param outputfile:
+        :param vdwCountCutoff:
+        :param vdwEnerCutoff:
+        :param colEnerCutoff:
+        :param dielec:
+        :return:
+        """
 
         # the Van der Waals interaction parameters
         # the format is: { "C" : [0.339, 0.359824]; "DU" : [0.339, 0.359] }
@@ -413,8 +432,8 @@ class BindingFeature:
                 pdbfileLig[s.split()[0]] = s.split()[1]
         lines.close()
 
-        tofile = open(outputfile, 'w')
-
+        allcases = []
+        colnames = []
         for i in range(len(pdbfileLig.keys())) :
             pdbfilename = sorted(pdbfileLig.keys())[i]
 
@@ -427,7 +446,7 @@ class BindingFeature:
             # this function pass the test
             reslist2, backcount, sidecount = self.residueCounts(alldistpairs,
                                                                 recatomDetailInfor,
-                                                                distanceCutoff = 6.0)
+                                                                distanceCutoff = vdwCountCutoff)
 
             # calculate Van der Waals contributions. Backbone and SideChain are seperated
             # this function works fine
@@ -435,7 +454,7 @@ class BindingFeature:
                                                                  recatomDetailInfor,
                                                                  ligatomDetailInfor,
                                                                  vdwParams ,
-                                                                 maxCutoff = 12.0)
+                                                                 maxCutoff = vdwEnerCutoff)
 
             # for all the atomtypes combinations, what are the contacts counts given a cutoff as 6.0 angstrom?
             # this function passes the test and works fine
@@ -443,59 +462,63 @@ class BindingFeature:
                                                    recatomDetailInfor,
                                                    ligatomDetailInfor,
                                                    vdwParams,
-                                                   distanceCutoff = 6.0 )
+                                                   distanceCutoff = vdwCountCutoff )
+
+            reslist2, backcol, sidecol = self.coulombE(alldistpairs,
+                                                       recatomDetailInfor,
+                                                       ligatomDetailInfor,
+                                                       maxCutoff=colEnerCutoff,
+                                                       dielectric=dielec,
+                                                       )
+
+            case = []
 
             # now, print the information into files
             if i == 0:
                 reslist = sorted(reslist2)
                 atomCombine = sorted(atomTypeCounts.keys())
 
-                tofile.write("# PDBName  binding  ")
-                for res in reslist :
-                    tofile.write("couback_"+res+"  ")
-                for res in reslist :
-                    tofile.write("counside_"+res+"  ")
-                for res in reslist :
-                    tofile.write("vdwback_"+res+"  ")
-                for res in reslist :
-                    tofile.write("vdwside_"+res+"  ")
-                for atomT in atomCombine :
-                    tofile.write("atomCoun_"+atomT+"  ")
-                tofile.write(" \n")
+                for cn in ["countback", "countside", "vdwback", "vdwside", "columbback", "columbside"] :
+                    colnames += [cn+"_"+ x for x in reslist]
 
-            tofile.write(pdbfilename + "  ")
-            for res in reslist :
-                if res not in backcount.keys() :
-                    tofile.write("0    ")
-                else :
-                    tofile.write("%4d   "% backcount[res])
-            for res in reslist :
-                if res not in backcount.keys() :
-                    tofile.write("0    ")
-                else :
-                    tofile.write("%4d   "% sidecount[res])
-            for res in reslist :
-                if res not in backcount.keys() :
-                    tofile.write("0.0       ")
-                else :
-                    tofile.write("%12.8f  " % backvan[res])
-            for res in reslist :
-                if res not in backcount.keys() :
-                    tofile.write("0.0       ")
-                else :
-                    tofile.write("%12.8f  " % sidevan[res])
-            for atomT in atomCombine :
-                tofile.write("%4d  " % atomTypeCounts[atomT])
-            tofile.write("  \n")
+                colnames = [ "atomTCount" + "_" + x for x in atomCombine ]
 
-            print(pdbfilename + "  completed! \n")
+            # countback and countside
+            case += [ backcount[x] for x in reslist ]
+            case += [ sidecount[x] for x in reslist]
 
-        tofile.close()
+            # vdwback and vdwside
+            case += [ backvan[x] for x in reslist]
+            case += [ sidevan[x] for x in reslist]
+
+            # columbback and cloumbback
+            case += [ backcol[x] for x in reslist]
+            case += [ sidecol[x] for x in reslist]
+
+            # atomTcount
+            case += [ atomTypeCounts[x] for x in atomCombine ]
+
+            allcases.append(case)
+
+        allcases = np.asarray(allcases)
+
+        np.savetxt(outputfile, allcases, fmt="%.3f", delimiter=",",
+                   header=",".join(colnames)
+                   )
+
+        return 1
 
 if __name__ == "__main__" :
     d = '''
     Extract the binding features between receptor and ligand
 
+    format of the input file:
+    ------------------ input --------------
+    pdbcomplex_1.pdb  LIG
+    pdbcomplex_2.pdb  WAT
+    pdbcomplex_3.pdb  STR
+    ...
+    ------------------ input --------------
     '''
     parser = argparse.ArgumentParser(description=d,formatter_class=RawTextHelpFormatter)
     parser.add_argument("-inp", default="input.dat",type=str,
