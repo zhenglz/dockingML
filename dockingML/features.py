@@ -13,23 +13,23 @@ class BindingFeature:
 
     def getVdWParams(self, inputFile="AtomType.dat") :
         '''
-        Get vdw parameters, mainly C12 and C6 term in energy function
-        :param inputFile: a library file containing atomic vdw parameters
+        Get vdw parameters, mainly sigma and epsilon term in energy function
+        :param inputFile: str, a library file containing atomic vdw parameters
         :return:
         '''
         # obtain vdw radius for different atoms
         vdwParams = defaultdict(list)
         with open(inputFile) as lines :
             for s in lines :
-                param = []
+                #param = []
                 if "#" not in s and ";" not in s :
                     #print s.split()[-2].split("e")[0]
                     ## in AtomType.dat nm
                     ## nm to angstrom by multiply 10.0
                     sigma   = float(s.split()[-2]) #.split("e")[0]) * ( 10 ** float(s.split()[-2].split("e")[1])) * 10.0
                     epsilon = float(s.split()[-1]) #.split("e")[0]) * ( 10 ** float(s.split()[-1].split("e")[1])) * 10.0
-                    param = [ sigma, epsilon ]
-                    vdwParams[s.split()[0]] = param
+                    #param = [ sigma, epsilon ]
+                    vdwParams[s.split()[0]] = [sigma, epsilon]
 
         # format of vdwParams : { "C":[C12, C6] }
         return vdwParams
@@ -53,13 +53,13 @@ class BindingFeature:
                     float(pdbline[38:46].strip()),
                     float(pdbline[46:54].strip())]
 
-    def getAtomInfor(self, pdbfilename, ligCode) :
+    def getAtomInfor(self, input, ligCode) :
         '''
         from a pdb file get ligand and receptor information
         input a pdbfile of the receptor-ligand complex
         return their xyz information and the detail information of each atom
-        :param pdbfilename:
-        :param ligCode:
+        :param input: str, input receptor-ligand complex
+        :param ligCode: str, res-name of the ligand
         :return: recInfor, ligInfor, recatomLine, ligatomLine
         '''
         recInfor = defaultdict(list)
@@ -67,20 +67,25 @@ class BindingFeature:
         ligatomLine = {}
         ligInfor = defaultdict(list)
 
-        with open(pdbfilename) as lines :
+        with open(input) as lines :
+            lines = [ s for s in lines if ("ATOM" == s.split()[0]
+                                           or "HETATM" == s.split()[0]
+                                           and len(s.split()) > 5)
+                      ]
             for s in lines :
-                if "ATOM" == s.split()[0] or "HETATM" == s.split()[0] and len(s.split()) > 5 :
-                    ## atomID: AtomName_ResidueName_ResidueIndex_Chain
-                    atomID = s[6:11].strip() + "_" +s[17:20].strip() + "_" + s[22:26].strip()+"_"+s[21]
+                #if "ATOM" == s.split()[0] or "HETATM" == s.split()[0] and len(s.split()) > 5 :
+                ## atomID: AtomName_ResidueName_ResidueIndex_Chain
+                atomID = s[6:11].strip() + "_" +s[17:20].strip() + "_" + s[22:26].strip()+"_"+s[21]
 
-                    ## receptor information
-                    if ligCode !=  s[17:20].strip() :
-                        recInfor[ atomID ] = self.getXYZCoord(s)
-                        recatomLine[atomID] = s
-                    ## ligand information
-                    elif ligCode ==  s[17:20].strip() :
-                        ligInfor[ atomID ] = self.getXYZCoord(s)
-                        ligatomLine[atomID] = s
+                ## receptor information
+                if ligCode !=  s[17:20].strip() :
+                    recInfor[ atomID ] = self.getXYZCoord(s)
+                    recatomLine[atomID] = s
+
+                ## ligand information
+                elif ligCode ==  s[17:20].strip() :
+                    ligInfor[ atomID ] = self.getXYZCoord(s)
+                    ligatomLine[atomID] = s
 
         return recInfor, ligInfor, recatomLine, ligatomLine
 
@@ -109,7 +114,6 @@ class BindingFeature:
         :param ligandXYZ: list 2D, a list of coordinates of atoms
         :return:
         '''
-
         allDistances = {}
         rkeys = receptorXYZ.keys()
         lkeys = ligandXYZ.keys()
@@ -121,17 +125,30 @@ class BindingFeature:
         return allDistances
 
     def switchFuction(self, x, d0, m=12, n=6):
-        # for countting, implement a rational switch function to enable a smooth transition
-        # the function is lik  s= [1 - (x/d0)^6] / [1 - (x/d0)^12]
-        # d0 is a cutoff, should be twice the larget than the distance cutoff
-        return  (1.0 - math.pow((x / d0), n)) / (1.0 - math.pow((x / d0), m))
+        """
+        for countting, implement a rational switch function to enable a smooth transition
+        the function is lik  s= [1 - (x/d0)^6] / [1 - (x/d0)^12]
+        d0 is a cutoff, should be twice the larget than the distance cutoff
+        :param x: float
+        :param d0: distance cutoff, should be 2 times of normal cutoff
+        :param m: int
+        :param n: int
+        :return: float
+        """
+        return(1.0 - math.pow((x / d0), n)) / (1.0 - math.pow((x / d0), m))
 
     def residueCounts(self, alldistpairs, atomDetailInfor, distanceCutoff = 3.5) :
-        # input all the distances pairs
-        # return the number of contacts
-        # alldistpairs: the porteinID-LigID-Distance inforamtion
-        # atomdetailInfor : the atomID-PDBline information
-        # distance unit is angstrom
+        """
+        input all the distances pairs
+        return the number of contacts
+        alldistpairs: the porteinID-LigID-Distance inforamtion
+        atomdetailInfor : the atomID-PDBline information
+        distance unit is angstrom
+        :param alldistpairs: dictionary, all distances
+        :param atomDetailInfor: dictionary, detail information
+        :param distanceCutoff: float, distance cutoff
+        :return:
+        """
 
         atoms = alldistpairs.keys()
         recRes =[]
@@ -139,9 +156,13 @@ class BindingFeature:
         backboneAtoms = ["C", "N", "O", "CA"]
 
         for atom in atoms :
-            res = atom.split("+")[0].split("_")[1] + "_" + atom.split("+")[0].split("_")[2] + "_" + atom.split("+")[0].split("_")[3]
+            res = atom.split("+")[0].split("_")[1] + "_" + \
+                  atom.split("+")[0].split("_")[2] + "_" + \
+                  atom.split("+")[0].split("_")[3]
+
+            # get the full residue_seq list
             if res not in recRes :
-                recRes.append(res)  # get the full residue_seq list
+                recRes.append(res)
 
         # counts between backbone (or side-chain) and ligand
         backCount = {}  # format is : {"ARE175": 0 }
@@ -160,7 +181,9 @@ class BindingFeature:
                 ### add more chain ID, in case you have several different chains
                 ### better, you may use 1 2 3 4 as your chain id, here choose original chain id
                 ### residueID  residueName_ResidueIndex_Chain
-                residueID = atom.split("+")[0].split("_")[1] + "_" + atom.split("+")[0].split("_")[2] + "_" + atom.split("+")[0].split("_")[3]
+                residueID = atom.split("+")[0].split("_")[1] + "_" + \
+                            atom.split("+")[0].split("_")[2] + "_" + \
+                            atom.split("+")[0].split("_")[3]
                 #residueID = line[17:20].strip() + "_" + line[22:26].strip()
                 ## count contacts in backbones
                 if line.split()[2] in backboneAtoms :
@@ -172,36 +195,52 @@ class BindingFeature:
         return recRes, backCount, sideCount
 
     def atomicVdWEnergy(self, atomtype1, atomtype2, distance, vdwParam) :
-        # Calculate Van der Waals interaction energy
-        # VdW potential calculation, using combination rule 2
-        # vdwParam is a dictionary list, eg. { "O": [ 0.22617E-02, 0.74158E-0.6 ]; }
+        """
+        Calculate Van der Waals interaction energy
+        VdW potential calculation, using combination rule 2
+        vdwParam is a dictionary list, eg. { "O": [ 0.22617E-02, 0.74158E-0.6 ]; }
+        :param atomtype1:
+        :param atomtype2: dictionary, parameters of atom type and sigma epsilon
+        :param distance: float
+        :param vdwParam: dictionary of lists
+        :return: float, short range vdw energy
+        """
 
-        Vi = vdwParam[atomtype1][0]
-        Wi = vdwParam[atomtype1][1]
-        Vj = vdwParam[atomtype2][0]
-        Wj = vdwParam[atomtype2][1]
+        Sigma_i   = vdwParam[atomtype1][0]
+        Epsilon_i = vdwParam[atomtype1][1]
+        Sigma_j   = vdwParam[atomtype2][0]
+        Epsilon_j = vdwParam[atomtype2][1]
 
         # combination rule 2 of vdw MM force field
-        sigma   = 0.5 * ( Vi + Vj )
-        epsilon = math.sqrt( Wi * Wj )
+        sigma_ij   = 0.5 * ( Sigma_i + Sigma_j )
+        epsilon_ij = math.sqrt( Epsilon_i * Epsilon_j )
 
         # Lennard-Jones Potential energy
         # the sigma is the distance at the lowest energy point, in unit of angstrom
-        # here temp, tmp, tmpp, all for speed up. no physical meaning
         # (sigma / distance)^6
-        distRatio = sigma / distance
-        dist6 = distRatio ** 6.0
-        dist12= distRatio ** 12.0
+        C6  = 4.0 * epsilon_ij * (sigma_ij**6)
+        C12 = 4.0 * epsilon_ij * (sigma_ij**12)
+        d6  = distance ** 6
+        d12 = distance ** 12
 
-        energy = 4.0 * epsilon * ( dist6 - dist12 )
+        energy = C12 / d12 - C6 / d6
 
         return energy
 
     def resVdWContribution(self, alldistpairs, recatomInfor, ligatomInfor,
                            vdwParams, maxCutoff, pdbqt=True) :
-        # accumulated vdw for side-chain or backbone
-        # alldistpairs: the porteinID-LigID-Distance inforamtion
-        # atomdetailInfor : the atomID-PDBline information
+        """
+        accumulated vdw for side-chain or backbone
+        alldistpairs: the porteinID-LigID-Distance inforamtion
+        atomdetailInfor : the atomID-PDBline information
+        :param alldistpairs:
+        :param recatomInfor:
+        :param ligatomInfor:
+        :param vdwParams:
+        :param maxCutoff:
+        :param pdbqt:
+        :return:
+        """
 
         atoms = alldistpairs.keys()
         recRes =[]

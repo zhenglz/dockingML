@@ -21,7 +21,6 @@ setup(name='dockingML',
       license='NA',
       packages=['dockingML'],
       install_requires=[
-          'markdown',
           'numpy',
           'pandas',
       ],
