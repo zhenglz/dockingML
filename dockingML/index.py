@@ -6,7 +6,8 @@ Indexing PDB file
 Generate Gromacs Format Index File
 """
 
-import sys
+import sys, os
+from collections import defaultdict
 import argparse
 from argparse import RawTextHelpFormatter
 
@@ -145,6 +146,95 @@ class PdbIndex :
 
         tofile.close()
         return 1
+
+    def withSubGroup(self, isProtein=True, nucleic="nucleic-acid.lib"):
+
+        if not os.path.exists(nucleic):
+            PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+            nucleic = os.path.join(PROJECT_ROOT, '/../', 'nucleic-acid.lib')
+
+        if isProtein:
+            subgroup = {}
+            for atom in ['CA', 'N', 'C', 'O']:
+                subgroup[atom] = "mainchain"
+            for atom in ['CZ2', 'OE2', 'OE1', 'OG1', 'CD1', 'CD2', 'CG2', 'NE', 'NZ', 'OD1',
+                         'ND1', 'ND2', 'OD2', 'CB', 'CZ3', 'CG', 'CZ',
+                         'NH1', 'CE', 'CE1', 'NH2', 'CG1', 'CD', 'OH', 'OG', 'SG', 'CH2',
+                         'NE1', 'CE3', 'SD', 'NE2', 'CE2']:
+                subgroup[atom] = 'sidechain'
+
+            return subgroup
+        else:
+            xna = {}
+            if os.path.exists(nucleic):
+                with open(nucleic) as lines:
+
+                    for s in lines:
+                        if "#" not in s:
+                            xna[s.split()[-1]] = s.split()[1]
+
+            return xna
+
+    def atomInformation(self, pdbin, proteinres="amino-acid.lib"):
+        # elements in atom infor
+        # key: atom index
+        # value: [atomname, molecule type, is_hydrogen,  resname, resndx, chainid,(mainchian, sidechain,
+        #           sugar ring, phosphate group, base ring)]
+        atominfor = defaultdict(list)
+
+        if not os.path.exists(proteinres) :
+            PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+            proteinres = os.path.join(PROJECT_ROOT, '/../', 'data/amino-acid.lib')
+
+        with open(proteinres) as lines:
+            protRes = [s.split()[2] for s in lines if "#" not in s]
+        DNARes = ['DA', 'DT', 'DC', 'DG']
+        RNARes = ['A', 'G', 'C', 'U']
+
+        prosubgroup = self.withSubGroup(True)
+        xnasubgroup = self.withSubGroup(False)
+
+        with open(pdbin) as lines:
+            for s in lines:
+                if len(s.split()) and s[:4] in ["ATOM", "HETA"]:
+
+                    atomndx = s[6:11].strip()
+                    atomname = s[12:16].strip()
+                    resname = s[17:20].strip()
+                    resndx = int(s[22:26].strip())
+                    chain = s[21]
+                    if len(s) > 76:
+                        if s[77] != " ":
+                            element = s[77]
+                        else:
+                            element = s[13]
+                    else:
+                        element = s[13]
+
+                    hydrogen = {"H": True}
+                    is_hydrogen = hydrogen.get(s[13], False)
+
+                    if resname in protRes:
+                        moltype = "Protein"
+                    elif resname in DNARes:
+                        moltype = "DNA"
+                    elif resname in RNARes:
+                        moltype = "RNA"
+                    else:
+                        moltype = "Unknown"
+
+                    if moltype == "Protein":
+                        subgroup = prosubgroup.get(atomname, "Unknown")
+                    elif moltype in ["RNA", "DNA"]:
+                        subgroup = xnasubgroup.get(atomname, "Unknown")
+                    else:
+                        subgroup = "Unknown"
+
+                    atominfor[atomndx] = [atomname, moltype, is_hydrogen, resname, resndx, chain, subgroup, element]
+                else:
+                    pass
+
+        return atominfor
 
     def arguements(self) :
         d ='''
