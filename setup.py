@@ -1,7 +1,7 @@
 from setuptools import setup
 
 """
-Description of how to make a python script
+Description of how to make a python package
 
 https://python-packaging.readthedocs.io/en/latest/command-line-scripts.html
 
@@ -23,6 +23,7 @@ setup(name='dockingML',
       install_requires=[
           'numpy',
           'pandas',
+          'mpi4py',
       ],
       include_package_data=True,
       zip_safe=False,
