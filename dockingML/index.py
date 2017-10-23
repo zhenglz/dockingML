@@ -1,3 +1,14 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
+Indexing PDB file
+Generate Gromacs Format Index File
+"""
+
+import sys
+import argparse
+from argparse import RawTextHelpFormatter
 
 class PdbIndex :
     '''
@@ -55,10 +66,11 @@ class PdbIndex :
                 for i in range(4):
                     with open(inpdb) as lines:
                         for s in lines:
-                            if len(s.split()) > 1 and s.split()[0] == "ATOM" and s[21] == chain:
-                                if int(s[22:26].strip()) == resndx + psindxadd[i] and s[12:16].strip() == psitype[i]:
-                                    psipair[i] = int(s.split()[1])
-                                    # break
+                            if len(s.split()) > 1 and s.split()[0] == "ATOM" and s[21] == chain and \
+                                            int(s[22:26].strip()) == resndx + psindxadd[i] and\
+                                            s[12:16].strip() == psitype[i]:
+                                psipair[i] = int(s.split()[1])
+                                # break
 
                 if "PHI" in dihedraltype :
                     indexlist.append(psipair)
