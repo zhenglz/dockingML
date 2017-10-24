@@ -123,7 +123,14 @@ class ContactMap:
         return ndx
 
     def getResIndex(self, singleFramePDB, chain, resIdList):
-        ## get the index of the residues from the pdbfile
+        """
+        get the index of the residues from the pdbfile
+        indexlist, [ resndx+"_"+chain, ]
+        :param singleFramePDB:
+        :param chain:
+        :param resIdList:
+        :return: list,
+        """
         indexlist = []
         with open(singleFramePDB) as lines :
             indexlist = [ s[22:28].strip() + '_' + chain
@@ -137,7 +144,8 @@ class ContactMap:
                 if "ATOM" in s and s[21] == chain and int(s[22:26].strip()) in resIdList:
                     resIndex = s[22:28].strip() + '_' + chain
                     if resIndex not in indexlist:
-                        indexlist.append(resIndex) '''
+                        indexlist.append(resIndex)
+            '''
         return indexlist
 
     def findAtomTypePerEle(self, elements, singleFramePDB):
@@ -299,8 +307,8 @@ class ContactMap:
         '''
         read the coordinates of two residue,
         return whether contacts
-        :param resCrd1:
-        :param resCrd2:
+        :param resCrd1: 2d list
+        :param resCrd2: 2d list
         :param distcutoff: the squared the distance cutoff
         :param countcutoff: number of contacts within a residue
         :param switch: apply a switch function
@@ -531,6 +539,8 @@ class ContactMap:
                 for j in range(len(resNames2)) :
                     result.write('%5s  %5s  %8.4f \n' % (resNames1[i], resNames2[j], cmap[j+i*nmax]/nFiles ))
             result.close()
+
+        return 1
 
 if __name__ == "__main__" :
     ## change to working directory

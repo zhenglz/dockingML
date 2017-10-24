@@ -1,3 +1,4 @@
+# atoms in nucleic acids
 ATOM  BASE    N9
 ATOM  BASE    C2
 ATOM  BASE    C4
@@ -11,7 +12,7 @@ ATOM  BASE    H
 ATOM  BASE    N4
 ATOM  BASE    H41
 ATOM  BASE    H42
-## hre are atoms in rU and rG, total 11 atom types
+# here are atoms in rU and rG, total 11 atom types
 ATOM  BASE    N1
 ATOM  BASE    N3
 ATOM  BASE    C2
@@ -30,7 +31,7 @@ ATOM  BASE    O6
 ATOM  BASE    N6
 ATOM  BASE    N5
 ATOM  BASE    N2
-## the atoms in A and U for the suger fing, are the same
+# the atoms in A and U for the suger fing, are the same
 ATOM SUGAR   C1'
 ATOM SUGAR   C2'
 ATOM SUGAR   C3'
@@ -46,7 +47,7 @@ ATOM SUGAR   H4'
 ATOM SUGAR   HO2'
 ATOM SUGAR   H5'
 ATOM SUGAR   H5''
-## the phosphate group atoms are the same in rA and rU
+# the phosphate group atoms are the same in rA and rU
 ATOM PHOSPHATE P
 ATOM PHOSPHATE OP1
 ATOM PHOSPHATE OP2
