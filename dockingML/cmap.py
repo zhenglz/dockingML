@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 #####################################################
 # Script for generating contact probability map     #
@@ -8,22 +9,29 @@
 # Date: 15 Jan 2017                                 #
 #####################################################
 
-import glob
-import math
-import sys
-import argparse
-import os
+import glob, math, sys, os
 import numpy as np
+import argparse
+
 from collections import defaultdict
 from argparse import RawTextHelpFormatter
 from datetime import datetime
-from mpi4py import  MPI
+from mpi4py import MPI
+
+from .index import PdbIndex
 
 class ContactMap:
     def __init__(self, hugePDBFile) :
         self.mfPDB = hugePDBFile
 
     def atomDistance(self, atomCrd1, atomCrd2, sqrt=False):
+        """
+        calculate atom distance
+        :param atomCrd1:
+        :param atomCrd2:
+        :param sqrt:
+        :return:
+        """
 
         if sqrt :
             return math.sqrt(sum(map(lambda x, y: (x-y)**2, atomCrd1, atomCrd2)))
@@ -79,7 +87,7 @@ class ContactMap:
                     else :
                         pass
 
-        print "PDB File spliting finished! \n"
+        print( "PDB File spliting finished! \n")
         return (sorted(filelist))
 
     def switchFuction(self, x, d0, m=12, n=6):
@@ -98,7 +106,7 @@ class ContactMap:
         try :
             count = (1.0 - math.pow((x / d0), n)) / (1.0 - math.pow((x / d0), m))
         except ZeroDivisionError :
-            print "Divide by zero, ", x, d0
+            print( "Divide by zero, ", x, d0)
 
         return count
 
@@ -132,87 +140,6 @@ class ContactMap:
                         indexlist.append(resIndex) '''
         return indexlist
 
-    def withSubGroup(self, isProtein=True, nucleic="nucleic-acid.lib"):
-        if isProtein :
-            subgroup = {}
-            for atom in ['CA', 'N', 'C', 'O'] :
-                subgroup[atom] = "mainchain"
-            for atom in ['CZ2', 'OE2', 'OE1', 'OG1', 'CD1', 'CD2', 'CG2', 'NE', 'NZ', 'OD1',
-                         'ND1', 'ND2', 'OD2','CB', 'CZ3', 'CG',  'CZ',
-                         'NH1', 'CE', 'CE1', 'NH2', 'CG1', 'CD', 'OH', 'OG', 'SG', 'CH2',
-                         'NE1', 'CE3', 'SD', 'NE2', 'CE2'] :
-                subgroup[atom] = 'sidechain'
-
-            return subgroup
-        else :
-            xna = {}
-            if os.path.exists(nucleic) :
-                with open(nucleic) as lines :
-
-                    for s in lines :
-                        if "#" not in s :
-                            xna[s.split()[-1]] = s.split()[1]
-
-            return xna
-
-    def atomInformation(self, pdbin, proteinres="amino-acid.lib"):
-        # elements in atom infor
-        # key: atom index
-        # value: [atomname, molecule type, is_hydrogen,  resname, resndx, chainid,(mainchian, sidechain,
-        #           sugar ring, phosphate group, base ring)]
-        atominfor = defaultdict(list)
-
-        protRes = []
-        with open(proteinres) as lines :
-            protRes = [ s.split()[2] for s in lines if "#" not in s ]
-        DNARes = ['DA','DT','DC','DG']
-        RNARes = ['A','G','C','U']
-
-        prosubgroup = self.withSubGroup(True)
-        xnasubgroup = self.withSubGroup(False)
-
-        with open(pdbin) as lines :
-            for s in lines :
-                if len(s.split()) and s[:4] in ["ATOM", "HETA"] :
-
-                    atomndx = s[6:11].strip()
-                    atomname= s[12:16].strip()
-                    resname = s[17:20].strip()
-                    resndx  = int(s[22:26].strip())
-                    chain   = s[21]
-                    if len(s) > 76 :
-                        if s[77] != " " :
-                            element = s[77]
-                        else :
-                            element = s[13]
-                    else :
-                        element = s[13]
-
-                    hydrogen = {"H": True}
-                    is_hydrogen = hydrogen.get(s[13], False)
-
-                    if resname in protRes :
-                        moltype = "Protein"
-                    elif resname in DNARes :
-                        moltype = "DNA"
-                    elif resname in RNARes :
-                        moltype = "RNA"
-                    else :
-                        moltype = "Unknown"
-
-                    if moltype == "Protein" :
-                        subgroup = prosubgroup.get(atomname, "Unknown")
-                    elif moltype in ["RNA", "DNA"] :
-                        subgroup = xnasubgroup.get(atomname, "Unknown")
-                    else :
-                        subgroup = "Unknown"
-
-                    atominfor[atomndx] = [atomname, moltype, is_hydrogen, resname, resndx, chain, subgroup, element]
-                else :
-                    pass
-
-        return  atominfor
-
     def findAtomTypePerEle(self, elements, singleFramePDB):
         '''
         input a list of elements and a reference pdb file
@@ -221,7 +148,8 @@ class ContactMap:
         :param singleFramePDB:
         :return:
         '''
-        atominfor = self.atomInformation(singleFramePDB)
+        ndx = PdbIndex()
+        atominfor = ndx.atomInformation(singleFramePDB)
         atomType = []
         keys = atominfor.keys()
         for key in keys :
@@ -268,7 +196,7 @@ class ContactMap:
         elif len(information):
             atomType = [information]
         else:
-            print "Error! AtomType not correct. Exit Now! \n"
+            print( "Error! AtomType not correct. Exit Now! \n")
             sys.exit(1)
 
         return atomType
@@ -284,7 +212,7 @@ class ContactMap:
         :return: a list of atom ndx, string
         '''
         if verbose :
-            print pdbfile, resList, chain, atomType
+            print( pdbfile, resList, chain, atomType)
 
         atomndx = []
         for key in resList.keys() :
@@ -386,7 +314,7 @@ class ContactMap:
 
         distances = [sum(map(lambda x, y: (x - y) ** 2, pair[0], pair[1])) for pair in newlist]
         if verbose :
-            print rank, " DISTANCES ", distances
+            print( rank, " DISTANCES ", distances)
 
         if NbyN :
             '''
@@ -400,22 +328,31 @@ class ContactMap:
                 dc = 2 * math.sqrt(distcutoff)
                 counts = self.switchFuction(math.sqrt(distances[0]), dc)
                 if verbose :
-                    print rank, " COUNTS: ", counts
+                    print( rank, " COUNTS: ", counts)
                 return counts
             else :
                 counts = len(filter(lambda x: x <= distcutoff, distances))
 
                 if verbose :
-                    print "Counts here ", counts
+                    print( "Counts here ", counts)
                 if counts >= countcutoff :
                     return 1.0
                 else:
                     return 0.0
 
     def subgroupCmap(self, pdbin, cutoff, atomNdx=[], verbose=False, logifle='log.log'):
+        """
+        calculate sub-group based contactmap
+        :param pdbin:
+        :param cutoff:
+        :param atomNdx:
+        :param verbose:
+        :param logifle:
+        :return:
+        """
         if not os.path.exists(pdbin):
             # raise Exception("Boo! \nNot find PDB files for calculation! ")
-            print 'Exit Now!'
+            print( 'Exit Now!')
             sys.exit(1)
 
         tofile = open(logifle, 'w')
@@ -425,7 +362,8 @@ class ContactMap:
         # value: [atomname, molecule type, is_hydrogen,  resname, resndx, chainid,(mainchian, sidechain,
         #           sugar ring, phosphate group, base ring)]
         # atominfor[atomndx] = [atomname, moltype, is_hydrogen, resname, resndx, chain, subgroup]
-        detailatomInfor = self.atomInformation(pdbin)
+        ndx = PdbIndex()
+        detailatomInfor = ndx.atomInformation(pdbin)
 
         atomndx_1 = atomNdx[0]
         atomndx_2 = atomNdx[-1]
@@ -435,30 +373,30 @@ class ContactMap:
 
         distance_cutoff = cutoff ** 2
 
-        for y in xrange(len(atomndx_2)) :
+        for y in range(len(atomndx_2)) :
             atom2 = atomndx_2[y]
             infor2 = detailatomInfor[atom2]
             if infor2[-1] in ['P','S', 'N','O'] :
-                for x in xrange(len(atomndx_1)) :
+                for x in range(len(atomndx_1)) :
                     atom1 = atomndx_1[x]
                     infor1 = detailatomInfor[atom1]
                     if infor1[-1] in ['P','S', 'N','O']   :
                         crd1 = crds1[x]
                         crd2 = crds2[y]
                         if verbose :
-                            print infor1, infor2
-                            print crd1, crd2
+                            print( infor1, infor2)
+                            print( crd1, crd2)
 
                         distance =  sum(map(lambda x, y: (x - y) ** 2, crd1, crd2))
                         if verbose :
-                            print distance
+                            print( distance)
 
                         if distance <= distance_cutoff :
 
                             resid1 = infor1[3] + "_" + str(infor1[4]) + "_" + infor1[6]
                             resid2 = infor2[3] + "_" + str(infor2[4]) + "_" + infor2[6]
 
-                            print resid1, resid2
+                            print( resid1, resid2)
 
                             tofile.write("%16s   %-20s   %-4s  %-4s  %8.3f\n"%(resid2, resid1, infor2[0], infor1[0], math.sqrt(distance)))
 
@@ -468,6 +406,7 @@ class ContactMap:
         tofile.close()
 
         return 1
+
     def cmap_ca(self, pdbFileList, cutoff, switch=False, atomNdx=[],
                 rank=0, verbose=False, nresidues=0,
                 perAtom=[False, False], ccutoff = 0.0, NbyN=False,
@@ -489,7 +428,7 @@ class ContactMap:
 
         if len(pdbFileList) == 0:
             # raise Exception("Boo! \nNot find PDB files for calculation! ")
-            print 'Exit Now!'
+            print( 'Exit Now!')
             sys.exit(1)
 
         atomndx_1 = atomNdx[0]
@@ -511,10 +450,10 @@ class ContactMap:
         contCountMap = [0.0] * nresidues
         for pdbfile in pdbFileList:
             progress += 1
-            print "Rank %d Progress: The %dth File %s out of total %d files" % \
-                  (rank, progress, pdbfile, len(pdbFileList))
+            print( "Rank %d Progress: The %dth File %s out of total %d files" % \
+                  (rank, progress, pdbfile, len(pdbFileList)))
             if verbose :
-                print rank, atomndx_1, atomndx_2
+                print( rank, atomndx_1, atomndx_2)
 
             resCrdDict1 = self.getPdbCrd(pdbfile, atomndx_1, perAtom=perAtom[0])
             resCrdDict2 = self.getPdbCrd(pdbfile, atomndx_2, perAtom=perAtom[1])
@@ -524,7 +463,7 @@ class ContactMap:
             for m in range(len(resCrdDict1)):
                 for n in range(len(resCrdDict2)):
                     if verbose :
-                        print rank, " RESIDUES ", m, n, resCrdDict1[m], resCrdDict2[n]
+                        print( rank, " RESIDUES ", m, n, resCrdDict1[m], resCrdDict2[n])
                     contCountMap[n + m * nmax] += self.residueContacts(resCrdDict1[m],
                                                                        resCrdDict2[n],
                                                                        distance_cutoff,
@@ -535,10 +474,10 @@ class ContactMap:
                                                                        NbyN=NbyN
                                                                        )
 
-            print "PDB file " + str(pdbfile) + " Finished!"
+            print( "PDB file " + str(pdbfile) + " Finished!")
             del resCrdDict1, resCrdDict2
         if verbose :
-            print contCountMap
+            print(contCountMap)
 
         return contCountMap
 
@@ -564,7 +503,7 @@ class ContactMap:
                     if item not in used :
                         used.append(item)
         if verbose :
-            print used, len(used)
+            print( used, len(used))
         return used
 
     def writeFiles(self, cmap, nFiles,cmapName, resNames1, resNames2, rank):
@@ -719,7 +658,7 @@ if __name__ == "__main__" :
         if len(sys.argv) < 2:
             # no enough arguements, exit now
             parser.print_help()
-            print "You chose non of the arguement!\nDo nothing and exit now!\n"
+            print( "You chose non of the arguement!\nDo nothing and exit now!\n")
             sys.exit(1)
 
         # setup MPI environment
@@ -739,7 +678,7 @@ if __name__ == "__main__" :
             elif len(atomName1) and len(atomName2) :
                 atomType = [ args.atomname1, args.atomname2 ]
             else :
-                print "Define atom indexing failed"
+                print( "Define atom indexing failed")
                 sys.exit(0)
         else :
             atomType.append(cmap.findAtomType(args.atomtype[0], reference))
@@ -771,10 +710,10 @@ if __name__ == "__main__" :
         ligandAtomNdx   = cmap.findAtomNdx(reference, lcResNdx, lcChains, atomType[-1], args.verbose)
 
         if args.verbose :
-            print "ATOM RES AND CHAIN " * 5
-            print lcResNdx, rcResNdx, lcChains, rcChains
-            print "ATOM NDX"
-            print receptorAtomNdx, ligandAtomNdx
+            print( "ATOM RES AND CHAIN " * 5)
+            print( lcResNdx, rcResNdx, lcChains, rcChains)
+            print( "ATOM NDX")
+            print( receptorAtomNdx, ligandAtomNdx)
 
         # report detail interactions, verbose reports
         if args.details :
@@ -804,7 +743,7 @@ if __name__ == "__main__" :
                 filesList.append(pdbFileList[(args.np-1)*load4each:])
 
                 if args.verbose:
-                    print "Full File List " * 10, pdbFileList, filesList
+                    print( "Full File List " * 10, pdbFileList, filesList)
 
                 if args.opt in ["S", "Separated", "separated"] :
                     filesList = [[args.inp,]]
@@ -842,8 +781,8 @@ if __name__ == "__main__" :
                 cmap.writeFiles(final, totalNumOfFiles, args.out, recNames, ligNames, rank='all')
 
         if rank == 0:
-            print "Total Time Usage: "
-            print datetime.now() - startTime
+            print( "Total Time Usage: ")
+            print( datetime.now() - startTime)
 
         MPI.Finalize()
         sys.exit(1)

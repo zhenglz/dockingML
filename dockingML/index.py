@@ -184,7 +184,7 @@ class PdbIndex :
 
         if not os.path.exists(proteinres) :
             PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
-            proteinres = os.path.join(PROJECT_ROOT, '/../', 'data/amino-acid.lib')
+            proteinres = PROJECT_ROOT + '/../data/amino-acid.lib'
 
         with open(proteinres) as lines:
             protRes = [s.split()[2] for s in lines if "#" not in s]
