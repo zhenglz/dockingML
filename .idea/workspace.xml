@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data/nucleic-acid.lib" afterPath="$PROJECT_DIR$/data/nucleic-acid.lib" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockingML/cmap.py" afterPath="$PROJECT_DIR$/dockingML/cmap.py" />
     </list>
     <ignored path="dockingML.iws" />
@@ -62,10 +61,11 @@
       <file leaf-file-name="cmap.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/dockingML/cmap.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="276">
-              <caret line="782" column="0" selection-start-line="782" selection-start-column="0" selection-end-line="782" selection-end-column="0" />
+            <state relative-caret-position="-995">
+              <caret line="207" column="0" selection-start-line="207" selection-start-column="0" selection-end-line="207" selection-end-column="0" />
               <folding>
                 <element signature="e#426#452#0" expanded="true" />
+                <element signature="e#3540#4124#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -118,7 +118,7 @@
       <file leaf-file-name="index.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dockingML/index.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2497">
+            <state relative-caret-position="2670">
               <caret line="181" column="60" selection-start-line="181" selection-start-column="60" selection-end-line="181" selection-end-column="60" />
               <folding>
                 <element signature="e#109#123#0" expanded="true" />
@@ -189,8 +189,8 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="y" value="22" />
-    <option name="width" value="1600" />
-    <option name="height" value="838" />
+    <option name="width" value="1366" />
+    <option name="height" value="706" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -217,8 +217,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -253,6 +251,8 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -459,13 +459,13 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="22" width="1600" height="838" extended-state="0" />
+    <frame x="0" y="22" width="1366" height="706" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1925" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19180088" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1989597" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21036106" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -591,9 +591,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="23" />
-          <folding>
-            <element signature="e#47#56#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -645,7 +642,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/dockingML/index.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2497">
+        <state relative-caret-position="2670">
           <caret line="181" column="60" selection-start-line="181" selection-start-column="60" selection-end-line="181" selection-end-column="60" />
           <folding>
             <element signature="e#109#123#0" expanded="true" />
@@ -681,10 +678,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/dockingML/cmap.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="782" column="0" selection-start-line="782" selection-start-column="0" selection-end-line="782" selection-end-column="0" />
+        <state relative-caret-position="-995">
+          <caret line="207" column="0" selection-start-line="207" selection-start-column="0" selection-end-line="207" selection-end-column="0" />
           <folding>
             <element signature="e#426#452#0" expanded="true" />
+            <element signature="e#3540#4124#0" expanded="false" />
           </folding>
         </state>
       </provider>

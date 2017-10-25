@@ -12,6 +12,7 @@
 import glob, math, sys, os
 import numpy as np
 import argparse
+import linecache
 
 from collections import defaultdict
 from argparse import RawTextHelpFormatter
@@ -55,7 +56,42 @@ class ContactMap:
                             break
         return reference
 
-    def splitPdbFile(self):
+    def crdPBCRemove(self, crd, pbc):
+        """
+        restore xyz PBC conditions by add or minus the pbc vectors
+        only cubic pbc could be handled
+        :param crd: list of floats, original coordinates
+        :param pbc: list of lists, pbc vectors
+        :return: list of floats, the new coordinates
+        """
+        newcrd = []
+        for i in range(3):
+            if len(pbc[i]) == 2:
+                if crd[i] <= pbc[i][0]:
+                    newcrd.append(crd[i] + pbc[i][1])
+                elif crd[i] >= pbc[i][1]:
+                    newcrd.append(crd[i] - pbc[i][1])
+                else:
+                    newcrd.append(crd[i])
+            else:
+                newcrd.append(crd[i])
+        return newcrd
+
+    def getPBCInfor(self, inp, ):
+        """
+        get the xyz pbc information, for lipid especially
+        :param inp: str, a pdb file with CRYST1 information
+        :return: list, xyz pbc range
+        """
+        pbcline = linecache.getline(inp, 1)
+        x, y, z = pbcline.split()[1], pbcline.split()[2], pbcline.split()[3]
+
+        return [[0.0, float(x)],
+                [0.0, float(y)],
+                [0.0, float(z)],
+                ]
+
+    def splitPdbFile(self, fileHeader="MODEL"):
         '''
         read a large pdb file to obtain the splitted files
         :return: a list of single-frame pdb file
@@ -70,10 +106,12 @@ class ContactMap:
 
         else :
             filelist = []
+            count = 0
             with open(self.mfPDB) as lines :
                 for s in lines :
-                    if "MODEL" == s.split()[0] :
-                        no_model = s.split()[1]
+                    if fileHeader == s.split()[0] :
+                        count += 1
+                        no_model = str(count)
                         tofile = open("S_"+no_model+".pdb",'wb')
                         filelist.append("S_"+no_model+".pdb")
                         tofile.write(s)
