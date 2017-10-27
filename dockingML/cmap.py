@@ -20,6 +20,7 @@ from datetime import datetime
 from mpi4py import MPI
 
 from .index import PdbIndex
+from .algorithms import BasicAlgorithm
 
 class ContactMap:
     def __init__(self, hugePDBFile) :
@@ -128,26 +129,6 @@ class ContactMap:
         print( "PDB File spliting finished! \n")
         return (sorted(filelist))
 
-    def switchFuction(self, x, d0, m=12, n=6):
-        '''
-        a switch function is a way to make the counting continuous
-        :param x: distance
-        :param d0: cutoff
-        :param m:
-        :param n:
-        :return: a switched distance
-        '''
-        # for countting, implement a rational switch function to enable a smooth transition
-        # the function is lik  s= [1 - (x/d0)^6] / [1 - (x/d0)^12]
-        # d0 is a cutoff
-        count = 0.0
-        try :
-            count = (1.0 - math.pow((x / d0), n)) / (1.0 - math.pow((x / d0), m))
-        except ZeroDivisionError :
-            print( "Divide by zero, ", x, d0)
-
-        return count
-
     def getAtomNdxByAtomName(self, singleFramePDB, atomName):
         '''
         input a pdb file and return related atom index
@@ -156,8 +137,13 @@ class ContactMap:
         :return: atom index, list of str
         '''
         ndx = []
-        with open(singleFramePDB) as lines :
-            ndx = [ s.split()[1] for s in lines if "ATOM" in s and s.split()[2] in atomName ]
+        try :
+            with open(singleFramePDB) as lines :
+                ndx = [ s.split()[1] for s in lines
+                        if (s.split()[0] in ["ATOM", "HETATM"] and s.split()[2] in atomName) ]
+        except FileExistsError :
+            print("File %s not exists" % (singleFramePDB))
+
         return ndx
 
     def getResIndex(self, singleFramePDB, chain, resIdList):
@@ -275,7 +261,8 @@ class ContactMap:
                 '''
                 for s in lines :
                     if "ATOM" in s or "HETATM" in s :
-                        if s.split()[2] in atomType and s[21] in list(chain) and int(s[22:26].strip()) in resList[key] :
+                        if s.split()[2] in atomType and s[21] in list(chain) and
+                            int(s[22:26].strip()) in resList[key] :
                             if s.split()[1] not in atomndx :
                                 append(s.split()[1])
                             else :
@@ -333,8 +320,13 @@ class ContactMap:
         """
         atomCrd = []
         with open(singleFramePDB) as lines :
-            lines = [s for s in lines if len(s) > 4 and s[:4] in ["ATOM","HETA"] and s.split()[1] in atomNdx]
-            atomCrd = map(lambda x: [float(x[30:38].strip()), float(x[38:46].strip()), float(x[46:54].strip())], lines)
+            lines = [s for s in lines if len(s) > 4 and
+                     s[:4] in ["ATOM","HETA"] and
+                     s.split()[1] in atomNdx]
+            atomCrd = map(lambda x: [float(x[30:38].strip()),
+                                     float(x[38:46].strip()),
+                                     float(x[46:54].strip())],
+                          lines)
         return atomCrd
 
     def residueContacts(self, resCrd1, resCrd2,
@@ -372,7 +364,8 @@ class ContactMap:
         else :
             if switch:
                 dc = 2 * math.sqrt(distcutoff)
-                counts = self.switchFuction(math.sqrt(distances[0]), dc)
+                swf= BasicAlgorithm()
+                counts = swf.switchFuction(math.sqrt(distances[0]), dc)
                 if verbose :
                     print( rank, " COUNTS: ", counts)
                 return counts
@@ -444,7 +437,8 @@ class ContactMap:
 
                             print( resid1, resid2)
 
-                            tofile.write("%16s   %-20s   %-4s  %-4s  %8.3f\n"%(resid2, resid1, infor2[0], infor1[0], math.sqrt(distance)))
+                            tofile.write("%16s   %-20s   %-4s  %-4s  %8.3f\n"%
+                                         (resid2, resid1, infor2[0], infor1[0], math.sqrt(distance)))
 
             if verbose :
                 print("complete atom %s "% atom2)
@@ -541,9 +535,13 @@ class ContactMap:
             with open(singleFramePDB) as lines:
                 lines = list(filter(lambda x: ("ATOM" in x or "HETATM" in x) and x[21] in chains, lines))
                 if perAtom :
-                    resNames = [x.split()[1] + '_' + x[21] for x in lines if int(x[22:26].strip()) in resList[key]]
+                    resNames = [x.split()[1] + '_' + x[21]
+                                for x in lines
+                                if int(x[22:26].strip()) in resList[key]]
                 else :
-                    resNames = [x[22:26].strip() + '_' + x[21] for x in lines if int(x[22:26].strip()) in resList[key]]
+                    resNames = [x[22:26].strip() + '_' + x[21]
+                                for x in lines
+                                if int(x[22:26].strip()) in resList[key]]
 
                 for item in resNames :
                     if item not in used :
@@ -722,7 +720,8 @@ if __name__ == "__main__" :
 
         if len(args.atomtype) not in [1, 2]:
             if len(args.eletype) != 0 :
-                atomType = [ cmap.findAtomTypePerEle(args.eletype, reference), cmap.findAtomTypePerEle(args.eletype, reference) ]
+                atomType = [ cmap.findAtomTypePerEle(args.eletype, reference),
+                             cmap.findAtomTypePerEle(args.eletype, reference) ]
             elif len(atomName1) and len(atomName2) :
                 atomType = [ args.atomname1, args.atomname2 ]
             else :

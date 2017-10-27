@@ -3,7 +3,6 @@
 
 from .mol2IO import Mol2IO
 import os
-from glob import glob
 
 class FilterMol2(Mol2IO) :
 

@@ -151,7 +151,7 @@ class PdbIndex :
 
         if not os.path.exists(nucleic):
             PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
-            nucleic = os.path.join(PROJECT_ROOT, '/../', 'nucleic-acid.lib')
+            nucleic = os.path.join(PROJECT_ROOT, '/../data/nucleic-acid.lib')
 
         if isProtein:
             subgroup = {}
@@ -166,13 +166,15 @@ class PdbIndex :
             return subgroup
         else:
             xna = {}
-            if os.path.exists(nucleic):
+            try :
                 with open(nucleic) as lines:
-
                     for s in lines:
                         if "#" not in s:
                             xna[s.split()[-1]] = s.split()[1]
 
+            except IOError :
+                print("File %s not exist" % nucleic)
+                xna = {}
             return xna
 
     def atomInformation(self, pdbin, proteinres="amino-acid.lib"):
