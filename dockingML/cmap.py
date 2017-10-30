@@ -21,6 +21,7 @@ from mpi4py import MPI
 
 from .index import PdbIndex
 from .algorithms import BasicAlgorithm
+from .pdbIO import coordinatesPDB
 
 class ContactMap:
     def __init__(self, hugePDBFile) :
@@ -56,41 +57,6 @@ class ContactMap:
                             tofile.write(s)
                             break
         return reference
-
-    def crdPBCRemove(self, crd, pbc):
-        """
-        restore xyz PBC conditions by add or minus the pbc vectors
-        only cubic pbc could be handled
-        :param crd: list of floats, original coordinates
-        :param pbc: list of lists, pbc vectors
-        :return: list of floats, the new coordinates
-        """
-        newcrd = []
-        for i in range(3):
-            if len(pbc[i]) == 2:
-                if crd[i] <= pbc[i][0]:
-                    newcrd.append(crd[i] + pbc[i][1])
-                elif crd[i] >= pbc[i][1]:
-                    newcrd.append(crd[i] - pbc[i][1])
-                else:
-                    newcrd.append(crd[i])
-            else:
-                newcrd.append(crd[i])
-        return newcrd
-
-    def getPBCInfor(self, inp, ):
-        """
-        get the xyz pbc information, for lipid especially
-        :param inp: str, a pdb file with CRYST1 information
-        :return: list, xyz pbc range
-        """
-        pbcline = linecache.getline(inp, 1)
-        x, y, z = pbcline.split()[1], pbcline.split()[2], pbcline.split()[3]
-
-        return [[0.0, float(x)],
-                [0.0, float(y)],
-                [0.0, float(z)],
-                ]
 
     def splitPdbFile(self, fileHeader="MODEL"):
         '''
@@ -311,24 +277,6 @@ class ContactMap:
         ## resCrdDist format : {'123':[[0.0,0.0,0.0],[]]}
         return resCrds
 
-    def getPdbCrdByNdx(self, singleFramePDB, atomNdx):
-        """
-        input a pdb file and the atom index, return the crd of the atoms
-        :param singleFramePDB: file, string
-        :param atomNdx: atom index, list of strings
-        :return: atom coordinates, list
-        """
-        atomCrd = []
-        with open(singleFramePDB) as lines :
-            lines = [s for s in lines if len(s) > 4 and
-                     s[:4] in ["ATOM","HETA"] and
-                     s.split()[1] in atomNdx]
-            atomCrd = map(lambda x: [float(x[30:38].strip()),
-                                     float(x[38:46].strip()),
-                                     float(x[46:54].strip())],
-                          lines)
-        return atomCrd
-
     def residueContacts(self, resCrd1, resCrd2,
                         distcutoff, countcutoff=1.0,
                         switch=False, verbose=False,
@@ -407,8 +355,9 @@ class ContactMap:
         atomndx_1 = atomNdx[0]
         atomndx_2 = atomNdx[-1]
 
-        crds1 = self.getPdbCrdByNdx(pdbin, atomndx_1)
-        crds2 = self.getPdbCrdByNdx(pdbin, atomndx_2)
+        pdbio = coordinatesPDB()
+        crds1 = pdbio.getAtomCrdByNdx(pdbin, atomndx_1)
+        crds2 = pdbio.getAtomCrdByNdx(pdbin, atomndx_2)
 
         distance_cutoff = cutoff ** 2
 

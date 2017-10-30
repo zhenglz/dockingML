@@ -4,23 +4,28 @@ from collections import defaultdict
 import math
 import argparse
 from argparse import RawTextHelpFormatter
-import sys
+import sys, os
 import numpy as np
 
 class BindingFeature:
 
     def __init__(self):
-        pass
+        if os.path.exists("AtomType.dat") :
+            self.atomtype = "AtomType.dat"
+        else :
+            PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+            DEFINITIONS_ROOT = os.path.join(PROJECT_ROOT, '../data/AtomType.dat')
+            self.atomtype = DEFINITIONS_ROOT
 
-    def getVdWParams(self, inputFile="AtomType.dat") :
+    def getVdWParams(self, inputF) :
         '''
         Get vdw parameters, mainly sigma and epsilon term in energy function
-        :param inputFile: str, a library file containing atomic vdw parameters
+        inputFile: str, a library file containing atomic vdw parameters
         :return:
         '''
         # obtain vdw radius for different atoms
         vdwParams = defaultdict(list)
-        with open(inputFile) as lines :
+        with open(inputF) as lines :
             for s in lines :
                 #param = []
                 if "#" not in s and ";" not in s :
@@ -249,8 +254,9 @@ class BindingFeature:
         backboneAtoms = ["C", "N", "O", "CA"]
 
         for atom in atoms :
-            res = atom.split("+")[0].split("_")[1] + "_" + atom.split("+")[0].split("_")[2] + "_" \
-                  +  atom.split("+")[0].split("_")[3]
+            res = atom.split("+")[0].split("_")[1] + "_" + \
+                  atom.split("+")[0].split("_")[2] + "_" + \
+                  atom.split("+")[0].split("_")[3]
             if res not in recRes :
                 recRes.append(res)  # get the full residue_seq_chain list
 
@@ -374,7 +380,9 @@ class BindingFeature:
         backboneAtoms = ["C", "N", "O", "CA"]
 
         for atom in atoms:
-            res = atom.split("+")[0].split("_")[1] + "_" + atom.split("+")[0].split("_")[2]
+            res = atom.split("+")[0].split("_")[1] + "_" + \
+                  atom.split("+")[0].split("_")[2] + "_" + \
+                  atom.split("+")[0].split("_")[3]
             if res not in recRes:
                 recRes.append(res)
                 # get the full residue_seq list
@@ -390,7 +398,9 @@ class BindingFeature:
                 recline = recatomInfor[atom.split("+")[0]]
                 ligline = ligatomInfor[atom.split("+")[1]]
                 #residueID = atom.split("+")[0].split("_")[1] + "_" + atom.split("+")[0].split("_")[2]
-                res = atom.split("+")[0].split("_")[1] + "_" + atom.split("+")[0].split("_")[2]
+                res = atom.split("+")[0].split("_")[1] + "_" + \
+                      atom.split("+")[0].split("_")[2] + "_" + \
+                      atom.split("+")[0].split("_")[3]
 
                 #q1 = RecCharges[ recline[16:20].strip() + "_" + recline[12:16].strip()]
                 #q2 = LigCharges[ ligline[16:20].strip() + "_" + ligline[12:16].strip()]
@@ -409,7 +419,8 @@ class BindingFeature:
                         vdwCountCutoff=6.0,
                         vdwEnerCutoff=12.0,
                         colEnerCutoff=12.0,
-                        dielec=4.0
+                        dielec=4.0,
+
                         ) :
         """
         extract necessary short range interaction features
@@ -424,7 +435,7 @@ class BindingFeature:
 
         # the Van der Waals interaction parameters
         # the format is: { "C" : [0.339, 0.359824]; "DU" : [0.339, 0.359] }
-        vdwParams = self.getVdWParams("AtomType.dat")
+        vdwParams = self.getVdWParams(self.atomtype)
         pdbfileLig = {}
         lines = open(inputfile)
         for s in lines :
@@ -435,6 +446,8 @@ class BindingFeature:
         allcases = []
         colnames = []
         for i in range(len(pdbfileLig.keys())) :
+            print("Progress: no. %d file, out of %d"%(i, len(pdbfileLig.keys())))
+
             pdbfilename = sorted(pdbfileLig.keys())[i]
 
             receptorXYZ, ligandXYZ, recatomDetailInfor, ligatomDetailInfor = \
@@ -447,7 +460,6 @@ class BindingFeature:
             reslist2, backcount, sidecount = self.residueCounts(alldistpairs,
                                                                 recatomDetailInfor,
                                                                 distanceCutoff = vdwCountCutoff)
-
             # calculate Van der Waals contributions. Backbone and SideChain are seperated
             # this function works fine
             reslist2, backvan, sidevan = self.resVdWContribution(alldistpairs,
@@ -481,19 +493,19 @@ class BindingFeature:
                 for cn in ["countback", "countside", "vdwback", "vdwside", "columbback", "columbside"] :
                     colnames += [cn+"_"+ x for x in reslist]
 
-                colnames = [ "atomTCount" + "_" + x for x in atomCombine ]
+                colnames += [ "atomTCount" + "_" + x for x in atomCombine ]
 
             # countback and countside
             case += [ backcount[x] for x in reslist ]
-            case += [ sidecount[x] for x in reslist]
+            case += [ sidecount[x] for x in reslist ]
 
             # vdwback and vdwside
-            case += [ backvan[x] for x in reslist]
-            case += [ sidevan[x] for x in reslist]
+            case += [ backvan[x] for x in reslist ]
+            case += [ sidevan[x] for x in reslist ]
 
             # columbback and cloumbback
-            case += [ backcol[x] for x in reslist]
-            case += [ sidecol[x] for x in reslist]
+            case += [ backcol[x] for x in reslist ]
+            case += [ sidecol[x] for x in reslist ]
 
             # atomTcount
             case += [ atomTypeCounts[x] for x in atomCombine ]

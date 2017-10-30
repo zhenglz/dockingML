@@ -172,7 +172,7 @@ class PdbIndex :
                         if "#" not in s:
                             xna[s.split()[-1]] = s.split()[1]
 
-            except IOError :
+            except FileNotFoundError :
                 print("File %s not exist" % nucleic)
                 xna = {}
             return xna
