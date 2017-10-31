@@ -4,6 +4,7 @@ import os
 import numpy as np
 import pandas as pd
 import linecache
+from collections import defaultdict
 
 class RewritePDB :
     """
@@ -74,7 +75,7 @@ class RewritePDB :
         newline = inline[:21] + str(chainid) + inline[22:]
         return newline
 
-class PDB_Parser :
+class parsePDB :
     """
     parse pdb file
     """
@@ -102,7 +103,7 @@ class PDB_Parser :
 
         return pdbInfor
 
-    def parsePDB(self, pdbin, proteinChains, pdbOut, ligandInfor=["SUB","A"]):
+    def subsetPDB(self, pdbin, proteinChains, pdbOut, ligandInfor=["SUB","A"]):
         """
         subset the pdb file and only output part of the file
         :param pdbin:
@@ -126,6 +127,132 @@ class PDB_Parser :
 
         pdbout.close()
         return 1
+
+    def withSubGroup(self, isProtein=True, nucleic="nucleic-acid.lib"):
+        """
+        check whether a pdb line is protein or nucleic acids
+        :param isProtein:
+        :param nucleic:
+        :return:
+        """
+
+        if not os.path.exists(nucleic):
+            PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+            nucleic = os.path.join(PROJECT_ROOT, '/../data/nucleic-acid.lib')
+
+        if isProtein:
+            subgroup = {}
+            for atom in ['CA', 'N', 'C', 'O']:
+                subgroup[atom] = "mainchain"
+            for atom in ['CZ2', 'OE2', 'OE1', 'OG1', 'CD1', 'CD2', 'CG2', 'NE', 'NZ', 'OD1',
+                         'ND1', 'ND2', 'OD2', 'CB', 'CZ3', 'CG', 'CZ',
+                         'NH1', 'CE', 'CE1', 'NH2', 'CG1', 'CD', 'OH', 'OG', 'SG', 'CH2',
+                         'NE1', 'CE3', 'SD', 'NE2', 'CE2']:
+                subgroup[atom] = 'sidechain'
+
+            return subgroup
+        else:
+            xna = {}
+            try:
+                with open(nucleic) as lines:
+                    for s in lines:
+                        if "#" not in s:
+                            xna[s.split()[-1]] = s.split()[1]
+
+            except FileNotFoundError:
+                print("File %s not exist" % nucleic)
+                xna = {}
+            return xna
+
+    def atomInformation(self, pdbin, proteinres="amino-acid.lib"):
+        """
+        # elements in atom infor
+        # key: atom index
+        # value: [atomname, molecule type, is_hydrogen,  resname, resndx, chainid,(mainchian, sidechain,
+        #           sugar ring, phosphate group, base ring)]
+        :param pdbin:
+        :param proteinres:
+        :return:
+        """
+
+        atominfor = defaultdict(list)
+
+        if not os.path.exists(proteinres):
+            PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+            proteinres = PROJECT_ROOT + '/../data/amino-acid.lib'
+
+        with open(proteinres) as lines:
+            protRes = [s.split()[2] for s in lines if "#" not in s]
+        DNARes = ['DA', 'DT', 'DC', 'DG']
+        RNARes = ['A', 'G', 'C', 'U']
+
+        prosubgroup = self.withSubGroup(True)
+        xnasubgroup = self.withSubGroup(False)
+
+        with open(pdbin) as lines:
+            for s in lines:
+                if len(s.split()) and s[:4] in ["ATOM", "HETA"]:
+
+                    atomndx = s[6:11].strip()
+                    atomname = s[12:16].strip()
+                    resname = s[17:20].strip()
+                    resndx = int(s[22:26].strip())
+                    chain = s[21]
+                    if len(s) > 76:
+                        if s[77] != " ":
+                            element = s[77]
+                        else:
+                            element = s[13]
+                    else:
+                        element = s[13]
+
+                    hydrogen = {"H": True}
+                    is_hydrogen = hydrogen.get(s[13], False)
+
+                    if resname in protRes:
+                        moltype = "Protein"
+                    elif resname in DNARes:
+                        moltype = "DNA"
+                    elif resname in RNARes:
+                        moltype = "RNA"
+                    else:
+                        moltype = "Unknown"
+
+                    if moltype == "Protein":
+                        subgroup = prosubgroup.get(atomname, "Unknown")
+                    elif moltype in ["RNA", "DNA"]:
+                        subgroup = xnasubgroup.get(atomname, "Unknown")
+                    else:
+                        subgroup = "Unknown"
+
+                    atominfor[atomndx] = [atomname, moltype, is_hydrogen, resname, resndx, chain, subgroup, element]
+                else:
+                    pass
+
+        return atominfor
+
+    def getResNamesList(self, pdbin, chains):
+
+        with open(pdbin) as lines :
+            lines = [ x for x in lines if (x[:4] in ["ATOM", "HETA"] and x[21] in chains)]
+
+
+    def getNdxForRes(self, pdbin, residues=[]):
+        pass
+
+    def getNdxForMol(self, pdbin, molres=[], resndx=[]):
+        """
+        generally, a molecule is composed by a list of residues (molres)
+        these residues' sequence number is a list of intergers (resndx)
+        :param pdbin:
+        :param molres:
+        :param resndx:
+        :return:
+        """
+
+        atominf = self.atomInformation(pdbin)
+        # ndx in atominf keys are string
+        atomndx = [str(x) for x in sorted([ x for x in atominf.keys()])]
 
 class handlePBC :
     def __init__(self):
