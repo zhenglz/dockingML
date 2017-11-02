@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockingML/pdbIO.py" afterPath="$PROJECT_DIR$/dockingML/pdbIO.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockingML/features.py" afterPath="$PROJECT_DIR$/dockingML/features.py" />
     </list>
     <ignored path="dockingML.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -24,18 +24,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dockingML/__init__.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-              <folding>
-                <element signature="e#25#34#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="gentop.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dockingML/gentop.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -95,14 +83,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pdbIO.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="pdbIO.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dockingML/pdbIO.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2603">
+            <state relative-caret-position="580">
               <caret line="233" column="45" selection-start-line="233" selection-start-column="45" selection-end-line="233" selection-end-column="45" />
               <folding>
                 <element signature="e#15#24#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="features.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/dockingML/features.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="299">
+              <caret line="303" column="67" selection-start-line="303" selection-start-column="67" selection-end-line="303" selection-end-column="67" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -184,7 +182,6 @@
         <option value="$PROJECT_DIR$/setup.py" />
         <option value="$PROJECT_DIR$/dockingML/algorithms.py" />
         <option value="$PROJECT_DIR$/dockingML/__init__.py" />
-        <option value="$PROJECT_DIR$/dockingML/features.py" />
         <option value="$PROJECT_DIR$/dockingML/autoMD.py" />
         <option value="$PROJECT_DIR$/dockingML/extract.py" />
         <option value="$PROJECT_DIR$/dockingML/filter_mol2.py" />
@@ -194,6 +191,7 @@
         <option value="$PROJECT_DIR$/dockingML/index.py" />
         <option value="$PROJECT_DIR$/dockingML/cmap.py" />
         <option value="$PROJECT_DIR$/dockingML/pdbIO.py" />
+        <option value="$PROJECT_DIR$/dockingML/features.py" />
       </list>
     </option>
   </component>
@@ -228,8 +226,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -264,6 +260,8 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -473,7 +471,7 @@
     <frame x="8" y="30" width="1366" height="706" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19180088" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19180088" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21036106" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -582,13 +580,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
           <caret line="18" column="12" selection-start-line="18" selection-start-column="12" selection-end-line="18" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dockingML/features.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6386">
-          <caret line="522" column="67" selection-start-line="522" selection-start-column="67" selection-end-line="522" selection-end-column="67" />
         </state>
       </provider>
     </entry>
@@ -715,11 +706,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/dockingML/pdbIO.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2603">
+        <state relative-caret-position="580">
           <caret line="233" column="45" selection-start-line="233" selection-start-column="45" selection-end-line="233" selection-end-column="45" />
           <folding>
             <element signature="e#15#24#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dockingML/features.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="299">
+          <caret line="303" column="67" selection-start-line="303" selection-start-column="67" selection-end-line="303" selection-end-column="67" />
+          <folding />
         </state>
       </provider>
     </entry>

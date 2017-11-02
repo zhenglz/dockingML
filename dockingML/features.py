@@ -301,7 +301,8 @@ class BindingFeature:
 
             # calculate L J potential per residue
             if alldistpairs[atom] <= maxCutoff:
-                energy = self.atomicVdWEnergy(atomtype1, atomtype2, alldistpairs[atom], vdwParams)
+                # transfer angstrom to nanometer by multiplying 0.1
+                energy = self.atomicVdWEnergy(atomtype1, atomtype2, alldistpairs[atom] * 0.1, vdwParams)
             else :
                 energy = 0.0
                 #energy = self.atomicVdWEnergy(atomtype1, atomtype2, maxCutoff, vdwParams)
@@ -408,9 +409,11 @@ class BindingFeature:
                 q2 = float(ligline.split()[-2])
 
                 if atom.split("+")[0].split("_")[0] in backboneAtoms :
-                    backElectroEner[res] += f * q1 * q2 /(alldistpairs[atom] * dielectric)
+                    # from angstrom to nanometer
+                    backElectroEner[res] += f * q1 * q2 /(alldistpairs[atom] * 0.1 * dielectric)
                 else :
-                    sideElectroEner[res] += f * q1 * q2 /(alldistpairs[atom] * dielectric)
+                    # from angstrom to nanometer
+                    sideElectroEner[res] += f * q1 * q2 /(alldistpairs[atom] * 0.1 * dielectric)
 
         return  recRes, backElectroEner, sideElectroEner
 
