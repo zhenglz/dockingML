@@ -1,7 +1,7 @@
 import os
-from .pdbIO import RewritePDB
+from .pdbIO import rewritePDB
 
-class ShiftPDB(RewritePDB) :
+class shiftPDB(rewritePDB) :
     """
     Shift or rotate pdb files
     """
@@ -54,7 +54,7 @@ class ShiftPDB(RewritePDB) :
 
         return head + '{:8.3f}'.format(x) + '{:8.3f}'.format(y) + '{:8.3f}'.format(z) + tail
 
-class SimulationModeller :
+class simulationModeller :
 
     def __init__(self, PDBin):
         self.pdb = PDBin
@@ -83,7 +83,7 @@ class SimulationModeller :
         else :
             tofile = open(output,'w')
 
-        rwPBD = ShiftPDB(self.pdb)
+        rwPBD = shiftPDB(self.pdb)
 
         with open(self.pdb) as lines :
             for s in lines :
@@ -122,7 +122,7 @@ class SimulationModeller :
         else:
             tofile = open(output, 'w')
 
-        rwPBD = ShiftPDB(self.pdb)
+        rwPBD = shiftPDB(self.pdb)
 
         with open(self.pdb) as lines:
             for s in lines:
@@ -200,5 +200,5 @@ if __name__ == "__main__" :
                 residueList=['DOE', 'DOG', 'LPS'], chainID='I')
     '''
 
-    sm = SimulationModeller("large_8pcs.pdb")
+    sm = simulationModeller("large_8pcs.pdb")
     sm.trunctSimulationBox([95.522, 95.522, 180], output='final_box.pdb')

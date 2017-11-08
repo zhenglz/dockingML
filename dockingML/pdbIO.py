@@ -6,7 +6,7 @@ import pandas as pd
 import linecache
 from collections import defaultdict
 
-class RewritePDB :
+class rewritePDB :
     """
     Modify pdb file by changing atom indexing, resname, res sequence number and chain id
     """
@@ -75,12 +75,53 @@ class RewritePDB :
         newline = inline[:21] + str(chainid) + inline[22:]
         return newline
 
+    def combinePDBFromLines(self, output, lines):
+        """
+        combine a list of lines to a pdb file
+        :param output:
+        :param lines:
+        :return:
+        """
+
+        with open(output, "wb") as tofile :
+            for s in lines :
+                tofile.write(s)
+
+        return 1
+
 class parsePDB :
     """
     parse pdb file
     """
     def __init__(self, inPDB='1a28.pdb'):
         self.pdbin = inPDB
+
+        if os.path.exists("amino-acid.lib") :
+            self.prores = "amino-acid.lib"
+        else :
+            PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+            self.prores = PROJECT_ROOT + '/../data/amino-acid.lib'
+
+        if os.path.exists("nucleic-acid.lib") :
+            self.nucleic = "nucleic-acid.lib"
+        else :
+            PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+            self.nucleic = PROJECT_ROOT + '/../data/nucleic-acid.lib'
+
+    def getStdProRes(self):
+        """
+        get the standard protein residue list
+        :param param:
+        :return:
+        """
+
+        with open(self.prores) as lines :
+            lines = [ x for x in lines if "#" not in x ]
+
+        resname = [ x.split()[2] for x in lines ]
+
+        return resname
+
 
     def pdbListInfor(self, pdbList):
         #pdbInfor = defaultdict(list)
@@ -128,17 +169,12 @@ class parsePDB :
         pdbout.close()
         return 1
 
-    def withSubGroup(self, isProtein=True, nucleic="nucleic-acid.lib"):
+    def withSubGroup(self, isProtein=True):
         """
         check whether a pdb line is protein or nucleic acids
         :param isProtein:
-        :param nucleic:
         :return:
         """
-
-        if not os.path.exists(nucleic):
-            PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
-            nucleic = os.path.join(PROJECT_ROOT, '/../data/nucleic-acid.lib')
 
         if isProtein:
             subgroup = {}
@@ -154,34 +190,33 @@ class parsePDB :
         else:
             xna = {}
             try:
-                with open(nucleic) as lines:
+                with open(self.nucleic) as lines:
                     for s in lines:
                         if "#" not in s:
                             xna[s.split()[-1]] = s.split()[1]
 
             except FileNotFoundError:
-                print("File %s not exist" % nucleic)
+                print("File %s not exist" % self.nucleic)
                 xna = {}
             return xna
 
-    def atomInformation(self, pdbin, proteinres="amino-acid.lib"):
+    def atomInformation(self, pdbin):
         """
         # elements in atom infor
         # key: atom index
         # value: [atomname, molecule type, is_hydrogen,  resname, resndx, chainid,(mainchian, sidechain,
         #           sugar ring, phosphate group, base ring)]
         :param pdbin:
-        :param proteinres:
         :return:
         """
 
         atominfor = defaultdict(list)
 
-        if not os.path.exists(proteinres):
+        if not os.path.exists(self.prores):
             PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
             proteinres = PROJECT_ROOT + '/../data/amino-acid.lib'
 
-        with open(proteinres) as lines:
+        with open(self.prores) as lines:
             protRes = [s.split()[2] for s in lines if "#" not in s]
         DNARes = ['DA', 'DT', 'DC', 'DG']
         RNARes = ['A', 'G', 'C', 'U']
@@ -236,6 +271,12 @@ class parsePDB :
         with open(pdbin) as lines :
             lines = [ x for x in lines if (x[:4] in ["ATOM", "HETA"] and x[21] in chains)]
 
+        resname = []
+        for s in lines :
+            if s.split()[3] not in resname :
+                resname.append(s.split()[3])
+
+        return resname
 
     def getNdxForRes(self, pdbin, residues=[]):
         pass
@@ -253,6 +294,8 @@ class parsePDB :
         atominf = self.atomInformation(pdbin)
         # ndx in atominf keys are string
         atomndx = [str(x) for x in sorted([ x for x in atominf.keys()])]
+
+        return atomndx
 
 class handlePBC :
     def __init__(self):
@@ -364,6 +407,6 @@ if __name__ == "__main__" :
 
     pdbin = "npt_M1_control.pdb"
 
-    pdbr = RewritePDB(pdbin)
+    pdbr = rewritePDB(pdbin)
 
     pdbr.pdbRewrite("new_"+pdbin, ' ', 1, 683)
