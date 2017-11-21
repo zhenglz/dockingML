@@ -4,6 +4,10 @@ import numpy as np
 from matplotlib import pyplot as plt
 import networkx as nx
 
+import os, sys
+import argparse
+from argparse import RawDescriptionHelpFormatter
+
 class NetworkPrepare :
     def __init__(self):
         pass
@@ -62,65 +66,172 @@ class NetworkDraw :
     def __init__(self):
         pass
 
-        def drawNetwork(node_edges, nodes, nodes_resnum,
-                        nodefactor=300, lwfactor=0.001,
-                        showlabel=False, fig=None, DPI=2000,
-                        fsize=20, positions=[], colors=[],
-                        ):
+    def arguemnets(self):
+        d = '''
+        Descriptions of community network pol
+        '''
+
+        parser = argparse.ArgumentParser(description=d, formatter_class=RawDescriptionHelpFormatter)
+        parser.add_argument('-node_edges', type=str, default='node-edges-x.dat',
+                            help="File contains node-edges information. \n"
+                                 "Default is node-edges.dat. If this file not exist, \n"
+                                 "Another node-edge file will be generated from betweenness and community.\n")
+        parser.add_argument('-betw', default="betweenness.dat", type=str,
+                            help="A matrix file contain betweenness information. \n")
+        parser.add_argument('-com', default='community.dat', type=str,
+                            help="A result file from gncommunity analysis. \n")
+        parser.add_argument('-nsf', type=float, default=100,
+                            help="Node size factor. Multiple this number with number of \n"
+                                 "Residues in a community to determine the node size.\n")
+        parser.add_argument('-lwf', type=float, default=0.001,
+                            help="Edge linewidth size factor. Default is 0.001 \n"
+                                 "Multiple this number with the \n"
+                                 "betweenness in a community to determine the edge size.\n")
+        parser.add_argument('-fig', type=str, default='',
+                            help="Output the plt figure as a file. Default is figure_1.pdf.\n")
+        parser.add_argument('-dpi', type=int, default=2000,
+                            help="Output file DPI. Default is 2000. \n")
+        parser.add_argument('-label', default=False, type=bool,
+                            help="Add labels to nodes. Default is False. \n")
+        parser.add_argument('-fsize', default=14, type=int,
+                            help="Font size of labels. Default is 16. \n")
+        parser.add_argument('-cols', default=['red', 'blue', 'yellow', 'green', 'cyan', 'orange', 'navy',
+                                              'pink', 'olive', 'purple', 'firebrick', 'brown'],
+                            type=str, nargs="+",
+                            help="Colors for the nodes. Default is r b y g c o navy pink, olive \n")
+        parser.add_argument('-pos', default='pos.dat', type=str,
+                            help="A file contains positions of the nodes. Default is pos.dat. \n"
+                                 "If this file is not existed, default postions will be used. \n")
+        parser.add_argument('-nres_cutoff', default=6, type=int,
+                            help="If in a community, number of residues is less than this number,\n"
+                                 "the community will be ignored. \n")
+
+        args, unknown = parser.parse_known_args()
+
+        if len(sys.argv) < 2:
+            parser.print_help()
+            print("\nYou chose non of the arguement!\nDo nothing and exit now!\n")
+            sys.exit(1)
+
+        return args
+
+    def readPos(self, filein):
+        """
+
+        :param filein: str, a file contains the communities locations
+        :return: list of floats, the positions of the communities
+        """
+        positions = []
+        with open(filein) as lines:
+            for s in lines:
+                if "#" not in s and len(s.split()) >= 2:
+                    positions.append((float(s.split()[0]), float(s.split()[1])))
+        return positions
+
+    def drawNetwork(node_edges, nodes, nodes_resnum,
+                    nodefactor=300, lwfactor=0.001,
+                    showlabel=False, fig=None, DPI=2000,
+                    fsize=20, positions=[], colors=[],
+                    ):
 
 
-            '''
-            Draw network plot based on weighted node edges
-            :param node_edges: a list of sets, []
-            :param nodes:
-            :param nodes_resnum:
-            :param nodefactor:
-            :param lwfactor:
-            :param showlabel:
-            :param fig:
-            :param DPI:
-            :param fsize:
-            :param positions:
-            :param colors:
-            :return:
-            '''
+        '''
+        Draw network plot based on weighted node edges
+        :param node_edges: a list of sets, []
+        :param nodes:
+        :param nodes_resnum:
+        :param nodefactor:
+        :param lwfactor:
+        :param showlabel:
+        :param fig:
+        :param DPI:
+        :param fsize:
+        :param positions:
+        :param colors:
+        :return:
+        '''
 
-            if len(colors) == 0:
-                cols = ['red', 'blue', 'yellow', 'green', 'cyan', 'orange', 'gray', 'pink', 'megenta'] * 2
-            elif len(colors) < len(nodes):
-                cols = colors * 5
-            elif len(colors) >= len(nodes):
-                cols = colors
-            else:
-                cols = ['red', 'blue', 'yellow', 'green', 'cyan', 'orange', 'gray', 'pink', 'megenta'] * 2
+        if len(colors) == 0:
+            cols = ['red', 'blue', 'yellow', 'green', 'cyan', 'orange', 'gray', 'pink', 'megenta'] * 2
+        elif len(colors) < len(nodes):
+            cols = colors * 5
+        elif len(colors) >= len(nodes):
+            cols = colors
+        else:
+            cols = ['red', 'blue', 'yellow', 'green', 'cyan', 'orange', 'gray', 'pink', 'megenta'] * 2
 
-            G = nx.Graph()
-            G.add_nodes_from(nodes)
-            # add edges
-            G.add_weighted_edges_from(node_edges)
+        G = nx.Graph()
+        G.add_nodes_from(nodes)
+        # add edges
+        G.add_weighted_edges_from(node_edges)
 
-            node_sizes = np.asarray(nodes_resnum) * nodefactor
-            node_colors = cols[:len(nodes)]
-            node_labels = {}
-            for x in nodes:
-                node_labels[x] = "C" + str(x)
-            edge_widths = []
-            t = [edge_widths.append(x[2]) for x in node_edges]
-            edge_widths = [x * lwfactor for x in edge_widths]
+        node_sizes = np.asarray(nodes_resnum) * nodefactor
+        node_colors = cols[:len(nodes)]
+        node_labels = {}
+        for x in nodes:
+            node_labels[x] = "C" + str(x)
+        edge_widths = []
+        t = [edge_widths.append(x[2]) for x in node_edges]
+        edge_widths = [x * lwfactor for x in edge_widths]
 
-            node_pos = {}
-            for i in nodes:
-                node_pos[i] = positions[i]
+        node_pos = {}
+        for i in nodes:
+            node_pos[i] = positions[i]
 
-            nx.draw_networkx_nodes(G, node_pos, nodelist=nodes, node_size=node_sizes, node_color=node_colors, alpha=1.0)
-            nx.draw_networkx_edges(G, pos=node_pos, edge_color='black', width=edge_widths)
-            if showlabel:
-                nx.draw_networkx_labels(G, pos=node_pos, labels=node_labels, font_size=fsize)
+        nx.draw_networkx_nodes(G, node_pos, nodelist=nodes, node_size=node_sizes, node_color=node_colors, alpha=1.0)
+        nx.draw_networkx_edges(G, pos=node_pos, edge_color='black', width=edge_widths)
+        if showlabel:
+            nx.draw_networkx_labels(G, pos=node_pos, labels=node_labels, font_size=fsize)
 
-            if fig:
-                plt.savefig(fig, dpi=DPI)
+        if fig:
+            plt.savefig(fig, dpi=DPI)
 
-            plt.show()
+        plt.show()
 
-            return 1
+        return 1
 
+
+
+if __name__ == "__main__" :
+    os.chdir(os.getcwd())
+
+    args = arguemnets()
+    comm = readCommunityFile(args.com, nres_cutoff=args.nres_cutoff)
+    nodes_resnum = [len(x) for x in comm if len(x) > args.nres_cutoff]
+
+    if os.path.exists(args.node_edges) :
+        node_edges = parseNodeEdges(args.node_edges)
+    else :
+        node_edges = []
+        edges = genNodeEdges(args.betw, comm)
+        nodes = xrange(edges.shape[0])
+        for i in nodes :
+            for j in nodes :
+                if i < j :
+                    node_edges.append((i, j, edges[i][j]))
+
+    nodes = range(len(nodes_resnum))
+
+    colors = args.cols
+
+    if os.path.exists(args.pos) :
+        positions = readPos(args.pos)
+    else :
+        positions = [
+            (0.1, 0.1),
+            (0.05, 0.3),
+            (0.1, 0.6),
+            (0.3, 0.2),
+            (0.35, 0.4),
+            (0.3, 0.6),
+            (0.25, 0.7),
+            (0.2, 0.1),
+            (0.2, 0.2),
+            (0.15, 0.4),
+        ] * 2
+
+    drawNetwork(node_edges, nodes, nodes_resnum,
+                args.nsf, args.lwf, args.label,
+                args.fig, args.dpi, args.fsize, positions,
+                colors,
+                )

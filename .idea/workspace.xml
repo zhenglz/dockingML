@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MDAnalysis/network.py" afterPath="$PROJECT_DIR$/MDAnalysis/network.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MDAnalysis/workingflow.py" afterPath="$PROJECT_DIR$/MDAnalysis/workingflow.py" />
     </list>
     <ignored path="dockingML.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -72,10 +69,11 @@
       <file leaf-file-name="network.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MDAnalysis/network.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1284">
-              <caret line="4" column="21" selection-start-line="4" selection-start-column="21" selection-end-line="4" selection-end-column="21" />
+            <state relative-caret-position="120">
+              <caret line="8" column="48" selection-start-line="8" selection-start-column="48" selection-end-line="8" selection-end-column="48" />
               <folding>
                 <element signature="e#25#43#0" expanded="true" />
+                <element signature="e#212#1701#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -659,16 +657,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file:///mnt/mulabnas/liangzhen/CloudStation/OneDrive/LPS_glycam/Results/Final_Model/genModel.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="32" selection-start-line="16" selection-start-column="32" selection-end-line="16" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#37#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/setup.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
@@ -695,12 +683,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file:///mnt/mulabnas/liangzhen/CloudStation/OneDrive/LPS_glycam/Results/Final_Model/genModel.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" column="32" selection-start-line="16" selection-start-column="32" selection-end-line="16" selection-end-column="32" />
+          <folding>
+            <element signature="e#0#37#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/MDAnalysis/network.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1284">
-          <caret line="4" column="21" selection-start-line="4" selection-start-column="21" selection-end-line="4" selection-end-column="21" />
+        <state relative-caret-position="120">
+          <caret line="8" column="48" selection-start-line="8" selection-start-column="48" selection-end-line="8" selection-end-column="48" />
           <folding>
             <element signature="e#25#43#0" expanded="true" />
+            <element signature="e#212#1701#0" expanded="false" />
           </folding>
         </state>
       </provider>
