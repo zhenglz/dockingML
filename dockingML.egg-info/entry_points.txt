@@ -1,0 +1,3 @@
+[console_scripts]
+dockingML = dockingML.cmd:main
+

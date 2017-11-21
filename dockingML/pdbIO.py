@@ -84,8 +84,7 @@ class rewritePDB :
         """
 
         with open(output, "wb") as tofile :
-            for s in lines :
-                tofile.write(s)
+            tmp = map(lambda x: tofile.write(x), lines)
 
         return 1
 
@@ -308,7 +307,9 @@ class handlePBC :
         :param inp: str, a pdb file with CRYST1 information
         :return: list, xyz pbc range
         """
-        pbcline = linecache.getline(inp, 1)
+        with open(inp) as lines :
+            pbcline = [ x for x in lines if "CRYST1" in x ][0]
+
         x, y, z = pbcline.split()[1], pbcline.split()[2], pbcline.split()[3]
 
         return [[0.0, float(x)],
