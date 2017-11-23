@@ -2,14 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/MDAnalysis/matrix.py" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dockingML/dataclean.py" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dockingML/mlearn.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MDAnalysis/__init__.py" afterPath="$PROJECT_DIR$/MDAnalysis/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MDAnalysis/io.py" afterPath="$PROJECT_DIR$/MDAnalysis/io.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MDAnalysis/network.py" afterPath="$PROJECT_DIR$/MDAnalysis/network.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MDAnalysis/workingflow.py" afterPath="$PROJECT_DIR$/MDAnalysis/workingflow.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockingML/__init__.py" afterPath="$PROJECT_DIR$/dockingML/__init__.py" />
     </list>
     <ignored path="dockingML.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -43,7 +39,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MDAnalysis/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="90">
@@ -51,6 +47,38 @@
               <folding>
                 <element signature="e#25#34#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="cmap.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/MDAnalysis/cmap.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="218">
+              <caret line="284" column="17" selection-start-line="284" selection-start-column="17" selection-end-line="284" selection-end-column="17" />
+              <folding>
+                <element signature="e#426#452#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dockingML/index.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="17" column="8" selection-start-line="17" selection-start-column="8" selection-end-line="17" selection-end-column="8" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dockingML/test.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="90">
+              <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -68,8 +96,8 @@
       <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dockingML/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+            <state relative-caret-position="150">
+              <caret line="10" column="20" selection-start-line="10" selection-start-column="20" selection-end-line="10" selection-end-column="20" />
               <folding>
                 <element signature="e#25#34#0" expanded="true" />
               </folding>
@@ -99,43 +127,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="autoMD.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dockingML/autoMD.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-759">
-              <caret line="1496" column="0" selection-start-line="1496" selection-start-column="0" selection-end-line="1496" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="mlearn.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dockingML/mlearn.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="3" selection-end-column="19" />
-              <folding>
-                <element signature="e#25#43#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="dataclean.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dockingML/dataclean.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="45">
               <caret line="3" column="19" selection-start-line="3" selection-start-column="19" selection-end-line="3" selection-end-column="19" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="io.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/MDAnalysis/io.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -180,7 +176,6 @@
         <option value="$PROJECT_DIR$/dockingML/gold.py" />
         <option value="$PROJECT_DIR$/dockingML/mol2IO.py" />
         <option value="$PROJECT_DIR$/dockingML/algorithms.py" />
-        <option value="$PROJECT_DIR$/dockingML/__init__.py" />
         <option value="$PROJECT_DIR$/dockingML/autoMD.py" />
         <option value="$PROJECT_DIR$/dockingML/extract.py" />
         <option value="$PROJECT_DIR$/dockingML/filter_mol2.py" />
@@ -202,6 +197,8 @@
         <option value="$PROJECT_DIR$/MDAnalysis/workingflow.py" />
         <option value="$PROJECT_DIR$/MDAnalysis/matrix.py" />
         <option value="$PROJECT_DIR$/MDAnalysis/__init__.py" />
+        <option value="$PROJECT_DIR$/dockingML/__init__.py" />
+        <option value="$PROJECT_DIR$/MDAnalysis/cmap.py" />
       </list>
     </option>
   </component>
@@ -545,7 +542,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/sample/mol2GMXtop.py" />
     <entry file="file://$PROJECT_DIR$/sample/extractFeatures.py" />
     <entry file="file://$PROJECT_DIR$/sample/postGold.py" />
     <entry file="file://$PROJECT_DIR$/sample/CMap5.py" />
@@ -631,13 +627,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dockingML/test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dockingML/PDBRewriter.py" />
     <entry file="file://$PROJECT_DIR$/dockingML/pdbshift.py" />
     <entry file="file://$PROJECT_DIR$/dockingML/PDB_Parser.py" />
@@ -645,13 +634,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1995">
           <caret line="149" column="15" selection-start-line="149" selection-start-column="8" selection-end-line="149" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dockingML/index.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2625">
-          <caret line="178" column="0" selection-start-line="178" selection-start-column="0" selection-end-line="178" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -682,7 +664,7 @@
         <state relative-caret-position="1260">
           <caret line="88" column="16" selection-start-line="88" selection-start-column="16" selection-end-line="88" selection-end-column="16" />
           <folding>
-            <element signature="e#15#24#0" expanded="true" />
+            <element signature="e#15#24#0" expanded="false" />
             <element signature="e#3090#3600#0" expanded="false" />
             <element signature="e#3638#3913#0" expanded="false" />
             <element signature="e#3961#4716#0" expanded="false" />
@@ -729,7 +711,7 @@
         <state relative-caret-position="225">
           <caret line="16" column="32" selection-start-line="16" selection-start-column="32" selection-end-line="16" selection-end-column="32" />
           <folding>
-            <element signature="e#0#37#0" expanded="true" />
+            <element signature="e#0#37#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -739,7 +721,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="3" selection-end-column="19" />
           <folding>
-            <element signature="e#25#43#0" expanded="true" />
+            <element signature="e#25#43#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -797,6 +779,32 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/dockingML/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dockingML/index.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="17" column="8" selection-start-line="17" selection-start-column="8" selection-end-line="17" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MDAnalysis/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="22" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
+          <folding>
+            <element signature="e#25#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/dockingML/algorithms.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
@@ -807,20 +815,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/dockingML/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+        <state relative-caret-position="150">
+          <caret line="10" column="20" selection-start-line="10" selection-start-column="20" selection-end-line="10" selection-end-column="20" />
           <folding>
             <element signature="e#25#34#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/MDAnalysis/__init__.py">
+    <entry file="file://$PROJECT_DIR$/MDAnalysis/cmap.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="22" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
+        <state relative-caret-position="218">
+          <caret line="284" column="17" selection-start-line="284" selection-start-column="17" selection-end-line="284" selection-end-column="17" />
           <folding>
-            <element signature="e#25#34#0" expanded="true" />
+            <element signature="e#426#452#0" expanded="true" />
           </folding>
         </state>
       </provider>
