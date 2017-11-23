@@ -282,7 +282,7 @@ class ContactMap:
         :param singleFramePDB: str, reference pdb file name
         :param resList: list, residue sequence list
         :param chains: list, a list of chains
-        :return: 
+        :return:
         '''
         used = []
         for key in resList.keys():
@@ -422,6 +422,95 @@ class ContactMap:
         tofile.close()
 
         return 1
+
+    def cmap_timeseries(self, pdbFileList, cutoff, deltaT,
+                        switch=False, atomNdx=[],
+                        rank=0, perAtom=[False, False],
+                        ccutoff = 0.0, NbyN=False,
+                        nresidues=0, verbose=False,
+                        ):
+
+        """
+        calculate time series based cmap
+        :param pdbFileList:
+        :param cutoff:
+        :param deltaT:
+        :param switch:
+        :param atomNdx:
+        :param rank:
+        :param perAtom:
+        :param ccutoff:
+        :param NbyN:
+        :param nresidues:
+        :param verbose:
+        :return:
+        """
+
+        if len(pdbFileList) == 0:
+            # raise Exception("Boo! \nNot find PDB files for calculation! ")
+            print('Exit Now!')
+            sys.exit(1)
+
+        atomndx_1 = atomNdx[0]
+        atomndx_2 = atomNdx[-1]
+
+        distance_cutoff = cutoff ** 2
+
+        if ccutoff > 0:
+            countCutoff = ccutoff
+        else:
+            if len(atomNdx[0]) * len(atomNdx[-1]) > nresidues :
+                countCutoff = 2.0
+            else:
+                countCutoff = 1.0
+
+        progress = 0
+
+        tscmap = []
+
+        for pdbfile in pdbFileList:
+
+            progress += 1
+
+            # time stamp of the pdb file
+            time = int(pdbfile.split("_")[1].split(".")[0]) * deltaT
+            print("Rank %d Progress: The %dth File %s out of total %d files" % \
+                  (rank, progress, pdbfile, len(pdbFileList)))
+            if verbose:
+                print(rank, atomndx_1, atomndx_2)
+
+            # get residue based list of xyz coordinates
+            resCrdDict1 = self.getPdbCrd(pdbfile, atomndx_1, perAtom=perAtom[0])
+            resCrdDict2 = self.getPdbCrd(pdbfile, atomndx_2, perAtom=perAtom[1])
+
+            nmax = len(resCrdDict2)
+
+            contCountMap = [0] * nresidues
+
+            # looping over all residues
+            for m in range(len(resCrdDict1)):
+                for n in range(len(resCrdDict2)):
+
+                    if verbose:
+                        print(rank, " RESIDUES ", m, n, resCrdDict1[m], resCrdDict2[n])
+
+                    # start calculate the contact map for each frame
+                    contCountMap[n + m * nmax] = self.residueContacts(resCrdDict1[m],
+                                                                       resCrdDict2[n],
+                                                                       distance_cutoff,
+                                                                       countCutoff,
+                                                                       switch,
+                                                                       verbose,
+                                                                       rank,
+                                                                       NbyN=NbyN
+                                                                       )
+            # append the cmap vector to the dataset
+            tscmap.append([time] + contCountMap)
+
+        # sort the 2d list, time stamp is re-ordered in accending order
+        tscmap = sorted(tscmap, key=lambda x: x[0], reverse=False)
+
+        return tscmap
 
     def cmap_ca(self, pdbFileList, cutoff, switch=False, atomNdx=[],
                 rank=0, verbose=False, nresidues=0,
