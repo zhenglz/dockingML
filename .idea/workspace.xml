@@ -6,6 +6,7 @@
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dockingML/dataclean.py" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dockingML/mlearn.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MDAnalysis/__init__.py" afterPath="$PROJECT_DIR$/MDAnalysis/__init__.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MDAnalysis/io.py" afterPath="$PROJECT_DIR$/MDAnalysis/io.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MDAnalysis/network.py" afterPath="$PROJECT_DIR$/MDAnalysis/network.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MDAnalysis/workingflow.py" afterPath="$PROJECT_DIR$/MDAnalysis/workingflow.py" />
@@ -49,16 +50,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="rep1_npt20_fixpbc.pdb" pinned="false" current-in-tab="false">
-        <entry file="file:///mnt/mulabnas/liangzhen/CloudStation/OneDrive/LPS_glycam/Results/Final_Model/rep1_npt20_fixpbc.pdb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="25" column="78" selection-start-line="25" selection-start-column="78" selection-end-line="25" selection-end-column="78" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="genModel.py" pinned="false" current-in-tab="false">
         <entry file="file:///mnt/mulabnas/liangzhen/CloudStation/OneDrive/LPS_glycam/Results/Final_Model/genModel.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -74,11 +65,22 @@
       <file leaf-file-name="network.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MDAnalysis/network.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2274">
-              <caret line="4" column="18" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="18" />
+            <state relative-caret-position="606">
+              <caret line="192" column="16" selection-start-line="192" selection-start-column="16" selection-end-line="192" selection-end-column="16" />
               <folding>
+                <element signature="e#25#42#0" expanded="true" />
                 <element signature="e#1815#4856#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/MDAnalysis/__init__.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="45">
+              <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -93,11 +95,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="matrix.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="matrix.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MDAnalysis/matrix.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="86" column="64" selection-start-line="86" selection-start-column="64" selection-end-line="86" selection-end-column="64" />
+            <state relative-caret-position="180">
+              <caret line="96" column="13" selection-start-line="96" selection-start-column="13" selection-end-line="96" selection-end-column="13" />
               <folding>
                 <element signature="e#23#42#0" expanded="true" />
               </folding>
@@ -207,6 +209,7 @@
         <option value="$PROJECT_DIR$/MDAnalysis/io.py" />
         <option value="$PROJECT_DIR$/MDAnalysis/workingflow.py" />
         <option value="$PROJECT_DIR$/MDAnalysis/matrix.py" />
+        <option value="$PROJECT_DIR$/MDAnalysis/__init__.py" />
       </list>
     </option>
   </component>
@@ -550,7 +553,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/sample/BindingFeature.py" />
     <entry file="file://$PROJECT_DIR$/sample/mol2GMXtop.py" />
     <entry file="file://$PROJECT_DIR$/sample/extractFeatures.py" />
     <entry file="file://$PROJECT_DIR$/sample/postGold.py" />
@@ -796,23 +798,32 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/MDAnalysis/matrix.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="96" column="13" selection-start-line="96" selection-start-column="13" selection-end-line="96" selection-end-column="13" />
+          <folding>
+            <element signature="e#23#42#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/MDAnalysis/network.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2274">
-          <caret line="4" column="18" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="18" />
+        <state relative-caret-position="606">
+          <caret line="192" column="16" selection-start-line="192" selection-start-column="16" selection-end-line="192" selection-end-column="16" />
           <folding>
+            <element signature="e#25#42#0" expanded="true" />
             <element signature="e#1815#4856#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/MDAnalysis/matrix.py">
+    <entry file="file://$PROJECT_DIR$/MDAnalysis/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="86" column="64" selection-start-line="86" selection-start-column="64" selection-end-line="86" selection-end-column="64" />
-          <folding>
-            <element signature="e#23#42#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="45">
+          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
