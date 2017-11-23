@@ -5,10 +5,6 @@ IO
 handle matrix files, community output, network files
 """
 
-class MatrixHandler :
-    def __init__(self) :
-        pass
-
 class CommunityHandler :
     def __init__(self) :
         pass

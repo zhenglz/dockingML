@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from .io import *
+
 import numpy as np
 from matplotlib import pyplot as plt
 import networkx as nx
@@ -193,18 +195,22 @@ class NetworkDraw :
 
 
 if __name__ == "__main__" :
-    os.chdir(os.getcwd())
+    #os.chdir(os.getcwd())
 
-    args = arguemnets()
-    comm = readCommunityFile(args.com, nres_cutoff=args.nres_cutoff)
+    nwd = NetworkDraw()
+    nio = CommunityHandler()
+    nwp = NetworkPrepare()
+
+    args = nwd.arguemnets()
+    comm = nio.readCommunityFile(args.com, nres_cutoff=args.nres_cutoff)
     nodes_resnum = [len(x) for x in comm if len(x) > args.nres_cutoff]
 
     if os.path.exists(args.node_edges) :
-        node_edges = parseNodeEdges(args.node_edges)
+        node_edges = nwp.parseNodeEdges(args.node_edges)
     else :
         node_edges = []
-        edges = genNodeEdges(args.betw, comm)
-        nodes = xrange(edges.shape[0])
+        edges = nwp.genNodeEdges(args.betw, comm)
+        nodes = range(edges.shape[0])
         for i in nodes :
             for j in nodes :
                 if i < j :
@@ -215,7 +221,7 @@ if __name__ == "__main__" :
     colors = args.cols
 
     if os.path.exists(args.pos) :
-        positions = readPos(args.pos)
+        positions = nwd.readPos(args.pos)
     else :
         positions = [
             (0.1, 0.1),
@@ -230,8 +236,4 @@ if __name__ == "__main__" :
             (0.15, 0.4),
         ] * 2
 
-    drawNetwork(node_edges, nodes, nodes_resnum,
-                args.nsf, args.lwf, args.label,
-                args.fig, args.dpi, args.fsize, positions,
-                colors,
-                )
+    nwd.drawNetwork(node_edges, nodes, nodes_resnum, args.nsf, args.lwf, args.label,args.fig, args.dpi, args.fsize, positions, colors,)
