@@ -155,7 +155,7 @@ class ContactMap:
 
     def findAtomType(self, information, singleFramePDB):
         '''
-
+        find atomtype of the atom
         :param information: a list of subgroup names for protein reisudes
         :param singleFramePDB: a reference pdb file
         :return:
@@ -395,12 +395,12 @@ class ContactMap:
                 for x in range(len(atomndx_1)) :
                     atom1 = atomndx_1[x]
                     infor1 = detailatomInfor[atom1]
-                    if infor1[-1] in ['P','S', 'N','O']   :
+                    if infor1[-1] in ['P','S', 'N','O'] :
                         crd1 = crds1[x]
                         crd2 = crds2[y]
                         if verbose :
-                            print( infor1, infor2)
-                            print( crd1, crd2)
+                            print(infor1, infor2)
+                            print(crd1, crd2)
 
                         distance =  sum(map(lambda x, y: (x - y) ** 2, crd1, crd2))
                         if verbose :

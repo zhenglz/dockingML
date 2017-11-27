@@ -5,7 +5,7 @@ The original idea of the project is to combine machine learning with
 docking to lower down the false positive rate.
 
 Authors: Zheng L.Z. & Mu Y.G.
-Contact: lzheng002@e.ntu.edu.sg
+Contact: lzheng002_AT_e.ntu.edu.sg
 
 ******************************************************************************
 * Docking and docking results parse (dockingML)
