@@ -1,4 +1,4 @@
-from .cmap import ContactMap
+import MDAnalysis
 import os, sys
 import urllib
 from collections import OrderedDict
@@ -87,7 +87,7 @@ class FixPDB :
         :param maxCoordinate:
         :return: coordination number ( number of contacts)
         '''
-        cmap = ContactMap(pdbfiles[0])
+        cmap = MDAnalysis.ContactMap(pdbfiles[0])
         coordinate = 0
 
         pdblist = []

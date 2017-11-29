@@ -6,12 +6,8 @@ import numpy as np
 import sys, os
 from argparse import RawTextHelpFormatter
 import argparse
-import pandas as pd
 
-def pmf_func(x, minX, kt=1.0, max=1.0) :
-    if x < minX :
-        x = minX / 2.0
-    return -1.0 * kt * np.log(x/max)
+import dockingML
 
 def plot2dScatter(filenames,
                   xlim=[], ylim=[],
@@ -26,14 +22,42 @@ def plot2dScatter(filenames,
                   marker='x', alpha=0.8,
                   pmf=False,
                   ) :
+    """
+    get X data from the first file and Y data from next file in filenames
+    draw a time series scatter
+    :param filenames:
+    :param xlim:
+    :param ylim:
+    :param xcol:
+    :param ycol:
+    :param colors:
+    :param cmaptype:
+    :param title:
+    :param label:
+    :param dpi:
+    :param savefile:
+    :param fz:
+    :param xshift:
+    :param yshift:
+    :param xscale:
+    :param yscale:
+    :param timescale:
+    :param xlab:
+    :param ylab:
+    :param marker:
+    :param alpha:
+    :param pmf:
+    :return:
+    """
     X = np.loadtxt(filenames[0], comments=["#", "@"], usecols=[xcol, ycol], dtype=float)[:, 0]
-    #X = X * xscale + xshift
+    X = X * xscale + xshift
     Y = np.loadtxt(filenames[1], comments=["#", "@"], usecols=[xcol, ycol], dtype=float)[:, 0]
-    #Y = Y * yscale + yshift
+    Y = Y * yscale + yshift
 
     if len(colors) == 0 :
         colors = np.loadtxt(filenames[0], comments=["#", "@"],)[:, 0] * timescale
 
+    # draw plot
     plt.scatter(X, Y, c=colors, marker=marker, alpha=alpha, cmap=cmaptype)
 
     plt.xlabel(xlab, fontsize=fz)
@@ -45,6 +69,7 @@ def plot2dScatter(filenames,
     if title :
         plt.title(title)
 
+    # draw color bar if necessary
     cb = plt.colorbar()
     cb.set_label(label, fontsize=12)
 
@@ -113,7 +138,9 @@ def plot2dFes(filename, dtype=[], zlim=[],
 
     if pmf :
         # PMF
-        PMF = np.vectorize(pmf_func)
+        algo = dockingML.BasicAlgorithm()
+        # vectorize the PMF function, and try to apply it to all element of a list
+        PMF = np.vectorize(algo.pmf)
         MAX = np.max(z.ravel())
         z = PMF(z, MIN, kt=2.5, max=MAX)
 

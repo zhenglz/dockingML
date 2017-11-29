@@ -6,6 +6,7 @@ basic math algorithms
 """
 
 import math
+import numpy as np
 
 class BasicAlgorithm :
 
@@ -32,3 +33,16 @@ class BasicAlgorithm :
         return count
 
         #return (1.0 - math.pow((x / d0), n)) / (1.0 - math.pow((x / d0), m))
+
+    def pmf(self, x, minX, kt=2.5, max=1.0):
+        """
+        calculate PMF of a histogram vector
+        :param x:
+        :param minX: float, avoid divide by zero problem
+        :param kt: float, kt=2.5 when T=300K and unit is kJ/mol
+        :param max:
+        :return: list of floats
+        """
+        if x < minX:
+            x = minX / 2.0
+        return -1.0 * kt * np.log(x / max)

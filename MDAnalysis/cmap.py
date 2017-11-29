@@ -432,18 +432,18 @@ class ContactMap:
 
         """
         calculate time series based cmap
-        :param pdbFileList:
-        :param cutoff:
-        :param deltaT:
-        :param switch:
-        :param atomNdx:
-        :param rank:
-        :param perAtom:
-        :param ccutoff:
-        :param NbyN:
-        :param nresidues:
-        :param verbose:
-        :return:
+        :param pdbFileList: list, a list of pdb files
+        :param cutoff: float, distance cutoff
+        :param deltaT: float, time delta
+        :param switch: bool, use switch function
+        :param atomNdx: list, [ receptor atom list, ligand atom list]
+        :param rank: int, the process cpu thread id
+        :param perAtom: bool, whether calculate atom-atom matrix
+        :param ccutoff: float, a cutoff for contacts between residues
+        :param NbyN: bool, whether use N by N to normalize contact
+        :param nresidues: number of total pairs
+        :param verbose: bool, detail output
+        :return: list, list of lists
         """
 
         if len(pdbFileList) == 0:
@@ -494,9 +494,13 @@ class ContactMap:
                         print(rank, " RESIDUES ", m, n, resCrdDict1[m], resCrdDict2[n])
 
                     # start calculate the contact map for each frame
-                    contacter = self.residueContacts(resCrd1=resCrdDict1[m],resCrd2=resCrdDict2[n],distcutoff=distance_cutoff,countcutoff=countCutoff,switch=switch,verbose=verbose,rank=rank, NbyN=False,)
+                    contacter = self.residueContacts(resCrd1=resCrdDict1[m],resCrd2=resCrdDict2[n],
+                                                     distcutoff=distance_cutoff,countcutoff=countCutoff,
+                                                     switch=switch,verbose=verbose,
+                                                     rank=rank, NbyN=False,)
+                    # append the cmap vector to the dataset
                     contCountMap.append(contacter)
-                # append the cmap vector to the dataset
+
             tscmap.append([time] + contCountMap)
 
         # sort the 2d list, time stamp is re-ordered in accending order
