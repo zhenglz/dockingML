@@ -423,7 +423,7 @@ class ContactMap:
 
         return 1
 
-    def cmap_timeseries(self, pdbFileList, cutoff, deltaT,
+    def cmap_timeseries(self, pdbFileList, cutoff=3.5, deltaT=0.001,
                         switch=False, atomNdx=[],
                         rank=0, perAtom=[False, False],
                         ccutoff = 0.0, NbyN=False,
@@ -465,7 +465,6 @@ class ContactMap:
                 countCutoff = 1.0
 
         progress = 0
-
         tscmap = []
 
         for pdbfile in pdbFileList:
@@ -485,7 +484,7 @@ class ContactMap:
 
             nmax = len(resCrdDict2)
 
-            contCountMap = [0] * nresidues
+            contCountMap = []
 
             # looping over all residues
             for m in range(len(resCrdDict1)):
@@ -495,20 +494,13 @@ class ContactMap:
                         print(rank, " RESIDUES ", m, n, resCrdDict1[m], resCrdDict2[n])
 
                     # start calculate the contact map for each frame
-                    contCountMap[n + m * nmax] = self.residueContacts(resCrdDict1[m],
-                                                                       resCrdDict2[n],
-                                                                       distance_cutoff,
-                                                                       countCutoff,
-                                                                       switch,
-                                                                       verbose,
-                                                                       rank,
-                                                                       NbyN=NbyN
-                                                                       )
-            # append the cmap vector to the dataset
+                    contacter = self.residueContacts(resCrd1=resCrdDict1[m],resCrd2=resCrdDict2[n],distcutoff=distance_cutoff,countcutoff=countCutoff,switch=switch,verbose=verbose,rank=rank, NbyN=False,)
+                    contCountMap.append(contacter)
+                # append the cmap vector to the dataset
             tscmap.append([time] + contCountMap)
 
         # sort the 2d list, time stamp is re-ordered in accending order
-        tscmap = sorted(tscmap, key=lambda x: x[0], reverse=False)
+        #tscmap = sorted(tscmap, key=lambda x: x[0], reverse=False)
 
         return tscmap
 
@@ -623,6 +615,124 @@ class ContactMap:
             result.close()
 
         return 1
+
+    def arguements(self):
+        d = '''
+        ########################################################################
+        #  Script for generating contact probability map                       #
+        #  Author:  ZHENG Liangzhen                                            #
+        #  Email:   LZHENG002@e.ntu.edu.sg                                     #
+        #  Version: V2.0                                                       #
+        #  Date:    15 Sept 2015                                               #
+        ########################################################################
+
+        Generating contact probability Map (Cmap)
+
+        Input a multi-frame pdb (MFPDB file) file to construct a contact probability map.
+        This MFPDB have multiple models in a single file, and all the structures should
+        stay whole, broken structures will cause inaccurate results.
+        All the frames in MFPDB do not consider PBC conditions, you should keep structures
+        as a whole.
+
+        If some arguements not given, default values would be used.
+
+        Usage:
+        1. Show help information
+        python ContactMap.py -h
+
+        2. Construct a Ca-Ca Cmap for a protein chain
+        python ContactMap.py -inp MF_pro.pdb -out Cmap.dat -rc A 1 250
+        -lc A 1 250 -cutoff 3.5 -switch T -atomtype CA
+
+        3. Generate a full-atom Cmap for a poly-peptide chain
+        python ContactMap.py -inp MF_pro.pdb -out Cmap.dat -rc A 1 250
+        -lc A 1 250 -cutoff 3.5 -atomtype all all
+
+        4. Construct a Cmap between a small ligand and a protein
+        python ContactMap.py -inp MF_pro.pdb -out Cmap.dat -rc A 1 250
+        -lc A 251 251 -cutoff 3.5 -atomtype all all
+
+        5. Construct a Cmap between a small ligand and a protein, Ca-allatom
+        python ContactMap.py -inp MF_pro.pdb -out Cmap.dat -rc A 1 250
+        -lc A 251 251 -cutoff 3.5 -atomtype CA all
+
+        6. Construct a cmap between a protein chain with MPI
+        mpirun -np 4 python ContactMap.py -inp MF_pro.pdb -out Cmap.dat -rc A 1 250
+        -lc A 251 251 -cutoff 3.5 -atomtype CA all -np 4
+
+        '''
+        # parse arguments
+        parser = argparse.ArgumentParser(description=d, formatter_class=RawTextHelpFormatter)
+        parser.add_argument('-inp', type=str, help="The input huge PDB file with multiple frames")
+        parser.add_argument('-out', type=str, default='ContactMap.dat',
+                            help="The output file name. Default name is ContactMap.dat \n")
+        parser.add_argument('-rc', type=str, nargs='+', default=['A', '1', '250'],
+                            help="The receptor chains and residue index for Cmap construction.\n"
+                                 "You must enter a chain name, start residue index, and end chain index.\n"
+                                 "Default is: A 1 250 \n")
+        parser.add_argument('-lc', type=str, nargs='+', default=['A', '1', '250'],
+                            help="The ligand chains and residue index for Cmap construction.\n"
+                                 "You must enter a chain name, start residue index, and end chain index.\n"
+                                 "Default is: B 1 250 \n")
+        parser.add_argument('-cutoff', type=float, default=0.35,
+                            help="Distance Cutoff for determining contacts. \n"
+                                 "Default is 3.5 (angstrom). \n")
+        parser.add_argument('-atomtype', type=str, nargs='+', default=[],
+                            help="Atom types for Receptor and Ligand in Contact Map Calculation. \n"
+                                 "Only selected atoms will be considered.\n"
+                                 "Options: CA, Backbone, MainChain, All, non-H(All-H), lig-all. \n"
+                                 "CA, alpha-carbon atoms. Backbone, backbone atoms in peptides. \n"
+                                 "MainChain, including CA and N atoms. All, means all atoms.\n"
+                                 "non-H, non-hydrogen atoms, all the heavy atoms. \n"
+                                 "lig-all trys to consider all the atoms of a ligand (H atoms not considered). \n"
+                                 "Two choices should be provided for receptor and ligand respectively. \n"
+                                 "If only one atomtype given, the 2nd will be the same as 1st.\n"
+                                 "Default is: [] \n")
+        parser.add_argument('-atomname1', type=str, nargs='+', default=[],
+                            help="Atom names for Recetpor in Contact Map. \n"
+                                 "Default is []. ")
+        parser.add_argument('-atomname2', type=str, nargs='+', default=[],
+                            help="Atom names for Ligand in Contact Map. \n"
+                                 "Default is []. ")
+        parser.add_argument('-eletype', type=str, nargs="+", default=[],
+                            help="Choose the specific elements for atom indexing to construct the cmap."
+                                 "Default is empty.")
+        parser.add_argument('-switch', type=str, default='True',
+                            help="Apply a switch function for determing Ca-Ca contacts for a smooth transition. \n"
+                                 "Only work with atomtype as CA. Options: True(T, t. TRUE), False(F, f, FALSE) \n"
+                                 "Default is False. \n")
+        parser.add_argument('-np', default=0, type=int,
+                            help='Number of Processers for MPI. Interger value expected. \n'
+                                 'If 4 is given, means using 4 cores or processers.\n'
+                                 'If 1 is given, means not using MPI, using only 1 Core.\n'
+                                 'Default is 1. ')
+        parser.add_argument('-test', default=0, type=int,
+                            help="Do a test with only a number of frames. For example, 4 frames. \n"
+                                 "Default value is 0. ")
+        parser.add_argument('-NbyN', type=bool, default=False,
+                            help="For community analysis, calculate atom contact number, normalized. \n"
+                                 "Default is False.")
+        parser.add_argument('-verbose', default=False, type=bool,
+                            help="Verbose. Default is False.")
+        parser.add_argument('-details', default=None, type=str,
+                            help="Provide detail contact information and write out to a file. \n"
+                                 "Default is None."
+                            )
+
+        parser.add_argument('-opt', default="Separated", type=str,
+                            help="Optional setting controls. \n"
+                                 "Separated, using separated files instead of splitting files.\n")
+
+        args = parser.parse_args()
+
+        # decide to print help message
+        if len(sys.argv) < 2:
+            # no enough arguements, exit now
+            parser.print_help()
+            print("You chose non of the arguement!\nDo nothing and exit now!\n")
+            sys.exit(1)
+
+        return args
 
 if __name__ == "__main__" :
     ## change to working directory
