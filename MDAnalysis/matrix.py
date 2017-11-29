@@ -12,76 +12,6 @@ class MatrixHandle :
     def __init__(self):
         pass
 
-    def arguments(self):
-
-        d = '''
-        Handling matrix files.
-
-        Merge 2 matrix: File1 takes the upper diagonal, while File2 takes the lower diagonal.
-        matrixHandle.py -opt merge -dat all_caCmap.dat.xyz ../../../repeat1/4un3_nrqq/cmap_acs9/all_caCmap.dat.xyz -dtype S6 S6 f4
-
-        Extract part of a matrix
-        matrixHandle.py -opt extract
-        matrixHandle.py -opt extract -dat all_caCmap.dat.xyz -dtype S6 S6 f4 -ds xyz -out HNH_CTD_cmap.xyz -xyrange 765 925 1200 1369
-        '''
-        parser = argparse.ArgumentParser(description=d, formatter_class=RawDescriptionHelpFormatter)
-        parser.add_argument('-opt', default='merge', type=str,
-                            help="Operations of matrix files. Default is merge.\n"
-                                 "Opts: merge, extract, average, pair-t-test, ind-t-test\n"
-                                 "merge: combine two matrix, 1st matrix takes the upper diagonal.\n"
-                                 "extract: extract specific x and y data points, using xyrange.\n"
-                                 "average: averaging matrix z values among the input matrices \n"
-                                 "pair-t-test and ind-t-test: perform t tests, paired and independednt\n"
-                                 "domain-aver: averaing domain wise data points\n"
-                                 "neib0: set diagonal neibor nodes value as 0 "
-                            )
-        parser.add_argument('-dat', default=["input.dat"], type=str, nargs="+",
-                            help="Input data file. Default is input.dat. \n")
-        parser.add_argument('-out', default="output.dat", type=str,
-                            help="Output file name. Default is output.dat. \n")
-        parser.add_argument('-dtype', default=[], type=str,
-                            help="Data type. For example, S6 and f4 indicate \n"
-                                 "string and float data respectively. \n"
-                                 "Default data type is none, automated data type \n"
-                                 "will be determined.")
-        parser.add_argument('-ds', default='xyz', type=str,
-                            help="Data file structure, options: xyz, or matrix. Default is xyz.\n"
-                                 "xyz data file contains columns (>=3) only. \n"
-                                 "Matrix data file contains M*N data matrix points. \n")
-        parser.add_argument('-xyrange', default=[], type=float, nargs="+",
-                            help="Range for x and y. Select only part of the matrix, \n"
-                                 "thus choose the ranges for X and Y respectively. \n"
-                                 "Please give 4 numbers, two of them define a range for one axis.")
-        parser.add_argument('-drange', default=[], type=float, nargs="+",
-                            help="Ranges define domain-domain matrix data. \n"
-                                 "Data points are average data points. "
-                            )
-        parser.add_argument('-xyzcol', type=int, nargs="+", default=[0, 1, 2],
-                            help="XYZ columns in data file. Default is 0 1 2.")
-        parser.add_argument('-xyshift', default=[0, 0], type=float, nargs="+",
-                            help="Shift X and Y axis. Add a value to the x or y. \n"
-                                 "Default is 0 and 0. ")
-        parser.add_argument('-zscale', type=float, default=1.0,
-                            help="Scale Z column, default is 0 \n")
-        parser.add_argument('-dzero', type=bool, default=False,
-                            help="Set digonal as zero. Default is False. ")
-        parser.add_argument('-neibsize', default=4, type=int,
-                            help="if -opt neib0, set neibor size. default is 4. \n")
-        args, unknown = parser.parse_known_args()
-
-        if len(sys.argv) < 2:
-            # no enough arguements, exit now
-            parser.print_help()
-            print("\nYou chose non of the arguement!\nDo nothing and exit now!\n")
-            sys.exit(1)
-
-        if len(unknown) > 0:
-            print("These arguments could not be understood! ")
-            print(unknown)
-
-
-        return args, unknown
-
     def reshapeMtx(self, dataf, dtype, cols=[0, 1, 2], xyshift=[0, 0]):
         '''
         Load a matrix file, return a ndarray matrix shape object
@@ -145,8 +75,8 @@ class MatrixHandle :
     def extractDomainData(self, data, xrange, yrange):
         '''
         extract specific x y data based xy range
-        :param data: 3D xyz array
-        :param xrange: [a, b], list
+        :param data: float, 3D xyz array (matrix)
+        :param xrange: list, [a, b]
         :param yrange: list
         :return: 3D xyz array
         '''
@@ -161,6 +91,15 @@ class MatrixHandle :
         return np.asarray(d)
 
     def neiborhood2zero(self, data, neiborsize=4, xyzshift=[0, 0, 0], zscale=1.0, outtype='xyz'):
+        """
+        treat diagonal elements as zero
+        :param data:
+        :param neiborsize:
+        :param xyzshift:
+        :param zscale:
+        :param outtype:
+        :return:
+        """
         xsize = len(set(list(data[:, 0])))
         ysize = len(set(list(data[:, 1])))
         xysize = xsize * ysize
@@ -175,11 +114,80 @@ class MatrixHandle :
         else:
             return np.reshape(newd[:, 2], [xsize, ysize])
 
+def arguments():
+    d = '''
+    Handling matrix files.
+
+    Merge 2 matrix: File1 takes the upper diagonal, while File2 takes the lower diagonal.
+    matrixHandle.py -opt merge -dat all_caCmap.dat.xyz ../../../repeat1/4un3_nrqq/cmap_acs9/all_caCmap.dat.xyz -dtype S6 S6 f4
+
+    Extract part of a matrix
+    matrixHandle.py -opt extract
+    matrixHandle.py -opt extract -dat all_caCmap.dat.xyz -dtype S6 S6 f4 -ds xyz -out HNH_CTD_cmap.xyz -xyrange 765 925 1200 1369
+    '''
+    parser = argparse.ArgumentParser(description=d, formatter_class=RawDescriptionHelpFormatter)
+    parser.add_argument('-opt', default='merge', type=str,
+                        help="Operations of matrix files. Default is merge.\n"
+                             "Opts: merge, extract, average, pair-t-test, ind-t-test\n"
+                             "merge: combine two matrix, 1st matrix takes the upper diagonal.\n"
+                             "extract: extract specific x and y data points, using xyrange.\n"
+                             "average: averaging matrix z values among the input matrices \n"
+                             "pair-t-test and ind-t-test: perform t tests, paired and independednt\n"
+                             "domain-aver: averaing domain wise data points\n"
+                             "neib0: set diagonal neibor nodes value as 0 "
+                        )
+    parser.add_argument('-dat', default=["input.dat"], type=str, nargs="+",
+                        help="Input data file. Default is input.dat. \n")
+    parser.add_argument('-out', default="output.dat", type=str,
+                        help="Output file name. Default is output.dat. \n")
+    parser.add_argument('-dtype', default=[], type=str,
+                        help="Data type. For example, S6 and f4 indicate \n"
+                             "string and float data respectively. \n"
+                             "Default data type is none, automated data type \n"
+                             "will be determined.")
+    parser.add_argument('-ds', default='xyz', type=str,
+                        help="Data file structure, options: xyz, or matrix. Default is xyz.\n"
+                             "xyz data file contains columns (>=3) only. \n"
+                             "Matrix data file contains M*N data matrix points. \n")
+    parser.add_argument('-xyrange', default=[], type=float, nargs="+",
+                        help="Range for x and y. Select only part of the matrix, \n"
+                             "thus choose the ranges for X and Y respectively. \n"
+                             "Please give 4 numbers, two of them define a range for one axis.")
+    parser.add_argument('-drange', default=[], type=float, nargs="+",
+                        help="Ranges define domain-domain matrix data. \n"
+                             "Data points are average data points. "
+                        )
+    parser.add_argument('-xyzcol', type=int, nargs="+", default=[0, 1, 2],
+                        help="XYZ columns in data file. Default is 0 1 2.")
+    parser.add_argument('-xyshift', default=[0, 0], type=float, nargs="+",
+                        help="Shift X and Y axis. Add a value to the x or y. \n"
+                             "Default is 0 and 0. ")
+    parser.add_argument('-zscale', type=float, default=1.0,
+                        help="Scale Z column, default is 0 \n")
+    parser.add_argument('-dzero', type=bool, default=False,
+                        help="Set digonal as zero. Default is False. ")
+    parser.add_argument('-neibsize', default=4, type=int,
+                        help="if -opt neib0, set neibor size. default is 4. \n")
+
+    args, unknown = parser.parse_known_args()
+
+    if len(sys.argv) < 2:
+        # no enough arguements, exit now
+        parser.print_help()
+        print("\nYou chose non of the arguement!\nDo nothing and exit now!\n")
+        sys.exit(1)
+
+    if len(unknown) > 0:
+        print("These arguments could not be understood! ")
+        print(unknown)
+
+    return args, unknown
+
 if __name__ == "__main__" :
 
     mtxh = MatrixHandle()
 
-    args, unknown = mtxh.arguments()
+    args, unknown = arguments()
 
     if args.opt in ["merge", "pair-t-test", "ind-t-test"] :
         if args.ds in ['xyz', 'XYZ', '3d'] :
