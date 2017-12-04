@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MDAnalysis/cmap.py" afterPath="$PROJECT_DIR$/MDAnalysis/cmap.py" />
     </list>
     <ignored path="dockingML.iws" />
@@ -48,8 +49,8 @@
       <file leaf-file-name="pdbIO.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dockingML/pdbIO.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="457">
-              <caret line="141" column="35" selection-start-line="141" selection-start-column="35" selection-end-line="141" selection-end-column="35" />
+            <state relative-caret-position="192">
+              <caret line="319" column="8" selection-start-line="319" selection-start-column="8" selection-end-line="319" selection-end-column="8" />
               <folding>
                 <element signature="e#5740#6412#0" expanded="false" />
                 <element signature="e#6466#7500#0" expanded="false" />
@@ -65,8 +66,8 @@
       <file leaf-file-name="cmap.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MDAnalysis/cmap.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="312">
-              <caret line="89" column="26" selection-start-line="89" selection-start-column="26" selection-end-line="89" selection-end-column="26" />
+            <state relative-caret-position="192">
+              <caret line="78" column="61" selection-start-line="78" selection-start-column="61" selection-end-line="78" selection-end-column="61" />
               <folding>
                 <element signature="e#426#452#0" expanded="true" />
               </folding>
@@ -849,8 +850,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/dockingML/pdbIO.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="457">
-          <caret line="141" column="35" selection-start-line="141" selection-start-column="35" selection-end-line="141" selection-end-column="35" />
+        <state relative-caret-position="192">
+          <caret line="319" column="8" selection-start-line="319" selection-start-column="8" selection-end-line="319" selection-end-column="8" />
           <folding>
             <element signature="e#5740#6412#0" expanded="false" />
             <element signature="e#6466#7500#0" expanded="false" />
@@ -864,8 +865,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MDAnalysis/cmap.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="89" column="26" selection-start-line="89" selection-start-column="26" selection-end-line="89" selection-end-column="26" />
+        <state relative-caret-position="192">
+          <caret line="78" column="61" selection-start-line="78" selection-start-column="61" selection-end-line="78" selection-end-column="61" />
           <folding>
             <element signature="e#426#452#0" expanded="true" />
           </folding>

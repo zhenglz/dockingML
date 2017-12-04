@@ -76,8 +76,8 @@ class DrawCMap :
 
             res_labels = []
             for resk in key_res :
-                resseq = str(int(fullreslist[resk][0]) + refpdb[2])
-                resname= shortresmap[fullreslist[resk][1]]
+                resseq = str(int(fullreslist[resk][1]) + refpdb[2])
+                resname= shortresmap[fullreslist[resk][0]]
                 chainid= fullreslist[resk][2]
 
                 if yticks_showchainid :
