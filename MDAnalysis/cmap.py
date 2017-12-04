@@ -34,6 +34,7 @@ class DrawCMap :
                          yticks_showchainid = False,
                          xticks_loc=[], xticks_labels=[],
                          colorbar_label="", colorbar_show=False,
+                         savefig="",
                          ):
 
         """
@@ -130,7 +131,8 @@ class DrawCMap :
         if len(xticks_labels) and len(xticks_loc) :
             plt.xticks(xticks_loc, xticks_labels)
 
-        plt.savefig("cmap.png", dpi=2000)
+        if len(savefig) :
+            plt.savefig(savefig, dpi=2000)
 
         plt.show()
 

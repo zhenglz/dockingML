@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MDAnalysis/cmap.py" afterPath="$PROJECT_DIR$/MDAnalysis/cmap.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockingML/pdbIO.py" afterPath="$PROJECT_DIR$/dockingML/pdbIO.py" />
     </list>
     <ignored path="dockingML.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -66,8 +65,8 @@
       <file leaf-file-name="cmap.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MDAnalysis/cmap.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-48">
-              <caret line="110" column="12" selection-start-line="110" selection-start-column="12" selection-end-line="110" selection-end-column="12" />
+            <state relative-caret-position="82">
+              <caret line="36" column="36" selection-start-line="36" selection-start-column="36" selection-end-line="36" selection-end-column="36" />
               <folding>
                 <element signature="e#426#452#0" expanded="true" />
               </folding>
@@ -866,8 +865,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MDAnalysis/cmap.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-48">
-          <caret line="110" column="12" selection-start-line="110" selection-start-column="12" selection-end-line="110" selection-end-column="12" />
+        <state relative-caret-position="82">
+          <caret line="36" column="36" selection-start-line="36" selection-start-column="36" selection-end-line="36" selection-end-column="36" />
           <folding>
             <element signature="e#426#452#0" expanded="true" />
           </folding>
