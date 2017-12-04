@@ -86,6 +86,8 @@ class DrawCMap :
                     id = resname + resseq
 
                 res_labels.append(id)
+        else :
+            res_labels = []
 
 
         # only keep the important residue cmap
