@@ -113,6 +113,8 @@ class MatrixHandle :
             return newd
         else:
             return np.reshape(newd[:, 2], [xsize, ysize])
+)))))
+
 
 def arguments():
     d = '''

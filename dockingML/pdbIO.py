@@ -117,12 +117,46 @@ class parsePDB :
         with open(self.prores) as lines :
             lines = [ x for x in lines if "#" not in x ]
 
-        resname = [ x.split()[2] for x in lines ]
+            resname = [ x.split()[2] for x in lines ]
 
         return resname
 
+    def shortRes2LongRes(self):
+        """
+        convert the short single-character residue name to long 3-code name
+        :return: dict, { shortname: longname}
+        """
+
+        resmap = {}
+        with open(self.prores) as lines:
+            lines = [x for x in lines if "#" not in x]
+
+            for s in lines :
+                resmap[s.split()[3]] = s.split()[2]
+
+        return resmap
+
+    def longRes2ShortRes(self):
+        """
+        convert the long 3-code name to short single-character residue name
+        :return: dict, { longname: shortname }
+        """
+
+        resmap = {}
+        with open(self.prores) as lines:
+            lines = [x for x in lines if "#" not in x]
+
+            for s in lines:
+                resmap[s.split()[2]] = s.split()[1]
+
+        return resmap
 
     def pdbListInfor(self, pdbList):
+        """
+        get a list of information from a rcsb database pdb file
+        :param pdbList:
+        :return:
+        """
         #pdbInfor = defaultdict(list)
         pdbCode, resolution, ligandName, Ktype, Kvalue = [], [], [], [], []
         with open(pdbList) as lines :
@@ -201,12 +235,12 @@ class parsePDB :
 
     def atomInformation(self, pdbin):
         """
-        # elements in atom infor
-        # key: atom index
-        # value: [atomname, molecule type, is_hydrogen,  resname, resndx, chainid,(mainchian, sidechain,
-        #           sugar ring, phosphate group, base ring)]
-        :param pdbin:
-        :return:
+          # elements in atom infor
+          # key: atom index
+          # value: [atomname, molecule type, is_hydrogen,  resname, resndx, chainid,(mainchian, sidechain,
+          #           sugar ring, phosphate group, base ring)]
+          :param pdbin:
+          :return: a dictionary of list, key is atom ndx
         """
 
         atominfor = defaultdict(list)
@@ -266,19 +300,41 @@ class parsePDB :
         return atominfor
 
     def getResNamesList(self, pdbin, chains):
+        """
+        get a list of residue names in specific chains
+        :param pdbin:
+        :param chains:
+        :return:
+        """
 
         with open(pdbin) as lines :
             lines = [ x for x in lines if (x[:4] in ["ATOM", "HETA"] and x[21] in chains)]
 
-        resname = []
-        for s in lines :
-            if s.split()[3] not in resname :
-                resname.append(s.split()[3])
+            resname = []
+            for s in lines :
+                if s.split()[3] not in resname :
+                    resname.append(s.split()[3])
 
         return resname
 
-    def getNdxForRes(self, pdbin, residues=[]):
-        pass
+    def getNdxForRes(self, pdbin, chains):
+        """
+        get the residue names, as well as seq ndx, and chain id
+        :param pdbin:
+        :param chains:
+        :return: a list of sets, [ (resname, seqid, chainid), ]
+        """
+
+        with open(pdbin) as lines:
+            lines = [x for x in lines if (x[:4] in ["ATOM", "HETA"] and x[21] in chains)]
+
+            reslist = []
+            for s in lines:
+                id = (s.split()[3], s[22:26].strip(), s[21])
+                if id not in reslist:
+                    reslist.append(id)
+
+        return reslist
 
     def getNdxForMol(self, pdbin, molres=[], resndx=[]):
         """

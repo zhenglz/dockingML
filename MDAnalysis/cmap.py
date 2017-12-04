@@ -12,14 +12,117 @@
 import glob, math, sys, os
 import numpy as np
 import argparse
-import linecache
 
+from matplotlib import pyplot as plt
 from collections import defaultdict
 from argparse import RawTextHelpFormatter
 from datetime import datetime
 from mpi4py import MPI
 
 import dockingML
+
+class DrawCMap :
+    def __init__(self):
+        pass
+
+    def drawTimeSeries2D(self, cmapmatrix, refpdb=[],
+                         fsize=14,
+                         xlabel="", ylabel="",
+                         cmaptype="Grey",
+                         xlim=[], ylim=[],
+                         yticks_loc=[], yticks_labels=[],
+                         yticks_showchainid = False,
+                         xticks_loc=[], xticks_lables=[],
+                         ):
+
+        """
+        plot the ligand protein interactions (time series, x axis)
+        :param cmapmatrix: str, the data file, containing time series matrix file
+        :param refpdb: list, [ pdbfilename, chain id, residue sequence shift-by ]
+        :param fsize:
+        :param xlabel:
+        :param ylabel:
+        :param cmaptype:
+        :param xlim:
+        :param ylim:
+        :param yticks_loc:
+        :param yticks_labels:
+        :param yticks_showchainid: whether show chainid of protein residues
+        :param xticks_loc:
+        :param xticks_lables:
+        :return:
+        """
+
+        # load cmap file
+        cmapdata = np.loadtxt(cmapmatrix, delimiter=",")
+        cm_sorted = sorted(list(cmapdata), key=lambda x: x[0], reverse=False)
+
+        # get key protein residues involving protein ligand binding
+        key_res = []
+        true_res = np.sum(cm_sorted, axis=0) > 0
+        for res in range(true_res.shape[0]):
+            if true_res[res]:
+                key_res.append(res)
+
+        # get full residue name index list
+        if len(refpdb) == 3 :
+
+            ppdb = dockingML.pdbIO.parsePDB("")
+            fullreslist = ppdb.getNdxForRes(refpdb[0], [refpdb[1]])
+
+            shortresmap = ppdb.longRes2ShortRes()
+
+            fullreslist = [ x for x in fullreslist if x[2] in refpdb[1] ]
+
+            res_labels = []
+            for resk in key_res :
+                resseq = str(int(fullreslist[resk][0]) + refpdb[2])
+                resname= shortresmap[fullreslist[resk][1]]
+                chainid= fullreslist[resk][2]
+
+                if yticks_showchainid :
+                    id = resname + resseq + chainid
+                else :
+                    id = resname + resseq
+
+                res_labels.append(id)
+
+
+        # only keep the important residue cmap
+        keyres_cmap = np.asarray(cm_sorted)[:, list(key_res)]
+
+        # get the length of x and y axis
+        shapex = len(key_res)
+        shapey = cmapdata.shape[0] + 1
+
+        #x = np.reshape(np.tile(range(shapex), shapey), (shapey, shapex))
+        #y = np.asarray(range(shapey))
+        #y = np.reshape(np.tile(y, shapex), (shapex, shapey)).T
+        z = np.transpose(keyres_cmap[:, 1:]).T
+
+        plt.pcolormesh(z.T, cmap=plt.get_cmap(cmaptype))
+        plt.colorbar()
+
+        plt.xlabel(xlabel, fontsize=fsize)
+        plt.ylabel(ylabel, fontsize=fsize)
+
+        if len(yticks_loc) and len(yticks_labels) :
+            plt.yticks(yticks_loc, yticks_labels)
+        else :
+            plt.yticks(np.array(range(shapex))+0.5, res_labels)
+
+        if len(xlim) :
+            plt.xlim(xlim)
+        if len(ylim) :
+            plt.ylim(ylim)
+
+        if len(xticks_lables) and len(xticks_loc) :
+            plt.xticks(xticks_loc, xticks_lables)
+
+        plt.show()
+
+        return 1
+
 
 class ContactMap:
     def __init__(self, hugePDBFile) :
