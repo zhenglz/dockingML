@@ -147,7 +147,7 @@ class parsePDB :
             lines = [x for x in lines if "#" not in x]
 
             for s in lines:
-                resmap[s.split()[2]] = s.split()[1]
+                resmap[s.split()[2]] = s.split()[3]
 
         return resmap
 

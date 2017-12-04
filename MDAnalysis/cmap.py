@@ -32,7 +32,8 @@ class DrawCMap :
                          xlim=[], ylim=[],
                          yticks_loc=[], yticks_labels=[],
                          yticks_showchainid = False,
-                         xticks_loc=[], xticks_lables=[],
+                         xticks_loc=[], xticks_labels=[],
+                         colorbar_label="", colorbar_show=False,
                          ):
 
         """
@@ -59,10 +60,11 @@ class DrawCMap :
 
         # get key protein residues involving protein ligand binding
         key_res = []
-        true_res = np.sum(cm_sorted, axis=0) > 0
+        true_res = np.sum(np.asarray(cm_sorted)[:, 1:], axis=0) > 0
         for res in range(true_res.shape[0]):
             if true_res[res]:
                 key_res.append(res)
+        print("KEY RES ", key_res)
 
         # get full residue name index list
         res_labels = []
@@ -72,28 +74,31 @@ class DrawCMap :
             fullreslist = ppdb.getNdxForRes(refpdb[0], [refpdb[1]])
 
             shortresmap = ppdb.longRes2ShortRes()
-
             fullreslist = [ x for x in fullreslist if x[2] in refpdb[1] ]
 
             for resk in key_res :
-                resseq = str(int(fullreslist[resk][1]) + refpdb[2])
-                resname= shortresmap[fullreslist[resk][0]]
-                chainid= fullreslist[resk][2]
+                if fullreslist[resk][0] in shortresmap.keys() :
+                    resseq = str(resk + refpdb[2])
+                    resname= shortresmap[fullreslist[resk][0]]
+                    chainid= fullreslist[resk][2]
 
-                if yticks_showchainid :
-                    id = resname + resseq + chainid
-                else :
-                    id = resname + resseq
+                    if yticks_showchainid :
+                        id = resname + resseq + chainid
+                    else :
+                        id = resname + resseq
 
-                print(id)
-                res_labels.append(id)
+                    #print("ID "* 5, id)
+                    res_labels.append(id)
 
         # only keep the important residue cmap
-        keyres_cmap = np.asarray(cm_sorted)[:, list(key_res)]
+        keyres_cmap = np.asarray(cm_sorted)[:, 1:][:, list(key_res)]
 
         # get the length of x and y axis
         shapex = len(key_res)
         shapey = cmapdata.shape[0] + 1
+
+        print("Protein residue numbers: %d" % shapex)
+        print("Time point numbers: %d"% shapey)
 
         #x = np.reshape(np.tile(range(shapex), shapey), (shapey, shapex))
         #y = np.asarray(range(shapey))
@@ -101,22 +106,31 @@ class DrawCMap :
         z = np.transpose(keyres_cmap[:, 1:]).T
 
         plt.pcolormesh(z.T, cmap=plt.get_cmap(cmaptype))
-        plt.colorbar()
+
+        if colorbar_show :
+            plt.colorbar(label=colorbar_label)
 
         plt.xlabel(xlabel, fontsize=fsize)
         plt.ylabel(ylabel, fontsize=fsize)
 
         if len(yticks_loc) and len(yticks_labels) :
             plt.yticks(yticks_loc, yticks_labels)
-            #plt.yticks(np.array(range(shapex))+0.5, res_labels)
+        else :
+            if len(refpdb) == 3 :
+                plt.yticks(np.array(range(shapex))+0.5, res_labels)
 
         if len(xlim) :
             plt.xlim(xlim)
+
         if len(ylim) :
             plt.ylim(ylim)
+        else :
+            plt.ylim([0, shapex+0.5])
 
-        if len(xticks_lables) and len(xticks_loc) :
-            plt.xticks(xticks_loc, xticks_lables)
+        if len(xticks_labels) and len(xticks_loc) :
+            plt.xticks(xticks_loc, xticks_labels)
+
+        plt.savefig("cmap.png", dpi=2000)
 
         plt.show()
 
