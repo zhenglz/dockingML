@@ -65,6 +65,7 @@ class DrawCMap :
                 key_res.append(res)
 
         # get full residue name index list
+        res_labels = []
         if len(refpdb) == 3 :
 
             ppdb = dockingML.pdbIO.parsePDB("")
@@ -74,7 +75,6 @@ class DrawCMap :
 
             fullreslist = [ x for x in fullreslist if x[2] in refpdb[1] ]
 
-            res_labels = []
             for resk in key_res :
                 resseq = str(int(fullreslist[resk][1]) + refpdb[2])
                 resname= shortresmap[fullreslist[resk][0]]
@@ -85,10 +85,8 @@ class DrawCMap :
                 else :
                     id = resname + resseq
 
+                print(id)
                 res_labels.append(id)
-        else :
-            res_labels = []
-
 
         # only keep the important residue cmap
         keyres_cmap = np.asarray(cm_sorted)[:, list(key_res)]
