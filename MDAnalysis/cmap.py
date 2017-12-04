@@ -108,12 +108,7 @@ class DrawCMap :
 
         if len(yticks_loc) and len(yticks_labels) :
             plt.yticks(yticks_loc, yticks_labels)
-        else :
-            if len(refpdb) == 3 :
-                pass
-                #plt.yticks(np.array(range(shapex))+0.5, res_labels)
-            else :
-                pass
+            #plt.yticks(np.array(range(shapex))+0.5, res_labels)
 
         if len(xlim) :
             plt.xlim(xlim)
