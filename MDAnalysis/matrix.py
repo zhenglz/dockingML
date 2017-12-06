@@ -42,7 +42,18 @@ class MatrixHandle :
 
         return np.asarray(d)
 
-    def loadxyz(self, dataf, dtype, cols=[0, 1, 2], xyshift=[0, 0]):
+    def xyz2matrix(self, data):
+
+        dat = list(data)
+        xyz = []
+
+        for i in range(len(data)) :
+            for j in range(len(data[0])) :
+                xyz.append([i, j, data[i][j]])
+
+        return xyz
+
+    def loadxyz(self, dataf, dtype=[], cols=[0, 1, 2], xyshift=[0, 0]):
         '''
         Load xyz data, return ndarray
         :param dataf:
@@ -59,12 +70,13 @@ class MatrixHandle :
                     for i in range(data1.shape[0]):
                         data1[i][0], data1[i][1] = float(data1[i][0].split("_")[0]), \
                                                    float(data1[i][1].split("_")[0])
+
+                if "S" not in dtype[0] and "S" not in dtype[1]:
+                    for c in [0, 1]:
+                        data1[:, c] = data1[:, c] + xyshift[c]
             else:
                 data1 = np.loadtxt(dataf, comments=['@', '#'], usecols=set(cols))
 
-            if "S" not in dtype[0] and "S" not in dtype[1]:
-                for c in [0, 1]:
-                    data1[:, c] = data1[:, c] + xyshift[c]
         else:
             print("file %s not exist! Exit now!" % dataf)
 
@@ -76,8 +88,8 @@ class MatrixHandle :
         '''
         extract specific x y data based xy range
         :param data: float, 3D xyz array (matrix)
-        :param xrange: list, [a, b]
-        :param yrange: list
+        :param xrange: list, [a, b], both a and b are integers
+        :param yrange: list, [a, b]
         :return: 3D xyz array
         '''
         d = []
@@ -113,6 +125,27 @@ class MatrixHandle :
             return newd
         else:
             return np.reshape(newd[:, 2], [xsize, ysize])
+
+    def zRangeSelect(self, data, zrange=[]):
+        """
+        select the data points whoes z values locate in the zrange
+        :param data: a list, or matrix data
+        :param zrange: list, the lower and upper boundary of the z values
+        :return:
+        """
+
+        xyshape = np.asarray(data).shape
+
+        newdata = list(data)
+
+        for x in range(xyshape[0]) :
+            for y in range(xyshape[1]) :
+                if zrange[0] <= newdata[y][x] < zrange[1] :
+                    pass
+                else :
+                    newdata[y][x] = 0.0
+
+        return newdata
 
 def arguments():
     d = '''

@@ -46,3 +46,44 @@ class BasicAlgorithm :
         if x < minX:
             x = minX / 2.0
         return -1.0 * kt * np.log(x / max)
+
+    def entropy1D(self, x, nbins=20, kbt=2.5):
+        """
+        get entropy from 1d vector
+        :param x:
+        :param nbins:
+        :param kbt:
+        :return:
+        """
+
+        # calculate histogram of the vector x
+        hist, edges = np.histogram(x, bins=nbins)
+        # compute the probability distribution of the histogram
+        prob = hist / np.asarray(x).shape[0]
+
+        prob = [ x for x in list(prob) if x > 0 ]
+
+        entropy = -1.0 * kbt * sum([ x * math.log(x) for x in prob ])
+
+        return entropy
+
+    def entropy2D(self, x, y, nbins=20, kbt=2.5):
+        """
+        get entropy from 2d vector
+        :param x:
+        :param y:
+        :param nbins:
+        :param kbt:
+        :return:
+        """
+
+        # calculate histogram of the vectors
+        hist, xedges, yedges = np.histogram2d(x, y, bins=nbins)
+        # compute the probability distribution of the histogram
+        prob = hist / np.asarray(x).shape[0]
+
+        prob = [ x for x in list(prob.ravel()) if x > 0 ]
+
+        entropy = -1.0 * kbt * sum([x * math.log(x) for x in prob ])
+
+        return entropy
