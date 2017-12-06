@@ -60,14 +60,20 @@ class DataClean :
 
         return importance, dataset_sel
 
-    def mutualInformation(self, X, Y):
+    def mutualInformation(self, x, y):
+        """
+        calculate mutual information
+        :param x:
+        :param y:
+        :return:
+        """
 
         from dockingML import algorithms
 
         algo = algorithms.BasicAlgorithm()
 
-        HX = algo.entropy1D(X)
-        HY = algo.entropy1D(Y)
-        HXY= algo.entropy2D(X, Y)
+        HX = algo.entropy1D(x)
+        HY = algo.entropy1D(y)
+        HXY= algo.entropy2D(x, y)
 
-        return HXY - HX - HY
+        return HX + HY - HXY
