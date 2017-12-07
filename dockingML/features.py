@@ -143,7 +143,7 @@ class BindingFeature:
         """
         return(1.0 - math.pow((x / d0), n)) / (1.0 - math.pow((x / d0), m))
 
-    def residueCounts(self, alldistpairs, atomDetailInfor, distanceCutoff = 3.5) :
+    def residueCounts(self, alldistpairs, atomDetailInfor, distanceCutoff = 3.5, shortRangeCutoff=12.0) :
         """
         input all the distances pairs
         return the number of contacts
@@ -181,7 +181,7 @@ class BindingFeature:
         for atom in atoms :
             # first set a distance cutoff check, only short range distances are considered
             distance = alldistpairs[atom]
-            if distance <= distanceCutoff * 4 :
+            if distance <= shortRangeCutoff :
                 line = atomDetailInfor[atom.split("+")[0]]
 
                 ### add more chain ID, in case you have several different chains

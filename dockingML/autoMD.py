@@ -16,6 +16,8 @@ import numpy as np
 import glob
 import time
 
+from . import extract
+
 # import modeller for loop refinement
 try:
     from modeller import *
@@ -125,7 +127,7 @@ class GenerateTop :
             elif "leaprc." in ff:
                 leapin.write("source %s  \n" % ff)
             else:
-                print "Load Force Field File Error! \nExit Now!"
+                print( "Load Force Field File Error! \nExit Now!")
                 sys.exit(1)
 
         # load amber frcmod and prep files
@@ -148,7 +150,7 @@ class GenerateTop :
                 leapin.write(item + " ")
             leapin.write(" } \n")
         else:
-            print "Loading PDB file or Sequence file error!"
+            print( "Loading PDB file or Sequence file error!")
             sys.exit(1)
 
         # save a amber off file of the molecule
@@ -160,17 +162,17 @@ class GenerateTop :
                 for i in range(len(ionNum)):
                     leapin.write("addions2 pdb %s %d \n" % (ionName[i], ionNum[i]))
             else:
-                print "\nAdd ions not successful!\n"
+                print( "\nAdd ions not successful!\n")
         else:
             "\nNot adding any ions!\n"
         if solveBox :
             if boxEdge :
                 leapin.write("solvatebox pdb %s %f \n" % (solveBox, boxEdge))
             else:
-                print "\nBOX size not correctly set.\nExit Now!\n"
+                print( "\nBOX size not correctly set.\nExit Now!\n")
                 sys.exit(1)
         else:
-            print "\nNot setting simulation box!\n"
+            print( "\nNot setting simulation box!\n")
 
         # check object
         leapin.write("check pdb \n")
@@ -234,7 +236,7 @@ class GenerateTop :
             if verbose :
                 print(status)
         else :
-            print input + " is not exist!!!"
+            print( input + " is not exist!!!")
             sys.exit(0)
 
         return(1)
@@ -646,7 +648,7 @@ class SummaryPDB :
             #for chain in chains :
             print( chain, "  ", missingResNdx[chain])
 
-            print "\nThe information of the non-protein residues here "
+            print("\nThe information of the non-protein residues here ")
             #for chain in chains :
             print( chain, "  ", noProteinResName[chain])
 
@@ -839,7 +841,7 @@ class CleanPDB :
         :param headersave:
         :return: the specific frame from a large pdb file
         '''
-        extractPDB = ExtractPDB()
+        extractPDB = extract.ExtractPDB()
         extractPDB.extract_frame(self.pdb, self.pdb[:-5]+"_%d.pdb"%frame, no_frames=[frame])
         return(self.pdb[:-5]+"_%d.pdb"%frame)
 
