@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from .autoMD import GenerateTop, MolDocking, CleanPDB, SummaryPDB
-import os, sys
+import os
 import subprocess as sp
+import sys
+
+from autoMD.autoMD import GenerateTop, MolDocking, CleanPDB, SummaryPDB
 
 """
 Combine the mol2 receptor and mol2 ligand files,

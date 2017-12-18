@@ -19,7 +19,7 @@ setup(name='dockingML',
       author='zhenglz',
       author_email='zhenglz@outlook.com',
       license='NA',
-      packages=['dockingML', 'MDAnalysis'],
+      packages=['dockingML', 'MDAnalysis', 'autoMD'],
       install_requires=[
           'numpy',
           'pandas',
