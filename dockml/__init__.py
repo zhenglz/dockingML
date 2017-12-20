@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import os
 from .convert import Convert
 from .features import *
 from .gold import GoldResults

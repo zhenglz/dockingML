@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import  numpy as np
+import numpy as np
 import argparse
 import os
 import sys
@@ -216,7 +216,7 @@ def arguments():
 
     return args, unknown
 
-if __name__ == "__main__" :
+def main():
 
     mtxh = MatrixHandle()
 

@@ -19,8 +19,6 @@ from argparse import RawTextHelpFormatter
 from datetime import datetime
 from mpi4py import MPI
 
-import dockingML
-
 class DrawCMap :
     def __init__(self):
         pass

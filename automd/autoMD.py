@@ -1,77 +1,85 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import os
+import sys
+import urllib
+import time
+import argparse
+import subprocess as sp
+from argparse import RawTextHelpFormatter
+import math
+from glob import glob
+from collections import *
+import linecache
+import numpy as np
+import glob
+import time
 
 from dockingML import extract
-import subprocess as sp
-from .gentop import GenerateTop
 
-class CleanPDB :
-    '''
-    Prepare the pdb file, add missing atoms, add hydrogens, add missing loops
-    '''
-    def __init__(self, filename, obabel='obabel'):
+# import modeller for loop refinement
+try:
+    from modeller import *
+    from modeller.automodel import *
+    MODELLER_EXIST = True
+except ImportError :
+    print("Warning: Modeller is not well imported, some features may not work. ")
+    MODELLER_EXIST = False
+
+class RewritePDB :
+    def __init__(self, filename):
         self.pdb = filename
-        # the input file is not a pdb, or pdbqt file, use obabel convert it
-        if filename.split(".")[-1] not in ["pdb","pdbqt"] :
-            gpdb = GenerateTop()
-            gpdb.runObabel(obabelexe=obabel, input=filename, output=filename+".pdb")
-            self.pdb = filename+".pdb"
 
-    def extractFrame(self, frame=1, headersave=True) :
-        '''
-        extract a frame (default is first) of the pdb file
+    def pdbRewrite(self, output, chain, atomStartNdx, resStartNdx):
+        # change atom id, residue id and chain id
+        resseq = resStartNdx
+        atomseq = int(atomStartNdx)
+        chainname = chain
+        lines = open(self.pdb)
+        newfile = open(output,'w')
+        resseq_list = []
 
-        :param frame:
-        :param headersave:
-        :return: the specific frame from a large pdb file
-        '''
-        extractPDB = extract.ExtractPDB()
-        extractPDB.extract_frame(self.pdb, self.pdb[:-5]+"_%d.pdb"%frame, no_frames=[frame])
-        return(self.pdb[:-5]+"_%d.pdb"%frame)
-
-    def processHETATM(self, filename,
-                      hetatmsave=['WAT','HOH'],
-                      dropWater=True,
-                      cleanedPDB='cleaned_', headersave=True,
-                      selectedChains = [],
-                     ):
-        '''
-        :param filename:
-        :param hetatmsave:
-        :param dropWater: remove water molecules
-        :param cleanedPDB:
-        :param headersave: save the pdb header information
-        :param selectedChains:
-        :return: the pdbfile after removing unnecessary information
-        '''
-        tofile = open(cleanedPDB+filename, 'wb')
-        with open(filename) as lines :
-            for s in lines :
-                if len(s.split()) > 0 and \
-                                s.split()[0] in ['ATOM', 'HETATM', 'TER', 'END', 'ENDMDL'] :
-                    if dropWater :
-                        if s[21] in selectedChains and s[17:20].strip() not in ['HOH', 'WAT'] \
-                                and s[17:20].strip() in hetatmsave :
-                            tofile.write(s)
-                    else :
-                        if s[21] in selectedChains and s[17:20].strip() in hetatmsave :
-                            tofile.write(s)
+        for s in lines :
+            if "ATOM" in s and len(s.split()) > 6 :
+                atomseq += 1
+                newline = s
+                newline = self.atomSeqChanger(newline, atomseq)
+                newline = self.chainIDChanger(newline, chainname)
+                if len(resseq_list) == 0 :
+                    newline = self.resSeqChanger(newline, resseq)
+                    resseq_list.append(int(s[22:26].strip()))
                 else :
-                    if headersave :
-                        tofile.write(s)
+                    if resseq_list[-1] == int(s[22:26].strip()) :
+                        newline = self.resSeqChanger(newline, resseq)
+                    else :
+                        resseq += 1
+                        newline = self.resSeqChanger(newline, resseq)
+                    resseq_list.append(int(s[22:26].strip()))
+                newfile.write(newline)
+            else :
+                newfile.write(s)
+        print "Completed!"
 
-        return(cleanedPDB+filename)
+    # Change the ID of residue, or index of residue
+    def resSeqChanger(self, inline, resseq):
+        resseqstring = " "*(4- len(str(resseq)))+str(resseq)
+        newline = inline[:22] + resseqstring + inline[26:]
+        return newline
 
-    def removeLonePair(self, inpdb, outpdb):
-        '''
-        input a pdb file, remove the lone pair electron lines in the file
-        :param inpdb:
-        :param outpdb:
-        :return:
-        '''
+    def atomSeqChanger(self, inline, atomseq) :
+        atomseqstring = " " * (5 - len(str(atomseq))) + str(atomseq)
+        newline = inline[:6] + atomseqstring + inline[11:]
+        return newline
 
-        job = sp.Popen("awk \'$1 ~ /HETATM/ && $3 !~ /XX/ {print $0}\' %s > %s "%(inpdb, outpdb), shell=True)
-        job.communicate()
+    def resNameChanger(self, inline, resname) :
+        resnamestr = " " * ( 4 - len(str(resname) ) ) + str(resname)
+        newline = inline[:17] + resnamestr + inline[20:]
+        return newline
 
-        return 1
+    def chainIDChanger(self, inline, chainid) :
+        newline = inline[:21] + str(chainid) + inline[22:]
+        return newline
 
 class MolDocking :
     def __init__(self):
@@ -402,3 +410,188 @@ class MolDocking :
                 else :
                     pass
         return prop
+
+
+
+class AutoRunMD :
+    def __init__(self, topFile, taskName, grompp, mdrun, verbose=True, qsub=False):
+        self.top = topFile
+        self.task= taskName
+        self.verbose = verbose
+        self.grompp = grompp
+        self.mdrun = mdrun
+
+    def modifyMDP(self, inputMDPFile, outputMDPFile, parameters):
+        tofile = open(outputMDPFile, 'wb')
+        with open(inputMDPFile) as lines :
+            for s in lines :
+                if len(s.split()) > 0 and s[0] != ";" :
+                    if s.split()[0] in parameters.keys() \
+                            and len(parameters[s.split()[0]]) > 0 :
+                        tofile.write("%s    = ")
+                        for item in parameters[s.split()[0]] :
+                            tofile.write("%s "%str(item))
+                        tofile.write(" \n")
+                    else:
+                        tofile.write(s)
+                else :
+                    tofile.write(s)
+        return(outputMDPFile)
+
+    def energyMinimization(self, emMDPFile, groFile, outTprFile, np=4, qsub=False):
+        if self.verbose :
+            print("Start energy minimization for task %s."%self.task)
+
+        # generate GMX tpr file
+        job = sp.check_output("%s -f %s -c %s -o %s -p %s "%
+                              (self.grompp, emMDPFile, groFile, outTprFile, self.top),
+                              shell=True )
+        if self.verbose :
+            print(job)
+            print("Generating TPR file for EM completed.")
+
+        # run MD with qsub or on the terminal
+        cmd = "mpirun -np %d %s -deffnm %s " % (np, self.mdrun, outTprFile)
+        if qsub :
+            pscript = PrepScripts('sample_qsub.sh')
+            pscript.prepareQsub('em_qsub.sh', cmd)
+            job = sp.Popen("qsub em_qsub.sh", shell=True)
+            job.communicate()
+
+        else :
+            job = sp.Popen(cmd, shell=True)
+            job.communicate()
+
+        return(outTprFile+".gro")
+
+    def runMD(self, MDPFile, groFile, outTprFile, mdpOptions,
+              sampleScript='sample_qsub.sh',
+              qsub=False, np=4,
+              index="index.ndx",
+              ):
+
+        # prepare mdp file for MD
+        current_mdp = MDPFile
+        if len(mdpOptions.keys()) :
+            self.modifyMDP(inputMDPFile=MDPFile,
+                           outputMDPFile="modified_"+MDPFile,
+                           parameters=mdpOptions)
+            current_mdp = "modified_"+MDPFile
+
+        # prepare tpr file for md
+        job = sp.check_output("%s -f %s -c %s -o %s -p %s -n %s"
+                              %(self.grompp, current_mdp, groFile, outTprFile, self.top, index),
+                              shell=True)
+        if self.verbose :
+            print(job)
+
+        # run md
+        cmd = "mpirun -np %d %s -deffnm %s " % (np, self.mdrun, outTprFile[-4:])
+        if qsub :
+            pscript = PrepScripts(sampleScript)
+            oscript = str(len(glob("./*_"+sampleScript)))+"_"+sampleScript
+            pscript.prepareQsub(oscript, cmd)
+            job = sp.Popen("qsub %s"%oscript, shell=True)
+            job.communicate()
+        else :
+            job = sp.Popen(cmd+" &", shell=True)
+            job.communicate()
+
+        return(outTprFile[-4:]+".gro")
+
+def runGenTop() :
+    '''
+    instant a gmxTopBuilder class, and input some parameters,
+        to generate amber and gromacs topology and coordinates
+
+    if a small ligand provide, if not prep and frcmod exist,
+        then am1/bcc charge based on amber antechamber sqm method
+        will be calculated. in this process, tleap will be used to
+        get bonded and non-bonded parameters
+    :parameter: None
+    :return: None
+    '''
+    top = GenerateTop()
+    args = top.arguments()
+
+    try :
+        os.environ["AMBERHOME"] = "/home/liangzhen/software/amber14/"
+    except :
+        os.system("export AMBERHOME=/home/liangzhen/software/amber14/")
+
+    # define the input coordinates information, a pdb, or mol2, or a sequence
+    # of amino acids
+    if args.aaseq:
+        structure = args.aaseq
+    elif args.inp:
+        structure = args.inp
+    else:
+        structure = ''
+        print('Error: No input structure defined.\n Exit Now!')
+        sys.exit(0)
+
+    if not args.resp:
+        # not calculate atomic charges
+        top.gmxTopBuilder(args.frcmod, args.prep,
+                          structure, args.out,
+                          args.ion, args.nion,
+                          args.bt, args.size,
+                          args.ff)
+    else:
+        # prepare resp charges for small ligand with antechamber
+        # give a netcharge: args.nc
+        sh = top.runAntechamber(args.nc)
+
+        try:
+            # set env for AMBERHOME
+            os.environ["AMBERHOME"] = "/home/liangzhen/software/amber14/"
+            job = sp.Popen("sh %s %s %s" % (sh, args.inp, args.out), shell=True)
+            job.communicate()
+        except :
+            print("Antechamber generateing RESP and atomic parameters error! \n "
+                  "Double check your input structure.")
+            sys.exit(1)
+
+        top.gmxTopBuilder("frcmod." + args.out,
+                          "prep." + args.out,
+                          structure, args.out,
+                          args.ion, args.nion,
+                          args.bt, args.size,
+                          args.ff)
+
+    if args.ion[0] == "X+" or args.bt == "NA":
+        # parse a gromacs .top to a .itp file
+        # print "ITP file created!"
+        top.removeMolInfor(args.out)
+
+if __name__ == "__main__" :
+    # cd to PWD
+    os.chdir(os.getcwd())
+
+    if len(sys.argv) <= 2 :
+        help_information = '''
+        The tool is used for automating Gromacs based MD simulation.
+        Several independent tools are provided.
+
+        Separated tools including index, gentop, autoMD etc.
+
+        Usage:
+
+        python autoMD.py -h
+        python autoMD.py gentop -h
+        python autoMD.py index -h
+        python autoMD.py extract -h
+        '''
+        print(help_information)
+        sys.exit(1)
+    else :
+        if str(sys.argv[1]) == "index" :
+            #print("Show help message: ")
+            index = PdbIndex()
+            index.genGMXIndex()
+        #if 1 :
+        elif str(sys.argv[1]) == "gentop" :
+            runGenTop()
+
+        elif str(sys.argv[1]) == "extract" :
+            runExtract()

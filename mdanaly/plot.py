@@ -7,7 +7,7 @@ import sys, os
 from argparse import RawTextHelpFormatter
 import argparse
 
-import dockingML
+import dockml
 
 def plot2dScatter(filenames,
                   xlim=[], ylim=[],
@@ -138,7 +138,7 @@ def plot2dFes(filename, dtype=[], zlim=[],
 
     if pmf :
         # PMF
-        algo = dockingML.BasicAlgorithm()
+        algo = dockml.BasicAlgorithm()
         # vectorize the PMF function, and try to apply it to all element of a list
         PMF = np.vectorize(algo.pmf)
         MAX = np.max(z.ravel())

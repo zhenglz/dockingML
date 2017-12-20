@@ -19,7 +19,7 @@ setup(name='dockingML',
       author='zhenglz',
       author_email='zhenglz@outlook.com',
       license='NA',
-      packages=['dockingML', 'MDAnalysis', 'autoMD'],
+      packages=['dockml', 'mdanaly', 'automd'],
       install_requires=[
           'numpy',
           'pandas',
@@ -32,5 +32,5 @@ setup(name='dockingML',
       include_package_data=True,
       zip_safe=False,
 
-      entry_points = {'console_scripts': ['dockingML=dockingML.cmd:main'],},
+      scripts=['bin/matrix.py'],
       )
