@@ -270,7 +270,7 @@ class ExtractPDB :
                     self.printinfor()
                     command = input("Your choice:  ")
 
-if __name__ == "__main__" :
+def main() :
 
     ext = ExtractPDB()
     ext.runExtract()

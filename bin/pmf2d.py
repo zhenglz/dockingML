@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-from mdanaly import plot
+from mdanaly import pmf
 
 if __name__ == "__main__" :
 
-    plot.main()
+    pmf.main()
