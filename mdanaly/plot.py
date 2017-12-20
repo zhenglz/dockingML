@@ -322,7 +322,7 @@ def histBins(files, num_bins=20, xcol=1, xscale=1.0, xstart=0, xshift=0) :
         bins.append(np.min(X) + float(i) * (np.max(X) - np.min(X)) / float(num_bins))
     return bins
 
-if __name__ == "__main__" :
+def main() :
     os.chdir(os.getcwd())
 
     d = '''
