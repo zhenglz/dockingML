@@ -5,7 +5,7 @@ import argparse
 import os
 import sys
 from scipy import stats
-from argparse import RawDescriptionHelpFormatter
+from argparse import RawTextHelpFormatter
 from matplotlib import pyplot as plt
 
 class MatrixHandle :
@@ -158,7 +158,7 @@ def arguments():
     matrixHandle.py -opt extract
     matrixHandle.py -opt extract -dat all_caCmap.dat.xyz -dtype S6 S6 f4 -ds xyz -out HNH_CTD_cmap.xyz -xyrange 765 925 1200 1369
     '''
-    parser = argparse.ArgumentParser(description=d, formatter_class=RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(description=d, formatter_class=RawTextHelpFormatter)
     parser.add_argument('-opt', default='merge', type=str,
                         help="Operations of matrix files. Default is merge.\n"
                              "Opts: merge, extract, average, pair-t-test, ind-t-test\n"
