@@ -1,3 +1,4 @@
+; amber 99 force field parameters
 ; name      at.num  mass     charge ptype  sigma      epsilon
 Br          35      79.90    0.0000  A   0.00000e+00  0.00000e+00
 C            6      12.01    0.0000  A   3.39967e-01  3.59824e-01
