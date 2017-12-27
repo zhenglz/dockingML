@@ -13,11 +13,15 @@ import glob, math, sys, os
 import numpy as np
 import argparse
 
+import dockml
+
 from matplotlib import pyplot as plt
 from collections import defaultdict
 from argparse import RawTextHelpFormatter
 from datetime import datetime
 from mpi4py import MPI
+
+import time
 
 class DrawCMap :
     def __init__(self):
@@ -69,7 +73,7 @@ class DrawCMap :
         res_labels = []
         if len(refpdb) == 3 :
 
-            ppdb = dockingML.pdbIO.parsePDB("")
+            ppdb = dockml.pdbIO.parsePDB("")
             fullreslist = ppdb.getNdxForRes(refpdb[0], [refpdb[1]])
 
             shortresmap = ppdb.longRes2ShortRes()
@@ -260,7 +264,7 @@ class ContactMap:
         :param singleFramePDB:
         :return:
         '''
-        ndx = dockingML.index.PdbIndex()
+        ndx = dockml.index.PdbIndex()
         atominfor = ndx.atomInformation(singleFramePDB)
         atomType = []
         keys = atominfor.keys()
@@ -455,7 +459,7 @@ class ContactMap:
         else :
             if switch:
                 dc = 2 * math.sqrt(distcutoff)
-                swf= dockingML.algorithms.BasicAlgorithm()
+                swf= dockml.algorithms.BasicAlgorithm()
                 counts = swf.switchFuction(math.sqrt(distances[0]), dc)
                 if verbose :
                     print( rank, " COUNTS: ", counts)
@@ -492,13 +496,13 @@ class ContactMap:
         # value: [atomname, molecule type, is_hydrogen,  resname, resndx, chainid,(mainchian, sidechain,
         #           sugar ring, phosphate group, base ring)]
         # atominfor[atomndx] = [atomname, moltype, is_hydrogen, resname, resndx, chain, subgroup]
-        ndx = dockingML.index.PdbIndex()
+        ndx = dockml.index.PdbIndex()
         detailatomInfor = ndx.atomInformation(pdbin)
 
         atomndx_1 = atomNdx[0]
         atomndx_2 = atomNdx[-1]
 
-        pdbio = dockingML.pdbIO.coordinatesPDB()
+        pdbio = dockml.pdbIO.coordinatesPDB()
         crds1 = pdbio.getAtomCrdByNdx(pdbin, atomndx_1)
         crds2 = pdbio.getAtomCrdByNdx(pdbin, atomndx_2)
 
@@ -665,10 +669,17 @@ class ContactMap:
         #contCountMap = [0] * nresidues
         progress = 0
         contCountMap = [0.0] * nresidues
+        oldtime = datetime.datetime.now()
+
         for pdbfile in pdbFileList:
             progress += 1
             print( "Rank %d Progress: The %dth File %s out of total %d files" % \
                   (rank, progress, pdbfile, len(pdbFileList)))
+
+            delta = datetime.datetime.now() - oldtime
+            print("Rank %d Progress: Time Usage for 1 frame %d seconds" % (rank, delta.total_seconds))
+            oldtime = datetime.datetime.now()
+
             if verbose :
                 print( rank, atomndx_1, atomndx_2)
 
@@ -962,10 +973,11 @@ def main() :
                         help="Provide detail contact information and write out to a file. \n"
                              "Default is None."
                         )
-
-    parser.add_argument('-opt', default="Separated", type=str,
+    parser.add_argument('-opt', default="TimeSeries", type=str,
                         help="Optional setting controls. \n"
-                             "Separated, using separated files instead of splitting files.\n")
+                             "Separated, using separated files instead of splitting files."
+                             "Options: S(Separated), TS (TimeSeries).\n"
+                             "Default is TimeSeries. \n")
 
     args = parser.parse_args()
 
@@ -1071,7 +1083,7 @@ def main() :
                 if args.opt in ["S", "Separated", "separated"] :
                     filesList = [[args.inp,]]
             else :
-                filesList = []
+                filesList = None
 
             ## scatter data to sub-processers/threads
             filesList = comm.scatter(filesList, root=0)
