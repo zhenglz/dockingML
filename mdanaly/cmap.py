@@ -669,16 +669,16 @@ class ContactMap:
         #contCountMap = [0] * nresidues
         progress = 0
         contCountMap = [0.0] * nresidues
-        oldtime = datetime.datetime.now()
+        oldtime = datetime.now()
 
         for pdbfile in pdbFileList:
             progress += 1
             print( "Rank %d Progress: The %dth File %s out of total %d files" % \
                   (rank, progress, pdbfile, len(pdbFileList)))
 
-            delta = datetime.datetime.now() - oldtime
+            delta = datetime.now() - oldtime
             print("Rank %d Progress: Time Usage for 1 frame %d seconds" % (rank, delta.total_seconds))
-            oldtime = datetime.datetime.now()
+            oldtime = datetime.now()
 
             if verbose :
                 print( rank, atomndx_1, atomndx_2)
@@ -753,8 +753,8 @@ class ContactMap:
         #  Script for generating contact probability map                       #
         #  Author:  ZHENG Liangzhen                                            #
         #  Email:   LZHENG002@e.ntu.edu.sg                                     #
-        #  Version: V2.0                                                       #
-        #  Date:    15 Sept 2015                                               #
+        #  Version: V2.2                                                       #
+        #  Date:    27 Dec 2017                                               #
         ########################################################################
 
         Generating contact probability Map (Cmap)
@@ -874,11 +874,11 @@ def main() :
 
     d = '''
     ########################################################################
-    #  Script for generating contact probability map                       #
-    #  Author:  ZHENG Liangzhen                                            #
+    #  Generating contact probability map                                  #
+    #  Author:  ZHENG Liangzhen & Mu Yuguang                               #
     #  Email:   LZHENG002@e.ntu.edu.sg                                     #
-    #  Version: V2.0                                                       #
-    #  Date:    15 Sept 2015                                               #
+    #  Version: V2.2                                                       #
+    #  Date:    27 Dec 2017                                                #
     ########################################################################
 
     Generating contact probability Map (Cmap)
@@ -1106,7 +1106,7 @@ def main() :
 
             overallValuesList = comm.gather(Cmap, root=0)
 
-            ## once calculation done, wrap up to write data out
+            ## once calculation done, wrap up and write data out
             if rank == 0 :
                 # "Wrap Up and write data to files "
                 final = np.zeros(len(Cmap))
