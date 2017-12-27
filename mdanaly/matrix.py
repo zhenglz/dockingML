@@ -65,24 +65,34 @@ class MatrixHandle :
 
         if os.path.exists(dataf):
             if len(dtype):
-                data1 = np.loadtxt(dataf, dtype=dtype, comments=['@', '#'], usecols=set(cols))
+
                 if "S" in dtype[0]:
-                    for i in range(data1.shape[0]):
-                        data1[i][0], data1[i][1] = float(data1[i][0].split("_")[0]), \
-                                                   float(data1[i][1].split("_")[0])
+                    data = []
+                    with open(dataf) as lines :
+                        for s in lines :
+                            if "#" != s[0] :
+                                d = [s.split()[cols[0]].split("_")[0],
+                                     s.split()[cols[1]].split("_")[0],
+                                     float(s.split()[cols[2]]),
+                                     ]
+                                data.append(d)
+
+                    data = np.asarray(data)
 
                 if "S" not in dtype[0] and "S" not in dtype[1]:
+                    data = np.loadtxt(dataf, dtype=dtype, comments=['@', '#'], usecols=set(cols))
                     for c in [0, 1]:
-                        data1[:, c] = data1[:, c] + xyshift[c]
+                        data[:, c] = data[:, c] + xyshift[c]
             else:
-                data1 = np.loadtxt(dataf, comments=['@', '#'], usecols=set(cols))
-
+                data = np.loadtxt(dataf, comments=['@', '#'], usecols=set(cols))
+                data[:, 0] = data[:, 0] + xyshift[0]
+                data[:, 1] = data[:, 1] + xyshift[1]
         else:
             print("file %s not exist! Exit now!" % dataf)
 
             sys.exit(0)
 
-        return data1
+        return data
 
     def extractDomainData(self, data, xrange, yrange):
         '''
@@ -161,7 +171,8 @@ def arguments():
     parser = argparse.ArgumentParser(description=d, formatter_class=RawTextHelpFormatter)
     parser.add_argument('-opt', default='merge', type=str,
                         help="Operations of matrix files. Default is merge.\n"
-                             "Opts: merge, extract, average, pair-t-test, ind-t-test\n"
+                             "Opts: transform, merge, extract, average, pair-t-test, ind-t-test\n"
+                             "transform: transform file from xyz to mtx, or vice verse\n"
                              "merge: combine two matrix, 1st matrix takes the upper diagonal.\n"
                              "extract: extract specific x and y data points, using xyrange.\n"
                              "average: averaging matrix z values among the input matrices \n"
@@ -173,7 +184,7 @@ def arguments():
                         help="Input data file. Default is input.dat. \n")
     parser.add_argument('-out', default="output.dat", type=str,
                         help="Output file name. Default is output.dat. \n")
-    parser.add_argument('-dtype', default=[], type=str,
+    parser.add_argument('-dtype', default=[], type=str, nargs="+",
                         help="Data type. For example, S6 and f4 indicate \n"
                              "string and float data respectively. \n"
                              "Default data type is none, automated data type \n"
