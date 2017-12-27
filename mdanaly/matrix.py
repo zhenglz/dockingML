@@ -260,6 +260,21 @@ def main():
         plt.ylabel("Y")
         plt.show()
 
+    elif args.opt == "transform" :
+        if args.ds in ['xyz', 'XYZ', '3d'] :
+            data = mtxh.loadxyz(args.dat[0], args.dtype, args.xyzcol, xyshift=args.xyshift)
+            x_size = len(set(list(data[:, 0])))
+            y_size = len(set(list(data[:, 1])))
+
+            odata = np.reshape(data, (x_size, y_size))
+
+            np.savetxt(args.out, odata, fmt="%.5f", delimiter=" ")
+        else :
+            data = mtxh.reshapeMtx(args.dat[0], args.dtype, args.xyzcol, xyshift=args.xyshift)
+
+            np.savetxt(args.out, data, fmt="%.5f", delimiter=" ")
+        print("Transform matrix file type completed!")
+
     elif args.opt == "extract" :
         if args.ds in ['xyz', 'XYZ', '3d']:
             data = mtxh.loadxyz(args.dat[0], args.dtype, args.xyzcol, xyshift=args.xyshift)
