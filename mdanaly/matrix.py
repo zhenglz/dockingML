@@ -159,6 +159,14 @@ class MatrixHandle :
 
 def arguments():
     d = '''
+    ########################################################################
+    #  Handling matrix files                                               #
+    #  Author:  ZHENG Liangzhen & Mu Yuguang                               #
+    #  Email:   LZHENG002@e.ntu.edu.sg                                     #
+    #  Version: V1.2                                                       #
+    #  Date:    27 Dec 2017                                                #
+    ########################################################################
+    
     Handling matrix files.
 
     Merge 2 matrix: File1 takes the upper diagonal, while File2 takes the lower diagonal.
