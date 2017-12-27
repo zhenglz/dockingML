@@ -854,7 +854,7 @@ class ContactMap:
 
         return args
 
-if __name__ == "__main__" :
+def main() :
     ## change to working directory
     pwd = os.getcwd()
     os.chdir(pwd)

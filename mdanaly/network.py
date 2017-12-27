@@ -8,7 +8,7 @@ import networkx as nx
 
 import os, sys
 import argparse
-from argparse import RawDescriptionHelpFormatter
+from argparse import RawTextHelpFormatter
 
 class NetworkPrepare :
     def __init__(self):
@@ -16,7 +16,7 @@ class NetworkPrepare :
 
     def genNodeEdges(self, filein, community, output=""):
         """
-
+        input a betweenness file, return community information
         :param filein: str, betweeness data set, matrix format
         :param community: list, community compositions, list of lists
         :return: a betweenness summed community matrix
@@ -70,10 +70,10 @@ class NetworkDraw :
 
     def arguemnets(self):
         d = '''
-        Descriptions of community network pol
+        Descriptions of community network plot
         '''
 
-        parser = argparse.ArgumentParser(description=d, formatter_class=RawDescriptionHelpFormatter)
+        parser = argparse.ArgumentParser(description=d, formatter_class=RawTextHelpFormatter)
         parser.add_argument('-node_edges', type=str, default='node-edges-x.dat',
                             help="File contains node-edges information. \n"
                                  "Default is node-edges.dat. If this file not exist, \n"
@@ -192,9 +192,7 @@ class NetworkDraw :
 
         return 1
 
-
-
-if __name__ == "__main__" :
+def main() :
     #os.chdir(os.getcwd())
 
     nwd = NetworkDraw()
@@ -202,6 +200,7 @@ if __name__ == "__main__" :
     nwp = NetworkPrepare()
 
     args = nwd.arguemnets()
+
     comm = nio.readCommunityFile(args.com, nres_cutoff=args.nres_cutoff)
     nodes_resnum = [len(x) for x in comm if len(x) > args.nres_cutoff]
 
