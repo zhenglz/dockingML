@@ -15,11 +15,11 @@ class MatrixHandle :
     def reshapeMtx(self, dataf, dtype, xyshift=[0, 0]):
         '''
         Load a matrix file, return a ndarray matrix shape object
-        :param dataf:
+        :param dataf: str, a matrix M*N file
         :param dtype:
         :param cols:
         :param xyshift:
-        :return:
+        :return: array, X Y Z 3 columns data array
         '''
 
         if len(dtype):
@@ -27,36 +27,48 @@ class MatrixHandle :
         else:
             data = np.loadtxt(dataf, comments=['@', '#'])
 
-        print(data.shape)
+        xyz = self.matrix2xyz(data)
+
+        for c in [0, 1]:
+            xyz[:, c] = xyz[:, c] + xyshift[c]
+
+        return np.asarray(xyz)
+
+    def xyz2matrix(self, data):
+        '''
+        give a 2d array [ X Y Z ], return a 2d M*N matrix array
+        remove x and y label information
+        :param data: array, matrix
+        :return: array, X Y Z (3 columns)
+        '''
+
+        z = data[:, 2]
+
+        xsize = len(set(list(z[:, 0])))
+        ysize = len(set(list(z[:, 1])))
+
+        mtx = np.reshape(z, (xsize, ysize))
+
+        return mtx
+
+    def matrix2xyz(self, data):
+        '''
+        give a matrix (M*N) 2d array, return a [ X Y Z ] array
+        the x and y label in the returned 3d array all starting from 0
+        :param data: 2d array, a M*N matrix
+        :return: 3d array, a 3*X array
+        '''
+
         xsize = data.shape[0]
         ysize = data.shape[1]
 
-        print(xsize, ysize)
-
-        d = []
+        xyz = []
         data = list(data)
-
         for i in range(xsize):
             for j in range(ysize):
-                d.append([i, j, data[i][j]])
-
-        d = np.asarray(d)
-        for c in [0, 1]:
-            d[:, c] = d[:, c] + xyshift[c]
-
-        print(d)
-        return np.asarray(d)
-
-    def xyz2matrix(self, data):
-
-        dat = list(data)
-        xyz = []
-
-        for i in range(len(data)) :
-            for j in range(len(data[0])) :
                 xyz.append([i, j, data[i][j]])
 
-        return xyz
+        return np.asarray(xyz)
 
     def loadxyz(self, dataf, dtype=[], cols=[0, 1, 2], xyshift=[0, 0]):
         '''
@@ -122,8 +134,8 @@ class MatrixHandle :
     def neiborhood2zero(self, data, neiborsize=4, xyzshift=[0, 0, 0], zscale=1.0, outtype='xyz'):
         """
         treat diagonal elements as zero
-        :param data:
-        :param neiborsize:
+        :param data: array, X Y Z array
+        :param neiborsize: int, default is 4
         :param xyzshift:
         :param zscale:
         :param outtype:
@@ -137,9 +149,7 @@ class MatrixHandle :
         newd[:, 2] = newd[:, 2] * zscale
         for i in range(xysize):
             if abs(data[i, 0] - data[i, 1]) <= neiborsize:
-                newd[i, 2] = 0.
-
-        print(newd.shape, xsize, ysize)
+                newd[i, 2] = 0.0
 
         if outtype == 'xyz':
             for i in range(3) :
@@ -151,7 +161,7 @@ class MatrixHandle :
     def zRangeSelect(self, data, zrange=[]):
         """
         select the data points whoes z values locate in the zrange
-        :param data: a list, or matrix data
+        :param data: array, matrix data
         :param zrange: list, the lower and upper boundary of the z values
         :return:
         """
@@ -167,7 +177,7 @@ class MatrixHandle :
                 else :
                     newdata[y][x] = 0.0
 
-        return newdata
+        return np.asarray(newdata)
 
 def arguments():
     d = '''
