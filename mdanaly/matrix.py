@@ -12,7 +12,7 @@ class MatrixHandle :
     def __init__(self):
         pass
 
-    def reshapeMtx(self, dataf, dtype, cols=[0, 1, 2], xyshift=[0, 0]):
+    def reshapeMtx(self, dataf, dtype, xyshift=[0, 0]):
         '''
         Load a matrix file, return a ndarray matrix shape object
         :param dataf:
@@ -23,12 +23,15 @@ class MatrixHandle :
         '''
 
         if len(dtype):
-            data = np.loadtxt(dataf, dtype=dtype, comments=['@', '#'], usecols=set(cols))
+            data = np.loadtxt(dataf, dtype=dtype, comments=['@', '#'])
         else:
-            data = np.loadtxt(dataf, comments=['@', '#'], usecols=set(cols))
+            data = np.loadtxt(dataf, comments=['@', '#'])
 
+        print(data.shape)
         xsize = data.shape[0]
         ysize = data.shape[1]
+
+        print(xsize, ysize)
 
         d = []
         data = list(data)
@@ -37,9 +40,11 @@ class MatrixHandle :
             for j in range(ysize):
                 d.append([i, j, data[i][j]])
 
+        d = np.asarray(d)
         for c in [0, 1]:
             d[:, c] = d[:, c] + xyshift[c]
 
+        print(d)
         return np.asarray(d)
 
     def xyz2matrix(self, data):
@@ -71,16 +76,18 @@ class MatrixHandle :
                     with open(dataf) as lines :
                         for s in lines :
                             if "#" != s[0] :
-                                d = [s.split()[cols[0]].split("_")[0],
+                                d = [
+                                     s.split()[cols[0]].split("_")[0],
                                      s.split()[cols[1]].split("_")[0],
                                      float(s.split()[cols[2]]),
                                      ]
                                 data.append(d)
 
                     data = np.asarray(data)
+                    data = data.astype(float)
 
                 if "S" not in dtype[0] and "S" not in dtype[1]:
-                    data = np.loadtxt(dataf, dtype=dtype, comments=['@', '#'], usecols=set(cols))
+                    data = np.loadtxt(dataf, comments=['@', '#'], usecols=set(cols))
                     for c in [0, 1]:
                         data[:, c] = data[:, c] + xyshift[c]
             else:
@@ -125,16 +132,21 @@ class MatrixHandle :
         xsize = len(set(list(data[:, 0])))
         ysize = len(set(list(data[:, 1])))
         xysize = xsize * ysize
-        newd = data + np.reshape(np.repeat(xyzshift, xysize), [xysize, 3])
+        #newd = data + np.reshape(np.repeat(xyzshift, xysize), [xysize, 3])
+        newd = data
         newd[:, 2] = newd[:, 2] * zscale
         for i in range(xysize):
             if abs(data[i, 0] - data[i, 1]) <= neiborsize:
                 newd[i, 2] = 0.
 
+        print(newd.shape, xsize, ysize)
+
         if outtype == 'xyz':
+            for i in range(3) :
+                newd[:, i] += xyzshift[i]
             return newd
         else:
-            return np.reshape(newd[:, 2], [xsize, ysize])
+            return np.reshape(newd[:, 2], (xsize, ysize))
 
     def zRangeSelect(self, data, zrange=[]):
         """
@@ -365,10 +377,12 @@ def main():
         if args.ds in ['xyz', 'XYZ', '3d']:
             data = mtxh.loadxyz(args.dat[0], args.dtype, args.xyzcol, xyshift=args.xyshift)
         elif args.ds in ['matrix', 'mtx']:
-            data = mtxh.reshapeMtx(args.dat[0], args.dtype, args.xyzcol, xyshift=args.xyshift)
+            data = mtxh.reshapeMtx(args.dat[0], args.dtype, xyshift=args.xyshift)
         else:
             sys.exit(0)
         data = data.astype(np.float)
+
+        print(data.shape)
 
         newd = mtxh.neiborhood2zero(data, neiborsize=args.neibsize, outtype='mtx', zscale=args.zscale)
         np.savetxt(args.out, newd, fmt='%.3f')
