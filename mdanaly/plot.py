@@ -116,6 +116,8 @@ def plot2dFes(filename, dtype=[], zlim=[],
 
     else :
         fes = np.loadtxt(filename, comments="#", usecols=xyzcols)
+
+        # get x and y size
         x_size = len(set(fes[:,0]))
         y_size = len(set(fes[:,1]))
         print( "X Y size", x_size, y_size)

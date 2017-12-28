@@ -337,12 +337,21 @@ def main():
             sys.exit(0)
         data = data.astype(np.float)
 
-        tofile = open(args.out, 'wb')
-        for i in range(len(args.drange)/2) :
-            tofile.write("# %d %.2f %.2f \n"%(i, args.drange[i*2], args.drange[i*2+1]))
+        drange = []
+        if os.path.exists(args.drange[0]) :
+            with open(args.drange) as lines :
+                for s in lines :
+                    if "#" not in s :
+                        drange += [ int(s.split()[1]), int(s.split()[2]) ]
+        else :
+            drange = args.drange
 
-        for i in range(len(args.drange)/2) :
-            for j in range(len(args.drange) / 2):
+        tofile = open(args.out, 'wb')
+        for i in range(len(drange)/2) :
+            tofile.write("# %d %.2f %.2f \n"%(i, drange[i*2], drange[i*2+1]))
+
+        for i in range(len(drange)/2) :
+            for j in range(len(drange) / 2):
                 if args.dzero and i == j :
                     tofile.write("%3d %3d  0.0 \n" % (i, j))
                 else :
