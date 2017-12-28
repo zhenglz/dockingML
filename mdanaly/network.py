@@ -264,6 +264,32 @@ class NetworkDraw :
 
         return 1
 
+def workingflow() :
+
+    d = '''
+    The working flow of drawing community network
+    
+    1. construct a cmap
+    using distance, or LMI, DCC correlation, generating a residue-residue
+    contact/correlation map
+    
+    2. process the cmap
+    remove digonal (means setting digonal as zeroes, since they are tightly connected)
+    set values (higher than a probability cutoff, say 0.8) as one, loose connecting values
+    (less than the cutoff) as zero
+    
+    3. calculate community information
+    using \'gncommunities\' generating communities, as well as their betweenness
+    
+    4. get community nodes and edges
+    name the communities, get their inter-connection strengths (weighted edges)
+    
+    5. draw community network
+    using networkx generating community network plot 
+    
+    '''
+    print(d)
+
 def main() :
     #os.chdir(os.getcwd())
 
