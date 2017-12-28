@@ -205,7 +205,7 @@ def arguments():
                         help="Range for x and y. Select only part of the matrix, \n"
                              "thus choose the ranges for X and Y respectively. \n"
                              "Please give 4 numbers, two of them define a range for one axis.")
-    parser.add_argument('-drange', default=[], type=float, nargs="+",
+    parser.add_argument('-drange', default=[], type=str, nargs="+",
                         help="Ranges define domain-domain matrix data. \n"
                              "Data points are average data points. "
                         )
@@ -339,12 +339,12 @@ def main():
 
         drange = []
         if os.path.exists(args.drange[0]) :
-            with open(args.drange) as lines :
+            with open(args.drange[0]) as lines :
                 for s in lines :
                     if "#" not in s :
                         drange += [ int(s.split()[1]), int(s.split()[2]) ]
         else :
-            drange = args.drange
+            drange = [ float(x) for x in args.drange ]
 
         tofile = open(args.out, 'wb')
         for i in range(len(drange)/2) :
@@ -355,7 +355,7 @@ def main():
                 if args.dzero and i == j :
                     tofile.write("%3d %3d  0.0 \n" % (i, j))
                 else :
-                    d = mtxh.extractDomainData(data, xrange=args.drange[2*i:2*i+2], yrange=args.drange[2*j:2*j+2])
+                    d = mtxh.extractDomainData(data, xrange=drange[2*i:2*i+2], yrange=drange[2*j:2*j+2])
                     tofile.write("%3d %3d %12.5f \n"%(i, j, np.mean(d[:, 2])))
         tofile.close()
 

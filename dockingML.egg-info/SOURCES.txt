@@ -18,7 +18,6 @@ dockml/algorithms.py
 dockml/cmd.py
 dockml/convert.py
 dockml/dataclean.py
-dockml/extract.py
 dockml/features.py
 dockml/filter_mol2.py
 dockml/fixpdb.py
@@ -32,8 +31,10 @@ dockml/shiftpdb.py
 dockml/test.py
 mdanaly/__init__.py
 mdanaly/cmap.py
+mdanaly/extract.py
 mdanaly/io.py
 mdanaly/matrix.py
 mdanaly/network.py
 mdanaly/plot.py
+mdanaly/pmf.py
 mdanaly/workingflow.py
