@@ -79,8 +79,8 @@
       <file leaf-file-name="network.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mdanaly/network.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="263">
-              <caret line="92" column="73" lean-forward="false" selection-start-line="92" selection-start-column="73" selection-end-line="92" selection-end-column="73" />
+            <state relative-caret-position="289">
+              <caret line="296" column="21" lean-forward="true" selection-start-line="296" selection-start-column="21" selection-end-line="296" selection-end-column="21" />
               <folding>
                 <element signature="e#25#42#0" expanded="true" />
               </folding>
@@ -91,8 +91,8 @@
       <file leaf-file-name="matrix.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mdanaly/matrix.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="367" column="27" lean-forward="false" selection-start-line="367" selection-start-column="27" selection-end-line="367" selection-end-column="27" />
+            <state relative-caret-position="680">
+              <caret line="361" column="14" lean-forward="false" selection-start-line="361" selection-start-column="8" selection-end-line="361" selection-end-column="14" />
               <folding>
                 <element signature="e#23#41#0" expanded="true" />
               </folding>
@@ -152,6 +152,7 @@
       <find>dockingML</find>
       <find>seperate</find>
       <find>Sep</find>
+      <find>genNodeEdges</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -755,8 +756,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/matrix.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="367" column="27" lean-forward="false" selection-start-line="367" selection-start-column="27" selection-end-line="367" selection-end-column="27" />
+        <state relative-caret-position="680">
+          <caret line="361" column="14" lean-forward="false" selection-start-line="361" selection-start-column="8" selection-end-line="361" selection-end-column="14" />
           <folding>
             <element signature="e#23#41#0" expanded="true" />
           </folding>
@@ -765,8 +766,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/network.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="263">
-          <caret line="92" column="73" lean-forward="false" selection-start-line="92" selection-start-column="73" selection-end-line="92" selection-end-column="73" />
+        <state relative-caret-position="289">
+          <caret line="296" column="21" lean-forward="true" selection-start-line="296" selection-start-column="21" selection-end-line="296" selection-end-column="21" />
           <folding>
             <element signature="e#25#42#0" expanded="true" />
           </folding>

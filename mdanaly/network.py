@@ -13,9 +13,33 @@ from argparse import RawTextHelpFormatter
 
 from dockml import pdbIO
 
-class NetworkPrepare :
-    def __init__(self):
-        pass
+class ParseCommunity :
+
+    def __init__(self, commu):
+        self.community = commu
+
+        if os.path.exists(self.community) :
+            print("File not exists: ", self.community)
+            sys.exit(0)
+
+    def parseCommunities(self):
+        """
+        input a community information file, return the community data
+        :param filen (self.community): str, a output community information from gncommunities software
+        :return: tuple, ( number_of_communities, { commu_id : residue list })
+        """
+        modularity = 0.0
+        community = collections.defaultdict(list)
+        with open(self.community) as lines :
+            for s in lines :
+                if "The optimum number of communities" in s :
+                    #no_commu = int(s.split()[6])
+                    modularity = float(s.split()[-1])
+
+                elif "The residues in community" in s :
+                    community[int(s.split()[4])] = [int(x) for x in s.split(":")[-1].split()]
+
+        return (community, modularity)
 
     def genNodeEdges(self, filein, community, output=""):
         """
@@ -48,6 +72,10 @@ class NetworkPrepare :
 
         return commu
 
+class NetworkPrepare :
+    def __init__(self):
+        pass
+
     def parseNodeEdges(self, filein):
         """
         input a matrix file, return the network information
@@ -65,25 +93,6 @@ class NetworkPrepare :
                     node_edges.append((i, j, dat[i][j]))
 
         return node_edges
-
-    def parseCommunities(self, filen):
-        """
-        input a community information file, return the community data
-        :param filen: str, a output community information from gncommunities software
-        :return: tuple, ( number_of_communities, { commu_id : residue list })
-        """
-        modularity = 0.0
-        community = collections.defaultdict(list)
-        with open(filen) as lines :
-            for s in lines :
-                if "The optimum number of communities" in s :
-                    no_commu = int(s.split()[6])
-                    modularity = float(s.split()[-1])
-
-                elif "The residues in community" in s :
-                    community[int(s.split()[4])] = [int(x) for x in s.split(":")[-1].split()]
-
-        return (community, modularity)
 
     def resInDomains(self, domainf, residues):
         '''
