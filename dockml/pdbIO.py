@@ -107,6 +107,24 @@ class parsePDB :
             PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
             self.nucleic = PROJECT_ROOT + '/../data/nucleic-acid.lib'
 
+    def readDomainRes(self, filein):
+        '''
+        load the domain data file, return a list of domain residue information
+        :param filein:
+        :return: list of list, domain-residue-range information
+        '''
+        drange = []
+
+        try :
+            with open(filein) as lines:
+                for s in lines:
+                    if "#" not in s:
+                        drange.append([s.split()[0], int(s.split()[1]), int(s.split()[2])])
+        except:
+            raise FileNotFoundError
+
+        return drange
+
     def getStdProRes(self):
         """
         get the standard protein residue list

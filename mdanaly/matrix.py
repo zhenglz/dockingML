@@ -8,6 +8,8 @@ from scipy import stats
 from argparse import RawTextHelpFormatter
 from matplotlib import pyplot as plt
 
+from dockml import pdbIO
+
 class MatrixHandle :
     def __init__(self):
         pass
@@ -304,10 +306,8 @@ def main():
     elif args.opt == "transform" :
         if args.ds in ['xyz', 'XYZ', '3d'] :
             data = mtxh.loadxyz(args.dat[0], args.dtype, args.xyzcol, xyshift=args.xyshift)
-            x_size = len(set(list(data[:, 0])))
-            y_size = len(set(list(data[:, 1])))
 
-            odata = np.reshape(data, (x_size, y_size))
+            odata = mtxh.xyz2matrix(data)
 
             np.savetxt(args.out, odata, fmt="%.5f", delimiter=" ")
         else :
@@ -361,10 +361,12 @@ def main():
 
         drange = []
         if os.path.exists(args.drange[0]) :
-            with open(args.drange[0]) as lines :
-                for s in lines :
-                    if "#" not in s :
-                        drange += [ int(s.split()[1]), int(s.split()[2]) ]
+            pdb = pdbIO.parsePDB()
+            domains = pdb.readDomainRes(args.drange[0])
+
+            drange = [ x[1:] for x in domains ]
+            # 2d list to 1d
+            drange = sum(drange, [])
         else :
             drange = [ float(x) for x in args.drange ]
 

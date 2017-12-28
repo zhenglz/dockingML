@@ -6,9 +6,12 @@ import numpy as np
 from matplotlib import pyplot as plt
 import networkx as nx
 
+import collections
 import os, sys
 import argparse
 from argparse import RawTextHelpFormatter
+
+from dockml import pdbIO
 
 class NetworkPrepare :
     def __init__(self):
@@ -63,6 +66,66 @@ class NetworkPrepare :
 
         return node_edges
 
+    def parseCommunities(self, filen):
+        """
+        input a community information file, return the community data
+        :param filen: str, a output community information from gncommunities software
+        :return: tuple, ( number_of_communities, { commu_id : residue list })
+        """
+        modularity = 0.0
+        community = collections.defaultdict(list)
+        with open(filen) as lines :
+            for s in lines :
+                if "The optimum number of communities" in s :
+                    no_commu = int(s.split()[6])
+                    modularity = float(s.split()[-1])
+
+                elif "The residues in community" in s :
+                    community[int(s.split()[4])] = [int(x) for x in s.split(":")[-1].split()]
+
+        return (community, modularity)
+
+    def resInDomains(self, domainf, residues):
+        '''
+        input a list of residues and domain information file
+        output the ratio of residues in each domain
+        :param domainf:
+        :param residues: list, a list of residues from community analysis
+        :return:
+        '''
+
+        pdb = pdbIO.parsePDB()
+        dinfor = pdb.readDomainRes(domainf)
+
+        # eg. { domain_name: [1, 3, 5]}
+        domains = collections.defaultdict(list)
+        d_count = {}
+
+        for d in dinfor :
+            domains[d[0]] = range(d[1], d[2]+1)
+            d_count[d[0]] = 0
+
+        for d in d_count.keys() :
+            # calculate how many res (in parameter residues) in a domain
+            d_count[d] = len(set(domains[d]).intersection(set(residues)))
+
+        # ratio_outof means how much res in the list (residues) in different domains,
+        # sum them up, you should get 1
+        # eg, this list of residues is 100 residues, only 25 in domain HNH,
+        # therefore, the ratio for HNH is 25%.
+        ratio_outof    = {}
+
+        # ratio_indomain means, for a specific domain,
+        # some ratio of all res in this specific domain, is in the list of residues
+        # eg. Domain HNH (have 250 residues), in this community residues list, 25 res in
+        # domain HNH, thus the ratio for HNH is 10%
+        ratio_indomain = {}
+
+        for d in d_count.keys() :
+            ratio_outof[d]    = d_count[d] / float(len(residues))
+            ratio_indomain[d] = d_count[d] / float(len(domains[d]))
+
+        return (ratio_indomain, ratio_outof)
 
 class NetworkDraw :
     def __init__(self):
