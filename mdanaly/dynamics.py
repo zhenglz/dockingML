@@ -83,8 +83,3 @@ class essentialDynamics :
                     tofile.write(x)
 
         return 1
-
-
-
-
-

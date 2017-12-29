@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/mdanaly/dynamics.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockml/pdbIO.py" afterPath="$PROJECT_DIR$/dockml/pdbIO.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mdanaly/dynamics.py" afterPath="$PROJECT_DIR$/mdanaly/dynamics.py" />
     </list>
     <ignored path="dockingML.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -69,7 +68,7 @@
         <entry file="file://$PROJECT_DIR$/mdanaly/network.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="334">
-              <caret line="323" column="23" lean-forward="true" selection-start-line="323" selection-start-column="23" selection-end-line="323" selection-end-column="23" />
+              <caret line="323" column="23" lean-forward="false" selection-start-line="323" selection-start-column="23" selection-end-line="323" selection-end-column="23" />
               <folding>
                 <element signature="e#25#42#0" expanded="true" />
               </folding>
@@ -115,8 +114,8 @@
       <file leaf-file-name="dynamics.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mdanaly/dynamics.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="493">
-              <caret line="68" column="68" lean-forward="false" selection-start-line="68" selection-start-column="68" selection-end-line="68" selection-end-column="68" />
+            <state relative-caret-position="569">
+              <caret line="85" column="0" lean-forward="false" selection-start-line="85" selection-start-column="0" selection-end-line="85" selection-end-column="0" />
               <folding>
                 <element signature="e#25#38#0" expanded="true" />
               </folding>
@@ -734,7 +733,7 @@
     <entry file="file://$PROJECT_DIR$/mdanaly/network.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="334">
-          <caret line="323" column="23" lean-forward="true" selection-start-line="323" selection-start-column="23" selection-end-line="323" selection-end-column="23" />
+          <caret line="323" column="23" lean-forward="false" selection-start-line="323" selection-start-column="23" selection-end-line="323" selection-end-column="23" />
           <folding>
             <element signature="e#25#42#0" expanded="true" />
           </folding>
@@ -772,8 +771,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/dynamics.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="68" column="68" lean-forward="false" selection-start-line="68" selection-start-column="68" selection-end-line="68" selection-end-column="68" />
+        <state relative-caret-position="569">
+          <caret line="85" column="0" lean-forward="false" selection-start-line="85" selection-start-column="0" selection-end-line="85" selection-end-column="0" />
           <folding>
             <element signature="e#25#38#0" expanded="true" />
           </folding>
