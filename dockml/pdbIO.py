@@ -1,4 +1,4 @@
-#import pymol
+# -*- coding: utf-8 -*-
 
 import os
 import numpy as np
@@ -445,6 +445,27 @@ class handlePBC :
 class coordinatesPDB :
     def __init__(self):
         pass
+
+    def replaceCrdInPdbLine(self, line, newxyz):
+        """
+        input a line of pdb file, and a new vector of xyz values,
+        the old xyz values will be replaces, and return a new pdb line
+        :param line: str, a line from pdb file
+        :param newxyz: list, xyz values
+        :return: str, a line from pdb file
+        """
+
+        if "ATOM" in line or "HETATM" in line :
+            head = line[:30]
+            tail = line[54:]
+
+            newline = head + "%8.3f%8.3f%8.3f"%(newxyz[0], newxyz[1], newxyz[2]) + tail
+
+        else :
+            print("WARNING: %s is not a coordination line"%line)
+            newline = ""
+
+        return newline
 
     def getAtomCrdFromLines(self, lines):
         """
