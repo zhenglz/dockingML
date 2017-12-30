@@ -22,16 +22,16 @@ class PdbIndex :
         self.phi       = ['C', 'N', 'CA', 'C']
         self.psi       = ['N', 'CA', 'C', 'N']
 
-    def res_index(self ,inpdb, chain, atomtype, residueNdx, atomList, dihedraltype="None"):
+    def res_index(self, inpdb, chain, atomtype, residueNdx, atomList, dihedraltype="None"):
         '''
         Obtain atom index from a reference pdb file
         provide information including: residue indexing, atomtype, atomname
 
         :param inpdb:
         :param chain:
-        :param atomtype:
-        :param residueNdx:
-        :param atomList:
+        :param atomtype: str, options: all-atom, non-hydrogen, dihedral
+        :param residueNdx: list, dimension 2*1
+        :param atomList: list, explicit atom name list
         :param dihedraltype:
         :param atomName:
         :return: a list, of atom index

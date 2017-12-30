@@ -111,7 +111,7 @@ class parsePDB :
         '''
         load the domain data file, return a list of domain residue information
         :param filein:
-        :return: list of list, domain-residue-range information
+        :return: list of list (3 elements), domain-residue-range information
         '''
         drange = []
 
@@ -459,7 +459,7 @@ class coordinatesPDB :
             head = line[:30]
             tail = line[54:]
 
-            newline = head + "%8.3f%8.3f%8.3f"%(newxyz[0], newxyz[1], newxyz[2]) + tail
+            newline = head + "{0:8.3f}{1:8.3f}{2:8.3f}".format(newxyz[0], newxyz[1], newxyz[2]) + tail
 
         else :
             print("WARNING: %s is not a coordination line"%line)
@@ -473,10 +473,7 @@ class coordinatesPDB :
         :param lines: list of str, a list of pdb lines contains coordinates
         :return: 2d list, list of 3 element list
         """
-        atomCrd = map(lambda x: [float(x[30:38].strip()),
-                                 float(x[38:46].strip()),
-                                 float(x[46:54].strip())],
-                      lines)
+        atomCrd = list(map(lambda x: [float(x[30:38].strip()),float(x[38:46].strip()),float(x[46:54].strip())],lines))
 
         return atomCrd
 
@@ -496,7 +493,7 @@ class coordinatesPDB :
                                      float(x[38:46].strip()),
                                      float(x[46:54].strip())],
                           lines)
-        return atomCrd
+        return list(atomCrd)
 
 if __name__ == "__main__" :
     os.chdir(os.getcwd())

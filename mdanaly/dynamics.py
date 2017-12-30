@@ -34,7 +34,7 @@ class essentialDynamics :
         :return: list, new list of xyz values
         '''
 
-        newxyz = map(lambda x, y: x+ y*delta, xyz, vector)
+        newxyz = list(map(lambda x, y: x+ y*delta, xyz, vector))
 
         return newxyz
 
@@ -56,7 +56,8 @@ class essentialDynamics :
 
             newxyzs =[]
             newlines=[]
-            if len(vectors) == coords :
+
+            if len(vectors) == len(coords) :
                 for i in range(len(coords)) :
                     newxyz = self.transformXYZ(coords[i], vectors[i], delta)
                     newxyzs.append(newxyz)
@@ -75,11 +76,100 @@ class essentialDynamics :
         :return:
         '''
 
-        with open(pdbout, 'wb') as tofile :
+        with open(pdbout, 'w') as tofile :
             for i in range(no_files) :
                 tofile.write("MODEL   %d \n"%i)
-                nlines = self.pdbIncreaseMotion(pdbin, vectors, delta=i*delta)
+                t, nlines = self.pdbIncreaseMotion(pdbin, vectors, delta=i*delta)
                 for x in nlines :
                     tofile.write(x)
+                tofile.write("ENDMDL  \n")
 
         return 1
+
+    def averageVectors(self, vectors, resindex):
+        '''
+        extract selected (resindex) rows and return their averages
+        :param vectors: list of lists,
+        :param resindex: list, residue list
+        :return:
+        '''
+
+        domain_vectors = []
+        for res in resindex :
+            domain_vectors.append(vectors[res])
+
+        aver_vector = np.sum(np.asarray(domain_vectors), axis=0)
+
+        return list(aver_vector)
+
+    def domainWiseEigVec(self, domainf, vectors, output='aver-vectors.dat'):
+        '''
+
+        :param domainf: str, domain information data file
+        :param vectors: list of lists, dimension N*3
+        :param output: str, output file name
+        :return: tuple, (domain_average_vectors, domain names)
+        '''
+
+        dom = dockml.parsePDB()
+        domains = dom.readDomainRes(domainf)
+
+        # domain_names
+        d_name = [ x[0] for x in domains ]
+
+        minResIndx = min(sum([ x[1:] for x in domains ], []))
+
+        aver_vec = []
+        for i in range(len(domains)) :
+            # becasue vectors index starting from 0
+            resindexlist = np.asarray(range(domains[i][1], domains[i][1])) - minResIndx
+
+            aver_vec.append(self.averageVectors(vectors, resindexlist))
+
+        np.savetxt(output, np.asarray(aver_vec),
+                   delimiter=' ', fmt='%12.5f',
+                   header=" ".join(d_name), comments="#"
+                   )
+
+        return (aver_vec, d_name)
+
+    def domainCOM(self, domainf, ref, pdbchain='A', output="com_domains.day", atomNames=["CA"]):
+        """
+
+        :param domainf:
+        :param ref:
+        :param pdbchain:
+        :param output:
+        :return:
+        """
+
+        dom = dockml.parsePDB()
+        domains = dom.readDomainRes(domainf)
+
+        pdbc = dockml.coordinatesPDB()
+
+        ndx = dockml.PdbIndex()
+
+        coms = []
+
+        for i in range(len(domains)) :
+
+            # get atom index of residues in a domain
+            atomindex = ndx.res_index(inpdb=ref,
+                                      chain=pdbchain,
+                                      atomtype="",
+                                      atomList=atomNames,
+                                      residueNdx=domains[i][1:],
+                                      )
+
+            # get crds of a list of atoms
+            crds = pdbc.getAtomCrdByNdx(ref, atomindex)
+
+            # calculate geometry center, not centor of mass
+            com = np.mean(np.asarray(crds), axis=0)
+
+            coms.append(list(com))
+
+        np.savetxt(output, np.asarray(coms), fmt="8.3f", delimiter=" ")
+
+        return coms
