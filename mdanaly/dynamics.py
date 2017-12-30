@@ -104,7 +104,7 @@ class essentialDynamics :
 
     def domainWiseEigVec(self, domainf, vectors, output='aver-vectors.dat'):
         '''
-
+        averaging the vectors on each atoms in a domain
         :param domainf: str, domain information data file
         :param vectors: list of lists, dimension N*3
         :param output: str, output file name
@@ -135,19 +135,18 @@ class essentialDynamics :
 
     def domainCOM(self, domainf, ref, pdbchain='A', output="com_domains.day", atomNames=["CA"]):
         """
-
-        :param domainf:
-        :param ref:
-        :param pdbchain:
-        :param output:
-        :return:
+        calculate centor of mass, or geometry center of a domain
+        :param domainf:str, domain information data file
+        :param ref: str, reference pdb file
+        :param pdbchain: chain id
+        :param output: str, output file name
+        :return: list of list, com of domains, dimension N*3
         """
 
         dom = dockml.parsePDB()
         domains = dom.readDomainRes(domainf)
 
         pdbc = dockml.coordinatesPDB()
-
         ndx = dockml.PdbIndex()
 
         coms = []
