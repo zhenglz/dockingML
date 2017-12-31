@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mdanaly/network.py" afterPath="$PROJECT_DIR$/mdanaly/network.py" />
     </list>
     <ignored path="dockingML.iws" />
@@ -25,43 +24,30 @@
       <file leaf-file-name="cmap.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bin/cmap.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
+            <state relative-caret-position="0">
               <caret line="5" column="12" lean-forward="false" selection-start-line="5" selection-start-column="12" selection-end-line="5" selection-end-column="12" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="network.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="network.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mdanaly/network.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="260">
-              <caret line="110" column="28" lean-forward="true" selection-start-line="110" selection-start-column="28" selection-end-line="110" selection-end-column="28" />
+            <state relative-caret-position="138">
+              <caret line="256" column="0" lean-forward="true" selection-start-line="256" selection-start-column="0" selection-end-line="256" selection-end-column="0" />
               <folding>
                 <element signature="e#25#42#0" expanded="true" />
-                <element signature="e#305#475#0" expanded="false" />
-                <element signature="e#4609#10116#0" expanded="false" />
-                <element signature="e#10143#10935#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="io.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/mdanaly/io.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="8" lean-forward="false" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="8" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="matrix.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="matrix.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mdanaly/matrix.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="433">
-              <caret line="364" column="37" lean-forward="false" selection-start-line="364" selection-start-column="37" selection-end-line="364" selection-end-column="37" />
+              <caret line="364" column="55" lean-forward="true" selection-start-line="364" selection-start-column="55" selection-end-line="364" selection-end-column="55" />
               <folding>
                 <element signature="e#23#41#0" expanded="true" />
               </folding>
@@ -72,7 +58,7 @@
       <file leaf-file-name="pdbIO.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dockml/pdbIO.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
+            <state relative-caret-position="223">
               <caret line="109" column="8" lean-forward="false" selection-start-line="109" selection-start-column="8" selection-end-line="109" selection-end-column="8" />
               <folding>
                 <element signature="e#25#34#0" expanded="true" />
@@ -87,7 +73,52 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="357">
               <caret line="24" column="8" lean-forward="false" selection-start-line="24" selection-start-column="8" selection-end-line="24" selection-end-column="8" />
-              <folding />
+              <folding>
+                <marker date="1514620352000" expanded="true" signature="658:4044" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="3296:4018" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="3301:4018" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="3357:3518" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="3572:3672" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="3728:3863" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="3893:4018" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="4089:5206" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="4098:4234" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+                <marker date="1514620352000" expanded="true" signature="4325:5169" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="5288:5681" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="5511:5640" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="5754:6850" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="5795:5943" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="5966:6472" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="6110:6396" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="6486:6850" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="6525:6709" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="6570:6709" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="6606:6709" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="6749:6827" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="6918:9197" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="6927:7143" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="7226:7362" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="7681:9171" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="7709:9171" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="7774:9124" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="8037:8196" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="9225:13207" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="9237:10083" ph="'''...'''" />
+                <marker date="1514620352000" expanded="true" signature="10528:10647" ph="&quot;...&quot;" />
+                <marker date="1514620352000" expanded="true" signature="10760:11037" ph="&quot;...&quot;" />
+                <marker date="1514620352000" expanded="true" signature="11153:11357" ph="&quot;...&quot;" />
+                <marker date="1514620352000" expanded="true" signature="11629:11839" ph="&quot;...&quot;" />
+                <marker date="1514620352000" expanded="true" signature="11950:12072" ph="&quot;...&quot;" />
+                <marker date="1514620352000" expanded="true" signature="12186:12409" ph="&quot;...&quot;" />
+                <marker date="1514620352000" expanded="true" signature="12517:12614" ph="&quot;...&quot;" />
+                <marker date="1514620352000" expanded="true" signature="12729:12891" ph="&quot;...&quot;" />
+                <marker date="1514620352000" expanded="true" signature="13014:13185" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="13245:13344" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+                <marker date="1514620352000" expanded="true" signature="13717:13814" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="14708:14866" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="14742:14866" ph="..." />
+                <marker date="1514620352000" expanded="true" signature="14932:15072" ph="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -95,8 +126,8 @@
       <file leaf-file-name="dynamics.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mdanaly/dynamics.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="431">
-              <caret line="87" column="0" lean-forward="true" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
+            <state relative-caret-position="-538">
+              <caret line="87" column="0" lean-forward="false" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
               <folding>
                 <element signature="e#25#38#0" expanded="true" />
               </folding>
@@ -108,7 +139,7 @@
         <entry file="file://$PROJECT_DIR$/bin/network.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="102">
-              <caret line="6" column="11" lean-forward="false" selection-start-line="6" selection-start-column="11" selection-end-line="6" selection-end-column="11" />
+              <caret line="6" column="18" lean-forward="true" selection-start-line="6" selection-start-column="18" selection-end-line="6" selection-end-column="18" />
               <folding />
             </state>
           </provider>
@@ -207,11 +238,11 @@
         <option value="$PROJECT_DIR$/bin/cmap.py" />
         <option value="$PROJECT_DIR$/mdanaly/cmap.py" />
         <option value="$PROJECT_DIR$/mdanaly/plot.py" />
-        <option value="$PROJECT_DIR$/mdanaly/matrix.py" />
         <option value="$PROJECT_DIR$/mdanaly/__init__.py" />
         <option value="$PROJECT_DIR$/dockml/index.py" />
         <option value="$PROJECT_DIR$/dockml/pdbIO.py" />
         <option value="$PROJECT_DIR$/mdanaly/dynamics.py" />
+        <option value="$PROJECT_DIR$/mdanaly/matrix.py" />
         <option value="$PROJECT_DIR$/mdanaly/network.py" />
       </list>
     </option>
@@ -536,7 +567,21 @@
       <option name="project" value="LOCAL" />
       <updated>1514607996743</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="from mars">
+      <created>1514707856946</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1514707856946</updated>
+    </task>
+    <task id="LOCAL-00004" summary="from mars">
+      <created>1514709205424</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1514709205424</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -733,7 +778,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/bin/cmap.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
+        <state relative-caret-position="0">
           <caret line="5" column="12" lean-forward="false" selection-start-line="5" selection-start-column="12" selection-end-line="5" selection-end-column="12" />
           <folding />
         </state>
@@ -749,30 +794,80 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/dockml/index.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="24" column="8" lean-forward="false" selection-start-line="24" selection-start-column="8" selection-end-line="24" selection-end-column="8" />
+          <folding>
+            <marker date="1514620352000" expanded="true" signature="658:4044" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="3296:4018" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="3301:4018" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="3357:3518" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="3572:3672" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="3728:3863" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="3893:4018" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="4089:5206" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="4098:4234" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+            <marker date="1514620352000" expanded="true" signature="4325:5169" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="5288:5681" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="5511:5640" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="5754:6850" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="5795:5943" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="5966:6472" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="6110:6396" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="6486:6850" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="6525:6709" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="6570:6709" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="6606:6709" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="6749:6827" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="6918:9197" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="6927:7143" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="7226:7362" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="7681:9171" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="7709:9171" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="7774:9124" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="8037:8196" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="9225:13207" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="9237:10083" ph="'''...'''" />
+            <marker date="1514620352000" expanded="true" signature="10528:10647" ph="&quot;...&quot;" />
+            <marker date="1514620352000" expanded="true" signature="10760:11037" ph="&quot;...&quot;" />
+            <marker date="1514620352000" expanded="true" signature="11153:11357" ph="&quot;...&quot;" />
+            <marker date="1514620352000" expanded="true" signature="11629:11839" ph="&quot;...&quot;" />
+            <marker date="1514620352000" expanded="true" signature="11950:12072" ph="&quot;...&quot;" />
+            <marker date="1514620352000" expanded="true" signature="12186:12409" ph="&quot;...&quot;" />
+            <marker date="1514620352000" expanded="true" signature="12517:12614" ph="&quot;...&quot;" />
+            <marker date="1514620352000" expanded="true" signature="12729:12891" ph="&quot;...&quot;" />
+            <marker date="1514620352000" expanded="true" signature="13014:13185" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="13245:13344" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+            <marker date="1514620352000" expanded="true" signature="13717:13814" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="14708:14866" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="14742:14866" ph="..." />
+            <marker date="1514620352000" expanded="true" signature="14932:15072" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/io.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="8" lean-forward="false" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="8" />
+        <state relative-caret-position="187">
+          <caret line="11" column="8" lean-forward="false" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/network.py">
+    <entry file="file://$PROJECT_DIR$/mdanaly/matrix.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="110" column="28" lean-forward="true" selection-start-line="110" selection-start-column="28" selection-end-line="110" selection-end-column="28" />
+        <state relative-caret-position="433">
+          <caret line="364" column="55" lean-forward="true" selection-start-line="364" selection-start-column="55" selection-end-line="364" selection-end-column="55" />
           <folding>
-            <element signature="e#25#42#0" expanded="true" />
-            <element signature="e#305#475#0" expanded="false" />
-            <element signature="e#4609#10116#0" expanded="false" />
-            <element signature="e#10143#10935#0" expanded="false" />
+            <element signature="e#23#41#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/dockml/pdbIO.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
+        <state relative-caret-position="223">
           <caret line="109" column="8" lean-forward="false" selection-start-line="109" selection-start-column="8" selection-end-line="109" selection-end-column="8" />
           <folding>
             <element signature="e#25#34#0" expanded="true" />
@@ -784,35 +879,27 @@
     <entry file="file://$PROJECT_DIR$/bin/network.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
-          <caret line="6" column="11" lean-forward="false" selection-start-line="6" selection-start-column="11" selection-end-line="6" selection-end-column="11" />
+          <caret line="6" column="18" lean-forward="true" selection-start-line="6" selection-start-column="18" selection-end-line="6" selection-end-column="18" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/dynamics.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="431">
-          <caret line="87" column="0" lean-forward="true" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
+        <state relative-caret-position="-538">
+          <caret line="87" column="0" lean-forward="false" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
           <folding>
             <element signature="e#25#38#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dockml/index.py">
+    <entry file="file://$PROJECT_DIR$/mdanaly/network.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="24" column="8" lean-forward="false" selection-start-line="24" selection-start-column="8" selection-end-line="24" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/matrix.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="433">
-          <caret line="364" column="37" lean-forward="false" selection-start-line="364" selection-start-column="37" selection-end-line="364" selection-end-column="37" />
+        <state relative-caret-position="138">
+          <caret line="256" column="0" lean-forward="true" selection-start-line="256" selection-start-column="0" selection-end-line="256" selection-end-column="0" />
           <folding>
-            <element signature="e#23#41#0" expanded="true" />
+            <element signature="e#25#42#0" expanded="true" />
           </folding>
         </state>
       </provider>
