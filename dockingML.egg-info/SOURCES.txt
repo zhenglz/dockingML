@@ -31,6 +31,7 @@ dockml/shiftpdb.py
 dockml/test.py
 mdanaly/__init__.py
 mdanaly/cmap.py
+mdanaly/dynamics.py
 mdanaly/extract.py
 mdanaly/io.py
 mdanaly/matrix.py

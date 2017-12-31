@@ -18,11 +18,9 @@ class ParseCommunity :
     def __init__(self, commu):
         self.community = commu
 
-        '''
         if os.path.exists(self.community) :
             print("File not exists: ", self.community)
             sys.exit(0)
-        '''
 
     def parseCommunities(self):
         """
@@ -81,8 +79,6 @@ class NetworkPrepare :
     def parseNodeEdges(self, filein):
         """
         input a matrix file, return the network information
-        this matrix file contains M*M dimension, means M communities
-        in total, and their connections in between each pair of nodes
         :param filein: str, community based matrix file
         :return: a list of sets, [ (edge_i, edge_j, connections), ()]
         """
@@ -296,32 +292,21 @@ def workingflow() :
 
 def main() :
     #os.chdir(os.getcwd())
+
     nwd = NetworkDraw()
+    nio = CommunityHandler()
     nwp = NetworkPrepare()
 
     args = nwd.arguemnets()
 
-    #nio = CommunityHandler()
-    nio = ParseCommunity(args.com)
-
-    # comm is a default(list) dictionary
-    comm, modularity = nio.parseCommunities()
-    comm_res = [ comm[x] for x in comm.keys() ]
-
-    # report the compositions of the nodes
-    for res in comm_res :
-        print("Community 1 \nNumber of Residues: %d"%len(res))
-
-
-    nodes_resnum = [len(x) for x in comm_res if len(x) > args.nres_cutoff]
+    comm = nio.readCommunityFile(args.com, nres_cutoff=args.nres_cutoff)
+    nodes_resnum = [len(x) for x in comm if len(x) > args.nres_cutoff]
 
     if os.path.exists(args.node_edges) :
         node_edges = nwp.parseNodeEdges(args.node_edges)
     else :
         node_edges = []
-        # for each node (a community), the betweenness with other nodes
-        # are calculated
-        edges = nio.genNodeEdges(args.betw, comm_res)
+        edges = nwp.genNodeEdges(args.betw, comm)
         nodes = range(edges.shape[0])
         for i in nodes :
             for j in nodes :

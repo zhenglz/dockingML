@@ -119,7 +119,9 @@ class parsePDB :
             with open(filein) as lines:
                 for s in lines:
                     if "#" not in s:
-                        drange.append([s.split()[0], int(s.split()[1]), int(s.split()[2])])
+                        d = [s.split()[0]]
+                        d += [ int(x) for x in s.split()[1:] ]
+                        drange.append(d)
         except:
             raise FileNotFoundError
 

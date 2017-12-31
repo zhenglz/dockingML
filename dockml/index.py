@@ -39,17 +39,19 @@ class PdbIndex :
 
         # atomInfor = {}
         indexlist = []
-        if len(residueNdx) == 2 :
-            residueNdx = range(residueNdx[0], residueNdx[1 ] +1)
-        elif len(residueNdx) == 1 :
-            residueNdx = range(residueNdx[0], residueNdx[0 ] +1)
+        resSeqNdx = []
+        if len(residueNdx) == 1 :
+            resSeqNdx = range(residueNdx[0], residueNdx[0 ] +1)
+        elif len(residueNdx) >= 2 and len(residueNdx) % 2 == 0 :
+            for k in range(len(residueNdx)/2) :
+                resSeqNdx += range(residueNdx[k*2], residueNdx[k*2+1]+1)
         else :
             print("Error!! No residue index provided. ")
-            residueNdx = []
+            resSeqNdx = []
 
         if atomtype == "dihedral" :
             indexlist = []
-            for resndx in residueNdx :
+            for resndx in resSeqNdx :
                 phitype = self.phi
                 phipair = [-1, -1, -1, -1]
                 phindxadd = [-1, 0, 0, 0]
@@ -81,7 +83,7 @@ class PdbIndex :
             with open(inpdb) as lines :
                 for s in lines :
                     if len(s.split()) > 1 and s.split()[0] == "ATOM" and s[21] == chain and \
-                                    int(s[22:26].strip()) in residueNdx :
+                                    int(s[22:26].strip()) in resSeqNdx :
                         if atomtype == "non-hydrogen" :
                             if s[13] != "H" and s.split()[2][0] != "H" and s.split()[-1] != "H" :
                                 indexlist.append(s.split()[1])

@@ -99,10 +99,10 @@ class essentialDynamics :
             domain_vectors.append(vectors[res])
 
         aver_vector = np.sum(np.asarray(domain_vectors), axis=0)
+        #print(aver_vector)
+        return aver_vector
 
-        return list(aver_vector)
-
-    def domainWiseEigVec(self, domainf, vectors, output='aver-vectors.dat'):
+    def domainWiseEigVec(self, domainf, vectors, scalefactor=1.0, output='aver-vectors.dat'):
         '''
         averaging the vectors on each atoms in a domain
         :param domainf: str, domain information data file
@@ -121,10 +121,15 @@ class essentialDynamics :
 
         aver_vec = []
         for i in range(len(domains)) :
+            #print(domains[i])
             # becasue vectors index starting from 0
-            resindexlist = np.asarray(range(domains[i][1], domains[i][1])) - minResIndx
+            resindexlist = []
+            for k in range((len(domains[i])-1)/2) :
+                #print(domains[i][k*2+1], domains[i][k*2+2])
+                resindexlist += list(np.asarray(range(domains[i][k*2+1], domains[i][k*2+2])) - minResIndx)
 
-            aver_vec.append(self.averageVectors(vectors, resindexlist))
+            v = self.averageVectors(vectors, resindexlist) * scalefactor
+            aver_vec.append(v)
 
         np.savetxt(output, np.asarray(aver_vec),
                    delimiter=' ', fmt='%12.5f',
