@@ -154,6 +154,8 @@ class NetworkDraw :
                             help="A matrix file contain betweenness information. \n")
         parser.add_argument('-com', default='community.dat', type=str,
                             help="A result file from gncommunity analysis. \n")
+        parser.add_argument('-domf', type=str, default='domains.dat',
+                            help="Domains and their residue information. \n")
         parser.add_argument('-nsf', type=float, default=100,
                             help="Node size factor. Multiple this number with number of \n"
                                  "Residues in a community to determine the node size.\n")
@@ -202,7 +204,7 @@ class NetworkDraw :
                     positions.append((float(s.split()[0]), float(s.split()[1])))
         return positions
 
-    def drawNetwork(node_edges, nodes, nodes_resnum,
+    def drawNetwork(self, node_edges, nodes, nodes_resnum,
                     nodefactor=300, lwfactor=0.001,
                     showlabel=False, fig=None, DPI=2000,
                     fsize=20, positions=[], colors=[],
@@ -245,7 +247,7 @@ class NetworkDraw :
         for x in nodes:
             node_labels[x] = "C" + str(x)
         edge_widths = []
-        t = [edge_widths.append(x[2]) for x in node_edges]
+        t = [ edge_widths.append(x[2]) for x in node_edges ]
         edge_widths = [x * lwfactor for x in edge_widths]
 
         node_pos = {}
@@ -294,19 +296,32 @@ def main() :
     #os.chdir(os.getcwd())
 
     nwd = NetworkDraw()
-    nio = CommunityHandler()
     nwp = NetworkPrepare()
-
     args = nwd.arguemnets()
 
-    comm = nio.readCommunityFile(args.com, nres_cutoff=args.nres_cutoff)
-    nodes_resnum = [len(x) for x in comm if len(x) > args.nres_cutoff]
+    nio = ParseCommunity(args.com)
 
+    comm, modu = nio.parseCommunities()
+    comm_res = [ comm[x] for x in comm.keys() if len(comm[x]) >= args.nres_cutoff ]
+
+    nodes_resnum = [ len(x) for x in comm_res ]
+
+    # report node residue compositions
+    for i in range(len(nodes_resnum)) :
+        print("Community (node) %d" % i)
+        print("Number of residues %d"%nodes_resnum[i])
+
+        info = nwp.resInDomains(args.domf, comm_res[i])
+
+        print("Ratio in domain : \n", info[0])
+        print("Ratio in community: \n", info[1])
+
+    # generate node-edge information [(node_i, node_j, connectivity)]
     if os.path.exists(args.node_edges) :
         node_edges = nwp.parseNodeEdges(args.node_edges)
     else :
         node_edges = []
-        edges = nwp.genNodeEdges(args.betw, comm)
+        edges = nio.genNodeEdges(args.betw, comm_res )
         nodes = range(edges.shape[0])
         for i in nodes :
             for j in nodes :
