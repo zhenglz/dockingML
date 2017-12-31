@@ -18,7 +18,7 @@ class ParseCommunity :
     def __init__(self, commu):
         self.community = commu
 
-        if os.path.exists(self.community) :
+        if not os.path.exists(self.community) :
             print("File not exists: ", self.community)
             sys.exit(0)
 
@@ -180,7 +180,8 @@ class NetworkDraw :
                                  "If this file is not existed, default postions will be used. \n")
         parser.add_argument('-nres_cutoff', default=6, type=int,
                             help="If in a community, number of residues is less than this number,\n"
-                                 "the community will be ignored. \n")
+                                 "the community will be ignored. \n"
+                                 "Default value is 6. \n")
 
         args, unknown = parser.parse_known_args()
 
@@ -302,6 +303,7 @@ def main() :
     nio = ParseCommunity(args.com)
 
     comm, modu = nio.parseCommunities()
+
     comm_res = [ comm[x] for x in comm.keys() if len(comm[x]) >= args.nres_cutoff ]
 
     nodes_resnum = [ len(x) for x in comm_res ]
@@ -327,6 +329,8 @@ def main() :
             for j in nodes :
                 if i < j :
                     node_edges.append((i, j, edges[i][j]))
+
+    print(node_edges)
 
     nodes = range(len(nodes_resnum))
 
