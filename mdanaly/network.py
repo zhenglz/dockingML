@@ -134,6 +134,9 @@ class NetworkPrepare :
             ratio_outof[d]    = d_count[d] / float(len(residues))
             ratio_indomain[d] = d_count[d] / float(len(domains[d]))
 
+        ratio_outof = sorted(ratio_outof.items(), key=lambda x: x[1], reverse=True)
+        ratio_indomain = sorted(ratio_indomain.items(), key=lambda x:x[1], reverse=True)
+
         return (ratio_indomain, ratio_outof)
 
 class NetworkDraw :
@@ -142,7 +145,8 @@ class NetworkDraw :
 
     def arguemnets(self):
         d = '''
-        Descriptions of community network plot
+        Community analysis and network plot.
+        Calculate the communities from a Cmap of a protein or other biomolecules simulations.
         '''
 
         parser = argparse.ArgumentParser(description=d, formatter_class=RawTextHelpFormatter)
@@ -158,11 +162,12 @@ class NetworkDraw :
                             help="Domains and their residue information. \n")
         parser.add_argument('-nsf', type=float, default=100,
                             help="Node size factor. Multiple this number with number of \n"
-                                 "Residues in a community to determine the node size.\n")
+                                 "Residues in a community to determine the node size.\n"
+                                 "Default value is 100. \n")
         parser.add_argument('-lwf', type=float, default=0.001,
-                            help="Edge linewidth size factor. Default is 0.001 \n"
-                                 "Multiple this number with the \n"
-                                 "betweenness in a community to determine the edge size.\n")
+                            help="Edge linewidth size factor. Multiple this number with the \n"
+                                 "betweenness in a community to determine the edge size.\n"
+                                 "Default value is 0.001 \n")
         parser.add_argument('-fig', type=str, default='',
                             help="Output the plt figure as a file. Default is figure_1.pdf.\n")
         parser.add_argument('-dpi', type=int, default=2000,
@@ -246,7 +251,7 @@ class NetworkDraw :
         node_colors = cols[:len(nodes)]
         node_labels = {}
         for x in nodes:
-            node_labels[x] = "C" + str(x)
+            node_labels[x] = str(x)
         edge_widths = []
         t = [ edge_widths.append(x[2]) for x in node_edges ]
         edge_widths = [x * lwfactor for x in edge_widths]
