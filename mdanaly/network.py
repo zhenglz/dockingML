@@ -315,8 +315,8 @@ def main() :
 
     # report node residue compositions
     for i in range(len(nodes_resnum)) :
-        print("Community (node) %d" % i)
-        print("Number of residues %d"%nodes_resnum[i])
+        print("Community (node) %d  Number of residues %d " % (i, nodes_resnum[i]))
+        #print("Number of residues %d"%nodes_resnum[i])
 
         info = nwp.resInDomains(args.domf, comm_res[i])
 
@@ -335,7 +335,7 @@ def main() :
                 if i < j :
                     node_edges.append((i, j, edges[i][j]))
 
-    print(node_edges)
+    #print(node_edges)
 
     nodes = range(len(nodes_resnum))
 
