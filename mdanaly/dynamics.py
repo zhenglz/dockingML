@@ -151,6 +151,8 @@ class essentialDynamics :
         dom = dockml.parsePDB()
         domains = dom.readDomainRes(domainf)
 
+        dnames = [x[0] for x in domains ]
+
         pdbc = dockml.coordinatesPDB()
         ndx = dockml.PdbIndex()
 
@@ -174,6 +176,6 @@ class essentialDynamics :
 
             coms.append(list(com))
 
-        np.savetxt(output, np.asarray(coms), fmt="8.3f", delimiter=" ")
+        np.savetxt(output, np.asarray(coms), fmt="%8.3f", delimiter=" ", header=dnames, comments="#")
 
         return coms

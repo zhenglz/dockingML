@@ -14,7 +14,7 @@ class MatrixHandle :
     def __init__(self):
         pass
 
-    def reshapeMtx(self, dataf, dtype, xyshift=[0, 0]):
+    def reshapeMtx(self, dataf, dtype,xyshift=[0, 0]):
         '''
         Load a matrix file, return a ndarray matrix shape object
         :param dataf: str, a matrix M*N file
@@ -305,13 +305,13 @@ def main():
 
     elif args.opt == "transform" :
         if args.ds in ['xyz', 'XYZ', '3d'] :
-            data = mtxh.loadxyz(args.dat[0], args.dtype, args.xyzcol, xyshift=args.xyshift)
+            data = mtxh.loadxyz(args.dat[0], args.dtype,  args.xyzcol, xyshift=args.xyshift)
 
             odata = mtxh.xyz2matrix(data)
 
             np.savetxt(args.out, odata, fmt="%.5f", delimiter=" ")
         else :
-            data = mtxh.reshapeMtx(args.dat[0], args.dtype, args.xyzcol, xyshift=args.xyshift)
+            data = mtxh.reshapeMtx(args.dat[0], args.dtype, xyshift=args.xyshift)
 
             np.savetxt(args.out, data, fmt="%.5f", delimiter=" ")
         print("Transform matrix file type completed!")

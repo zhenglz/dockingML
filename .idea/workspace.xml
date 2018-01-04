@@ -3,7 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mdanaly/dynamics.py" afterPath="$PROJECT_DIR$/mdanaly/dynamics.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mdanaly/matrix.py" afterPath="$PROJECT_DIR$/mdanaly/matrix.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mdanaly/network.py" afterPath="$PROJECT_DIR$/mdanaly/network.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mdanaly/plot.py" afterPath="$PROJECT_DIR$/mdanaly/plot.py" />
     </list>
     <ignored path="dockingML.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -32,11 +35,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="network.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="network.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mdanaly/network.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="137" column="87" lean-forward="false" selection-start-line="137" selection-start-column="87" selection-end-line="137" selection-end-column="87" />
+            <state relative-caret-position="3672">
+              <caret line="227" column="23" lean-forward="false" selection-start-line="227" selection-start-column="23" selection-end-line="227" selection-end-column="23" />
               <folding>
                 <element signature="e#25#42#0" expanded="true" />
               </folding>
@@ -47,11 +50,21 @@
       <file leaf-file-name="matrix.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mdanaly/matrix.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6052">
-              <caret line="364" column="55" lean-forward="false" selection-start-line="364" selection-start-column="55" selection-end-line="364" selection-end-column="55" />
+            <state relative-caret-position="242">
+              <caret line="313" column="81" lean-forward="true" selection-start-line="313" selection-start-column="81" selection-end-line="313" selection-end-column="81" />
               <folding>
                 <element signature="e#23#41#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="plot.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bin/plot.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="102">
+              <caret line="6" column="13" lean-forward="false" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -84,8 +97,8 @@
       <file leaf-file-name="dynamics.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mdanaly/dynamics.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1445">
-              <caret line="87" column="0" lean-forward="false" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
+            <state relative-caret-position="395">
+              <caret line="178" column="51" lean-forward="false" selection-start-line="178" selection-start-column="51" selection-end-line="178" selection-end-column="51" />
               <folding>
                 <element signature="e#25#38#0" expanded="true" />
               </folding>
@@ -115,11 +128,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="plot.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="plot.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mdanaly/plot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1904">
-              <caret line="119" column="26" lean-forward="false" selection-start-line="119" selection-start-column="26" selection-end-line="119" selection-end-column="26" />
+            <state relative-caret-position="148">
+              <caret line="121" column="33" lean-forward="false" selection-start-line="121" selection-start-column="33" selection-end-line="121" selection-end-column="33" />
               <folding>
                 <element signature="e#23#55#0" expanded="true" />
               </folding>
@@ -143,6 +156,7 @@
       <find>seperate</find>
       <find>Sep</find>
       <find>genNodeEdges</find>
+      <find>position</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -195,20 +209,20 @@
         <option value="$PROJECT_DIR$/bin/network.py" />
         <option value="$PROJECT_DIR$/bin/cmap.py" />
         <option value="$PROJECT_DIR$/mdanaly/cmap.py" />
-        <option value="$PROJECT_DIR$/mdanaly/plot.py" />
         <option value="$PROJECT_DIR$/mdanaly/__init__.py" />
         <option value="$PROJECT_DIR$/dockml/index.py" />
         <option value="$PROJECT_DIR$/dockml/pdbIO.py" />
+        <option value="$PROJECT_DIR$/mdanaly/network.py" />
         <option value="$PROJECT_DIR$/mdanaly/dynamics.py" />
         <option value="$PROJECT_DIR$/mdanaly/matrix.py" />
-        <option value="$PROJECT_DIR$/mdanaly/network.py" />
+        <option value="$PROJECT_DIR$/mdanaly/plot.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="y" value="23" />
-    <option name="width" value="1280" />
-    <option name="height" value="961" />
+    <option name="y" value="22" />
+    <option name="width" value="1600" />
+    <option name="height" value="838" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -225,7 +239,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -241,6 +255,11 @@
             <path>
               <item name="dockingML" type="b2602c69:ProjectViewProjectNode" />
               <item name="dockingML" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="dockingML" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dockingML" type="462c0819:PsiDirectoryNode" />
               <item name="dockml" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -252,7 +271,7 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -546,22 +565,29 @@
       <option name="project" value="LOCAL" />
       <updated>1514716589779</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="from mars">
+      <created>1514824377531</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1514824377531</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="961" extended-state="0" />
+    <frame x="0" y="22" width="1600" height="838" extended-state="0" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19453125" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.155625" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18284424" sideWeight="0.57109374" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4993498" sideWeight="0.78375" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18284424" sideWeight="0.42890626" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21231979" sideWeight="0.42890626" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4993498" sideWeight="0.78375" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -699,13 +725,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bin/plot.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="22" lean-forward="false" selection-start-line="2" selection-start-column="22" selection-end-line="2" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bin/extract.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -724,16 +743,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="14671">
           <caret line="875" column="0" lean-forward="false" selection-start-line="875" selection-start-column="0" selection-end-line="881" selection-end-column="76" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/plot.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1904">
-          <caret line="119" column="26" lean-forward="false" selection-start-line="119" selection-start-column="26" selection-end-line="119" selection-end-column="26" />
-          <folding>
-            <element signature="e#23#55#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -772,12 +781,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/matrix.py">
+    <entry file="file://$PROJECT_DIR$/bin/network.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6052">
-          <caret line="364" column="55" lean-forward="false" selection-start-line="364" selection-start-column="55" selection-end-line="364" selection-end-column="55" />
+        <state relative-caret-position="102">
+          <caret line="6" column="18" lean-forward="true" selection-start-line="6" selection-start-column="18" selection-end-line="6" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mdanaly/network.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3672">
+          <caret line="227" column="23" lean-forward="false" selection-start-line="227" selection-start-column="23" selection-end-line="227" selection-end-column="23" />
           <folding>
-            <element signature="e#23#41#0" expanded="true" />
+            <element signature="e#25#42#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -793,30 +810,40 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bin/network.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="18" lean-forward="true" selection-start-line="6" selection-start-column="18" selection-end-line="6" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/dynamics.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1445">
-          <caret line="87" column="0" lean-forward="false" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
+        <state relative-caret-position="395">
+          <caret line="178" column="51" lean-forward="false" selection-start-line="178" selection-start-column="51" selection-end-line="178" selection-end-column="51" />
           <folding>
             <element signature="e#25#38#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/network.py">
+    <entry file="file://$PROJECT_DIR$/mdanaly/matrix.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="137" column="87" lean-forward="false" selection-start-line="137" selection-start-column="87" selection-end-line="137" selection-end-column="87" />
+        <state relative-caret-position="242">
+          <caret line="313" column="81" lean-forward="true" selection-start-line="313" selection-start-column="81" selection-end-line="313" selection-end-column="81" />
           <folding>
-            <element signature="e#25#42#0" expanded="true" />
+            <element signature="e#23#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bin/plot.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="13" lean-forward="false" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mdanaly/plot.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="148">
+          <caret line="121" column="33" lean-forward="false" selection-start-line="121" selection-start-column="33" selection-end-line="121" selection-end-column="33" />
+          <folding>
+            <element signature="e#23#55#0" expanded="true" />
           </folding>
         </state>
       </provider>

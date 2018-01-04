@@ -143,63 +143,11 @@ class NetworkDraw :
     def __init__(self):
         pass
 
-    def arguemnets(self):
-        d = '''
-        Community analysis and network plot.
-        Calculate the communities from a Cmap of a protein or other biomolecules simulations.
-        '''
-
-        parser = argparse.ArgumentParser(description=d, formatter_class=RawTextHelpFormatter)
-        parser.add_argument('-node_edges', type=str, default='node-edges-x.dat',
-                            help="File contains node-edges information. \n"
-                                 "Default is node-edges.dat. If this file not exist, \n"
-                                 "Another node-edge file will be generated from betweenness and community.\n")
-        parser.add_argument('-betw', default="betweenness.dat", type=str,
-                            help="A matrix file contain betweenness information. \n")
-        parser.add_argument('-com', default='community.dat', type=str,
-                            help="A result file from gncommunity analysis. \n")
-        parser.add_argument('-domf', type=str, default='domains.dat',
-                            help="Domains and their residue information. \n")
-        parser.add_argument('-nsf', type=float, default=100,
-                            help="Node size factor. Multiple this number with number of \n"
-                                 "Residues in a community to determine the node size.\n"
-                                 "Default value is 100. \n")
-        parser.add_argument('-lwf', type=float, default=0.001,
-                            help="Edge linewidth size factor. Multiple this number with the \n"
-                                 "betweenness in a community to determine the edge size.\n"
-                                 "Default value is 0.001 \n")
-        parser.add_argument('-fig', type=str, default='',
-                            help="Output the plt figure as a file. Default is figure_1.pdf.\n")
-        parser.add_argument('-dpi', type=int, default=2000,
-                            help="Output file DPI. Default is 2000. \n")
-        parser.add_argument('-label', default=False, type=bool,
-                            help="Add labels to nodes. Default is False. \n")
-        parser.add_argument('-fsize', default=14, type=int,
-                            help="Font size of labels. Default is 16. \n")
-        parser.add_argument('-cols', default=['red', 'blue', 'yellow', 'green', 'cyan', 'orange', 'navy',
-                                              'pink', 'olive', 'purple', 'firebrick', 'brown'],
-                            type=str, nargs="+",
-                            help="Colors for the nodes. Default is r b y g c o navy pink, olive \n")
-        parser.add_argument('-pos', default='pos.dat', type=str,
-                            help="A file contains positions of the nodes. Default is pos.dat. \n"
-                                 "If this file is not existed, default postions will be used. \n")
-        parser.add_argument('-nres_cutoff', default=6, type=int,
-                            help="If in a community, number of residues is less than this number,\n"
-                                 "the community will be ignored. \n"
-                                 "Default value is 6. \n")
-
-        args, unknown = parser.parse_known_args()
-
-        if len(sys.argv) < 2:
-            parser.print_help()
-            print("\nYou chose non of the arguement!\nDo nothing and exit now!\n")
-            sys.exit(1)
-
-        return args
-
     def readPos(self, filein):
         """
-
+        read community locations from a file
+        the file should contain at least two columns,
+        the last two columns should be the x y coordinates
         :param filein: str, a file contains the communities locations
         :return: list of floats, the positions of the communities
         """
@@ -207,12 +155,26 @@ class NetworkDraw :
         with open(filein) as lines:
             for s in lines:
                 if "#" not in s and len(s.split()) >= 2:
-                    positions.append((float(s.split()[0]), float(s.split()[1])))
+                    positions.append((float(s.split()[-2]), float(s.split()[-1])))
         return positions
+
+    def readColors(self, filein):
+        """
+        Read colors from a file
+        this file contains at least 1 column
+        :param filein: str, multiple lines file
+        :return: list, list of strings
+        """
+        colors = []
+        with open(filein) as lines :
+            for s in [ x for x in lines if "#" not in x ] :
+                colors.append(s.split()[-1])
+
+        return colors
 
     def drawNetwork(self, node_edges, nodes, nodes_resnum,
                     nodefactor=300, lwfactor=0.001,
-                    showlabel=False, fig=None, DPI=2000,
+                    showlabel=[], fig=None, DPI=2000,
                     fsize=20, positions=[], colors=[],
                     ):
 
@@ -260,9 +222,10 @@ class NetworkDraw :
         for i in nodes:
             node_pos[i] = positions[i]
 
-        nx.draw_networkx_nodes(G, node_pos, nodelist=nodes, node_size=node_sizes, node_color=node_colors, alpha=1.0)
+        nx.draw_networkx_nodes(G, node_pos, nodelist=nodes, node_size=node_sizes, node_color=node_colors, alpha=1.0, edgecolors='black')
         nx.draw_networkx_edges(G, pos=node_pos, edge_color='black', width=edge_widths)
-        if showlabel:
+        if len(showlabel) :
+            node_labels = showlabel
             nx.draw_networkx_labels(G, pos=node_pos, labels=node_labels, font_size=fsize)
 
         if fig:
@@ -271,6 +234,60 @@ class NetworkDraw :
         plt.show()
 
         return 1
+
+    def arguemnets(self):
+        d = '''
+        Community analysis and network plot.
+        Calculate the communities from a Cmap of a protein or other biomolecules simulations.
+        '''
+
+        parser = argparse.ArgumentParser(description=d, formatter_class=RawTextHelpFormatter)
+        parser.add_argument('-node_edges', type=str, default='node-edges-x.dat',
+                            help="File contains node-edges information. \n"
+                                 "Default is node-edges.dat. If this file not exist, \n"
+                                 "Another node-edge file will be generated from betweenness and community.\n")
+        parser.add_argument('-betw', default="betweenness.dat", type=str,
+                            help="A matrix file contain betweenness information. \n")
+        parser.add_argument('-com', default='community.dat', type=str,
+                            help="A result file from gncommunity analysis. \n")
+        parser.add_argument('-domf', type=str, default='domains.dat',
+                            help="Domains and their residue information. \n")
+        parser.add_argument('-nsf', type=float, default=100,
+                            help="Node size factor. Multiple this number with number of \n"
+                                 "Residues in a community to determine the node size.\n"
+                                 "Default value is 100. \n")
+        parser.add_argument('-lwf', type=float, default=0.001,
+                            help="Edge linewidth size factor. Multiple this number with the \n"
+                                 "betweenness in a community to determine the edge size.\n"
+                                 "Default value is 0.001 \n")
+        parser.add_argument('-fig', type=str, default='',
+                            help="Output the plt figure as a file. Default is figure_1.pdf.\n")
+        parser.add_argument('-dpi', type=int, default=2000,
+                            help="Output file DPI. Default is 2000. \n")
+        parser.add_argument('-label', default=[], type=str, nargs="+",
+                            help="Add labels to nodes. Default is Void. \n")
+        parser.add_argument('-fsize', default=14, type=int,
+                            help="Font size of labels. Default is 16. \n")
+        parser.add_argument('-cols', default=['red', 'blue', 'yellow', 'green', 'cyan', 'orange', 'navy',
+                                              'pink', 'olive', 'purple', 'firebrick', 'brown'],
+                            type=str, nargs="+",
+                            help="Colors for the nodes. Default is r b y g c o navy pink, olive \n")
+        parser.add_argument('-pos', default='pos.dat', type=str,
+                            help="A file contains positions of the nodes. Default is pos.dat. \n"
+                                 "If this file is not existed, default postions will be used. \n")
+        parser.add_argument('-nres_cutoff', default=6, type=int,
+                            help="If in a community, number of residues is less than this number,\n"
+                                 "the community will be ignored. \n"
+                                 "Default value is 6. \n")
+
+        args, unknown = parser.parse_known_args()
+
+        if len(sys.argv) < 2:
+            parser.print_help()
+            print("\nYou chose non of the arguement!\nDo nothing and exit now!\n")
+            sys.exit(1)
+
+        return args
 
 def workingflow() :
 
@@ -315,10 +332,11 @@ def main() :
 
     # report node residue compositions
     for i in range(len(nodes_resnum)) :
+        shiftx = 4
         print("Community (node) %d  Number of residues %d " % (i, nodes_resnum[i]))
         #print("Number of residues %d"%nodes_resnum[i])
 
-        info = nwp.resInDomains(args.domf, comm_res[i])
+        info = nwp.resInDomains(args.domf, [ x+shiftx for x in comm_res[i]])
 
         print("Ratio in domain : \n", info[0])
         print("Ratio in community: \n", info[1])
@@ -340,6 +358,10 @@ def main() :
     nodes = range(len(nodes_resnum))
 
     colors = args.cols
+    if os.path.exists(colors[0]) :
+        colors = nwd.readColors(colors[0])
+
+    print(colors)
 
     if os.path.exists(args.pos) :
         positions = nwd.readPos(args.pos)
