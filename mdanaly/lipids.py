@@ -106,7 +106,7 @@ def main() :
     layer_step = 0.5
 
     # extract all files
-    files = [ "S_%d.pdb"%x for x in range(N) ]
+    files = [ "S_%d.pdb"%x for x in range(1, N) ]
 
     for f in files :
         print("Frame %s " % (f) )
@@ -124,7 +124,12 @@ def main() :
         up_proarea = apl.proteinArea(apl.selectProteinAtomsCrds(up_zrange))
         low_proarea = apl.proteinArea(apl.selectProteinAtomsCrds(low_zrange))
 
-        up_alp =  up_proarea / float(up_num_lip)
-        low_alp= low_proarea / float(low_num_lip)
+        total_area = apl.totalArea(vectors=[91.1,91.1,97.9])
 
-        print("%8.3f %8.3f %8.3f"%(thick, up_alp, low_alp))
+        up_alp = (total_area - up_proarea )  / float(up_num_lip)
+        low_alp= (total_area - low_proarea) / float(low_num_lip)
+
+        alp_aver = (total_area * 2 - up_proarea - low_proarea) / float(up_num_lip+low_num_lip)
+
+        print("%5d %5d %8.3f %8.3f "%(up_num_lip, low_num_lip, up_proarea, low_proarea))
+        print("%8.3f %8.3f %8.3f %8.3f"%(thick, up_alp, low_alp, alp_aver))

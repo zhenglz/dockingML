@@ -252,7 +252,7 @@ class ExtractPDB :
             command = input("Your choice:  ")
             while command in ['0', '1', '2', '3', '4']:
                 if command == "1":
-                    self.extract_pdb(pdbfile, structname, 0)
+                    self.extract_all(pdbfile, structname)
                     command = '0'
                 elif command == "2":
                     self.extract_frame(pdbfile, structname)
