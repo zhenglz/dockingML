@@ -163,7 +163,7 @@ def main() :
     ntype = args.pdbf
 
     # extract all files
-    files = [ ntype %x for x in range(1, N+1) ]
+    files = [ ntype.split("_")[0]+"_"+str(x)+".pdb" for x in range(1, N+1) ]
 
     tofile = open(args.out, 'w')
     tofile.write("#Thickness Average_APL Upper_APL Lower_APL \n")
