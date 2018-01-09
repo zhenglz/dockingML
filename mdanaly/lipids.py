@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import sys
 import dockml
 import numpy as np
 from scipy.spatial import ConvexHull
@@ -47,9 +48,16 @@ class lipidThickness :
 
         deltaZ = up_aver - low_aver
 
-        return deltaZ, middle
+        return deltaZ, middle, up_aver, low_aver
 
-class areaPerLip :
+    def lipidsNum(self, zvalues, middle):
+
+        upleaflet = [x for x in zvalues if x > middle]
+        lowleaflet = [x for x in zvalues if x < middle]
+
+        return len(upleaflet), len(lowleaflet)
+
+class areaPerLipid :
 
     def __init__(self, pdb):
         self.pdb = pdb
@@ -71,10 +79,10 @@ class areaPerLip :
 
         return area
 
-    def selectProteinAtomsCrds(self, pdb, zrange=[0, 1.0]):
+    def selectProteinAtomsCrds(self, zrange=[0, 1.0]):
 
         pdbio = dockml.parsePDB()
-        atominfor = pdbio.atomInformation(pdb)
+        atominfor = pdbio.atomInformation(self.pdb)
 
         ndx = atominfor.keys()
 
@@ -82,8 +90,41 @@ class areaPerLip :
         selected_ndx = [ x for x in ndx if atominfor[x][1] == "Protein" ]
 
         cpdb = dockml.coordinatesPDB()
-        crds = np.asarray(cpdb.getAtomCrdByNdx(pdb, selected_ndx))
+        crds = np.asarray(cpdb.getAtomCrdByNdx(self.pdb, selected_ndx))
 
         selected_crds = [ x for x in crds if ((x[2] > zrange[0]) and (x[2] < zrange[1]))]
 
         return np.asarray(selected_crds)
+
+    def totalArea(self, vectors):
+
+        return vectors[0] * vectors[1]
+
+def main() :
+
+    N=5
+    layer_step = 0.5
+
+    # extract all files
+    files = [ "S_%d.pdb"%x for x in range(N) ]
+
+    for f in files :
+        print("Frame %s " % (f) )
+        lip = lipidThickness(f, ["POP"], ["P"])
+        zv = lip.getZvalues()
+
+        thick, middle, up, low = lip.deltaZcoord(zv, 20)
+
+        up_num_lip, low_num_lip = lip.lipidsNum(zv, middle)
+
+        up_zrange = [ up - layer_step, up + layer_step]
+        low_zrange= [ low - layer_step, low+ layer_step]
+
+        apl = areaPerLipid(f)
+        up_proarea = apl.proteinArea(apl.selectProteinAtomsCrds(up_zrange))
+        low_proarea = apl.proteinArea(apl.selectProteinAtomsCrds(low_zrange))
+
+        up_alp =  up_proarea / float(up_num_lip)
+        low_alp= low_proarea / float(low_num_lip)
+
+        print("%8.3f %8.3f %8.3f"%(thick, up_alp, low_alp))
