@@ -5,7 +5,6 @@
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/bin/lipids.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mdanaly/extract.py" afterPath="$PROJECT_DIR$/mdanaly/extract.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mdanaly/lipids.py" afterPath="$PROJECT_DIR$/mdanaly/lipids.py" />
     </list>
     <ignored path="dockingML.iws" />
     <ignored path=".idea/workspace.xml" />
