@@ -125,12 +125,11 @@ def arguments() :
     
     '''
     parser = argparse.ArgumentParser(description=d, formatter_class=RawTextHelpFormatter)
-
     parser.add_argument('-pdbf', type=str, default="S_%d.pdb",
                         help="Format of pdb files. For example, \n"
                              "you have S_1.pdb to S_100.pdb, you could\n"
-                             "set this argument as \'S_%d.pdb\' \n"
-                             "Default is S_%d.pdb")
+                             "set this argument as S_d.pdb \n"
+                             "Default is S_d.pdb")
     parser.add_argument('-out', type=str, default="thickness_APL.dat",
                         help="Output file name. Default is thickness_APL.dat \n")
     parser.add_argument('-num', type=int, default=1,
@@ -150,6 +149,7 @@ def arguments() :
                         help="Grid number for P z coordinates analysis. \n"
                              "Default is 20. \n")
 
+
     args = parser.parse_args()
 
     return args
@@ -160,10 +160,10 @@ def main() :
 
     N = args.num
     layer_step = args.layer
-    ntype = args.pdbf
+    #ntype = args.pdbf
 
     # extract all files
-    files = [ ntype.split("_")[0]+"_"+str(x)+".pdb" for x in range(1, N+1) ]
+    files = [ args.pdbf%x for x in range(1, N+1) ]
 
     tofile = open(args.out, 'w')
     tofile.write("#Thickness Average_APL Upper_APL Lower_APL \n")
