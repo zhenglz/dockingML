@@ -4,6 +4,8 @@ import sys
 import dockml
 import numpy as np
 from scipy.spatial import ConvexHull
+import argparse
+from argparse import RawTextHelpFormatter
 
 class lipidThickness :
 
@@ -51,6 +53,12 @@ class lipidThickness :
         return deltaZ, middle, up_aver, low_aver
 
     def lipidsNum(self, zvalues, middle):
+        '''
+        number of lipids in upper and lower leaflet
+        :param zvalues:
+        :param middle:
+        :return:
+        '''
 
         upleaflet = [x for x in zvalues if x > middle]
         lowleaflet = [x for x in zvalues if x < middle]
@@ -80,6 +88,11 @@ class areaPerLipid :
         return area
 
     def selectProteinAtomsCrds(self, zrange=[0, 1.0]):
+        '''
+        get protein atoms' coordinates if the protein atoms z values in zrange
+        :param zrange:
+        :return:
+        '''
 
         pdbio = dockml.parsePDB()
         atominfor = pdbio.atomInformation(self.pdb)
@@ -97,23 +110,70 @@ class areaPerLipid :
         return np.asarray(selected_crds)
 
     def totalArea(self, vectors):
+        '''
+        get PBC vectors, and return the total area of the bilayer lipids
+        :param vectors:
+        :return:
+        '''
 
         return vectors[0] * vectors[1]
 
+def arguments() :
+
+    d = '''
+    Descriptions of the lipid Thickness and Lipid Per Area calculation
+    
+    '''
+    parser = argparse.ArgumentParser(description=d, formatter_class=RawTextHelpFormatter)
+
+    parser.add_argument('-pdbf', type=str, default="S_%d.pdb",
+                        help="Format of pdb files. For example, \n"
+                             "you have S_1.pdb to S_100.pdb, you could\n"
+                             "set this argument as \'S_%d.pdb\' \n"
+                             "Default is S_%d.pdb")
+    parser.add_argument('-out', type=str, default="thickness_APL.dat",
+                        help="Output file name. Default is thickness_APL.dat \n")
+    parser.add_argument('-num', type=int, default=1,
+                        help="Number of files for analysis. Default is 1 .\n")
+    parser.add_argument('-layer', type=float, default=2.5,
+                        help="To select a layer of protein atoms, you set a\n"
+                             "thickness for the layer. Default is 2.5 Angstrom.\n")
+    parser.add_argument('-res', type=str, nargs="+", default=['POC'],
+                        help="Lipid residues for analysis. \n"
+                             "Default is [ POC ]. \n")
+    parser.add_argument('-head', type=str, nargs='+', default=['P'],
+                        help="Head atoms for lipid thickness and APL calculations.\n"
+                             "Default is [ P ]. \n")
+    parser.add_argument('-pbc', type=float, nargs="+", default=[0.0, 0.0, 0.0 ],
+                        help="PBC vectors (3 elements) for analysis. Unit is Angstrom. \n")
+    parser.add_argument('-grid', type=int, default=20,
+                        help="Grid number for P z coordinates analysis. \n"
+                             "Default is 20. \n")
+
+    args, unknown = parser.parse_args()
+
+    return args
+
 def main() :
 
-    N=5
-    layer_step = 0.5
+    args, unknown = arguments()
+
+    N = args.num
+    layer_step = args.layer
+    ntype = args.pdbf
 
     # extract all files
-    files = [ "S_%d.pdb"%x for x in range(1, N) ]
+    files = [ ntype %x for x in range(1, N+1) ]
+
+    tofile = open(args.out, 'w')
+    tofile.write("#Thickness Average_APL Upper_APL Lower_APL \n")
 
     for f in files :
         print("Frame %s " % (f) )
-        lip = lipidThickness(f, ["POP"], ["P"])
+        lip = lipidThickness(f, args.res, args.head)
         zv = lip.getZvalues()
 
-        thick, middle, up, low = lip.deltaZcoord(zv, 20)
+        thick, middle, up, low = lip.deltaZcoord(zv, args.grid)
 
         up_num_lip, low_num_lip = lip.lipidsNum(zv, middle)
 
@@ -124,7 +184,7 @@ def main() :
         up_proarea = apl.proteinArea(apl.selectProteinAtomsCrds(up_zrange))
         low_proarea = apl.proteinArea(apl.selectProteinAtomsCrds(low_zrange))
 
-        total_area = apl.totalArea(vectors=[91.1,91.1,97.9])
+        total_area = apl.totalArea(vectors=args.pbc)
 
         up_alp = (total_area - up_proarea )  / float(up_num_lip)
         low_alp= (total_area - low_proarea) / float(low_num_lip)
@@ -133,3 +193,9 @@ def main() :
 
         print("%5d %5d %8.3f %8.3f "%(up_num_lip, low_num_lip, up_proarea, low_proarea))
         print("%8.3f %8.3f %8.3f %8.3f"%(thick, up_alp, low_alp, alp_aver))
+
+        tofile.write("%6.3f %6.3f %6.3f %6.3f \n"%(thick, alp_aver, up_alp, low_alp))
+
+    tofile.close()
+
+    print("Calculations of Thickness and APL completed!")
