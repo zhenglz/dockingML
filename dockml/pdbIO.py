@@ -256,7 +256,7 @@ class parsePDB :
     def atomInformation(self, pdbin):
         """
           # elements in atom infor
-          # key: atom index
+          # key: str, atom index
           # value: [atomname, molecule type, is_hydrogen,  resname, resndx, chainid,(mainchian, sidechain,
           #           sugar ring, phosphate group, base ring)]
           :param pdbin:
