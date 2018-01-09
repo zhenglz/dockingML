@@ -150,13 +150,13 @@ def arguments() :
                         help="Grid number for P z coordinates analysis. \n"
                              "Default is 20. \n")
 
-    args, unknown = parser.parse_args()
+    args = parser.parse_args()
 
     return args
 
 def main() :
 
-    args, unknown = arguments()
+    args = arguments()
 
     N = args.num
     layer_step = args.layer
