@@ -151,22 +151,45 @@ class ExtractPDB :
         return(indexing)
 
     def extract_all(self, filename, structname):
-        '''
+
+        filenum = 0
+
+        with open(filename) as lines :
+
+            tofile = open(structname+"_"+str(filenum)+'.pdb', 'w')
+            print("START FRAME: %d "%(filenum))
+
+            for s in lines :
+
+                if "ENDMDL" not in s :
+                    tofile.write(s)
+                else :
+                    tofile.write(s)
+                    filenum += 1
+                    print("START FRAME: %d " % (filenum))
+
+                    tofile.close()
+                    tofile = open(structname + "_" + str(filenum) + '.pdb', 'w')
+
+        return 1
+
+
+    '''def extract_all(self, filename, structname):
+        
         extract all the frames into seperated mol2 (or, pdb and pdbqt) files
 
         :param filename: the multiple-frames mol2 file
         :param structname: the prefix of the extracted separated frames
         :return: None
-        '''
+        
         extension = filename.split('.')[-1]
         if extension in ['pdb', 'pdbqt', 'mol2'] :
             try :
                 # try to loop over the file to count number of lines in the file
-                totalLineNum = sum(1 for line in open(filename))
+                totalLineNum = sum([ 1 for line in open(filename)])
             except IOError :
                 totalLineNum = 0
 
-            # if in the file filename, the file is not empty,
             # start to extract frames
             if totalLineNum :
                 structFirstLineIndex = self.indexCoord(filename)
@@ -182,12 +205,13 @@ class ExtractPDB :
                         for lndx in range(start_end[0]+1, start_end[1]+1) :
                             tofile.write(linecache.getline(filename, lndx))
             else :
-                print("File %s is empty. Couldnot extract frames. " % filename)
+                print("File %s is empty. Could not extract frames. " % filename)
         else :
             print("PDB, PDBQT, or MOL2 file is required. ")
             sys.exit(0)
 
-        print("Extracting all frames in mol2 file completed. ")
+        print("Extracting all frames in mol2 file completed. ") 
+        '''
 
     def arguments(self):
         """

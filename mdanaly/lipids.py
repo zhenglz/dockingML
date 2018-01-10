@@ -85,6 +85,7 @@ class areaPerLipid :
         vdw_dummy = self.atomVdWBoundary(xy_coords)
 
         hull = ConvexHull(np.concatenate((xy_coords, vdw_dummy)))
+
         area = hull.area
 
         return area
@@ -163,7 +164,7 @@ def arguments() :
     parser.add_argument('-head', type=str, nargs='+', default=['P'],
                         help="Head atoms for lipid thickness and APL calculations.\n"
                              "Default is [ P ]. \n")
-    parser.add_argument('-pbc', type=float, nargs="+", default=[0.0, 0.0, 0.0 ],
+    parser.add_argument('-pbc', type=float, nargs="+", default=[ ],
                         help="PBC vectors (3 elements) for analysis. Unit is Angstrom. \n")
     parser.add_argument('-grid', type=int, default=20,
                         help="Grid number for P z coordinates analysis. \n"
@@ -204,7 +205,14 @@ def main() :
         up_proarea = apl.proteinArea(apl.selectProteinAtomsCrds(up_zrange))
         low_proarea = apl.proteinArea(apl.selectProteinAtomsCrds(low_zrange))
 
-        total_area = apl.totalArea(vectors=args.pbc)
+        # get pbc from files
+        if len(args.pbc) :
+            pbc = args.pbc
+        else :
+            pbcpdb = dockml.handlePBC()
+            pbc = pbcpdb.getPBCFromPBD(f)
+            pbc = list(np.asarray(pbc)[:, 1])
+        total_area = apl.totalArea(vectors=pbc)
 
         up_alp = (total_area - up_proarea )  / float(up_num_lip)
         low_alp= (total_area - low_proarea) / float(low_num_lip)

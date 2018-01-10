@@ -388,7 +388,8 @@ class handlePBC :
 
         x, y, z = pbcline.split()[1], pbcline.split()[2], pbcline.split()[3]
 
-        return [[0.0, float(x)],
+        return [
+                [0.0, float(x)],
                 [0.0, float(y)],
                 [0.0, float(z)],
                 ]
