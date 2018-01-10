@@ -82,7 +82,9 @@ class areaPerLipid :
 
         xy_coords = np.asarray(proCrds)[:, :2]
 
-        hull = ConvexHull(xy_coords)
+        vdw_dummy = self.atomVdWBoundary(xy_coords)
+
+        hull = ConvexHull(np.concatenate((xy_coords, vdw_dummy)))
         area = hull.area
 
         return area
@@ -108,6 +110,24 @@ class areaPerLipid :
         selected_crds = [ x for x in crds if ((x[2] > zrange[0]) and (x[2] < zrange[1]))]
 
         return np.asarray(selected_crds)
+
+    def atomVdWBoundary(self, points, vcutoff=1.4):
+        '''
+        given a list of points, for each of points, find it's 4 neihboring dummy points
+        to represent its vdw boundary
+        :param points: ndarray, 3*N
+        :param vcutoff: float, cutoff of vdw
+        :return: ndarray, 2*N
+        '''
+
+        dummy = []
+        for p in points :
+            d_p = map(lambda x, y: [x+ vcutoff*p[0], y+vcutoff*p[1]],
+                      [-1.0, 1.0, -1.0, 1.0 ], [-1, 1.0, 1.0, -1.0]
+                      )
+            dummy += list(d_p)
+
+        return np.asarray(dummy)
 
     def totalArea(self, vectors):
         '''
