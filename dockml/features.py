@@ -17,15 +17,15 @@ class BindingFeature:
             DEFINITIONS_ROOT = os.path.join(PROJECT_ROOT, '../data/AtomType.dat')
             self.atomtype = DEFINITIONS_ROOT
 
-    def getVdWParams(self, inputF) :
+    def getVdWParams(self) :
         '''
         Get vdw parameters, mainly sigma and epsilon term in energy function
-        inputFile: str, a library file containing atomic vdw parameters
+        :inputFile: str, a library file containing atomic vdw parameters
         :return:
         '''
         # obtain vdw radius for different atoms
         vdwParams = defaultdict(list)
-        with open(inputF) as lines :
+        with open(self.atomtype) as lines :
             for s in lines :
                 #param = []
                 if "#" not in s and ";" not in s :
@@ -205,6 +205,7 @@ class BindingFeature:
         Calculate Van der Waals interaction energy
         VdW potential calculation, using combination rule 2
         vdwParam is a dictionary list, eg. { "O": [ 0.22617E-02, 0.74158E-0.6 ]; }
+        unit of the parameters: nanometer
         :param atomtype1:
         :param atomtype2: dictionary, parameters of atom type and sigma epsilon
         :param distance: float
@@ -523,7 +524,7 @@ class BindingFeature:
 
         return 1
 
-if __name__ == "__main__" :
+def main() :
     d = '''
     Extract the binding features between receptor and ligand
 

@@ -61,7 +61,7 @@ class BasicAlgorithm :
         # compute the probability distribution of the histogram
         prob = hist / float(np.asarray(x).shape[0])
 
-        print(prob)
+        #print(prob)
 
         prob = [ x for x in list(prob) if x > 0 ]
 

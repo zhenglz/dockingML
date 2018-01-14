@@ -70,31 +70,40 @@ class areaPerLipid :
     def __init__(self, pdb):
         self.pdb = pdb
 
-    def proteinArea(self, proCrds):
+    def proteinArea(self, proCrds, vectors, restorePBC=False):
         '''
         calculate protein area given a set of 2d points (xy data only)
         convex hull algorithm
         http://scipy-cookbook.readthedocs.io/items/Finding_Convex_Hull.html
         https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.ConvexHull.html
-        :param proCrds: a list of xyz coordinates, 3*N array
+        :param proCrds: ndarray, a list of xyz coordinates, 3*N array
         :return: area, float
         '''
 
-        xy_coords = np.asarray(proCrds)[:, :2]
+        if restorePBC :
+            pbc = dockml.handlePBC()
+            coords = pbc.crdPBCRestore(proCrds, vectors)
+        else :
+            coords = proCrds
 
-        vdw_dummy = self.atomVdWBoundary(xy_coords)
+        xy_coords = np.asarray(coords)[:, :2]
 
-        hull = ConvexHull(np.concatenate((xy_coords, vdw_dummy)))
+        if xy_coords.shape[0] :
+            vdw_dummy = self.atomVdWBoundary(xy_coords)
 
-        area = hull.area
+            # convex hull algorithm to determine the area occupied by atoms
+            hull = ConvexHull(np.concatenate((xy_coords, vdw_dummy)))
+            area = hull.area
 
-        return area
+            return area
+        else:
+            return 0.0
 
     def selectProteinAtomsCrds(self, zrange=[0, 1.0]):
         '''
         get protein atoms' coordinates if the protein atoms z values in zrange
-        :param zrange:
-        :return:
+        :param zrange: list of floats, up and low boundarys
+        :return: ndarray, 3*N
         '''
 
         pdbio = dockml.parsePDB()
@@ -116,6 +125,11 @@ class areaPerLipid :
         '''
         given a list of points, for each of points, find it's 4 neihboring dummy points
         to represent its vdw boundary
+                   dummy2
+                     |
+          dummy1-- atom --  dummy3
+                     |
+                   dummy4
         :param points: ndarray, 3*N
         :param vcutoff: float, cutoff of vdw
         :return: ndarray, 2*N
@@ -133,6 +147,7 @@ class areaPerLipid :
     def totalArea(self, vectors):
         '''
         get PBC vectors, and return the total area of the bilayer lipids
+        total area = x_length * y_length
         :param vectors:
         :return:
         '''
@@ -169,7 +184,9 @@ def arguments() :
     parser.add_argument('-grid', type=int, default=20,
                         help="Grid number for P z coordinates analysis. \n"
                              "Default is 20. \n")
-
+    parser.add_argument('-restore', type=bool, default=False,
+                        help="Whether restore the protein PBC given specific PBC conditions. \n"
+                             "Default is False. ")
 
     args = parser.parse_args()
 
@@ -191,19 +208,11 @@ def main() :
 
     for f in files :
         print("Frame %s " % (f) )
-        lip = lipidThickness(f, args.res, args.head)
-        zv = lip.getZvalues()
-
-        thick, middle, up, low = lip.deltaZcoord(zv, args.grid)
-
-        up_num_lip, low_num_lip = lip.lipidsNum(zv, middle)
-
-        up_zrange = [ up - layer_step, up + layer_step]
-        low_zrange= [ low - layer_step, low+ layer_step]
 
         apl = areaPerLipid(f)
-        up_proarea = apl.proteinArea(apl.selectProteinAtomsCrds(up_zrange))
-        low_proarea = apl.proteinArea(apl.selectProteinAtomsCrds(low_zrange))
+        lip = lipidThickness(f, args.res, args.head)
+
+        zv = lip.getZvalues()
 
         # get pbc from files
         if len(args.pbc) :
@@ -213,6 +222,16 @@ def main() :
             pbc = pbcpdb.getPBCFromPBD(f)
             pbc = list(np.asarray(pbc)[:, 1])
         total_area = apl.totalArea(vectors=pbc)
+
+        thick, middle, up, low = lip.deltaZcoord(zv, args.grid)
+        up_num_lip, low_num_lip = lip.lipidsNum(zv, middle)
+
+        up_zrange = [ up - layer_step, up + layer_step]
+        low_zrange= [ low - layer_step, low+ layer_step]
+
+        # calculate protein atom area, restore PBC if required
+        up_proarea = apl.proteinArea(apl.selectProteinAtomsCrds(up_zrange), pbc, restorePBC=args.restore)
+        low_proarea = apl.proteinArea(apl.selectProteinAtomsCrds(low_zrange), pbc, restorePBC=args.restore)
 
         up_alp = (total_area - up_proarea )  / float(up_num_lip)
         low_alp= (total_area - low_proarea) / float(low_num_lip)
