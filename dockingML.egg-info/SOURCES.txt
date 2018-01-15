@@ -34,6 +34,7 @@ mdanaly/cmap.py
 mdanaly/dynamics.py
 mdanaly/extract.py
 mdanaly/io.py
+mdanaly/lipids.py
 mdanaly/matrix.py
 mdanaly/network.py
 mdanaly/plot.py

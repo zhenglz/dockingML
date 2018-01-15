@@ -77,12 +77,18 @@ class areaPerLipid :
         http://scipy-cookbook.readthedocs.io/items/Finding_Convex_Hull.html
         https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.ConvexHull.html
         :param proCrds: ndarray, a list of xyz coordinates, 3*N array
+        :param vectors: list, 3 elements, pbc xyz vector
         :return: area, float
         '''
 
         if restorePBC :
             pbc = dockml.handlePBC()
-            coords = pbc.crdPBCRestore(proCrds, vectors)
+            pbcVec = [
+                [0.0, vectors[0]],
+                [0.0, vectors[1]],
+                [0.0, vectors[2]],
+            ]
+            coords = pbc.crdPBCRestore(proCrds, pbcVec)
         else :
             coords = proCrds
 
@@ -217,10 +223,12 @@ def main() :
         # get pbc from files
         if len(args.pbc) :
             pbc = args.pbc
+
         else :
             pbcpdb = dockml.handlePBC()
             pbc = pbcpdb.getPBCFromPBD(f)
             pbc = list(np.asarray(pbc)[:, 1])
+
         total_area = apl.totalArea(vectors=pbc)
 
         thick, middle, up, low = lip.deltaZcoord(zv, args.grid)
