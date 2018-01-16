@@ -677,7 +677,7 @@ class ContactMap:
                   (rank, progress, pdbfile, len(pdbFileList)))
 
             delta = datetime.now() - oldtime
-            print("Rank %d Progress: Time Usage for 1 frame %d seconds" % (rank, delta.total_seconds))
+            print("Rank %d Progress: Time Usage for 1 frame %d seconds" % (rank, delta.total_seconds()))
             oldtime = datetime.now()
 
             if verbose :
