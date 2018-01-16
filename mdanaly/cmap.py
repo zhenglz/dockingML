@@ -1119,5 +1119,6 @@ def main() :
             print( "Total Time Usage: ")
             print( datetime.now() - startTime)
 
+        print("Contact map calculation completed! Exit Now!")
         MPI.Finalize()
         sys.exit(1)
