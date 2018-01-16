@@ -326,14 +326,16 @@ def main() :
 
     comm, modu = nio.parseCommunities()
 
-    comm_res = [ comm[x] for x in comm.keys() if len(comm[x]) >= args.nres_cutoff ]
+    comm_res = [ comm[x] for x in comm.keys()
+                 if len(comm[x]) >= args.nres_cutoff ]
 
     nodes_resnum = [ len(x) for x in comm_res ]
 
     # report node residue compositions
     for i in range(len(nodes_resnum)) :
         shiftx = 4
-        print("Community (node) %d  Number of residues %d " % (i, nodes_resnum[i]))
+        print("Community (node) %d  Number of residues %d "
+              % (i, nodes_resnum[i]))
         #print("Number of residues %d"%nodes_resnum[i])
 
         info = nwp.resInDomains(args.domf, [ x+shiftx for x in comm_res[i]])
@@ -348,10 +350,13 @@ def main() :
         node_edges = []
         edges = nio.genNodeEdges(args.betw, comm_res )
         nodes = range(edges.shape[0])
+
         for i in nodes :
             for j in nodes :
                 if i < j :
                     node_edges.append((i, j, edges[i][j]))
+                else :
+                    pass
 
     #print(node_edges)
 
@@ -379,4 +384,8 @@ def main() :
             (0.15, 0.4),
         ] * 2
 
-    nwd.drawNetwork(node_edges, nodes, nodes_resnum, args.nsf, args.lwf, args.label,args.fig, args.dpi, args.fsize, positions, colors,)
+    nwd.drawNetwork(node_edges, nodes, nodes_resnum,
+                    args.nsf, args.lwf, args.label,
+                    args.fig, args.dpi, args.fsize,
+                    positions, colors,
+                    )

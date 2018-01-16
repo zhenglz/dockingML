@@ -747,50 +747,11 @@ class ContactMap:
         return 1
 
     def arguements(self):
-        d = '''
-        ########################################################################
-        #  Script for generating contact probability map                       #
-        #  Author:  ZHENG Liangzhen                                            #
-        #  Email:   LZHENG002@e.ntu.edu.sg                                     #
-        #  Version: V2.2                                                       #
-        #  Date:    27 Dec 2017                                               #
-        ########################################################################
-
-        Generating contact probability Map (Cmap)
-
-        Input a multi-frame pdb (MFPDB file) file to construct a contact probability map.
-        This MFPDB have multiple models in a single file, and all the structures should
-        stay whole, broken structures will cause inaccurate results.
-        All the frames in MFPDB do not consider PBC conditions, you should keep structures
-        as a whole.
-
-        If some arguements not given, default values would be used.
-
-        Usage:
-        1. Show help information
-        python ContactMap.py -h
-
-        2. Construct a Ca-Ca Cmap for a protein chain
-        python ContactMap.py -inp MF_pro.pdb -out Cmap.dat -rc A 1 250
-        -lc A 1 250 -cutoff 3.5 -switch T -atomtype CA
-
-        3. Generate a full-atom Cmap for a poly-peptide chain
-        python ContactMap.py -inp MF_pro.pdb -out Cmap.dat -rc A 1 250
-        -lc A 1 250 -cutoff 3.5 -atomtype all all
-
-        4. Construct a Cmap between a small ligand and a protein
-        python ContactMap.py -inp MF_pro.pdb -out Cmap.dat -rc A 1 250
-        -lc A 251 251 -cutoff 3.5 -atomtype all all
-
-        5. Construct a Cmap between a small ligand and a protein, Ca-allatom
-        python ContactMap.py -inp MF_pro.pdb -out Cmap.dat -rc A 1 250
-        -lc A 251 251 -cutoff 3.5 -atomtype CA all
-
-        6. Construct a cmap between a protein chain with MPI
-        mpirun -np 4 python ContactMap.py -inp MF_pro.pdb -out Cmap.dat -rc A 1 250
-        -lc A 251 251 -cutoff 3.5 -atomtype CA all -np 4
-
-        '''
+        """
+        parse arguments
+        :return:
+        """
+        d = descriptions()
         # parse arguments
         parser = argparse.ArgumentParser(description=d, formatter_class=RawTextHelpFormatter)
         parser.add_argument('-inp', type=str, help="The input huge PDB file with multiple frames")
@@ -864,6 +825,57 @@ class ContactMap:
 
         return args
 
+def descriptions() :
+    """
+    return descriptions of the script
+    :return:
+    """
+    d = '''
+        ########################################################################
+        #  Generating contact probability map                                  #
+        #  Author:  ZHENG Liangzhen & Mu Yuguang                               #
+        #  Email:   LZHENG002@e.ntu.edu.sg                                     #
+        #  Version: V2.2                                                       #
+        #  Date:    27 Dec 2017                                                #
+        ########################################################################
+
+        Generating contact probability Map (Cmap)
+
+        Input a multi-frame pdb (MFPDB file) file to construct a contact probability map.
+        This MFPDB have multiple models in a single file, and all the structures should
+        stay whole, broken structures will cause inaccurate results.
+        All the frames in MFPDB do not consider PBC conditions, you should keep structures
+        as a whole.
+
+        If some arguements not given, default values would be used.
+
+        Usage:
+        1. Show help information
+        python ContactMap.py -h
+
+        2. Construct a Ca-Ca Cmap for a protein chain
+        python ContactMap.py -inp MF_pro.pdb -out Cmap.dat -rc A 1 250
+        -lc A 1 250 -cutoff 3.5 -switch T -atomtype CA
+
+        3. Generate a full-atom Cmap for a poly-peptide chain
+        python ContactMap.py -inp MF_pro.pdb -out Cmap.dat -rc A 1 250
+        -lc A 1 250 -cutoff 3.5 -atomtype all all
+
+        4. Construct a Cmap between a small ligand and a protein
+        python ContactMap.py -inp MF_pro.pdb -out Cmap.dat -rc A 1 250
+        -lc A 251 251 -cutoff 3.5 -atomtype all all
+
+        5. Construct a Cmap between a small ligand and a protein, Ca-allatom
+        python ContactMap.py -inp MF_pro.pdb -out Cmap.dat -rc A 1 250
+        -lc A 251 251 -cutoff 3.5 -atomtype CA all
+
+        6. Construct a cmap between a protein chain with MPI
+        mpirun -np 4 python ContactMap.py -inp MF_pro.pdb -out Cmap.dat -rc A 1 250
+        -lc A 251 251 -cutoff 3.5 -atomtype CA all -np 4
+
+        '''
+    return d
+
 def main() :
     ## change to working directory
     pwd = os.getcwd()
@@ -871,50 +883,7 @@ def main() :
 
     startTime = datetime.now()
 
-    d = '''
-    ########################################################################
-    #  Generating contact probability map                                  #
-    #  Author:  ZHENG Liangzhen & Mu Yuguang                               #
-    #  Email:   LZHENG002@e.ntu.edu.sg                                     #
-    #  Version: V2.2                                                       #
-    #  Date:    27 Dec 2017                                                #
-    ########################################################################
-
-    Generating contact probability Map (Cmap)
-
-    Input a multi-frame pdb (MFPDB file) file to construct a contact probability map.
-    This MFPDB have multiple models in a single file, and all the structures should
-    stay whole, broken structures will cause inaccurate results.
-    All the frames in MFPDB do not consider PBC conditions, you should keep structures
-    as a whole.
-
-    If some arguements not given, default values would be used.
-
-    Usage:
-    1. Show help information
-    python ContactMap.py -h
-
-    2. Construct a Ca-Ca Cmap for a protein chain
-    python ContactMap.py -inp MF_pro.pdb -out Cmap.dat -rc A 1 250
-    -lc A 1 250 -cutoff 3.5 -switch T -atomtype CA
-
-    3. Generate a full-atom Cmap for a poly-peptide chain
-    python ContactMap.py -inp MF_pro.pdb -out Cmap.dat -rc A 1 250
-    -lc A 1 250 -cutoff 3.5 -atomtype all all
-
-    4. Construct a Cmap between a small ligand and a protein
-    python ContactMap.py -inp MF_pro.pdb -out Cmap.dat -rc A 1 250
-    -lc A 251 251 -cutoff 3.5 -atomtype all all
-
-    5. Construct a Cmap between a small ligand and a protein, Ca-allatom
-    python ContactMap.py -inp MF_pro.pdb -out Cmap.dat -rc A 1 250
-    -lc A 251 251 -cutoff 3.5 -atomtype CA all
-
-    6. Construct a cmap between a protein chain with MPI
-    mpirun -np 4 python ContactMap.py -inp MF_pro.pdb -out Cmap.dat -rc A 1 250
-    -lc A 251 251 -cutoff 3.5 -atomtype CA all -np 4
-
-    '''
+    d = descriptions()
     # parse arguments
     parser = argparse.ArgumentParser(description=d, formatter_class=RawTextHelpFormatter)
     parser.add_argument('-inp', type=str, help="The input huge PDB file with multiple frames")

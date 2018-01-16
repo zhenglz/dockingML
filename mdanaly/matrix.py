@@ -46,8 +46,8 @@ class MatrixHandle :
 
         z = data[:, 2]
 
-        xsize = len(set(list(z[:, 0])))
-        ysize = len(set(list(z[:, 1])))
+        xsize = len(set(list(data[:, 0])))
+        ysize = len(set(list(data[:, 1])))
 
         mtx = np.reshape(z, (xsize, ysize))
 
@@ -84,7 +84,7 @@ class MatrixHandle :
 
         if os.path.exists(dataf):
             if len(dtype):
-
+                data = np.asarray([])
                 if "S" in dtype[0]:
                     data = []
                     with open(dataf) as lines :
@@ -106,12 +106,14 @@ class MatrixHandle :
                         data[:, c] = data[:, c] + xyshift[c]
             else:
                 data = np.loadtxt(dataf, comments=['@', '#'], usecols=set(cols))
-                data[:, 0] = data[:, 0] + xyshift[0]
-                data[:, 1] = data[:, 1] + xyshift[1]
+
         else:
             print("file %s not exist! Exit now!" % dataf)
 
             sys.exit(0)
+
+        data[:, 0] = data[:, 0] + xyshift[0]
+        data[:, 1] = data[:, 1] + xyshift[1]
 
         return data
 
