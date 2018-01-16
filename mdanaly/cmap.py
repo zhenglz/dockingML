@@ -726,7 +726,7 @@ class ContactMap:
         else :
             nmax = len(resNames2)
             # generate contact matrix file
-            result = open(str(rank) + "_" + cmapName, 'wb')
+            result = open(str(rank) + "_" + cmapName, 'w')
             result.write("NDX  ")
             for i in resNames2 :
                 result.write('%5s ' % str(i))
@@ -738,7 +738,7 @@ class ContactMap:
                     result.write('%8.1f ' % (cmap[n + m * nmax ]))
             result.close()
 
-            result = open(str(rank) + "_" + cmapName + '.xyz', 'wb')
+            result = open(str(rank) + "_" + cmapName + '.xyz', 'w')
             result.write("# Receptor Ligand Contact_probability \n")
             for i in range(len(resNames1)):
                 for j in range(len(resNames2)) :
