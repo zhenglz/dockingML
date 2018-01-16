@@ -1026,7 +1026,7 @@ def main() :
 
         # receptor information about residues
         rcResNdx = defaultdict(list)
-        round = len(args.rc) / 3
+        round = int(len(args.rc) / 3)
         rcChains = []
         for i in range(round):
             rcResNdx[args.rc[i * 3]] = range(int(args.rc[i * 3 +1]),int(args.rc[i *3+2]) + 1)
@@ -1034,7 +1034,7 @@ def main() :
 
         # ligand information about residues
         lcResNdx = defaultdict(list)
-        round = len(args.lc) / 3
+        round = int(len(args.lc) / 3)
         lcChains = []
         for i in range(round):
             lcChains.append(args.lc[i*3])
