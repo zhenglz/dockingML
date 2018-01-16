@@ -454,7 +454,7 @@ class ContactMap:
             for community analysis
             fij = N / sqrt(N_i * N_j)
             '''
-            counts = len(filter(lambda x: x <= distcutoff, distances))
+            counts = len(list(filter(lambda x: x <= distcutoff, distances)))
             return float(counts) / np.sqrt(float(len(distances)))
         else :
             if switch:
@@ -465,7 +465,7 @@ class ContactMap:
                     print( rank, " COUNTS: ", counts)
                 return counts
             else :
-                counts = len(filter(lambda x: x <= distcutoff, distances))
+                counts = len(list(filter(lambda x: x <= distcutoff, distances)))
 
                 if verbose :
                     print( "Counts here ", counts)
