@@ -140,7 +140,6 @@ class DrawCMap :
 
         return 1
 
-
 class ContactMap:
     def __init__(self, hugePDBFile) :
         self.mfPDB = hugePDBFile
@@ -166,7 +165,7 @@ class ContactMap:
         '''
         reference = self.mfPDB+"_reference.pdb"
         if not os.path.exists(reference) :
-            with open(reference, 'wb') as tofile :
+            with open(reference, 'w') as tofile :
                 with open(self.mfPDB) as lines :
                     for s in lines :
                         if s[:6].strip() in ["ATOM", "HETATM"] :
@@ -197,7 +196,7 @@ class ContactMap:
                     if fileHeader == s.split()[0] :
                         count += 1
                         no_model = str(count)
-                        tofile = open("S_"+no_model+".pdb",'wb')
+                        tofile = open("S_"+no_model+".pdb",'w')
                         filelist.append("S_"+no_model+".pdb")
                         tofile.write(s)
                     elif "ATOM" == s.split()[0] :

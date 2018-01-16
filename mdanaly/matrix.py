@@ -14,7 +14,7 @@ class MatrixHandle :
     def __init__(self):
         pass
 
-    def reshapeMtx(self, dataf, dtype,xyshift=[0, 0]):
+    def reshapeMtx(self, dataf, dtype, xyshift=[0, 0]):
         '''
         Load a matrix file, return a ndarray matrix shape object
         :param dataf: str, a matrix M*N file
@@ -271,8 +271,8 @@ def main():
             data2 = mtxh.loadxyz(args.dat[1], args.dtype, args.xyzcol, xyshift=args.xyshift)
 
         elif args.ds in ['matrix', 'mtx'] :
-            data1 = mtxh.reshapeMtx(args.dat[0], args.dtype, args.xyzcol, xyshift=args.xyshift)
-            data2 = mtxh.reshapeMtx(args.dat[1], args.dtype, args.xyzcol, xyshift=args.xyshift)
+            data1 = mtxh.reshapeMtx(args.dat[0], args.dtype, xyshift=args.xyshift)
+            data2 = mtxh.reshapeMtx(args.dat[1], args.dtype, xyshift=args.xyshift)
 
         else :
             sys.exit(0)
@@ -320,7 +320,7 @@ def main():
         if args.ds in ['xyz', 'XYZ', '3d']:
             data = mtxh.loadxyz(args.dat[0], args.dtype, args.xyzcol, xyshift=args.xyshift)
         elif args.ds in ['matrix', 'mtx'] :
-            data = mtxh.reshapeMtx(args.dat[0], args.dtype, args.xyzcol, xyshift=args.xyshift)
+            data = mtxh.reshapeMtx(args.dat[0], args.dtype, xyshift=args.xyshift)
         else :
             sys.exit(0)
         data = data.astype(np.float)
@@ -334,7 +334,7 @@ def main():
             if args.ds in ['xyz', 'XYZ', '3d']:
                 data = mtxh.loadxyz(args.dat[0], args.dtype, args.xyzcol, xyshift=args.xyshift)
             elif args.ds in ['matrix', 'mtx'] :
-                data = mtxh.reshapeMtx(args.dat[0], args.dtype, args.xyzcol, xyshift=args.xyshift)
+                data = mtxh.reshapeMtx(args.dat[0], args.dtype, xyshift=args.xyshift)
             else :
                 sys.exit(0)
 
@@ -354,7 +354,7 @@ def main():
         if args.ds in ['xyz', 'XYZ', '3d']:
             data = mtxh.loadxyz(args.dat[0], args.dtype, args.xyzcol, xyshift=args.xyshift)
         elif args.ds in ['matrix', 'mtx']:
-            data = mtxh.reshapeMtx(args.dat[0], args.dtype, args.xyzcol, xyshift=args.xyshift)
+            data = mtxh.reshapeMtx(args.dat[0], args.dtype, xyshift=args.xyshift)
         else:
             sys.exit(0)
         data = data.astype(np.float)
@@ -370,17 +370,17 @@ def main():
         else :
             drange = [ float(x) for x in args.drange ]
 
-        tofile = open(args.out, 'wb')
-        for i in range(len(drange)/2) :
+        tofile = open(args.out, 'w')
+        for i in range(int(len(drange)/2)) :
             tofile.write("# %d %.2f %.2f \n"%(i, drange[i*2], drange[i*2+1]))
 
-        for i in range(len(drange)/2) :
-            for j in range(len(drange) / 2):
+        for i in range(int(len(drange)/2)) :
+            for j in range(int(len(drange) / 2)):
                 if args.dzero and i == j :
                     tofile.write("%3d %3d  0.0 \n" % (i, j))
                 else :
                     d = mtxh.extractDomainData(data, xrange=drange[2*i:2*i+2], yrange=drange[2*j:2*j+2])
-                    tofile.write("%3d %3d %12.5f \n"%(i, j, np.mean(d[:, 2])))
+                    tofile.write("%3d %3d %12.5f \n"%(i, j, list(np.mean(d[:, 2]))[0]))
         tofile.close()
 
         print("Domain-wise matrix averaging completed!")
