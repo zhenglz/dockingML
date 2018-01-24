@@ -21,6 +21,7 @@ class PMF :
         """
         data = np.array(data)
 
+        # calculate 2d probability distributions
         hist2d, edges1, edges2 = np.histogram2d(data[:, xcol], data[:, ycol], bins=nbins)
 
         max_val = np.max(hist2d)
@@ -29,13 +30,13 @@ class PMF :
         prob = hist2d / max_val
 
         # Assign the half_of_the_min to the zero elements
-        prob[ prob == 0.0 ] = min_val / (-1.0 * RT)
+        prob[ prob == 0 ] = ( min_val / (-1.0 * RT)) / max_val
 
         pmf = RT * np.log(prob)
 
         return pmf, edges1, edges2
 
-    def pmf1d(self, data, nbins=20):
+    def pmf1d(self, data, nbins=20, RT=-2.5):
         """
         give a 1d array, calculate the 1d distribution
         and then calculate its PMF fes
@@ -43,6 +44,19 @@ class PMF :
         :param nbins:
         :return:
         """
+
+        # probability distribution
+        hist, edges = np.histogram(data, bins=nbins)
+
+        max_val = np.max(hist)
+        min_val = np.sort(hist, axis=None)[1]
+
+        prob = hist / max_val
+        prob[prob == 0] = (min_val / (-1.0 * RT)) / max_val
+
+        pmf = RT * np.log(prob)
+
+        return pmf, edges
 
 def arguments() :
     d = '''
@@ -86,6 +100,16 @@ def main() :
     df = np.loadtxt(dataf, comments=["#", "@"], usecols= args.cols)
 
     pmf = PMF()
-    matrix, edges1, edges2 = pmf.pmf2d(df, nb)
+
+    if len(args.cols) == 2:
+        matrix, edges1, edges2 = pmf.pmf2d(df, nb)
+        print("X ticks ")
+        print(",".join([str(x) for x in list(edges1)]))
+        print("Y ticks ")
+        print(",".join([str(x) for x in list(edges2)]))
+    else :
+        matrix, edges = pmf.pmf1d(df, nb)
+        print("X ticks ")
+        print(",".join([str(x) for x in list(edges)]))
 
     np.savetxt(out, matrix, fmt="%.3f")
