@@ -2,12 +2,14 @@
 
 import numpy as np
 import sys
+import argparse
+from argparse import RawTextHelpFormatter
 
 class PMF :
     def __init__(self):
         pass
 
-    def pmf2d(self, data, nbins=20, xcol=0, ycol=1):
+    def pmf2d(self, data, nbins=20, xcol=0, ycol=1, RT=-2.5):
         """
         give a 2d array, calculate the 2d distribution
         and then calculate its PMF fes
@@ -18,54 +20,72 @@ class PMF :
         :return:
         """
         data = np.array(data)
-        X1 = list(data[:, xcol])
-        X2 = list(data[:, ycol])
 
-        hist1, edges1 = np.histogram(X1, bins=nbins)
-        hist2, edges2 = np.histogram(X2, bins=nbins)
+        hist2d, edges1, edges2 = np.histogram2d(data[:, xcol], data[:, ycol], bins=nbins)
 
-        n = len(edges1)
-        pmf = {}
-        for j in range(n - 1):
-            for k in range(n - 1):
-                pmf[str(j) + "_" + str(k)] = 0
+        max_val = np.max(hist2d)
+        min_val = np.sort(hist2d, axis=None)[1]
 
-        for i in range(len(X1)):
-            x = [X1[i], X2[i]]
-            for k in range(n - 1):
-                for j in range(n - 1):
-                    if x[0] >= edges1[k] and x[0] < edges1[k + 1]:
-                        if x[1] >= edges2[j] and x[1] < edges2[j + 1]:
-                            pmf[str(k) + "_" + str(j)] += 1.0
+        prob = hist2d / max_val
 
-        pmf_array = []
-        for j in range(n - 1):
-            for k in range(n - 1):
-                z = [edges1[j], edges2[k], pmf[str(k) + "_" + str(j)]]
-                pmf_array.append(z)
+        # Assign the half_of_the_min to the zero elements
+        prob[ prob == 0.0 ] = min_val / (-1.0 * RT)
 
-        return np.asarray(pmf_array)
+        pmf = RT * np.log(prob)
 
-def main() :
-    if len(sys.argv) < 2 :
-        print('''
+        return pmf, edges1, edges2
+
+    def pmf1d(self, data, nbins=20):
+        """
+        give a 1d array, calculate the 1d distribution
+        and then calculate its PMF fes
+        :param data:
+        :param nbins:
+        :return:
+        """
+
+def arguments() :
+    d = '''
         Transform a 2D data (time series) file into a PMF matrix
         (Only numerical data files are accepted)
         Usage:
-        python pmf2d.py your2d.data numberofbins
-        python pmf2d.py proj2d.dat
-        python pmf2d.py proj2d.dat 40
-        ''')
+        python pmf2d.py -dat your2d.data -numbins numberofbins
+    '''
+
+    parser = argparse.ArgumentParser(description=d, formatter_class=RawTextHelpFormatter)
+
+    parser.add_argument('-dat', type=str, default='time_series.dat',
+                        help="Input file name. Two columns or one column. ")
+    parser.add_argument('-numbins', type=int, default=40,
+                        help="Number of bins for histogram analysis. \n")
+    parser.add_argument('-out', type=str, default='',
+                        help="Output file name. \n")
+    parser.add_argument('-cols', type=int, default=[0], nargs="+",
+                        help="Use which cols for analysis. \n "
+                             "Default is col 0. ")
+
+    args = parser.parse_args()
+
+    if len(sys.argv) < 2 :
+        print(d)
+        parser.print_help()
         sys.exit(0)
 
-    dataf = sys.argv[1]
-    if len(sys.argv) == 3 :
-        nb = int(sys.argv[2])
+    return args
+
+def main() :
+    args = arguments()
+
+    dataf = args.dat
+    nb = args.numbins
+    if len(args.out) :
+        out = args.out
     else :
-        nb = 20
-    df = np.loadtxt(dataf, comments=["#", "@"] )#, usecols=[0, 1])
+        out  = "pmf_"+dataf
+
+    df = np.loadtxt(dataf, comments=["#", "@"], usecols= args.cols)
 
     pmf = PMF()
-    dist = pmf.pmf2d(df, nb)
+    matrix, edges1, edges2 = pmf.pmf2d(df, nb)
 
-    np.savetxt("pmf_"+dataf, dist, fmt="%.3f")
+    np.savetxt(out, matrix, fmt="%.3f")
