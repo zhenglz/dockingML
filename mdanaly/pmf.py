@@ -25,7 +25,7 @@ class PMF :
         hist2d, edges1, edges2 = np.histogram2d(data[:, xcol], data[:, ycol], bins=nbins)
 
         max_val = np.max(hist2d)
-        min_val = np.sort(hist2d, axis=None)[1]
+        min_val = sorted(list(set(np.sort(hist2d, axis=None)[1])))[1]
 
         prob = hist2d / max_val
 
