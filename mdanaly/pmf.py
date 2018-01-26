@@ -24,17 +24,23 @@ class PMF :
         # calculate 2d probability distributions
         hist2d, edges1, edges2 = np.histogram2d(data[:, xcol], data[:, ycol], bins=nbins)
 
-        max_val = np.max(hist2d)
-        min_val = sorted(list(set(np.sort(hist2d, axis=None)[1])))[1]
+        max_val = float(np.max(hist2d))
+        min_val = 1.0 / 2.5
 
         prob = hist2d / max_val
 
         # Assign the half_of_the_min to the zero elements
-        prob[ prob == 0 ] = ( min_val / (-1.0 * RT)) / max_val
+        prob[ prob == 0.0 ] = ( min_val / (-1.0 * RT)) / max_val
 
         pmf = RT * np.log(prob)
 
-        return pmf, edges1, edges2
+        x = np.repeat(edges1[:-1], pmf.shape[0])
+        x = np.reshape(x, (pmf.shape[0], pmf.shape[1]))
+
+        y = np.repeat(edges2[:-1], pmf.shape[0])
+        y = np.reshape(y, pmf.shape)
+
+        return pmf.T, x.T, y
 
     def pmf1d(self, data, nbins=20, RT=-2.5):
         """
