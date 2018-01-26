@@ -74,6 +74,7 @@ def main() :
 
     args = arguments()
 
+    print("Selecting data points ... ... ")
     dp = ts.selectDataPoints(args.dat, args.up, args.low, dt=args.dt, usecols=args.cols)
 
     indexes = dp[:, 0]
@@ -83,4 +84,5 @@ def main() :
     else :
         groupname = "+".join([str(x) for x in args.up ]) + "_" + "+".join([str(x) for x in args.low ])
 
+    print("Writing data point time stamp ... ... ")
     ts.outputIndex(args.out, groupname, [int(x) for x in indexes])
