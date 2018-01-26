@@ -24,7 +24,7 @@ class TimeStamp :
 
         selected = df
 
-        for i in range(df.shape[1]) :
+        for i in range(len(upbounds)) :
             selected = selected[ selected[:, i+1] > upbounds[i] ]
             selected = selected[ selected[:, i+1] < lowbounds[i]]
 
