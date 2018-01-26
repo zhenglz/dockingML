@@ -14,7 +14,8 @@ class TimeStamp :
         df = np.loadtxt(dataf, comments="#", delimiter=" ", usecols=usecols)
         timestamp = np.arange(df.shape[0]) * dt
 
-        df[:, df.shape[1]] = timestamp
+        # add time stamp information
+        df = np.concatenate((timestamp, df), axis=1)
 
         selected = df
 
