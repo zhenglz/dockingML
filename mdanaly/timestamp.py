@@ -15,13 +15,13 @@ class TimeStamp :
         timestamp = np.arange(df.shape[0]) * dt
 
         # add time stamp information
-        df = np.concatenate((timestamp, df), axis=1)
+        df = np.concatenate((timestamp.T, df), axis=1)
 
         selected = df
 
         for i in range(df.shape[1]) :
-            selected = selected[ selected[:, i] > upbounds[i] ]
-            selected = selected[ selected[:, i] < lowbounds[i]]
+            selected = selected[ selected[:, i+1] > upbounds[i] ]
+            selected = selected[ selected[:, i+1] < lowbounds[i]]
 
         return selected
 
@@ -87,3 +87,5 @@ def main() :
 
     print("Writing data point time stamp ... ... ")
     ts.outputIndex(args.out, groupname, [int(x) for x in indexes])
+
+    print("Completed ... ... ")
