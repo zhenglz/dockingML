@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="">
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/bin/timestamp.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/mdanaly/timestamp.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mdanaly/timestamp.py" afterPath="$PROJECT_DIR$/mdanaly/timestamp.py" />
     </list>
     <ignored path="dockingML.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -55,8 +55,8 @@
       <file leaf-file-name="timestamp.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mdanaly/timestamp.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="336">
-              <caret line="84" column="66" lean-forward="false" selection-start-line="84" selection-start-column="66" selection-end-line="84" selection-end-column="66" />
+            <state relative-caret-position="183">
+              <caret line="28" column="32" lean-forward="false" selection-start-line="28" selection-start-column="32" selection-end-line="28" selection-end-column="32" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -204,8 +204,8 @@
         <option value="$PROJECT_DIR$/mdanaly/__init__.py" />
         <option value="$PROJECT_DIR$/bin/pmf2d.py" />
         <option value="$PROJECT_DIR$/mdanaly/pmf.py" />
-        <option value="$PROJECT_DIR$/mdanaly/timestamp.py" />
         <option value="$PROJECT_DIR$/bin/timestamp.py" />
+        <option value="$PROJECT_DIR$/mdanaly/timestamp.py" />
       </list>
     </option>
   </component>
@@ -934,8 +934,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/timestamp.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="84" column="66" lean-forward="false" selection-start-line="84" selection-start-column="66" selection-end-line="84" selection-end-column="66" />
+        <state relative-caret-position="183">
+          <caret line="28" column="32" lean-forward="false" selection-start-line="28" selection-start-column="32" selection-end-line="28" selection-end-column="32" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>

@@ -26,7 +26,7 @@ class TimeStamp :
 
     def outputIndex(self, output, groupname, indexes):
 
-        tofile = open(output, 'w')
+        tofile = open(output, 'a')
         tofile.write("[ %s ] \n"%(groupname))
         i = 0
         for atom in indexes :
@@ -64,6 +64,7 @@ def arguments() :
 
     if len(sys.argv) < 2 :
         parser.print_help()
+        sys.exit(0)
 
     return args
 
