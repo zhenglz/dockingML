@@ -8,6 +8,7 @@ from .network import *
 from .cmap import *
 from .dynamics import *
 from .pmf import *
+from .tsne import *
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 DEFINITIONS_ROOT = os.path.join(PROJECT_ROOT, 'sample', 'lib')
