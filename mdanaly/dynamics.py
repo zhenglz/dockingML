@@ -3,7 +3,7 @@
 import dockml
 import numpy as np
 import pyemma as pe
-import os
+import os,sys
 
 class PCA :
     def __init__(self):
@@ -58,18 +58,18 @@ class essentialDynamics :
             newxyzs =[]
             newlines=[]
 
-            if len(vectors) == len(coords) :
+            if vectors.shape[0] == len(coords) :
                 for i in range(len(coords)) :
-                    newxyz = self.transformXYZ(coords[i], vectors[i], delta)
+                    newxyz = self.transformXYZ(coords[i], list(vectors[i]), delta)
                     newxyzs.append(newxyz)
                     newlines.append(pdbio.replaceCrdInPdbLine(lines[i], newxyz))
 
         return newxyzs, newlines
 
-    def genEDAEssemble(self, pdbin, pdbout, vectors, no_files=20, delta=0.5):
+    def genEDAEssemble(self, pdbin, vectors, pdbout, no_files=20, delta=0.5):
         '''
         generate an essemble of pdb files to increase the PC motions
-        :param pdbin:
+        :param pdbin: input
         :param pdbout:
         :param vectors:
         :param no_files:
@@ -80,14 +80,17 @@ class essentialDynamics :
         PI = 3.14159
 
         if os.path.exists(vectors) :
-            vectors = np.loadtxt(vectors, comments="#")
+            newvectors = np.loadtxt(vectors, comments="#")
+            print(newvectors.shape)
+            vectors = np.reshape(newvectors[:, 1], ( 250, 3 ))
+
         else :
             pass
 
         with open(pdbout, 'w') as tofile :
             for i in range(no_files) :
                 length = delta * np.cos(PI * (float(i) / float(no_files)))
-
+                print(length)
                 tofile.write("MODEL   %d \n"%i)
                 t, nlines = self.pdbIncreaseMotion(pdbin, vectors, delta=length)
                 for x in nlines :
@@ -189,3 +192,14 @@ class essentialDynamics :
         np.savetxt(output, np.asarray(coms), fmt="%8.3f", delimiter=" ", header=dnames, comments="#")
 
         return coms
+
+if __name__ == "__main__" :
+
+    inpdb = sys.argv[1]
+    outpdb = sys.argv[2]
+    vector = sys.argv[3]
+    nfiles = int(sys.argv[4])
+    delta  = float(sys.argv[5])
+
+    dyn = essentialDynamics()
+    dyn.genEDAEssemble(inpdb, outpdb, vector, nfiles, delta)

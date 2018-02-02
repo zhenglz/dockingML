@@ -76,9 +76,9 @@ def arguments() :
 
 def main() :
 
-    ts = TimeStamp()
-
     args = arguments()
+
+    ts = TimeStamp()
 
     print("Selecting data points ... ... ")
     dp = ts.selectDataPoints(args.dat, args.up, args.low, dt=args.dt, usecols=args.cols)
