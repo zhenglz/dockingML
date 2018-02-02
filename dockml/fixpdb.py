@@ -1,4 +1,4 @@
-import MDAnalysis
+import mdanaly
 import os, sys
 import urllib
 from collections import OrderedDict
@@ -87,7 +87,7 @@ class FixPDB :
         :param maxCoordinate:
         :return: coordination number ( number of contacts)
         '''
-        cmap = MDAnalysis.ContactMap(pdbfiles[0])
+        cmap = mdanaly.ContactMap(pdbfiles[0])
         coordinate = 0
 
         pdblist = []
@@ -102,16 +102,16 @@ class FixPDB :
             else :
                 pdblist.append(item)
 
-        #try :
-        coordinate = cmap.coordinationNumber(pdblist, cutoff,
-                                            range(loopRange[0], loopRange[-1]+1),
-                                            range(ligandRange[0], ligandRange[-1]+1),
-                                            [chainLoop, chainLigand],
-                                            ['heavy','all'],
-                                            False, maxCoordinate
-                                            )
-        #except IOError:
-            #print("Calculate coordination number between receptor and ligand failed!")
+        try :
+            coordinate = cmap.coordinationNumber(pdblist, cutoff,
+                                                range(loopRange[0], loopRange[-1]+1),
+                                                range(ligandRange[0], ligandRange[-1]+1),
+                                                [chainLoop, chainLigand],
+                                                ['heavy','all'],
+                                                False, maxCoordinate
+                                                )
+        except IOError:
+            print("Calculate coordination number between receptor and ligand failed!")
 
         return (coordinate)
 

@@ -3,6 +3,7 @@
 import dockml
 import numpy as np
 import pyemma as pe
+import os
 
 class PCA :
     def __init__(self):
@@ -42,7 +43,7 @@ class essentialDynamics :
         '''
         increase motions of a pdb given its PC component eigenvectors
         :param pdbin:
-        :param vectors:
+        :param vectors: ndarray, a M * 3 matrix, M means num of Ca atoms
         :param delta:
         :return:
         '''
@@ -76,10 +77,19 @@ class essentialDynamics :
         :return:
         '''
 
+        PI = 3.14159
+
+        if os.path.exists(vectors) :
+            vectors = np.loadtxt(vectors, comments="#")
+        else :
+            pass
+
         with open(pdbout, 'w') as tofile :
             for i in range(no_files) :
+                length = delta * np.cos(PI * (float(i) / float(no_files)))
+
                 tofile.write("MODEL   %d \n"%i)
-                t, nlines = self.pdbIncreaseMotion(pdbin, vectors, delta=i*delta)
+                t, nlines = self.pdbIncreaseMotion(pdbin, vectors, delta=length)
                 for x in nlines :
                     tofile.write(x)
                 tofile.write("ENDMDL  \n")
