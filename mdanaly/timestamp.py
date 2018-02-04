@@ -10,14 +10,20 @@ class TimeStamp :
         pass
 
     def selectDataPoints(self, dataf, upbounds, lowbounds, dt=100, usecols=[0, 1]):
+        """
+        select the time points where values locate in up and low boundaries
+        :param dataf: str, input data file name
+        :param upbounds: list of float, up boundaries for the two cols
+        :param lowbounds:list of float, low boundaries for the two cols
+        :param dt: int, delta time step
+        :param usecols: list of int, using which two cols values
+        :return: ndarray, M*3 shape
+        """
 
         df = np.loadtxt(dataf, comments="#", delimiter=" ", usecols=usecols)
         timestamp = np.arange(df.shape[0]) * dt
 
         timestamp = np.array([timestamp]).T
-
-        print(timestamp.shape)
-        print(df.shape)
 
         # add time stamp information
         df = np.concatenate((timestamp, df), axis=1)
@@ -31,6 +37,13 @@ class TimeStamp :
         return selected
 
     def outputIndex(self, output, groupname, indexes):
+        """
+        output atom index into a gmx index file
+        :param output: str, output index file name
+        :param groupname: str, group name in index file
+        :param indexes: list of interger
+        :return:
+        """
 
         tofile = open(output, 'a')
         tofile.write("[ %s ] \n"%(groupname))
@@ -48,6 +61,15 @@ class TimeStamp :
 def arguments() :
 
     d = """
+    extract specific frames from a local minimium 
+    given a file contains two columns, select data points 
+    within up and low boundarys
+    
+    examples: 
+    
+    timestampy -h
+    
+    timestamp.py -dat datafile.dat -up 1.0 1.0 -low -2 -3.0 -out output.ndx -gn groupname
     
     """
 
@@ -94,3 +116,4 @@ def main() :
     ts.outputIndex(args.out, groupname, [int(x) for x in indexes])
 
     print("Completed ... ... ")
+    sys.exit(1)
