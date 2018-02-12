@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-from mdanaly import tsne
+from dockml import index
 
 if __name__ == "__main__" :
-    tsne.main()
+
+    index.main()

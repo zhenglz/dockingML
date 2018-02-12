@@ -66,7 +66,7 @@ class essentialDynamics :
 
         return newxyzs, newlines
 
-    def genEDAEssemble(self, pdbin, vectors, pdbout, no_files=20, delta=0.5):
+    def genEDAEssemble(self, pdbin, pdbout, vectors, no_files=20, delta=0.5, numres=250):
         '''
         generate an essemble of pdb files to increase the PC motions
         :param pdbin: input
@@ -78,21 +78,22 @@ class essentialDynamics :
         '''
 
         PI = 3.14159
+        print(vectors)
 
         if os.path.exists(vectors) :
             newvectors = np.loadtxt(vectors, comments="#")
             print(newvectors.shape)
-            vectors = np.reshape(newvectors[:, 1], ( 250, 3 ))
 
+            #vectors = np.reshape(newvectors[:, 1], ( numres, 3 ))
         else :
-            pass
+            newvectors = vectors
 
         with open(pdbout, 'w') as tofile :
             for i in range(no_files) :
-                length = delta * np.cos(PI * (float(i) / float(no_files)))
+                length = delta * np.cos(2.0 * PI * (float(i) / float(no_files)) - PI )
                 print(length)
                 tofile.write("MODEL   %d \n"%i)
-                t, nlines = self.pdbIncreaseMotion(pdbin, vectors, delta=length)
+                t, nlines = self.pdbIncreaseMotion(pdbin, newvectors, delta=length)
                 for x in nlines :
                     tofile.write(x)
                 tofile.write("ENDMDL  \n")
@@ -195,6 +196,19 @@ class essentialDynamics :
 
 if __name__ == "__main__" :
 
+    if len(sys.argv) < 5 :
+        d = '''
+        Generate EDA ensemble of conformations with PCA eigenvectors
+        
+        Usage:
+        python dynamics.py input.pdb output.pdb eigenvectors.dat number_of_files delta_stepsize
+        
+        Example:
+        
+        '''
+        print(d)
+        sys.exit(0)
+
     inpdb = sys.argv[1]
     outpdb = sys.argv[2]
     vector = sys.argv[3]
@@ -202,4 +216,4 @@ if __name__ == "__main__" :
     delta  = float(sys.argv[5])
 
     dyn = essentialDynamics()
-    dyn.genEDAEssemble(inpdb, outpdb, vector, nfiles, delta)
+    dyn.genEDAEssemble(inpdb, outpdb, vector, nfiles, delta, 1361)

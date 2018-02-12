@@ -43,7 +43,7 @@ class PdbIndex :
         if len(residueNdx) == 1 :
             resSeqNdx = range(residueNdx[0], residueNdx[0 ] +1)
         elif len(residueNdx) >= 2 and len(residueNdx) % 2 == 0 :
-            for k in range(len(residueNdx)/2) :
+            for k in range(int(len(residueNdx)/2)) :
                 resSeqNdx += range(residueNdx[k*2], residueNdx[k*2+1]+1)
         else :
             print("Error!! No residue index provided. ")
@@ -374,3 +374,11 @@ class PdbIndex :
 
         print("\nGenerating Index File Completed!")
         return(1)
+
+def main() :
+
+    ndx = PdbIndex()
+
+    ndx.genGMXIndex()
+
+    return 1
