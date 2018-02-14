@@ -20,7 +20,7 @@ class TimeStamp :
         :return: ndarray, M*3 shape
         """
 
-        df = np.loadtxt(dataf, comments="#", delimiter=" ", usecols=usecols)
+        df = np.loadtxt(dataf, comments="#", usecols=usecols)
         timestamp = np.arange(df.shape[0]) * dt
 
         timestamp = np.array([timestamp]).T
@@ -103,6 +103,7 @@ def main() :
     ts = TimeStamp()
 
     print("Selecting data points ... ... ")
+
     dp = ts.selectDataPoints(args.dat, args.up, args.low, dt=args.dt, usecols=args.cols)
 
     indexes = dp[:, 0]
