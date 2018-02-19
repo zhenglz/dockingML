@@ -1,6 +1,14 @@
+from dockml import rewritePDB
+import sys
 
-from .algorithms import BasicAlgorithm
+if __name__ == "__main__" :
 
-ba = BasicAlgorithm()
-print(ba.switchFuction(3.5, 7.0))
+    inp = sys.argv[1]
+    out = sys.argv[2]
+
+    chain = "A"
+
+    rew = rewritePDB(inp)
+
+    rew.pdbRewrite(out,chain, 1, 1)
 

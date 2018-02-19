@@ -18,11 +18,11 @@ class rewritePDB :
         change atom id, residue id and chain id
         :param output: str, output file name
         :param chain: str, chain id
-        :param atomStartNdx:
-        :param resStartNdx:
+        :param atomStartNdx: int,
+        :param resStartNdx: int
         :return:
         """
-        resseq = resStartNdx
+        resseq = int(resStartNdx)
         atomseq = int(atomStartNdx)
         chainname = chain
 

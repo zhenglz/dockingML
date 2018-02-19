@@ -89,3 +89,64 @@ class BasicAlgorithm :
         entropy = -1.0 * kbt * sum([x * math.log(x) for x in prob ])
 
         return entropy
+
+class PlaneFit :
+    def __init__(self):
+        pass
+
+    def fitPlane(self, points):
+        """
+        fit some points to a plane
+        https://math.stackexchange.com/questions/99299/best-fitting-plane-given-a-set-of-points
+        plane function: ax + by - z + c = 0
+        or: ax + by - z = -c
+        Ax + By + Cz + D = 0
+        we need to determine [a, b, c]
+        A B C D = a  b -1 c
+        :param points: ndarray, M*3
+        :return: array, [a, b, c]
+        """
+
+        # prepare dataset
+        xs = np.array(points)[:, 0]
+        ys = np.array(points)[:, 1]
+        zs = np.array(points)[:, 2]
+
+        tmp_A = []
+        tmp_B = []
+        for i in range(xs.shape[0]):
+            tmp_A.append([xs[i], ys[i], 1])
+            tmp_B.append(zs[i])
+
+        B = np.matrix(tmp_B).T
+        A = np.matrix(tmp_A)
+
+        # do fit
+        fit = (A.T * A).I * A.T * B
+        errors = B - A * fit
+        residual = np.linalg.norm(errors)
+
+        return fit
+
+    def point_distance(self, params, point):
+        """
+        https://mathinsight.org/distance_point_plane
+        determine the distance between a point to a plane
+        the function of a function Ax + By + Cz + D = 0
+        P (x0, y0, z0 ) to the plane
+        distance (x0*A + y0*B + z0*C + D)/sqrt(A^2 + B^2 + C^2)
+        :param params: list, a list of parameters (A, B, D), while C=-1
+        :param point: list, x y z coordinates of a point
+        :return: float, distance
+        """
+
+        distance = math.sqrt(params[0] ** 2 + params[1] ** 2 + 1)
+
+        distance = (params[0] * point[0] +
+                    params[1] * point[1] +
+                    (-1.0) * point[2] +
+                    params[2]
+                    ) / distance
+
+        return distance
+
