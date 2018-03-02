@@ -18,7 +18,7 @@ setup(name='dockingML',
       url='https://github.com/zhenglz/dockingML',
       author='zhenglz',
       author_email='zhenglz@outlook.com',
-      license='NA',
+      license='GPL-3.0',
       packages=['dockml', 'mdanaly', 'automd'],
       install_requires=[
           'numpy',
