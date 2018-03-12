@@ -34,7 +34,7 @@ class BasicAlgorithm :
 
         #return (1.0 - math.pow((x / d0), n)) / (1.0 - math.pow((x / d0), m))
 
-    def pmf(self, x, minX, kt=2.5, max=1.0):
+    def pmf(self, x, minX, kbt=2.5, max=1.0):
         """
         calculate PMF of a histogram vector
         :param x:
@@ -45,7 +45,7 @@ class BasicAlgorithm :
         """
         if x < minX:
             x = minX / 2.0
-        return -1.0 * kt * np.log(x / max)
+        return -1.0 * kbt * np.log(x / max)
 
     def entropy1D(self, x, nbins=20, kbt=1.0):
         """
@@ -150,3 +150,12 @@ class PlaneFit :
 
         return distance
 
+class LineFit :
+    def __init__(self, points):
+        self.dots = points
+
+    def fit_line(self):
+        datamean = self.dots.mean(axis=0)
+        uu, dd, vv = np.linalg.svd(self.dots - datamean)
+
+        return vv[0] / np.sqrt(sum([x ** 2 for x in vv[0]]))

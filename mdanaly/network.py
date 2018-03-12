@@ -168,7 +168,7 @@ class NetworkDraw :
         colors = []
         with open(filein) as lines :
             for s in [ x for x in lines if "#" not in x ] :
-                colors.append(s.split()[-1])
+                colors += s.split()[-1]
 
         return colors
 

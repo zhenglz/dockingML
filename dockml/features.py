@@ -437,9 +437,9 @@ class BindingFeature:
         :return:
         """
 
-        # the Van der Waals interaction parameters
+        # the Van der Waals interaction parameters,
         # the format is: { "C" : [0.339, 0.359824]; "DU" : [0.339, 0.359] }
-        vdwParams = self.getVdWParams(self.atomtype)
+        vdwParams = self.getVdWParams()
         pdbfileLig = {}
         lines = open(inputfile)
         for s in lines :
@@ -454,8 +454,10 @@ class BindingFeature:
 
             pdbfilename = sorted(pdbfileLig.keys())[i]
 
+            # get atom information
             receptorXYZ, ligandXYZ, recatomDetailInfor, ligatomDetailInfor = \
                 self.getAtomInfor(pdbfilename, pdbfileLig[pdbfilename])
+
             alldistpairs = self.atomDistMatrix(receptorXYZ, ligandXYZ)
             # containing all the atom-atom distances data
 

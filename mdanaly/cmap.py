@@ -332,15 +332,14 @@ class ContactMap:
         atomndx = []
         for key in resList.keys() :
             with open(pdbfile) as lines :
-                atomndx += [ s.split()[1]
-                            for s in lines
-                            if len(s.split()) and
-                            s[:6].strip() in ["ATOM", "HETATM"] and
-                            s.split()[2] in atomType and
-                            s[21] in list(chain) and
-                            int(s[22:26].strip()) in resList[key] and
-                            s.split()[1] not in atomndx
-                            ]
+                atomndx +=     [ s.split()[1]
+                                 for s in lines
+                                 if len(s.split()) and
+                                 s[:6].strip() in ["ATOM", "HETATM"] and
+                                 s.split()[2] in atomType and
+                                 s[21] in list(chain) and
+                                 int(s[22:26].strip()) in resList[key] and
+                                 s.split()[1] not in atomndx ]
                 '''
                 for s in lines :
                     if "ATOM" in s or "HETATM" in s :
@@ -357,7 +356,7 @@ class ContactMap:
         input a pdb file return the atom crds in each residue
         in a dictionary format
         :param singleFramePDB:
-        :param atomList:
+        :param atomList: atom index in a residue
         :return:
         '''
         resCrds = []
@@ -454,7 +453,7 @@ class ContactMap:
             fij = N / sqrt(N_i * N_j)
             '''
             counts = len(list(filter(lambda x: x <= distcutoff, distances)))
-            return float(counts) / np.sqrt(float(len(distances)))
+            return float(counts) / math.sqrt(float(len(distances)))
         else :
             if switch:
                 dc = 2 * math.sqrt(distcutoff)

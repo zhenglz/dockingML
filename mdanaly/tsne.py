@@ -175,9 +175,9 @@ def arguments() :
     '''
     parser = argparse.ArgumentParser(description=d, formatter_class=RawTextHelpFormatter)
     
-    parser.add_argument("-dat", default="input.dat", type="str", 
+    parser.add_argument("-dat", default="input.dat", type=str,
                         help="Input dataset file name.")
-    parser.add_argument("-out", default="output.dat", type="str",
+    parser.add_argument("-out", default="output.dat", type=str,
                         help="Output transformed dataset.")
     parser.add_argument("-ndim", type=int, default=2, 
                         help="Number of dimensions for output. ")
@@ -199,7 +199,7 @@ def main() :
     
     X = np.loadtxt(args.dat, comments=["@","#"])
     
-    Y = tsne.tsne(X, 2, X.shape[1], 20.0)
+    Y = tsne.tsne(X, args.ndim, X.shape[1], 20.0)
     
     np.savetxt(args.out, Y, fmt="%8.3f", delimiter=" ")
 

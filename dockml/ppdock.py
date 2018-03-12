@@ -6,6 +6,7 @@ from dockml import pdbIO
 from dockml import algorithms
 import sys, os
 import argparse
+import numpy as np
 from argparse import RawTextHelpFormatter
 
 class DockSurfRes :
@@ -46,7 +47,7 @@ class DockSurfRes :
             lines = [ x for x in lines
                       if ("ATOM" in x and
                           x[21] in chain and
-                          x.strip()[2] in atoms
+                          x.split()[2] in atoms
                           )
                       ]
 
@@ -58,7 +59,6 @@ class DockSurfRes :
                 distances.append(pfit.point_distance(params=plane, point=p))
 
         return list(zip(distances, lines))
-
 
 def main() :
 
@@ -92,11 +92,15 @@ def main() :
     else :
         reslist = [ int(x) for x in args.surf_res ]
 
+    print(reslist)
+
     ppdock = DockSurfRes()
     key_points = ppdock.surfaceRes(reslist, args.pdb)
+    print(key_points)
 
     pfit = algorithms.PlaneFit()
     plane = pfit.fitPlane(key_points)
+    print(plane)
 
     dist_lines = ppdock.distanceToPlane(args.pdb, plane)
 
@@ -104,11 +108,14 @@ def main() :
     nonr = open(args.out,  'w')
 
     for e in dist_lines :
-        if (args.dist_cutoff < 0 and e[0] < args.dist_cutoff) or  (args.dist_cutoff > 0 and e[0] > args.dist_cutoff):
+        d = e[0].tolist()[0][0]
+        print(d)
+
+        if (args.dist_cutoff < 0 and d < args.dist_cutoff) or (args.dist_cutoff > 0 and d > args.dist_cutoff):
             opdb.write(e[1])
             nonr.write("%s \n"%(e[1][22:26].strip()))
 
     opdb.close()
     nonr.close()
 
-    print("Prepare Zdock file completed. !")
+    print("Prepare Zdock file completed!")
