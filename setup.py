@@ -14,11 +14,11 @@ def readme():
 setup(name='dockingML',
       version='1.0',
       long_description=readme(),
-      description='Docking and Machine Learning for virtual screening',
+      description='Molecular dynamics analysis, Docking and Machine Learning for Computer Aid Drug discovery',
       url='https://github.com/zhenglz/dockingML',
       author='zhenglz',
       author_email='zhenglz@outlook.com',
-      license='NA',
+      license='GPL-3.0',
       packages=['dockml', 'mdanaly', 'automd'],
       install_requires=[
           'numpy',
