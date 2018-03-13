@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os, sys
-from .gentop import GenerateTop
+from automd import gentop
 import numpy as np
 from collections import defaultdict
 import math
@@ -96,7 +96,7 @@ class SummaryPDB :
         '''
         pdb = inputMol
         if inputMol.split(".")[-1] not in ['pdb', 'pdbqt'] :
-            gpdb = GenerateTop()
+            gpdb = gentop.GenerateTop()
             gpdb.runObabel(obabelexe, inputMol, inputMol+".pdb")
             pdb = inputMol + ".pdb"
         coordinates = []

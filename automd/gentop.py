@@ -3,19 +3,20 @@
 import sys, os
 from datetime import time
 import subprocess as sp
-from .sumpdb import SummaryPDB
+from automd.sumpdb import SummaryPDB
 import argparse
 from argparse import RawDescriptionHelpFormatter, RawTextHelpFormatter
 
 class GenerateTop :
     def __init__(self):
         PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
-        self.antechamber = PROJECT_ROOT + "/data/sample_antechamber.sh"
+        self.antechamber = PROJECT_ROOT + "/../data/sample_antechamber.sh"
 
     def gmxTopBuilder(self, PDBFile, outputName, frcmodFile=None,
-                      prepfile=None, ionName=[''], ionNum=[0],
+                      prepFile=None, ionName=[''], ionNum=[0],
                       solveBox=None, boxEdge=12,
-                      FField=["AMBER99SB", ], verbose=True):
+                      FField=["AMBER99SB", ], ACPYPE="acpype",
+                      verbose=True):
         '''
         provide a coordination file, output a amber and gromacs topology file.
 
@@ -37,66 +38,72 @@ class GenerateTop :
 
         # check AMBERHOME PATH
         AMBERHOME = sp.check_output("echo $AMBERHOME", shell=True)
-        AMBERHOME = AMBERHOME[:-1] + "/"
+        #AMBERHOME = AMBERHOME[:-1] + "/"
         if verbose :
-            print("Here is amber home path: " + AMBERHOME + " \n\n")
+            print("Here is amber home path:")
+            print(AMBERHOME)
+
+        AMBERHOME = "/app/amber16"
 
         # multiple FF supoorted here
-        leapin = open("leapIn.in", 'w')
+        leapin = open("leapIn.in", 'wb')
         for ff in FField:
             # create tleap input file
             if "gaff" in ff:
-                leapin.write("source leaprc.gaff \n")
+                leapin.write("source leaprc.gaff \n".encode())
             elif "ildn" in ff or "ILDN" in ff:
-                leapin.write("source oldff/leaprc.ff99SBildn  \n")
-            elif ff == "AMBER99SB" or "amber99sb" == ff:
-                leapin.write("source oldff/leaprc.ff99SB  \n")
+                leapin.write("source oldff/leaprc.ff99SBildn  \n".encode())
+            elif ff == "AMBER99SB" or "amber99sb" == ff or "99sb" in ff.lower() :
+                leapin.write("source oldff/leaprc.ff99SB  \n".encode())
             elif ff == "AMBER14SB" or "14" in ff:
-                leapin.write("source leaprc.ff14SB  \n")
+                leapin.write("source leaprc.ff14SB  \n".encode())
             elif "leaprc." in ff:
-                leapin.write("source %s  \n" % ff)
+                leapin.write(("source %s  \n" % ff).encode())
             else:
                 print( "Load Force Field File Error! \nExit Now!")
                 sys.exit(1)
 
         # load amber frcmod and prep files
         if frcmodFile :
-            leapin.write("loadamberparams  " + frcmodFile + "  \n")
-        if prepfile :
-            leapin.write("loadamberprep " + prepfile + "  \n")
+            leapin.write(("loadamberparams  " + frcmodFile + "  \n").encode())
+        if prepFile :
+            leapin.write(("loadamberprep " + prepFile + "  \n").encode())
 
-        # prepare PDB file and load it
-        if ".pdb" in PDBFile:
-            leapin.write("pdb = loadPDB  " + PDBFile + "  \n")
-        elif ".mol2" in PDBFile :
-            # convert the mol2 file to pdb file using obabel
-            job = sp.Popen("obabel %s -O %s"%(PDBFile, PDBFile[:-4]+"pdb"), shell=True)
-            job.communicate()
-            leapin.write("pdb = loadpdb " + PDBFile[:-4]+"pdb" + "  \n")
-        elif len(PDBFile) >= 2:
-            leapin.write("pdb = sequence{ ")
-            for item in PDBFile:
-                leapin.write(item + " ")
-            leapin.write(" } \n")
-        else:
-            print( "Loading PDB file or Sequence file error!")
-            sys.exit(1)
+        if frcmodFile and prepFile :
+            leapin.write("pdb = LIG \n".encode())
+        else :
+            # prepare PDB file and load it
+            if ".pdb" in PDBFile:
+                leapin.write(("pdb = loadPDB  " + PDBFile + "  \n").encode())
+            elif ".mol2" in PDBFile :
+                # convert the mol2 file to pdb file using obabel
+                job = sp.Popen("obabel %s -O %s"%(PDBFile, PDBFile[:-4]+"pdb"), shell=True)
+                job.communicate()
+                leapin.write(("pdb = loadpdb " + PDBFile[:-4]+"pdb" + "  \n").encode())
+            elif len(PDBFile) >= 2 and ".pdb" not in PDBFile[0] :
+                leapin.write("pdb = sequence{ ".encode())
+                for item in PDBFile:
+                    leapin.write((item + " ").encode())
+                leapin.write(" } \n".encode())
+            else:
+                print( "Loading PDB file or Sequence file error!")
+                sys.exit(1)
 
         # save a amber off file of the molecule
-        leapin.write("saveoff pdb %s.lib \n" % outputName)
+        leapin.write(("saveoff pdb %s.lib \n" % outputName).encode())
 
         # add counter ions and solvate solute into water box
-        if ionNum[0] > 0 and ionName[0] != "X+":
+        if ionName and ionNum and ionNum[0] > 0 and ionName[0] != "X+":
             if len(ionNum) == len(ionName):
                 for i in range(len(ionNum)):
-                    leapin.write("addions2 pdb %s %d \n" % (ionName[i], ionNum[i]))
+                    leapin.write(("addions2 pdb %s %d \n" % (ionName[i], ionNum[i])).encode())
             else:
                 print( "\nAdd ions not successful!\n")
         else:
             "\nNot adding any ions!\n"
         if solveBox :
             if boxEdge :
-                leapin.write("solvatebox pdb %s %f \n" % (solveBox, boxEdge))
+                leapin.write(("solvatebox pdb %s %f \n" % (solveBox, boxEdge)).encode())
             else:
                 print( "\nBOX size not correctly set.\nExit Now!\n")
                 sys.exit(1)
@@ -104,11 +111,11 @@ class GenerateTop :
             print( "\nNot setting simulation box!\n")
 
         # check object
-        leapin.write("check pdb \n")
-        leapin.write("savepdb pdb %s  \n" % (outputName + ".pdb"))
-        leapin.write("saveoff pdb %s  \n"%(outputName+".lib"))
-        leapin.write("saveamberparm pdb %s.prmtop %s.prmcrd \n" % (outputName, outputName))
-        leapin.write("quit \n")
+        leapin.write("check pdb \n".encode())
+        leapin.write(("savepdb pdb %s  \n" % (outputName + ".pdb")).encode())
+        leapin.write(("saveoff pdb %s  \n"%(outputName+".lib")).encode())
+        leapin.write(("saveamberparm pdb %s.prmtop %s.prmcrd \n" % (outputName, outputName)).encode())
+        leapin.write("quit \n".encode())
         leapin.close()
 
         if verbose :
@@ -117,14 +124,22 @@ class GenerateTop :
         # run tleap
         out = sp.check_output("%s/bin/tleap -f leapIn.in  \n" % AMBERHOME, shell=True)
         if verbose :
-            print(out)
+            print(out.decode())
 
         # convert AMBER format to GMX format
-        time.sleep(2)
-        out = sp.check_output("Amb2gmx.pl --prmtop %s.prmtop --crd %s.prmcrd --outname gmx_%s " \
-                              % (outputName, outputName, outputName), shell=True)
+        #time.sleep(2)
+        if len(ACPYPE) :
+            try :
+                out = sp.check_output("%s -b %s -x %s.prmcrd -p %s.prmtop "
+                                      %(ACPYPE, outputName, outputName, outputName)
+                                      )
+            except :
+                "Converting AMBER files to GMX failed! "
+        else :
+            out = sp.check_output("Amb2gmx.pl --prmtop %s.prmtop --crd %s.prmcrd --outname gmx_%s " \
+                                  % (outputName, outputName, outputName), shell=True)
         if verbose :
-            print(out + "\n\nGMX and Amber topologies created!")
+            print(out.decode() + "\n\nGMX and Amber topologies created!")
 
         return 1
 
@@ -240,7 +255,7 @@ class GenerateTop :
             print("ITP file for %s generated! " % outputName)
         return(1)
 
-    def runAntechamber(self, infile, netCharge):
+    def runAntechamber(self, infile, netCharge=None):
         '''
         run antechamber to generate RESP am1/bcc atomic charges
         :param netcharge: input, number of netcharges of the molecule

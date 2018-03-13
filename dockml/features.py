@@ -116,8 +116,8 @@ class BindingFeature:
         '''
         calculate the distances of all the atom pairs
         receptorXYZ and ligandXYZ are dictionaries containing atom coordinates
-        :param receptorXYZ: list 2D, a list of coordinates of atoms
-        :param ligandXYZ: list 2D, a list of coordinates of atoms
+        :param receptorXYZ: list 2D, dimension N*3, a list of coordinates of atoms
+        :param ligandXYZ: list 2D, dimension N*3, a list of coordinates of atoms
         :return:
         '''
         allDistances = {}

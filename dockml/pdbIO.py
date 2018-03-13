@@ -10,12 +10,13 @@ class rewritePDB :
     """
     Modify pdb file by changing atom indexing, resname, res sequence number and chain id
     """
-    def __init__(self, filename):
-        self.pdb = filename
+    def __init__(self, inpdb):
+        self.pdb = inpdb
 
-    def pdbRewrite(self, output, chain, atomStartNdx, resStartNdx):
+    def pdbRewrite(self, input, output, chain, atomStartNdx, resStartNdx):
         """
         change atom id, residue id and chain id
+        :param input: str, input pdb file
         :param output: str, output file name
         :param chain: str, chain id
         :param atomStartNdx: int,
@@ -30,7 +31,7 @@ class rewritePDB :
         resseq_list = []
 
         try :
-            with open(self.pdb) as lines :
+            with open(input) as lines :
                 for s in lines :
                     if "ATOM" in s and len(s.split()) > 6 :
                         atomseq += 1
@@ -85,6 +86,41 @@ class rewritePDB :
 
         with open(output, "wb") as tofile :
             tmp = map(lambda x: tofile.write(x), lines)
+
+        return 1
+
+    def swampPDB(self, input, atomseq_pdb, out_pdb, chain="B"):
+        """
+        given a pdb file (with coordinates in a protein pocket), but with wrong atom
+        sequence order, try to re-order the pdb for amber topology building
+
+        :param input, str, the pdb file with the correct coordinates
+        :param atomseq_pdb: str, the pdb file with correct atom sequences
+        :param out_pdb: str, output pdb file name
+        :param chain:
+        :return:
+        """
+
+        tofile = open("temp.pdb", 'wb')
+
+        crd_list ={}
+
+        # generate a dict { atomname: pdbline}
+        with open(input) as lines :
+            for s in [x for x in lines if "ATOM" in x ] :
+                crd_list[s.split()[2]] = s
+
+        # reorder the crd_pdb pdblines, acording to the atomseq_pdb lines
+        with open(atomseq_pdb) as lines :
+            for s in [x for x in lines if "ATOM" in x ] :
+                tofile.write(crd_list[s.split()[2]])
+
+        tofile.close()
+
+        # re-sequence the atom index
+        self.pdbRewrite(input="temp.pdb", atomStartNdx=1, chain=chain, output=out_pdb, resStartNdx=1)
+
+        os.remove("temp.pdb")
 
         return 1
 
@@ -505,4 +541,4 @@ if __name__ == "__main__" :
 
     pdbr = rewritePDB(pdbin)
 
-    pdbr.pdbRewrite("new_"+pdbin, ' ', 1, 683)
+    pdbr.pdbRewrite( pdbin, "new_"+pdbin, ' ', 1, 683)

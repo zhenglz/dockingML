@@ -1,7 +1,7 @@
 
-from dockingML import extract
+from mdanaly import extract
 import subprocess as sp
-from .gentop import GenerateTop
+from automd import gentop
 
 class CleanPDB :
     '''
@@ -11,7 +11,7 @@ class CleanPDB :
         self.pdb = filename
         # the input file is not a pdb, or pdbqt file, use obabel convert it
         if filename.split(".")[-1] not in ["pdb","pdbqt"] :
-            gpdb = GenerateTop()
+            gpdb = gentop.GenerateTop()
             gpdb.runObabel(obabelexe=obabel, input=filename, output=filename+".pdb")
             self.pdb = filename+".pdb"
 

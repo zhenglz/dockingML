@@ -152,10 +152,16 @@ class PlaneFit :
 
 class LineFit :
     def __init__(self, points):
-        self.dots = points
+        self.points = points
 
     def fit_line(self):
-        datamean = self.dots.mean(axis=0)
-        uu, dd, vv = np.linalg.svd(self.dots - datamean)
+        """
+        given a list of atoms (with xyz coordinate)
+        return their normalized fitting line vector
+
+        :return:
+        """
+        datamean = self.points.mean(axis=0)
+        uu, dd, vv = np.linalg.svd(self.points - datamean)
 
         return vv[0] / np.sqrt(sum([x ** 2 for x in vv[0]]))

@@ -175,6 +175,60 @@ class simulationModeller :
                         tofile.write(s)
         tofile.close()
 
+class shiftDNA :
+
+    def __init__(self, inputpdb):
+
+        self.pdb = inputpdb
+
+    def shiftDNA(self,dt=10.0, out = "output.pdb"):
+        """
+        shift DNA along its helical axis
+        using all atoms in the DNA, and calculate the fitting line of the atoms
+        then get the vector of the fitting line, and then shift the DNA along
+        the vector with movement step size
+
+        :param dt: float, could be negative, unit Angstrom, step size of the movement
+        :param out: str, output pdb file name
+        :return:
+        """
+        import os, sys
+        from dockml import pdbIO
+        from dockml import algorithms
+        import numpy as np
+        #from dockml import shiftpdb
+
+        if not os.path.exists(self.pdb):
+            sys.exit(0)
+
+        with open(self.pdb) as lines:
+            lines = [x for x in lines if "ATOM" in x]
+
+            crd = pdbIO.coordinatesPDB()
+
+            p_crds = crd.getAtomCrdFromLines(lines)
+
+        # calculate the vector of the DNA helix axis
+        algo = algorithms.LineFit(np.array(p_crds))
+        vectors = algo.fit_line()
+
+        vectors = vectors * dt
+
+        tofiles = open(out, 'w')
+        shift = shiftPDB(self.pdb)
+
+        with open(self.pdb) as lines:
+            for atom in lines:
+                if "ATOM" in atom:
+                    newline = shift.xyzChanger(atom, vectors)
+                    tofiles.write(newline)
+                else:
+                    tofiles.write(atom)
+
+        tofiles.close()
+
+        return 1
+
 if __name__ == "__main__" :
 
     os.chdir(os.getcwd())
