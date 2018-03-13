@@ -2,18 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dockml/classification.py" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dockml/bulit_ternary1.pdb" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/automd/autoMD.py" afterPath="$PROJECT_DIR$/automd/autoMD.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/automd/cleanpdb.py" afterPath="$PROJECT_DIR$/automd/cleanpdb.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/automd/gentop.py" afterPath="$PROJECT_DIR$/automd/gentop.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/automd/sumpdb.py" afterPath="$PROJECT_DIR$/automd/sumpdb.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/automd/test.py" afterPath="$PROJECT_DIR$/automd/test.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockml/algorithms.py" afterPath="$PROJECT_DIR$/dockml/algorithms.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockml/features.py" afterPath="$PROJECT_DIR$/dockml/features.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockml/pdbIO.py" afterPath="$PROJECT_DIR$/dockml/pdbIO.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockml/shiftpdb.py" afterPath="$PROJECT_DIR$/dockml/shiftpdb.py" />
     </list>
     <ignored path="dockingML.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -641,12 +630,18 @@
       <option name="project" value="LOCAL" />
       <updated>1515490804498</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="from mars">
+      <created>1520959290988</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1520959290988</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1600" height="837" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.201875" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
