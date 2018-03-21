@@ -101,21 +101,29 @@ class rewritePDB :
         :return:
         """
 
-        tofile = open("temp.pdb", 'wb')
+        tofile = open("temp.pdb", 'w')
 
         crd_list ={}
 
+        ln_target, ln_source = 0, 0
         # generate a dict { atomname: pdbline}
         with open(input) as lines :
             for s in [x for x in lines if "ATOM" in x ] :
                 crd_list[s.split()[2]] = s
+                ln_source += 1
 
         # reorder the crd_pdb pdblines, acording to the atomseq_pdb lines
         with open(atomseq_pdb) as lines :
             for s in [x for x in lines if "ATOM" in x ] :
-                tofile.write(crd_list[s.split()[2]])
+                newline = crd_list[s.split()[2]]
+                tofile.write(newline)
+                ln_target += 1
 
         tofile.close()
+
+        if ln_source != ln_target :
+            pwd = os.getcwd()
+            print("Error: Number of lines in source and target pdb files are not equal. (%s)"%(pwd))
 
         # re-sequence the atom index
         self.pdbRewrite(input="temp.pdb", atomStartNdx=1, chain=chain, output=out_pdb, resStartNdx=1)
@@ -294,7 +302,7 @@ class parsePDB :
           # elements in atom infor
           # key: str, atom index
           # value: [atomname, molecule type, is_hydrogen,  resname, resndx, chainid,(mainchian, sidechain,
-          #           sugar ring, phosphate group, base ring)]
+          #           sugar ring, phosphate group, base ring), element]
           :param pdbin:
           :return: a dictionary of list, key is atom ndx
         """
@@ -327,6 +335,12 @@ class parsePDB :
                             element = s[77]
                         else:
                             element = s[13]
+
+                        if s[13] == "B" :
+                            element = "Br"
+                        if "Cl" in s.split()[1] or "CL" in s.split()[1] :
+                            element = "Cl"
+
                     else:
                         element = s[13]
 

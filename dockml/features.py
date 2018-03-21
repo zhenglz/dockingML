@@ -526,6 +526,25 @@ class BindingFeature:
 
         return 1
 
+class LigandFingerPrints(BindingFeature) :
+
+    def elementCount(self, ligand):
+        from dockml import pdbIO
+
+        elements = self.getVdWParams().keys()
+        atominfor = pdbIO.parsePDB(ligand).atomInformation(ligand)
+
+        elem_count = dict(zip(elements, np.zeros(len(elements))))
+
+        for atom in atominfor.keys() :
+
+            if atominfor[atom][7] not in elements :
+                elem_count["DU"] += 1
+            else :
+                elem_count[atominfor[atom][7]] += 1
+
+        return elem_count
+
 def main() :
     d = '''
     Extract the binding features between receptor and ligand
