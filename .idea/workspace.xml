@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/automd/gmxtop.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockml/features.py" afterPath="$PROJECT_DIR$/dockml/features.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/automd/gentop.py" afterPath="$PROJECT_DIR$/automd/gentop.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockml/pdbIO.py" afterPath="$PROJECT_DIR$/dockml/pdbIO.py" />
     </list>
     <ignored path="dockingML.iws" />
@@ -23,29 +24,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="run_energymin.py" pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/PRLBD/dockingML/DUDE/active/ener_min/run_energymin.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1360">
-              <caret line="84" column="24" lean-forward="false" selection-start-line="84" selection-start-column="24" selection-end-line="84" selection-end-column="24" />
-              <folding>
-                <element signature="e#23#45#0" expanded="true" />
-                <marker date="1521078942410" expanded="true" signature="173:2722" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="classification.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dockml/classification.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="sumpdb.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/automd/sumpdb.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -63,24 +41,44 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="run_energymin.py" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/PRLBD/dockingML/DUDE/active/mini/run_energymin.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1445">
+              <caret line="89" column="14" lean-forward="false" selection-start-line="89" selection-start-column="14" selection-end-line="89" selection-end-column="14" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="cmap.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bin/cmap.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="51">
+              <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="gmxtop.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/automd/gmxtop.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="34">
+              <caret line="2" column="0" lean-forward="true" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#16#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="cmap.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mdanaly/cmap.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="17731">
               <caret line="1055" column="12" lean-forward="false" selection-start-line="1055" selection-start-column="12" selection-end-line="1055" selection-end-column="55" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="cleanpdb.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/automd/cleanpdb.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="12" column="39" lean-forward="false" selection-start-line="12" selection-start-column="39" selection-end-line="12" selection-end-column="39" />
-              <folding>
-                <element signature="e#1#28#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -100,8 +98,8 @@
       <file leaf-file-name="gentop.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/automd/gentop.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2057">
-              <caret line="126" column="29" lean-forward="false" selection-start-line="126" selection-start-column="29" selection-end-line="126" selection-end-column="29" />
+            <state relative-caret-position="4454">
+              <caret line="267" column="8" lean-forward="false" selection-start-line="267" selection-start-column="8" selection-end-line="267" selection-end-column="8" />
               <folding>
                 <element signature="e#25#39#0" expanded="true" />
               </folding>
@@ -109,21 +107,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pdbIO.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="pdbIO.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dockml/pdbIO.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="105" column="20" lean-forward="false" selection-start-line="105" selection-start-column="20" selection-end-line="105" selection-end-column="20" />
+            <state relative-caret-position="1054">
+              <caret line="119" column="30" lean-forward="false" selection-start-line="119" selection-start-column="30" selection-end-line="119" selection-end-column="30" />
               <folding>
                 <element signature="e#392#2030#0" expanded="false" />
                 <element signature="e#2808#3050#0" expanded="false" />
-                <element signature="e#4544#13866#0" expanded="false" />
-                <element signature="e#9690#12293#0" expanded="false" />
-                <element signature="e#12349#12786#0" expanded="false" />
-                <element signature="e#12839#13369#0" expanded="false" />
-                <element signature="e#13436#13866#0" expanded="false" />
-                <element signature="e#13890#16219#0" expanded="false" />
-                <element signature="e#16248#18132#0" expanded="false" />
+                <element signature="e#4563#13885#0" expanded="false" />
+                <element signature="e#9709#12312#0" expanded="false" />
+                <element signature="e#12368#12805#0" expanded="false" />
+                <element signature="e#12858#13388#0" expanded="false" />
+                <element signature="e#13455#13885#0" expanded="false" />
+                <element signature="e#13909#16238#0" expanded="false" />
+                <element signature="e#16267#18151#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -132,7 +130,7 @@
       <file leaf-file-name="features.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dockml/features.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="542">
+            <state relative-caret-position="9095">
               <caret line="540" column="39" lean-forward="false" selection-start-line="540" selection-start-column="39" selection-end-line="540" selection-end-column="39" />
               <folding />
             </state>
@@ -143,7 +141,7 @@
         <entry file="file://$PROJECT_DIR$/data/AtomType.dat">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="85">
-              <caret line="5" column="1" lean-forward="true" selection-start-line="5" selection-start-column="1" selection-end-line="5" selection-end-column="1" />
+              <caret line="5" column="1" lean-forward="false" selection-start-line="5" selection-start-column="1" selection-end-line="5" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -181,8 +179,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/autoMD/runmd.py" />
-        <option value="$PROJECT_DIR$/MDAnalysis/matrix.py" />
         <option value="$PROJECT_DIR$/bin/matrix" />
         <option value="$PROJECT_DIR$/bin/matrix.py" />
         <option value="$PROJECT_DIR$/bin/plot.py" />
@@ -228,18 +224,19 @@
         <option value="$PROJECT_DIR$/automd/sumpdb.py" />
         <option value="$PROJECT_DIR$/automd/cleanpdb.py" />
         <option value="$PROJECT_DIR$/dockml/classification.py" />
-        <option value="$USER_HOME$/PRLBD/dockingML/DUDE/active/ener_min/run_energymin.py" />
-        <option value="$PROJECT_DIR$/automd/gentop.py" />
         <option value="$PROJECT_DIR$/dockml/features.py" />
         <option value="$PROJECT_DIR$/dockml/pdbIO.py" />
+        <option value="$USER_HOME$/PRLBD/dockingML/DUDE/active/ener_min/run_energymin.py" />
+        <option value="$USER_HOME$/PRLBD/dockingML/DUDE/active/mini/run_energymin.py" />
+        <option value="$PROJECT_DIR$/automd/gentop.py" />
+        <option value="$PROJECT_DIR$/automd/gmxtop.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="8" />
-    <option name="y" value="30" />
+    <option name="y" value="22" />
     <option name="width" value="1600" />
-    <option name="height" value="837" />
+    <option name="height" value="838" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -256,8 +253,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -297,7 +294,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$USER_HOME$/PRLBD/dockingML/DUDE/active/ener_min/run_energymin.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../common" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -651,19 +648,19 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="8" y="30" width="1600" height="837" extended-state="0" />
+    <frame x="0" y="22" width="1600" height="838" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.201875" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18284424" sideWeight="0.57109374" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17060368" sideWeight="0.78375" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24409449" sideWeight="0.42890626" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24377458" sideWeight="0.42890626" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17060368" sideWeight="0.78375" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -698,20 +695,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/.PyCharmCE2017.2/system/python_stubs/913087099/scipy/spatial/qhull.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="173">
-          <caret line="271" column="20" lean-forward="true" selection-start-line="271" selection-start-column="20" selection-end-line="271" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dockml/mlearn.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="29" column="17" lean-forward="false" selection-start-line="29" selection-start-column="17" selection-end-line="29" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/setup.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="578">
@@ -880,13 +863,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bin/cmap.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="12" lean-forward="false" selection-start-line="5" selection-start-column="12" selection-end-line="5" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dockml/fixpdb.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
@@ -985,21 +961,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/automd/sumpdb.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="19" lean-forward="false" selection-start-line="3" selection-start-column="19" selection-end-line="3" selection-end-column="19" />
-          <folding>
-            <element signature="e#765#3198#0" expanded="false" />
-            <element signature="e#5205#7390#0" expanded="false" />
-            <element signature="e#7445#11249#0" expanded="false" />
-            <element signature="e#11346#14722#0" expanded="false" />
-            <element signature="e#14806#15542#0" expanded="false" />
-            <element signature="e#15635#17341#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/automd/cleanpdb.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -1020,27 +981,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/PRLBD/dockingML/DUDE/active/ener_min/run_energymin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1360">
-          <caret line="84" column="24" lean-forward="false" selection-start-line="84" selection-start-column="24" selection-end-line="84" selection-end-column="24" />
-          <folding>
-            <element signature="e#23#45#0" expanded="true" />
-            <marker date="1521078942410" expanded="true" signature="173:2722" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/automd/gentop.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2057">
-          <caret line="126" column="29" lean-forward="false" selection-start-line="126" selection-start-column="29" selection-end-line="126" selection-end-column="29" />
-          <folding>
-            <element signature="e#25#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/cmap.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17731">
@@ -1049,25 +989,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dockml/classification.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/data/AtomType.dat">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
-          <caret line="5" column="1" lean-forward="true" selection-start-line="5" selection-start-column="1" selection-end-line="5" selection-end-column="1" />
+          <caret line="5" column="1" lean-forward="false" selection-start-line="5" selection-start-column="1" selection-end-line="5" selection-end-column="1" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/dockml/features.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="542">
+        <state relative-caret-position="9095">
           <caret line="540" column="39" lean-forward="false" selection-start-line="540" selection-start-column="39" selection-end-line="540" selection-end-column="39" />
           <folding />
         </state>
@@ -1075,18 +1007,83 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/dockml/pdbIO.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="105" column="20" lean-forward="false" selection-start-line="105" selection-start-column="20" selection-end-line="105" selection-end-column="20" />
+        <state relative-caret-position="1054">
+          <caret line="119" column="30" lean-forward="false" selection-start-line="119" selection-start-column="30" selection-end-line="119" selection-end-column="30" />
           <folding>
             <element signature="e#392#2030#0" expanded="false" />
             <element signature="e#2808#3050#0" expanded="false" />
-            <element signature="e#4544#13866#0" expanded="false" />
-            <element signature="e#9690#12293#0" expanded="false" />
-            <element signature="e#12349#12786#0" expanded="false" />
-            <element signature="e#12839#13369#0" expanded="false" />
-            <element signature="e#13436#13866#0" expanded="false" />
-            <element signature="e#13890#16219#0" expanded="false" />
-            <element signature="e#16248#18132#0" expanded="false" />
+            <element signature="e#4563#13885#0" expanded="false" />
+            <element signature="e#9709#12312#0" expanded="false" />
+            <element signature="e#12368#12805#0" expanded="false" />
+            <element signature="e#12858#13388#0" expanded="false" />
+            <element signature="e#13455#13885#0" expanded="false" />
+            <element signature="e#13909#16238#0" expanded="false" />
+            <element signature="e#16267#18151#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/PRLBD/dockingML/DUDE/active/ener_min/run_energymin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="675">
+          <caret line="86" column="24" lean-forward="false" selection-start-line="86" selection-start-column="24" selection-end-line="86" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dockml/classification.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/automd/sumpdb.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="19" lean-forward="false" selection-start-line="3" selection-start-column="19" selection-end-line="3" selection-end-column="19" />
+          <folding>
+            <element signature="e#765#3198#0" expanded="false" />
+            <element signature="e#5205#7390#0" expanded="false" />
+            <element signature="e#7445#11249#0" expanded="false" />
+            <element signature="e#11346#14722#0" expanded="false" />
+            <element signature="e#14806#15542#0" expanded="false" />
+            <element signature="e#15635#17341#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/automd/gentop.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4454">
+          <caret line="267" column="8" lean-forward="false" selection-start-line="267" selection-start-column="8" selection-end-line="267" selection-end-column="8" />
+          <folding>
+            <element signature="e#25#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/PRLBD/dockingML/DUDE/active/mini/run_energymin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1445">
+          <caret line="89" column="14" lean-forward="false" selection-start-line="89" selection-start-column="14" selection-end-line="89" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bin/cmap.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/automd/gmxtop.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="0" lean-forward="true" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
           </folding>
         </state>
       </provider>

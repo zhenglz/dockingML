@@ -122,8 +122,8 @@ class rewritePDB :
         tofile.close()
 
         if ln_source != ln_target :
-            pwd = os.getcwd()
-            print("Error: Number of lines in source and target pdb files are not equal. (%s)"%(pwd))
+            #pwd = os.getcwd()
+            print("Error: Number of lines in source and target pdb files are not equal. (%s %s)"%(input, atomseq_pdb))
 
         # re-sequence the atom index
         self.pdbRewrite(input="temp.pdb", atomStartNdx=1, chain=chain, output=out_pdb, resStartNdx=1)

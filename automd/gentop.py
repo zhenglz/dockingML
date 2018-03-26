@@ -122,9 +122,14 @@ class GenerateTop :
             print("Generating a leap input file for tleap topology processing.")
 
         # run tleap
-        out = sp.check_output("%s/bin/tleap -f leapIn.in  \n" % AMBERHOME, shell=True)
-        if verbose :
-            print(out.decode())
+        try :
+            out = sp.check_output("%s/bin/tleap -f leapIn.in  \n" % AMBERHOME, shell=True)
+
+            if verbose:
+                print(out.decode())
+
+        except :
+            print("tleap loading failed!")
 
         # convert AMBER format to GMX format
         #time.sleep(2)
@@ -134,12 +139,17 @@ class GenerateTop :
                                       %(ACPYPE, outputName, outputName, outputName)
                                       )
             except :
-                "Converting AMBER files to GMX failed! "
+                "Converting AMBER files using ACPYPE to GMX failed! "
+
         else :
-            out = sp.check_output("Amb2gmx.pl --prmtop %s.prmtop --crd %s.prmcrd --outname gmx_%s " \
-                                  % (outputName, outputName, outputName), shell=True)
-        if verbose :
-            print(out.decode() + "\n\nGMX and Amber topologies created!")
+            try:
+                out = sp.check_output("Amb2gmx.pl --prmtop %s.prmtop --crd %s.prmcrd --outname gmx_%s " \
+                                      % (outputName, outputName, outputName), shell=True)
+                if verbose:
+                    print(out.decode() + "\n\nGMX and Amber topologies created!")
+
+            except :
+                print("Converting AMBER files using AMB2GMX to GMX failed!")
 
         return 1
 
