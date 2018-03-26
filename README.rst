@@ -8,8 +8,8 @@ Authors: Zheng L.Z. & Mu Y.G.
 Contact: lzheng002_AT_e.ntu.edu.sg
 
 * Docking and docking results parse (dockml)
-  Docking with GOLD
-  Post-processing the GOLD results
+ 1 Docking with GOLD
+ 2 Post-processing the GOLD results
   
 
 * Molecular Dynamics (autoMD & mdanaly)
@@ -53,15 +53,15 @@ Contact: lzheng002_AT_e.ntu.edu.sg
     the difference between plus and minus groups. Only limited number of
     features are chosen for ML training.
 
-    Step 1. From coordination files to obtain features.
+  1 From coordination files to obtain features.
         We prepare a input file, called "input.dat". The file contains two columns. First
         column is the filename of a complex file (receptor + ligand) in pdb file format.
         Second column is the ligand code, or residue name of the ligand involving the
         interactions.
-    Step 2. Feature clean and selection
+  2 Feature clean and selection
 
-    Step 3. Construct machine learning models
+  3 Construct machine learning models
 
-    Step 4. Rescoring large screening poses and select high potent ligands
+  4 Rescoring large screening poses and select high potent ligands
 
 
