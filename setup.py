@@ -27,10 +27,7 @@ setup(name='dockingML',
           'sklearn',
           'matplotlib',
           'networkx',
-          'modeller',
       ],
       include_package_data=True,
       zip_safe=False,
-
-      scripts=['bin/matrix.py'],
       )

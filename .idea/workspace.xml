@@ -6,6 +6,8 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/automd/gentop.py" afterPath="$PROJECT_DIR$/automd/gentop.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockml/pdbIO.py" afterPath="$PROJECT_DIR$/dockml/pdbIO.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/setup.py" afterPath="$PROJECT_DIR$/setup.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/test_gmxtop.py" afterPath="$PROJECT_DIR$/test/test_gmxtop.py" />
     </list>
     <ignored path="dockingML.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -61,7 +63,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="gmxtop.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="gmxtop.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/automd/gmxtop.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="34">
@@ -73,24 +75,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="cmap.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/mdanaly/cmap.py">
+      <file leaf-file-name="test_gmxtop.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/test_gmxtop.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17731">
-              <caret line="1055" column="12" lean-forward="false" selection-start-line="1055" selection-start-column="12" selection-end-line="1055" selection-end-column="55" />
-              <folding />
+            <state relative-caret-position="714">
+              <caret line="42" column="21" lean-forward="true" selection-start-line="42" selection-start-column="21" selection-end-line="42" selection-end-column="21" />
+              <folding>
+                <element signature="e#1#53#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="autoMD.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/automd/autoMD.py">
+      <file leaf-file-name="setup.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/setup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6919">
-              <caret line="415" column="12" lean-forward="false" selection-start-line="415" selection-start-column="12" selection-end-line="415" selection-end-column="12" />
-              <folding>
-                <element signature="e#47#56#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="425">
+              <caret line="31" column="21" lean-forward="false" selection-start-line="31" selection-start-column="21" selection-end-line="31" selection-end-column="21" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -179,7 +181,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/bin/matrix" />
         <option value="$PROJECT_DIR$/bin/matrix.py" />
         <option value="$PROJECT_DIR$/bin/plot.py" />
         <option value="$PROJECT_DIR$/dockml/extract.py" />
@@ -192,7 +193,6 @@
         <option value="$PROJECT_DIR$/dockml/mlearn.py" />
         <option value="$PROJECT_DIR$/bin/genfeatures.py" />
         <option value="$PROJECT_DIR$/dockml/__init__.py" />
-        <option value="$PROJECT_DIR$/setup.py" />
         <option value="$USER_HOME$/PRLBD/dockingML/docking_bindDB/test/test_features.py" />
         <option value="$PROJECT_DIR$/mdanaly/extract.py" />
         <option value="$PROJECT_DIR$/mdanaly/lipids.py" />
@@ -230,6 +230,8 @@
         <option value="$USER_HOME$/PRLBD/dockingML/DUDE/active/mini/run_energymin.py" />
         <option value="$PROJECT_DIR$/automd/gentop.py" />
         <option value="$PROJECT_DIR$/automd/gmxtop.py" />
+        <option value="$PROJECT_DIR$/test/test_gmxtop.py" />
+        <option value="$PROJECT_DIR$/setup.py" />
       </list>
     </option>
   </component>
@@ -265,27 +267,12 @@
             <path>
               <item name="dockingML" type="b2602c69:ProjectViewProjectNode" />
               <item name="dockingML" type="462c0819:PsiDirectoryNode" />
-              <item name="automd" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="dockingML" type="b2602c69:ProjectViewProjectNode" />
-              <item name="dockingML" type="462c0819:PsiDirectoryNode" />
-              <item name="bin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="dockingML" type="b2602c69:ProjectViewProjectNode" />
-              <item name="dockingML" type="462c0819:PsiDirectoryNode" />
               <item name="data" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="dockingML" type="b2602c69:ProjectViewProjectNode" />
               <item name="dockingML" type="462c0819:PsiDirectoryNode" />
-              <item name="dockml" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="dockingML" type="b2602c69:ProjectViewProjectNode" />
-              <item name="dockingML" type="462c0819:PsiDirectoryNode" />
-              <item name="mdanaly" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -695,20 +682,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/setup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="578">
-          <caret line="34" column="32" lean-forward="false" selection-start-line="34" selection-start-column="32" selection-end-line="34" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bin/lipids.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="14" lean-forward="false" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/lipids.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2601">
@@ -1085,6 +1058,24 @@
           <folding>
             <element signature="e#0#16#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/test_gmxtop.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="714">
+          <caret line="42" column="21" lean-forward="true" selection-start-line="42" selection-start-column="21" selection-end-line="42" selection-end-column="21" />
+          <folding>
+            <element signature="e#1#53#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="31" column="21" lean-forward="false" selection-start-line="31" selection-start-column="21" selection-end-line="31" selection-end-column="21" />
+          <folding />
         </state>
       </provider>
     </entry>
