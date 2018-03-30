@@ -268,7 +268,7 @@ class ContactMap:
         atomType = []
         keys = atominfor.keys()
         for key in keys :
-            if atominfor[key][-1] in elements and atominfor[key][0] not in atomType :
+            if atominfor[key][7] in elements and atominfor[key][0] not in atomType :
                 atomType.append(atominfor[key][0])
         return atomType
 
@@ -509,11 +509,11 @@ class ContactMap:
         for y in range(len(atomndx_2)) :
             atom2 = atomndx_2[y]
             infor2 = detailatomInfor[atom2]
-            if infor2[-1] in ['P','S', 'N','O'] :
+            if infor2[7] in ['P','S', 'N','O'] :
                 for x in range(len(atomndx_1)) :
                     atom1 = atomndx_1[x]
                     infor1 = detailatomInfor[atom1]
-                    if infor1[-1] in ['P','S', 'N','O'] :
+                    if infor1[7] in ['P','S', 'N','O'] :
                         crd1 = crds1[x]
                         crd2 = crds2[y]
                         if verbose :

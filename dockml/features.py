@@ -6,6 +6,181 @@ import argparse
 from argparse import RawTextHelpFormatter
 import sys, os
 import numpy as np
+import dockml.index as index
+import dockml.pdbIO as pio
+
+class GridBasedFeature :
+
+    def __init__(self, ligandPDB, receptorPDB, gridsize=1.0):
+        '''
+
+        :param gridsize: float, grid size, unit angstrom
+        '''
+
+        self.gridsize = gridsize
+        self.ligpdb   = ligandPDB
+        self.recpdb   = receptorPDB
+
+        bf = BindingFeature()
+        self.parm = bf.getVdWParams()
+
+        self.atominfor = pio.parsePDB().atomInformation(self.ligpdb)
+
+    def pocketFromRes(self, receptorPDB, reslist, chain='A'):
+        '''
+        get a list of residues' index, return their coordinates (angstrom)
+        :param receptorPDB:
+        :param reslist: list of int
+        :param chain:
+        :return:
+        '''
+
+        pndx = []
+        for res in reslist :
+            pndx+= index.PdbIndex().res_index(inpdb=self.recpdb,
+                                              chain=chain,
+                                              atomtype="non-hydrogen",
+                                              residueNdx=[res,],
+                                              atomList=[],
+                                              )
+
+        pocketResCoord = pio.coordinatesPDB().getAtomCrdByNdx(singleFramePDB=self.recpdb,
+                                                              atomNdx=pndx)
+        return pocketResCoord
+
+    def createCubicPocket(self, coordinates, extension=10.0):
+
+        coordinates = np.asarray(coordinates)
+
+        maxs = coordinates.max(axis=0) + extension
+        mins = coordinates.min(axis=0) - extension
+
+        return (maxs, mins)
+
+    def generateGrids(self, boundaries, gridfile="GRID", gridsize=1.0):
+
+        upbound, lowbound = boundaries[0], boundaries[1]
+
+        dims = upbound.shape[0]
+
+        grids = []
+        for d in dims :
+            ranges = [lowbound[d], upbound[d]]
+
+            d_grids = []
+            level = ranges[0]
+            while level < ranges[1] :
+                d_grids.append(level)
+                level = level + gridsize
+
+            d_grids.append(ranges[1])
+
+            grids.append(grids)
+
+        grid_nums = np.array(grids).shape
+
+        grid_table = []
+        for i in range(grid_nums[0] - 1 ) :
+            for j in range(grid_nums[1] - 1) :
+                for k in range(grid_nums[2] - 1) :
+                    the_grid = [
+                        grids[0][i], grids[0][i + 1],
+                        grids[1][j], grids[1][j + 1],
+                        grids[2][k], grids[2][k + 1],
+                    ]
+
+                    grid_table += the_grid
+
+        np.savetxt(gridfile, np.array(grid_table), delimiter=" ", fmt="8.3f")
+
+        return np.array(grid_table)
+
+    def ligCoords(self, chain="B", resndx=[1, ]):
+
+        ligndx = index.PdbIndex().res_index(inpdb=self.ligpdb, chain=chain, atomList=[],
+                                          atomtype='non-hydrogen', residueNdx=resndx)
+
+        return pio.coordinatesPDB().getAtomCrdByNdx(singleFramePDB=self.ligpdb, atomNdx=ligndx), ligndx
+
+    def atomGridBoxId(self, grid_table, atomcrd):
+
+        try :
+            num_bin = grid_table.shape[0]
+        except TypeError :
+            num_bin = np.asarray(grid_table).shape[0]
+
+        for num in range(num_bin) :
+            grid = grid_table[num]
+            if self.pointInGrid(atomcrd, grid) :
+                return num
+            else :
+                pass
+
+        return -1
+
+    def pointInGrid(self, point, grid):
+        '''
+        determine a point in a grid box or not
+        :param point: float, a list of 3 items
+        :param grid: float, a list of 6 items
+        :return: bool
+        '''
+
+        if point[0] > grid[0] and point[0] <= grid[1] \
+                and point[1] > grid[2] and point[1] <= grid[3] \
+                and point[2] > grid[4] and point[2] <= grid[5] :
+            return True
+        else :
+            pass
+
+        return False
+
+    def gridAtomMap(self, grid_table, ligndx, ligcoords):
+
+        gridMapper = defaultdict(list)
+
+        for i in range(grid_table.shape[0]) :
+            gridMapper[i] = []
+
+        for i in range(len(ligndx)) :
+            crd = ligcoords[i]
+            bin_id = self.atomGridBoxId(grid_table, atomcrd=crd)
+            if bin_id > 0 :
+                try :
+                    gridMapper[bin_id] += ligndx[i]
+                except KeyError :
+                    pass
+
+        return gridMapper
+
+    def gridBinProperty(self, gridMapper):
+
+        grid_features = []
+        grid_ids = sorted(gridMapper.keys())
+        for id in grid_ids :
+            # mass vdw_epsilon, vdw_sigma, charge, negativity
+            p = np.array([ 0.0, 0.0, 0.0, 0.0, 0])
+
+            atoms = gridMapper[id]
+            if len(atoms) :
+                for ndx in atoms :
+                    p += self.atomProperty(ndx)
+
+            grid_features.append(list(p))
+
+        return grid_features
+
+    def atomProperty(self, atomndx):
+
+        atom_parms = self.atominfor[atomndx]
+        [e, s] = self.parm[atom_parms[7]]
+
+        # mass vdw_epsilon, vdw_sigma, charge, negativity
+        p = np.array([0.0, 0.0, 0.0, 0.0, 0])
+
+        p[1], p[2] = e, s
+
+        return p
 
 class BindingFeature:
 
@@ -424,7 +599,7 @@ class BindingFeature:
                         vdwEnerCutoff=12.0,
                         colEnerCutoff=12.0,
                         dielec=4.0,
-
+                        feature_terms = [ True, True, True, True],
                         ) :
         """
         extract necessary short range interaction features
@@ -548,6 +723,9 @@ class LigandFingerPrints(BindingFeature) :
 def main() :
     d = '''
     Extract the binding features between receptor and ligand
+    
+    Usage: 
+    features.py -inp input.dat -out features.dat 
 
     format of the input file:
     ------------------ input --------------
@@ -568,6 +746,8 @@ def main() :
                         help="Counting of contacts by atom types. ")
     parser.add_argument("-vdwE", default=1, type=int,
                         help="Whether van del waals calculate energy per residue")
+    parser.add_argument("-columb", type=bool, default=True,
+                        help="Whether include columbic interactions. Default is True")
     parser.add_argument("-parm",default="AtomType.dat",type=str,
                         help="The parameters for VDW of each type of atoms.")
 
@@ -575,4 +755,4 @@ def main() :
 
     binding = BindingFeature()
 
-    binding.extractFeatures(args.inp, args.out)
+    binding.extractFeatures(args.inp, args.out, )

@@ -139,15 +139,19 @@ class parsePDB :
     def __init__(self, inPDB='1a28.pdb'):
         self.pdbin = inPDB
 
-        if os.path.exists("amino-acid.lib") :
-            self.prores = "amino-acid.lib"
-        else :
+        self.resSideChainAtoms = ['CZ2', 'OE2', 'OE1', 'OG1', 'CD1', 'CD2', 'CG2', 'NE', 'NZ', 'OD1',
+                                  'ND1', 'ND2', 'OD2', 'CB', 'CZ3', 'CG', 'CZ',
+                                  'NH1', 'CE', 'CE1', 'NH2', 'CG1', 'CD', 'OH', 'OG', 'SG', 'CH2',
+                                  'NE1', 'CE3', 'SD', 'NE2', 'CE2']
+        self.resMainChainAtoms = ['CA', 'N', 'C', 'O']
+
+        self.prores = "amino-acid.lib"
+        if not os.path.exists("amino-acid.lib") :
             PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
             self.prores = PROJECT_ROOT + '/../data/amino-acid.lib'
 
-        if os.path.exists("nucleic-acid.lib") :
-            self.nucleic = "nucleic-acid.lib"
-        else :
+        self.nucleic = "nucleic-acid.lib"
+        if not os.path.exists("nucleic-acid.lib") :
             PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
             self.nucleic = PROJECT_ROOT + '/../data/nucleic-acid.lib'
 
@@ -275,12 +279,10 @@ class parsePDB :
 
         if isProtein:
             subgroup = {}
-            for atom in ['CA', 'N', 'C', 'O']:
+
+            for atom in self.resMainChainAtoms :
                 subgroup[atom] = "mainchain"
-            for atom in ['CZ2', 'OE2', 'OE1', 'OG1', 'CD1', 'CD2', 'CG2', 'NE', 'NZ', 'OD1',
-                         'ND1', 'ND2', 'OD2', 'CB', 'CZ3', 'CG', 'CZ',
-                         'NH1', 'CE', 'CE1', 'NH2', 'CG1', 'CD', 'OH', 'OG', 'SG', 'CH2',
-                         'NE1', 'CE3', 'SD', 'NE2', 'CE2']:
+            for atom in self.resSideChainAtoms :
                 subgroup[atom] = 'sidechain'
 
             return subgroup
@@ -288,13 +290,12 @@ class parsePDB :
             xna = {}
             try:
                 with open(self.nucleic) as lines:
-                    for s in lines:
-                        if "#" not in s:
-                            xna[s.split()[-1]] = s.split()[1]
+                    for s in [ x for x in lines.readlines() if "#" not in x ] :
+                        xna[s.split()[-1]] = s.split()[1]
 
             except FileNotFoundError:
                 print("File %s not exist" % self.nucleic)
-                xna = {}
+
             return xna
 
     def atomInformation(self, pdbin):
@@ -408,8 +409,8 @@ class parsePDB :
 
     def getNdxForMol(self, pdbin, molres=[], resndx=[]):
         """
-        generally, a molecule is composed by a list of residues (molres)
-        these residues' sequence number is a list of intergers (resndx)
+        generally, a molecule is composed by a list of atoms
+        these atoms' sequence number is a list of intergers (atomndx)
         :param pdbin:
         :param molres:
         :param resndx:
