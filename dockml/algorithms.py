@@ -34,6 +34,19 @@ class BasicAlgorithm :
 
         #return (1.0 - math.pow((x / d0), n)) / (1.0 - math.pow((x / d0), m))
 
+    def exponentialFunction(self, x, exp=2.0, k=1.0, c0=0.0, bias=0.0):
+        '''
+
+        :param x: variable
+        :param exp:  float, exponential number
+        :param k: float, constant
+        :param c0: float
+        :param bias: float, bias or intercept
+        :return: float, result
+        '''
+
+        return k * (x + c0) ** exp + bias
+
     def pmf(self, x, minX, kbt=2.5, max=1.0):
         """
         calculate PMF of a histogram vector

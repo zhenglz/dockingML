@@ -8,6 +8,7 @@ import sys, os
 import numpy as np
 import dockml.index as index
 import dockml.pdbIO as pio
+import mdanaly, dockml
 
 class GridBasedFeature :
 
@@ -22,7 +23,8 @@ class GridBasedFeature :
         self.recpdb   = receptorPDB
 
         bf = BindingFeature()
-        self.parm = bf.getVdWParams()
+        self.vdwparm = bf.getVdWParams()
+        self.eleparm = bf.getElementParams()
 
         self.atominfor = pio.parsePDB().atomInformation(self.ligpdb)
 
@@ -49,6 +51,12 @@ class GridBasedFeature :
         return pocketResCoord
 
     def createCubicPocket(self, coordinates, extension=10.0):
+        '''
+        create the 6 element vector to describe a cubic pocket
+        :param coordinates: ndarray, M*3 dim
+        :param extension: float, extend the box and enlarge it
+        :return: ([x, y, z], [x, y, z] )
+        '''
 
         coordinates = np.asarray(coordinates)
 
@@ -58,42 +66,37 @@ class GridBasedFeature :
         return (maxs, mins)
 
     def generateGrids(self, boundaries, gridfile="GRID", gridsize=1.0):
+        '''
+
+        :param boundaries:
+        :param gridfile:
+        :param gridsize:
+        :return:
+        '''
 
         upbound, lowbound = boundaries[0], boundaries[1]
 
-        dims = upbound.shape[0]
+        x_range = np.arange(lowbound[0], upbound[0], gridsize)
+        y_range = np.arange(lowbound[1], upbound[1], gridsize)
+        z_range = np.arange(lowbound[2], upbound[2], gridsize)
 
-        grids = []
-        for d in dims :
-            ranges = [lowbound[d], upbound[d]]
+        xsize, ysize, zsize = x_range.shape[0], y_range.shape[0], z_range.shape[0]
 
-            d_grids = []
-            level = ranges[0]
-            while level < ranges[1] :
-                d_grids.append(level)
-                level = level + gridsize
+        grid_x = np.repeat(x_range, ysize*zsize)
 
-            d_grids.append(ranges[1])
+        grid_y = np.tile(np.repeat(y_range, zsize), xsize)
 
-            grids.append(grids)
+        grid_z = np.tile(np.tile(z_range, ysize), xsize)
 
-        grid_nums = np.array(grids).shape
+        grid_center = np.concatenate((np.array([grid_x]),
+                                      np.array([grid_y]),
+                                      np.array([grid_z]),
+                                      ), axis=0
+                                     ).T
 
-        grid_table = []
-        for i in range(grid_nums[0] - 1 ) :
-            for j in range(grid_nums[1] - 1) :
-                for k in range(grid_nums[2] - 1) :
-                    the_grid = [
-                        grids[0][i], grids[0][i + 1],
-                        grids[1][j], grids[1][j + 1],
-                        grids[2][k], grids[2][k + 1],
-                    ]
+        np.savetxt(gridfile, grid_center, delimiter=" ", fmt="%8.3f")
 
-                    grid_table += the_grid
-
-        np.savetxt(gridfile, np.array(grid_table), delimiter=" ", fmt="8.3f")
-
-        return np.array(grid_table)
+        return grid_center
 
     def ligCoords(self, chain="B", resndx=[1, ]):
 
@@ -102,95 +105,148 @@ class GridBasedFeature :
 
         return pio.coordinatesPDB().getAtomCrdByNdx(singleFramePDB=self.ligpdb, atomNdx=ligndx), ligndx
 
-    def atomGridBoxId(self, grid_table, atomcrd):
+    def atomGridBoxId(self, grid_center, atomcrd, count_cutoff=0.01):
 
         try :
-            num_bin = grid_table.shape[0]
+            num_bin = grid_center.shape[0]
         except TypeError :
-            num_bin = np.asarray(grid_table).shape[0]
+            num_bin = np.asarray(grid_center).shape[0]
 
         for num in range(num_bin) :
-            grid = grid_table[num]
-            if self.pointInGrid(atomcrd, grid) :
-                return num
+            grid = grid_center[num]
+            count = self.pointInGrid(atomcrd, grid)
+            if count > count_cutoff :
+                print(num, count)
+                return num, count
             else :
                 pass
 
-        return -1
+        return -1, 0.0
 
-    def pointInGrid(self, point, grid):
+    def distToGrid(self, grid_point, physic_point):
+
+        distance = mdanaly.ContactMap(self.ligpdb).atomDistance(list(grid_point),
+                                                                list(physic_point),
+                                                                sqrt=True
+                                                                )
+
+        return distance
+
+    def pointInGrid(self, point, grid, cutoff=4.0):
         '''
         determine a point in a grid box or not
         :param point: float, a list of 3 items
-        :param grid: float, a list of 6 items
-        :return: bool
+        :param grid: float, a list of 3 items, the grid center
+        :param gridsize: float, the grid size
+        :return: float
         '''
 
-        if point[0] > grid[0] and point[0] <= grid[1] \
-                and point[1] > grid[2] and point[1] <= grid[3] \
-                and point[2] > grid[4] and point[2] <= grid[5] :
-            return True
-        else :
-            pass
+        '''if point[0] > grid[0] and point[0] <= grid[1] \
+                        and point[1] > grid[2] and point[1] <= grid[3] \
+                        and point[2] > grid[4] and point[2] <= grid[5] :
+                    return True
+                else :
+                    pass
 
-        return False
+                return False'''
 
-    def gridAtomMap(self, grid_table, ligndx, ligcoords):
+
+        dist = self.distToGrid(point, grid)
+        dist_scaled = dockml.BasicAlgorithm().switchFuction(dist, d0=cutoff*2)
+
+        return dist_scaled
+
+    def gridAtomMap(self, grid_table, ligndx, ligcoords, count_cutoff=0.01):
 
         gridMapper = defaultdict(list)
 
-        for i in range(grid_table.shape[0]) :
-            gridMapper[i] = []
+        #for i in range(grid_table.shape[0]) :
+        #    gridMapper[i] = [ ]
 
-        for i in range(len(ligndx)) :
-            crd = ligcoords[i]
-            bin_id = self.atomGridBoxId(grid_table, atomcrd=crd)
-            if bin_id > 0 :
-                try :
-                    gridMapper[bin_id] += ligndx[i]
-                except KeyError :
-                    pass
+        for k in range(grid_table.shape[0]) :
+            grid = grid_table[k]
+            for i in range(len(ligndx)) :
+                crd = ligcoords[i]
+                count = self.pointInGrid(crd, grid)
+                if count > count_cutoff :
+                    #print("found", k, i, count)
+                    try :
+                        gridMapper[k].append((ligndx[i], count))
+                    except KeyError :
+                        pass
 
         return gridMapper
 
     def gridBinProperty(self, gridMapper):
 
-        grid_features = []
+        grid_features = defaultdict(list)
         grid_ids = sorted(gridMapper.keys())
+
         for id in grid_ids :
             # mass vdw_epsilon, vdw_sigma, charge, negativity
             p = np.array([ 0.0, 0.0, 0.0, 0.0, 0])
+            grid_features[id] = list(p)
 
-            atoms = gridMapper[id]
-            if len(atoms) :
-                for ndx in atoms :
-                    p += self.atomProperty(ndx)
+            if len(gridMapper[id]) :
+                for item in gridMapper[id] :
+                    if len(item) == 2 :
+                        p += self.atomProperty(item[0]) * item[1]
 
-            grid_features.append(list(p))
+            grid_features[id] = (list(p))
+
+
 
         return grid_features
 
+    def getLigPartialCharges(self):
+
+        if self.ligpdb[-5:] == "pdbqt" :
+            charges = {}
+            with open(self.ligpdb) as lines :
+                for s in [ x for x in lines if "ATOM" in x ] :
+                    charges[s.split()[1]] = float(s.split()[-2])
+            return charges
+        else :
+            return {}
+
     def atomProperty(self, atomndx):
 
-        atom_parms = self.atominfor[atomndx]
-        [e, s] = self.parm[atom_parms[7]]
-
         # mass vdw_epsilon, vdw_sigma, charge, negativity
-        p = np.array([0.0, 0.0, 0.0, 0.0, 0])
+        p = [0.0, 0.0, 0.0, 0.0, 0.0]
+
+        atom_parms = self.atominfor[atomndx]
+        try :
+            [e, s] = self.vdwparm[atom_parms[7]]
+        except :
+            e, s = 0.0, 0.0
+
+        try :
+            [eleid, negat] = self.eleparm[atom_parms[7]]
+        except :
+            eleid, negat = 0.0, 0.0
+
+        try :
+            charges = self.getLigPartialCharges()
+            p[3] = charges[atomndx]
+        except FileNotFoundError :
+            pass
 
         p[1], p[2] = e, s
+        p[0], p[4] = eleid, negat
 
-        return p
+        return np.asarray(p)
 
 class BindingFeature:
 
     def __init__(self):
-        if os.path.exists("AtomType.dat") :
+        if os.path.exists("AtomType.dat") and os.path.exists("elementNegativity.dat"):
             self.atomtype = "AtomType.dat"
+            self.elenegat = "elementNegativity.dat"
         else :
             PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
             DEFINITIONS_ROOT = os.path.join(PROJECT_ROOT, '../data/AtomType.dat')
             self.atomtype = DEFINITIONS_ROOT
+            self.elenegat = os.path.join(PROJECT_ROOT, '../data/elementNegativity.dat')
 
     def getVdWParams(self) :
         '''
@@ -214,6 +270,18 @@ class BindingFeature:
 
         # format of vdwParams : { "C":[C12, C6] }
         return vdwParams
+
+    def getElementParams(self):
+        '''
+        get element negativity and atomic mass
+        :return: dict, { element: [atomic mass, negativity, ] }
+        '''
+
+        elemParams = defaultdict(list)
+        with open(self.elenegat) as lines :
+            for s in [ x for x in lines if (x[0] not in [";", "#"] and len(x.split()) > 3 )] :
+                elemParams[ s.split()[1] ] = (int(s.split()[0]), float(s.split()[3]))
+        return elemParams
 
     def getXYZCoord(self, pdbline) :
         '''
