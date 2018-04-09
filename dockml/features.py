@@ -28,6 +28,12 @@ class GridBasedFeature :
 
         self.atominfor = pio.parsePDB().atomInformation(self.ligpdb)
 
+        try :
+            with open(self.ligpdb) as lines :
+                self.ligndx = [ x.split()[1] for x in lines if "ATOM" in x ]
+        except :
+            self.ligndx = []
+
     def pocketFromRes(self, receptorPDB, reslist, chain='A'):
         '''
         get a list of residues' index, return their coordinates (angstrom)
@@ -65,20 +71,20 @@ class GridBasedFeature :
 
         return (maxs, mins)
 
-    def generateGrids(self, boundaries, gridfile="GRID", gridsize=1.0):
+    def generateGrids(self, boundaries, gridfile="GRID"):
         '''
-
-        :param boundaries:
-        :param gridfile:
-        :param gridsize:
-        :return:
+        the grid ndarray, generated from the boundaries in x y z dimension
+        :param boundaries: list of list, [ [x, y, z], [x, y, z]]
+        :param gridfile: str, output grid file format
+        :param gridsize: float, grid bin size
+        :return: ndarray of floats, N * 3 dimmension
         '''
 
         upbound, lowbound = boundaries[0], boundaries[1]
 
-        x_range = np.arange(lowbound[0], upbound[0], gridsize)
-        y_range = np.arange(lowbound[1], upbound[1], gridsize)
-        z_range = np.arange(lowbound[2], upbound[2], gridsize)
+        x_range = np.arange(lowbound[0], upbound[0], self.gridsize)
+        y_range = np.arange(lowbound[1], upbound[1], self.gridsize)
+        z_range = np.arange(lowbound[2], upbound[2], self.gridsize)
 
         xsize, ysize, zsize = x_range.shape[0], y_range.shape[0], z_range.shape[0]
 
@@ -98,14 +104,31 @@ class GridBasedFeature :
 
         return grid_center
 
-    def ligCoords(self, chain="B", resndx=[1, ]):
+    def ligCoords(self, chain="B"):
+        '''
+        from ligandpdb file get ligand atoms coordinates
+        :param chain: str
+        :param resndx: list of int
+        :return: ndarray, N*3 dimension
+        '''
 
-        ligndx = index.PdbIndex().res_index(inpdb=self.ligpdb, chain=chain, atomList=[],
-                                          atomtype='non-hydrogen', residueNdx=resndx)
+        coords = defaultdict(list)
 
-        return pio.coordinatesPDB().getAtomCrdByNdx(singleFramePDB=self.ligpdb, atomNdx=ligndx), ligndx
+        for ndx in self.ligndx :
+            coords[ndx] = pio.coordinatesPDB().getAtomCrdByNdx(singleFramePDB=self.ligpdb,
+                                                               atomNdx=[ndx,])[0]
+
+        return coords
 
     def atomGridBoxId(self, grid_center, atomcrd, count_cutoff=0.01):
+        '''
+        calculate whether a point in grid bind centered around grid_center
+        return the grid_id and counts
+        :param grid_center:
+        :param atomcrd:
+        :param count_cutoff:
+        :return:
+        '''
 
         try :
             num_bin = grid_center.shape[0]
@@ -138,7 +161,7 @@ class GridBasedFeature :
         :param point: float, a list of 3 items
         :param grid: float, a list of 3 items, the grid center
         :param gridsize: float, the grid size
-        :return: float
+        :return: float, scaled contact number
         '''
 
         '''if point[0] > grid[0] and point[0] <= grid[1] \
@@ -150,55 +173,74 @@ class GridBasedFeature :
 
                 return False'''
 
-
         dist = self.distToGrid(point, grid)
         dist_scaled = dockml.BasicAlgorithm().switchFuction(dist, d0=cutoff*2)
 
         return dist_scaled
 
-    def gridAtomMap(self, grid_table, ligndx, ligcoords, count_cutoff=0.01):
+    def gridAtomMap(self, grid_table, ligcoords):
+        '''
+        determine in each grid bin, whether ligand atom exists there
+        :param grid_table: ndarray, N*3 dim
+        :param ligcoords: defaultdict(list),{ key, dimension N*3},
+                          the coordinates of ligand atoms
+        :return: { grid_id: (atomndx, contactnumber) }
+        '''
 
         gridMapper = defaultdict(list)
 
-        #for i in range(grid_table.shape[0]) :
-        #    gridMapper[i] = [ ]
-
         for k in range(grid_table.shape[0]) :
             grid = grid_table[k]
-            for i in range(len(ligndx)) :
-                crd = ligcoords[i]
+            gridMapper[k] = [ (x, self.pointInGrid(ligcoords[x], grid)) for x in self.ligndx ]
+
+            '''for ndx in self.ligndx :
+                
+                crd = ligcoords[ndx]
+                #print(grid, crd)
                 count = self.pointInGrid(crd, grid)
+                #count = 0.0
+
                 if count > count_cutoff :
                     #print("found", k, i, count)
                     try :
-                        gridMapper[k].append((ligndx[i], count))
+                        gridMapper[k].append((ndx, count))
                     except KeyError :
                         pass
-
+            '''
         return gridMapper
 
-    def gridBinProperty(self, gridMapper):
+    def gridBinProperty(self, gridMapper, properties, count_cutoff=0.2):
+        '''
+        get atomic based properties from the gridmapper
+        :param gridMapper: defaultdict(list)
+        :return: defaultdict(list), { grid_id, [dim=5]
+        '''
 
         grid_features = defaultdict(list)
         grid_ids = sorted(gridMapper.keys())
 
+        #properties = self.atomProperties(self.ligndx)
+
         for id in grid_ids :
             # mass vdw_epsilon, vdw_sigma, charge, negativity
-            p = np.array([ 0.0, 0.0, 0.0, 0.0, 0])
-            grid_features[id] = list(p)
+            #p = np.array([ 0.0, 0.0, 0.0, 0.0, 0])
+            grid_features[id] = [[ 0.0, 0.0, 0.0, 0.0, 0], ]
 
-            if len(gridMapper[id]) :
-                for item in gridMapper[id] :
-                    if len(item) == 2 :
-                        p += self.atomProperty(item[0]) * item[1]
+            grid_features[id] = [ list(np.array(properties[x[0]]) * x[1])
+                                  for x in gridMapper[id]
+                                  if (gridMapper[id] and len(x) == 2 and x[1] >= count_cutoff)
+                                  ]
 
-            grid_features[id] = (list(p))
-
-
+            grid_features[id] = np.sum(np.array(grid_features[id]), axis=0)
+            #grid_features[id] = (list(p))
 
         return grid_features
 
     def getLigPartialCharges(self):
+        '''
+        get atom partial charges
+        :return:
+        '''
 
         if self.ligpdb[-5:] == "pdbqt" :
             charges = {}
@@ -209,32 +251,49 @@ class GridBasedFeature :
         else :
             return {}
 
-    def atomProperty(self, atomndx):
+    def atomProperties(self, ligatomndx):
+        '''
+        get the properties of a atom
+        mass, vdw_e, vdw_s, charge, negativity
+        :param ligatomndx:
+        :return:
+        '''
 
-        # mass vdw_epsilon, vdw_sigma, charge, negativity
-        p = [0.0, 0.0, 0.0, 0.0, 0.0]
+        properties = defaultdict(list)
 
-        atom_parms = self.atominfor[atomndx]
-        try :
-            [e, s] = self.vdwparm[atom_parms[7]]
-        except :
-            e, s = 0.0, 0.0
+        for atomndx in ligatomndx :
+            # mass vdw_epsilon, vdw_sigma, charge, negativity
+            p = [0.0, 0.0, 0.0, 0.0, 0.0]
 
-        try :
-            [eleid, negat] = self.eleparm[atom_parms[7]]
-        except :
-            eleid, negat = 0.0, 0.0
+            atom_parms = self.atominfor[atomndx]
 
-        try :
-            charges = self.getLigPartialCharges()
-            p[3] = charges[atomndx]
-        except FileNotFoundError :
-            pass
+            ele = atom_parms[7]
+            if ele == "A" :
+                ele = "C"
 
-        p[1], p[2] = e, s
-        p[0], p[4] = eleid, negat
+            try :
+                [e, s] = self.vdwparm[ele]
+            except :
+                e, s = 0.0, 0.0
 
-        return np.asarray(p)
+            try :
+                [eleid, negat] = self.eleparm[ele]
+            except :
+                eleid, negat = 0.0, 0.0
+
+            try :
+                charges = self.getLigPartialCharges()
+                if atomndx in charges.keys() :
+                    p[3] = charges[atomndx]
+            except FileNotFoundError :
+                pass
+
+            p[1], p[2] = e, s
+            p[0], p[4] = eleid, negat
+
+            properties[atomndx] = p
+
+        return properties
 
 class BindingFeature:
 

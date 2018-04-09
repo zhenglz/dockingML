@@ -531,11 +531,11 @@ class coordinatesPDB :
 
         return atomCrd
 
-    def getAtomCrdByNdx(self, singleFramePDB, atomNdx):
+    def getAtomCrdByNdx(self, singleFramePDB, atomNdx=['1',]):
         """
         input a pdb file and the atom index, return the crd of the atoms
         :param singleFramePDB: file, string
-        :param atomNdx: atom index, list of strings
+        :param atomNdx : list of str, atom index, list of strings
         :return: atom coordinates, list
         """
         atomCrd = []
