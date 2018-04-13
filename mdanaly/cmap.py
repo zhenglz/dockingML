@@ -5,7 +5,7 @@
 # Script for generating contact probability map     #
 # Author: ZHENG Liangzhen                           #
 # Email: LZHENG002@e.ntu.edu.sg                     #
-# Version: V3.1                                     #
+# Version: V3.2                                     #
 # Date: 23 Nov 2017                                 #
 #####################################################
 
@@ -810,8 +810,10 @@ class ContactMap:
                             )
 
         parser.add_argument('-opt', default="Separated", type=str,
-                            help="Optional setting controls. \n"
-                                 "Separated, using separated files instead of splitting files.\n")
+                            help="Optional setting controls. Default is Separated. \n"
+                                 "Separated, using separated files instead of splitting files."
+                                 "TimeSeries, create time series contact map, suitable for ligand "
+                                 "protein contact information. \n")
 
         args = parser.parse_args()
 
@@ -941,10 +943,11 @@ def main() :
                              "Default is None."
                         )
     parser.add_argument('-opt', default="TimeSeries", type=str,
-                        help="Optional setting controls. \n"
-                             "Separated, using separated files instead of splitting files."
-                             "Options: S(Separated), TS (TimeSeries).\n"
-                             "Default is TimeSeries. \n")
+                        help="Optional setting controls. Default is TimeSeries. \n"
+                             "TimeSeries, using splited files and get average cmap.\n"
+                             "Separated, create time series contact map, suitable for ligand "
+                             "protein contact information.\n"
+                             "Options: S(Separated), TS (TimeSeries).\n")
 
     args = parser.parse_args()
 
@@ -1049,6 +1052,7 @@ def main() :
 
                 if args.opt in ["S", "Separated", "separated"] :
                     filesList = [[args.inp,]]
+                    totalNumOfFiles = 1
             else :
                 filesList = None
 

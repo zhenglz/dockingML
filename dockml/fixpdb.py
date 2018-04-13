@@ -1,9 +1,11 @@
 import mdanaly
+import math
 import os, sys
 import urllib
 from collections import OrderedDict
 from os import environ
 import subprocess as sp
+from collections import defaultdict
 
 # import modeller for loop refinement
 try:
@@ -13,6 +15,268 @@ try:
 except ImportError :
     print("Warning: Modeller is not well imported, some features may not work. ")
     MODELLER_EXIST = False
+
+class SummaryPDB :
+
+    def __init__(self, pdbfile, aminoLibFile):
+        self.pdbfile = pdbfile
+
+        if not os.path.exists(aminoLibFile) :
+            PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+            DEFINITIONS_ROOT = os.path.join(PROJECT_ROOT, '../data/amino-acid.lib')
+            aminoLibFile = DEFINITIONS_ROOT
+
+        resShortName = {}
+        with open(aminoLibFile) as lines:
+            for s in [x for x in lines if "#" not in x ]:
+                resShortName[s.split()[2]] = s.split()[3]
+        self.resShortName = resShortName
+
+    def details(self, verbose=False):
+        '''
+        obtain details of the pdbfile
+        :param verbose:
+        :return:
+        '''
+        chains = []
+        resNdx = defaultdict(list)
+        resName= defaultdict(list)
+        resAtom= defaultdict(list)
+        resNameNdx = {}
+        with open(self.pdbfile) as lines :
+            for s in [ x for x in lines if
+                       ( len(x.split()) and  x.split()[0] in ["ATOM","HETATM"] and "TER" not in x)
+                       ]  :
+                # get chains
+                if s[21] not in chains:
+                    chains.append(s[21])
+
+                ## residue index information
+                if s[21] not in resNdx.keys() :
+                    resNdx[s[21]] = []
+                if s[22:26].strip() not in resNdx[s[21]] :
+                    resNdx[s[21]].append((s[22:26].strip()))
+
+                ## residue name information
+                if s[21] not in resName.keys():
+                   resName[s[21]] = []
+                if s[17:20].strip() + "_" + s[22:26].strip() not in resName[s[21]] :
+                   resName[s[21]].append(s[17:20].strip() + "_" + s[22:26].strip())
+
+                # pdb file atoms name in each residue
+                resId = (s[22:26].strip() + '_' + s[21]).strip()
+                if resId not in resAtom.keys() :
+                    resAtom[resId] = []
+                resAtom[resId].append(s[12:16].strip())
+
+                # residue index and name hash map
+                resNameNdx[s[22:26].strip()+'_' + s[21].strip()] = s[17:20].strip()
+
+        ## print some information
+        if verbose :
+            print("\nNumber of chains in this pdb file : ", len(chains), ". They are ", chains)
+
+            print("\nNumber of residues in each chain: ")
+            for chain in chains :
+                print("Chain ", chain, " ",len(resNdx[chain]))
+
+            print("\nResidue Names for each chain are : ")
+            for chain in chains :
+                print("For chain ", chain)
+                for i in range(10) :
+                    print(resNdx[chain][i], "  ", resName[chain][i])
+                print("......")
+                for j in range(10) :
+                    print(resNdx[chain][-10+j], "  ", resName[chain][-10+j])
+        return chains, resNdx, resName, resAtom, resNameNdx
+
+    def getFastaSeq(self, fastaFile):
+        '''
+        obtain fasta sequence from file
+        :param fastaFile:
+        :return:
+        '''
+        fastaseq = ''
+        try:
+            if os.path.isfile(fastaFile):
+                with open(fastaFile) as lines:
+                    for s in lines:
+                        if '>' not in s :
+                            #print s #strip()
+                            fastaseq += s.strip()
+        except IOError :
+            fastaseq = ''
+
+        return fastaseq
+
+    def summary(self, chain, verbose=False):
+
+        chains, resNdx, resName, resAtom, resNameNdx = self.details()
+
+        proteinSequence = {}
+        noProteinResNdx = defaultdict(list)
+        noProteinResName= defaultdict(list)
+        missingResNdx = defaultdict(list)
+        fullResNdx = defaultdict(list)
+        #for chain in chains :
+        #resNdxNameDict = {}
+        if len(resNdx[chain]) != len(resName[chain]) :
+            print("Error in function SummaryPDB.details. \nNumber of index is different with number of residues.")
+            print("Exit Now!")
+            sys.exit(1)
+
+        proResNdx = []
+        for i in range(len(resNdx[chain])) :
+            ## get index for all the protein residues in a specific chain
+            if resName[chain][i].split("_")[0] in self.resShortName.keys() :
+                proResNdx.append(int(resNdx[chain][i]))
+
+                #resNdxNameDict[int(resNdx[chain][i])] = resName[chain][i].split("_")[0]
+            else :
+                ## non-protein residues information
+                if chain not in noProteinResName.keys() :
+                    noProteinResName[chain] = []
+                if chain not in noProteinResNdx.keys() :
+                    noProteinResNdx[chain]  = []
+
+                noProteinResName[chain].append(resName[chain][i])
+                noProteinResNdx[chain].append(resNdx[chain][i])
+
+        # get protein chain sequence
+        startNdx = proResNdx[0]
+        finalNdx = proResNdx[-1]
+
+        fullNdx = range(startNdx, finalNdx+1)
+        fullResNdx[chain] = fullNdx
+
+        #print fullNdx
+        for i in range(len(fullNdx) ):
+            residueid = str(fullNdx[i]) + "_" + chain
+
+            if chain not in proteinSequence.keys() :
+                proteinSequence[chain] = ''
+
+            if residueid in resNameNdx.keys() :
+                if resNameNdx[residueid] not in self.resShortName.keys() :
+                    proteinSequence[chain] += "_" + resNameNdx[residueid]
+                else :
+                    proteinSequence[chain] += self.resShortName[resNameNdx[residueid]]
+            else :
+                proteinSequence[chain] += "-"
+
+                ## find missing residues' index
+                if chain not in missingResNdx.keys() :
+                    missingResNdx[chain] = []
+                missingResNdx[chain].append(str(fullNdx[i]))
+
+        # print some information
+        if verbose :
+            print("\nFull sequence of protein chains are: ")
+            #for chain in chains :
+            print(chain, "  ", proteinSequence[chain])
+
+            print("\nSome missing protein residues in each chain ")
+            #for chain in chains :
+            print(chain, "  ", missingResNdx[chain])
+
+            print("\nThe information of the non-protein residues here ")
+            #for chain in chains :
+            print(chain, "  ", noProteinResName[chain])
+
+            print("\nThe sequence of the full protein chain is: ")
+            print("Chain  ", chain)
+            sections = math.ceil(float(len(proteinSequence[chain])) / 20.0)
+
+            for i in range(int(sections - 1)):
+                print(fullResNdx[chain][i * 20], " " * (-len(str(fullResNdx[chain][i * 20])) + 11), fullResNdx[chain][i * 20 + 10])
+                print(proteinSequence[chain][i * 20: i * 20 + 10], " ", proteinSequence[chain][i * 20 + 10: i * 20 + 20])
+            print(fullResNdx[chain][i * 20 + 20])
+            print(proteinSequence[chain][i * 20 + 20:])
+
+        return proteinSequence, missingResNdx, noProteinResNdx, noProteinResName, fullResNdx
+
+    def missingRes(self, chain, fastaSeq, verbose=False):
+        ## find the missing residues sequences in the pdb file
+        #chains, resNdx, resName, resAtom, resNameNdx = self.details()
+        proteinSequence, missingResNdx, noProteinResNdx, noProteinResName, fullResNdx = self.summary(chain)
+        #print fullResNdx[chain]
+        trueResName = defaultdict(list)
+        ## full fasta sequences here :
+        fastaseq = ''
+        if os.path.isfile(fastaSeq):
+            fastaseq = self.getFastaSeq(fastaFile=fastaSeq)
+
+        else :
+            fastaseq = fastaSeq
+
+        # print protein missing residue information
+        startndx = fullResNdx[chain][0]
+        for index in missingResNdx[chain] :
+            if chain not in trueResName.keys() :
+                trueResName[chain] = []
+            trueResName[chain].append(fastaseq[int(index)-startndx]+'_'+index)
+
+        ranges = []
+        siteRange = []
+        missedSeqsList = defaultdict(list)
+        missedRSeq = ''
+        brokenSeq = proteinSequence[chain]
+        for i in range(len(brokenSeq)) :
+            currentResNdx = i + int(startndx)
+            if brokenSeq[i] != '-' and len(siteRange) == 0 :
+                pass
+            elif brokenSeq[i] == '-' :
+                siteRange.append(currentResNdx)
+                missedRSeq += fastaseq[i]
+                #print missedRSeq
+            elif brokenSeq[i] != '-' and len(siteRange) > 0 :
+                ranges.append([siteRange[0],siteRange[-1]])
+                #missedRSeq.append(seq[i])
+
+                missedSeqsList[str(siteRange[0])+"_"+str(siteRange[-1])] = missedRSeq
+                missedRSeq = ''
+                siteRange = []
+            else :
+                pass
+
+        if verbose :
+            ## print full sequence information
+            print("The fasta sequence of the full protein chain is: ")
+            print("Chain  ", chain)
+            sections = math.ceil(float(len(fastaseq)) / 20.0)
+
+            for i in range(int(sections-1)) :
+                print(fullResNdx[chain][i*20], " "*(-len(str(fullResNdx[chain][i*20]))+11), fullResNdx[chain][i*20+10])
+                print(fastaseq[i*20 : i*20+10], " ",fastaseq[i*20+10 : i*20+20])
+            print(fullResNdx[chain][i*20+20])
+            print(fastaseq[i*20+20:])
+
+            ## print the true residue name
+            print("\nThe missing residues are :")
+            print(chain,"  ", trueResName[chain])
+
+            ## information about the missing sequences
+            for ndxrange in missedSeqsList.keys() :
+                print (("%12s   %-s ")%(ndxrange, missedSeqsList[ndxrange]))
+
+        return fastaseq, missedSeqsList, fullResNdx
+
+    def extendMissRange(self, chain, fastaSeq, extend=10, verbose=False):
+        extMissSeq = {}
+        fastaseq, missedSeqs, fullResNdx = self.missingRes(chain,fastaSeq)
+        startndx = int(fullResNdx[chain][0])
+        for ndxrange in missedSeqs.keys() :
+            fixSeq = fastaseq[(int(ndxrange.split("_")[0])-extend-startndx):(int(ndxrange.split("_")[1]) + extend-startndx+1)]
+            newrange = str((int(ndxrange.split("_")[0])-extend)) + "_" +\
+                str(int(ndxrange.split("_")[1]) + extend)
+            extMissSeq[newrange] = fixSeq
+
+        if verbose :
+            print( "\nExtend %d residues at broken part for chain %s : "%(extend,chain))
+            for newrange in extMissSeq.keys() :
+                print(("%12s   %-s")%(newrange, extMissSeq[newrange]))
+
+        return extMissSeq
 
 class FixPDB :
     def __init__(self):
