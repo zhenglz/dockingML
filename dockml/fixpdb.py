@@ -83,11 +83,16 @@ class SummaryPDB :
             print("\nResidue Names for each chain are : ")
             for chain in chains :
                 print("For chain ", chain)
-                for i in range(10) :
-                    print(resNdx[chain][i], "  ", resName[chain][i])
-                print("......")
-                for j in range(10) :
-                    print(resNdx[chain][-10+j], "  ", resName[chain][-10+j])
+                if len(resNdx[chain]) > 10 :
+                    for i in range(10) :
+                        print(resNdx[chain][i], "  ", resName[chain][i])
+                    print("......")
+                    for j in range(10) :
+                        print(resNdx[chain][-10+j], "  ", resName[chain][-10+j])
+                else :
+                    for i in range(len(resNdx[chain])) :
+                        print(resNdx[chain][i], "  ", resName[chain][i])
+
         return chains, resNdx, resName, resAtom, resNameNdx
 
     def getFastaSeq(self, fastaFile):

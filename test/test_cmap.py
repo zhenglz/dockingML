@@ -33,7 +33,7 @@ if __name__ == "__main__" :
     with open( "all_cmap_%d.xyz" % 1) as lines :
         res_ndx = sorted(set([ int(x.split()[0].split("_")[0]) for x in lines if "#" not in x ]))
 
-    cmap['Index'] = res_ndx
+    cmap['Index'] = np.array(res_ndx)
 
     fpdb = fixpdb.SummaryPDB("all_cmap_%d.xyz" % 1, "")
 

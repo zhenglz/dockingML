@@ -56,23 +56,33 @@ if __name__ == "__main__" :
     parser.add_argument("-fsize", default=12, type=int, help="Font Size for axis.")
     parser.add_argument("-labels", default=[ str(x) for x in range(9) ], type=str, nargs="+",
                         help="Labels of subplots.")
-    parser.add_argument("-legend_loc", default="upper right", type=str,
+    parser.add_argument("-legend_loc", default=["upper right"], type=str, nargs="+",
                         help="Set legend location. Default is upper right. Options:"
                              "upper left, upper right, middle.")
+    parser.add_argument("-legend_frameon", default=False, type=bool,
+                        help="Set boarder box for legends. Default False. ")
     parser.add_argument("-ylim", default=[], type=float, nargs="+",
-                        help="Y axis lim")
+                        help="Y axis lim. Number of float numbers should be twice "
+                             "the number of total input files. Default is auto. ")
     parser.add_argument("-xlim", default=[], type=float, nargs="+",
-                        help="X axis lim")
+                        help="X axis lim. ")
     parser.add_argument("-ytick", default=[], type=float, nargs="+",
                         help="Set ytick. Start and end, and step. "
                              "Example: 0 10 1, means from 0 to 9 step as 1.")
+    parser.add_argument("-sharex", default=True, type=bool, help="Share X axis. Default is True.")
+    parser.add_argument("-sharey", default=True, type=bool, help="Share Y axis. Default is True.")
     parser.add_argument("-savefig", default="", type=str, help="Save Figure. Default is not saving figure.")
     args, unknown = parser.parse_known_args()
+
+    if len(args.legend_loc) == len(args.data) :
+        legend_loc = args.legend_loc
+    else :
+        legend_loc = args.legend_loc[0] * len(args.data)
 
     if len(args.data) >= 1 :
         num = len(args.data)
 
-        f, axes = plt.subplots(num, sharex=True, sharey=True)
+        f, axes = plt.subplots(num, sharex=args.sharex, sharey=args.sharey)
 
         for i in range(num) :
             x1, y1 = loadData(args.data[i], args.xycols[i*2:i*2+2])
@@ -85,13 +95,14 @@ if __name__ == "__main__" :
 
             if num % 2 == 1 :
                 if i == int(num / 2) :
-                    axes[i].set_ylabel(args.ylab, fontsize=14)
+                    axes[i].set_ylabel(args.ylab, fontsize=args.fsize)
             else :
-                axes[i].set_ylabel(args.ylab, fontsize=14)
+                pass
+                #axes[i].set_ylabel(args.ylab, fontsize=14)
             if i == num -1 :
-                axes[i].set_xlabel(args.xlab, fontsize=14)
+                axes[i].set_xlabel(args.xlab, fontsize=args.fsize)
 
-            axes[i].legend(frameon=False, loc=args.legend_loc)
+            axes[i].legend(frameon=False, loc=legend_loc[i])
 
             if len(args.ylim) >= 2 :
                 axes[i].set_ylim(args.ylim[i*2 : i*2+2])
@@ -103,6 +114,10 @@ if __name__ == "__main__" :
                 axes[i].yaxis.set_ticks(ytick)
 
         f.subplots_adjust(hspace=0)
+
+        if num % 2 == 0 :
+            f.text(0.06, 0.5, args.ylab, fontsize=args.fsize,
+                   ha='center', va='center', rotation='vertical')
 
         if len(args.savefig) :
             plt.savefig(args.savefig, dpi=3000)

@@ -49,9 +49,9 @@ def plot2dScatter(filenames,
     :param pmf:
     :return:
     """
-    X = np.loadtxt(filenames[0], comments=["#", "@"], usecols=[xcol, ycol], dtype=float)[:, 0]
+    X = np.loadtxt(filenames[0], comments=["#", "@"], usecols=[xcol, ycol], dtype=float)[:, 1]
     X = X * xscale + xshift
-    Y = np.loadtxt(filenames[1], comments=["#", "@"], usecols=[xcol, ycol], dtype=float)[:, 0]
+    Y = np.loadtxt(filenames[1], comments=["#", "@"], usecols=[xcol, ycol], dtype=float)[:, 1]
     Y = Y * yscale + yshift
 
     if len(colors) == 0 :
