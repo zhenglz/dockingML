@@ -29,18 +29,19 @@ def calculateNbyN(pdbfile, dcutoff, res1, res2, ndxlist) :
     #print(t)
     return t
 
-def scatterFileList(ranksize, fileList) :
+def scatterFileList(ranksize, pdbFileList) :
     load4each = int(math.ceil(float(len(fileList)) / float(ranksize)))
     filesList = []
 
-    pdbFileList = []
     for i in range(ranksize - 1):
         filesList.append(pdbFileList[i * load4each: load4each * (i + 1)])
     filesList.append(pdbFileList[(ranksize - 1) * load4each:])
 
-    return pdbFileList
+    return filesList
 
 if __name__ == "__main__" :
+
+    pwd = os.getcwd()
 
     startTime = datetime.now()
 
@@ -48,9 +49,22 @@ if __name__ == "__main__" :
     size = comm.Get_size()
     rank = comm.rank
 
-    MAX = 2000
+    MAX = 20
 
-    fileList = [ "S_%d.pdb"%str(x) for x in range(MAX) ]
+    fileList = [ pwd + "/S_%s.pdb"%str(x) for x in range(MAX) ]
+
+    chain = ' '
+    resindex = [str(x) for x in range(1, 251)]
+    cutoff = 5.0
+    atomtype = "side-chain-noH"
+
+    ndxdict = defaultdict(list)
+    for res in resindex:
+        ndxdict[res] = ndx.PdbIndex().res_index(fileList[0], chain,
+                                                residueNdx=[int(res)],
+                                                atomtype=atomtype,
+                                                atomList=[],
+                                                )
 
     if rank == 0 :
         pdbFileList = scatterFileList(size, fileList)
@@ -65,27 +79,11 @@ if __name__ == "__main__" :
         count = 0
         print("progress file name {}, number {} out of ".format(fn, count, len(filesList)))
 
-        chain = ' '
-        resindex = [ str(x) for x in range(1, 251) ]
-        cutoff= 5.0
-        atomtype = "side-chain-noH"
-
-        ndxdict = defaultdict(list)
-        for res in resindex :
-            ndxdict[res] = ndx.PdbIndex().res_index(fn, chain,
-                                                    residueNdx=[int(res)],
-                                                    atomtype=atomtype,
-                                                    atomList=[],
-                                                    )
-
-        print(ndxdict)
-
         nbyn = [ calculateNbyN(fn, cutoff, x, y, ndxdict) for x in resindex for y in resindex ]
         #pair = [ [x, y] for x in resindex for y in resindex ]
 
         results.append(nbyn)
         count += 1
-
 
     overallValuesList = comm.gather(results, root=0)
     if rank == 0:
