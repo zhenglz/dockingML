@@ -41,7 +41,7 @@ class PdbIndex :
         indexlist = []
         resSeqNdx = []
         if len(residueNdx) == 1 :
-            resSeqNdx = range(residueNdx[0], residueNdx[0 ] +1)
+            resSeqNdx = range(residueNdx[0], residueNdx[0] +1)
         elif len(residueNdx) >= 2 and len(residueNdx) % 2 == 0 :
             for k in range(int(len(residueNdx)/2)) :
                 resSeqNdx += range(residueNdx[k*2], residueNdx[k*2+1]+1)
@@ -90,6 +90,14 @@ class PdbIndex :
                         elif atomtype == "all-atom" :
                             ## all atoms
                             indexlist.append(s.split()[1])
+                        elif atomtype == "side-chain-noH" :
+                            if s.split()[3] != "GLY" :
+                                if s[12:16].strip() not in self.mainchain \
+                                        and s[13] != "H" and s.split()[-1] != "H":
+                                    indexlist.append(s.split()[1])
+                            else :
+                                if s.split()[2] == "H" :
+                                    indexlist.append(s.split()[1])
                         elif atomtype == "side-chain" :
                             if s[12:16].strip() not in self.mainchain :
                                 indexlist.append(s.split()[1])

@@ -422,7 +422,7 @@ class ContactMap:
             print(used, len(used))
         return used
 
-    def residueContacts(self, resCrd1, resCrd2,
+    def  residueContacts(self, resCrd1, resCrd2,
                         distcutoff, countcutoff=1.0,
                         switch=False, verbose=False,
                         rank=0, NbyN=False,
@@ -445,15 +445,19 @@ class ContactMap:
 
         distances = [sum(map(lambda x, y: (x - y) ** 2, pair[0], pair[1])) for pair in newlist]
         if verbose :
-            print( rank, " DISTANCES ", distances)
+            print( rank, " SQRT DISTANCES ", distances)
 
         if NbyN :
             '''
             for community analysis
             fij = N / sqrt(N_i * N_j)
             '''
-            counts = len(list(filter(lambda x: x <= distcutoff, distances)))
-            return float(counts) / math.sqrt(float(len(distances)))
+            if len(distances) :
+                counts = np.sum(np.array(distances) <= distcutoff)
+                #counts = len(list(filter(lambda x: x <= distcutoff, distances)))
+                return float(counts) / math.sqrt(float(len(distances)))
+            else :
+                return 0.0
         else :
             if switch:
                 dc = 2 * math.sqrt(distcutoff)
