@@ -6,6 +6,26 @@ class shiftPDB(rewritePDB) :
     Shift or rotate pdb files
     """
 
+    def xyzReplace(self, pdbline, XYZ):
+        '''
+        REPLACE THE ORIGINAL XYZ WITH NEW XYZ
+        :param pdbline: str, the old pdb line
+        :param XYZ: list of float, the new xyz coordinations
+        :return: str, the new pdb line
+        '''
+        if len(XYZ) != 3 :
+            print("Number of values for XYZ vector not equals to 3. Exit Now!")
+            return ""
+
+        head = pdbline[:30]
+        tail = pdbline[54:]
+
+        x = XYZ[0]
+        y = XYZ[1]
+        z = XYZ[2]
+
+        return head + '{:8.3f}'.format(x) + '{:8.3f}'.format(y) + '{:8.3f}'.format(z) + tail
+
     def xyzChanger(self, pdbline, XYZ ):
         """
         shift x y z by a vector

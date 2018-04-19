@@ -4,4 +4,3 @@ mpi4py
 sklearn
 matplotlib
 networkx
-modeller

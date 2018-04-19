@@ -11,8 +11,8 @@ import argparse
 from argparse import RawTextHelpFormatter
 
 class ExtractPDB :
-    def __init__(self):
-        pass
+    def __init__(self, filename=""):
+        self.fn = filename
 
     def extract_pdb(self,filename, structname, first_n_frame):
         '''
@@ -118,6 +118,7 @@ class ExtractPDB :
         """
 
         print(d)
+        return 1
 
     def indexCoord(self, filename):
         '''
@@ -296,5 +297,5 @@ class ExtractPDB :
 
 def main() :
 
-    ext = ExtractPDB()
+    ext = ExtractPDB("")
     ext.runExtract()

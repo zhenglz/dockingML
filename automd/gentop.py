@@ -3,7 +3,7 @@
 import sys, os
 from datetime import time
 import subprocess as sp
-from automd.sumpdb import SummaryPDB
+from automd import SummaryPDB
 import argparse
 from argparse import RawDescriptionHelpFormatter, RawTextHelpFormatter
 

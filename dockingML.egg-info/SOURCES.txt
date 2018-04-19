@@ -4,8 +4,10 @@ automd/__init__.py
 automd/autoMD.py
 automd/cleanpdb.py
 automd/gentop.py
+automd/gmxtop.py
 automd/runmd.py
 automd/sumpdb.py
+automd/test.py
 bin/matrix.py
 dockingML.egg-info/PKG-INFO
 dockingML.egg-info/SOURCES.txt
@@ -15,6 +17,7 @@ dockingML.egg-info/requires.txt
 dockingML.egg-info/top_level.txt
 dockml/__init__.py
 dockml/algorithms.py
+dockml/classification.py
 dockml/cmd.py
 dockml/convert.py
 dockml/dataclean.py
@@ -27,6 +30,7 @@ dockml/index.py
 dockml/mlearn.py
 dockml/mol2IO.py
 dockml/pdbIO.py
+dockml/ppdock.py
 dockml/shiftpdb.py
 dockml/test.py
 mdanaly/__init__.py
@@ -37,6 +41,16 @@ mdanaly/io.py
 mdanaly/lipids.py
 mdanaly/matrix.py
 mdanaly/network.py
+mdanaly/plane_fit.py
 mdanaly/plot.py
 mdanaly/pmf.py
+mdanaly/subplot.py
+mdanaly/timestamp.py
+mdanaly/tsne.py
 mdanaly/workingflow.py
+test/test2.py
+test/test_cmap.py
+test/test_cmap_NbyN.py
+test/test_gmxtop.py
+test/test_gridfeatures.py
+test/test_rotateDNA.py

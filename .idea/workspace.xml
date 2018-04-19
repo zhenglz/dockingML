@@ -2,7 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/shiftPDB.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/test_rotateDNA.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/automd/__init__.py" afterPath="$PROJECT_DIR$/automd/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/automd/gentop.py" afterPath="$PROJECT_DIR$/automd/gentop.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/automd/sumpdb.py" afterPath="$PROJECT_DIR$/automd/sumpdb.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockingML.egg-info/PKG-INFO" afterPath="$PROJECT_DIR$/dockingML.egg-info/PKG-INFO" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockingML.egg-info/SOURCES.txt" afterPath="$PROJECT_DIR$/dockingML.egg-info/SOURCES.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockingML.egg-info/requires.txt" afterPath="$PROJECT_DIR$/dockingML.egg-info/requires.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockml/algorithms.py" afterPath="$PROJECT_DIR$/dockml/algorithms.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockml/shiftpdb.py" afterPath="$PROJECT_DIR$/dockml/shiftpdb.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mdanaly/extract.py" afterPath="$PROJECT_DIR$/mdanaly/extract.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/test_cmap_NbyN.py" afterPath="$PROJECT_DIR$/test/test_cmap_NbyN.py" />
     </list>
     <ignored path="dockingML.iws" />
@@ -22,148 +33,118 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="pdbIO.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dockml/pdbIO.py">
+      <file leaf-file-name="shiftpdb.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dockml/shiftpdb.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="324">
-              <caret line="541" column="0" lean-forward="false" selection-start-line="541" selection-start-column="0" selection-end-line="541" selection-end-column="0" />
+            <state relative-caret-position="204">
+              <caret line="13" column="38" lean-forward="false" selection-start-line="13" selection-start-column="38" selection-end-line="13" selection-end-column="38" />
               <folding>
-                <element signature="e#25#34#0" expanded="true" />
-                <element signature="e#151#4540#0" expanded="false" />
-                <element signature="e#392#2030#0" expanded="false" />
-                <element signature="e#2808#3050#0" expanded="false" />
-                <element signature="e#4644#5529#0" expanded="false" />
-                <element signature="e#5576#6136#0" expanded="false" />
-                <element signature="e#6174#6453#0" expanded="false" />
-                <element signature="e#6495#6854#0" expanded="false" />
-                <element signature="e#6896#7255#0" expanded="false" />
-                <element signature="e#7302#8186#0" expanded="false" />
-                <element signature="e#8276#8948#0" expanded="false" />
-                <element signature="e#9002#9749#0" expanded="false" />
-                <element signature="e#9797#12400#0" expanded="false" />
-                <element signature="e#12456#12893#0" expanded="false" />
-                <element signature="e#12946#13476#0" expanded="false" />
-                <element signature="e#13983#16312#0" expanded="false" />
-                <element signature="e#16432#17055#0" expanded="false" />
-                <element signature="e#17107#17468#0" expanded="false" />
+                <element signature="e#0#9#0" expanded="true" />
+                <element signature="e#2489#3927#0" expanded="false" />
+                <element signature="e#4062#4895#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="features.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dockml/features.py">
+      <file leaf-file-name="test_cmap_NbyN.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/test_cmap_NbyN.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="174">
-              <caret line="304" column="41" lean-forward="true" selection-start-line="304" selection-start-column="0" selection-end-line="305" selection-end-column="81" />
+            <state relative-caret-position="476">
+              <caret line="36" column="73" lean-forward="false" selection-start-line="36" selection-start-column="73" selection-end-line="36" selection-end-column="73" />
               <folding>
-                <element signature="e#25#60#0" expanded="true" />
-                <element signature="e#6503#6959#1" expanded="false" />
-                <element signature="e#11610#12264#0" expanded="false" />
-                <element signature="e#19504#22704#0" expanded="false" />
-                <element signature="e#24989#27017#0" expanded="false" />
-                <element signature="e#31691#32165#0" expanded="false" />
-                <element signature="e#32184#33705#0" expanded="false" />
-                <element signature="e#32188#32532#0" expanded="false" />
+                <element signature="e#23#37#0" expanded="true" />
+                <element signature="e#1842#3392#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="cmap.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/mdanaly/cmap.py">
+      <file leaf-file-name="test_rotateDNA.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/test_rotateDNA.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="169">
-              <caret line="1081" column="57" lean-forward="true" selection-start-line="1081" selection-start-column="12" selection-end-line="1081" selection-end-column="57" />
+            <state relative-caret-position="1258">
+              <caret line="82" column="0" lean-forward="false" selection-start-line="82" selection-start-column="0" selection-end-line="82" selection-end-column="0" />
               <folding>
-                <element signature="e#426#452#0" expanded="true" />
-                <element signature="e#4703#5025#0" expanded="false" />
-                <element signature="e#5067#5674#0" expanded="false" />
-                <element signature="e#5732#6892#0" expanded="false" />
-                <element signature="e#6964#7516#0" expanded="false" />
-                <element signature="e#8593#9111#0" expanded="false" />
-                <element signature="e#9178#10969#0" expanded="false" />
-                <element signature="e#11056#12456#0" expanded="false" />
-                <element signature="e#12532#14181#0" expanded="false" />
-                <element signature="e#14284#15379#0" expanded="false" />
-                <element signature="e#17466#19879#0" expanded="false" />
-                <element signature="e#20195#23128#0" expanded="false" />
-                <element signature="e#23345#26392#0" expanded="false" />
-                <element signature="e#26480#27955#0" expanded="false" />
-                <element signature="e#33308#35492#0" expanded="false" />
+                <element signature="e#23#41#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dockml/index.py">
+      <file leaf-file-name="shiftPDB.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/shiftPDB.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="277">
-              <caret line="99" column="66" lean-forward="true" selection-start-line="99" selection-start-column="66" selection-end-line="99" selection-end-column="66" />
+            <state relative-caret-position="425">
+              <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ref.pdb" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test/ref.pdb">
+      <file leaf-file-name="autoMD.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/automd/autoMD.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-50175">
+            <state relative-caret-position="3718">
+              <caret line="318" column="32" lean-forward="false" selection-start-line="318" selection-start-column="32" selection-end-line="318" selection-end-column="32" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="extract.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bin/extract.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="85">
+              <caret line="5" column="9" lean-forward="false" selection-start-line="5" selection-start-column="9" selection-end-line="5" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="extract.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/mdanaly/extract.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="198">
+              <caret line="120" column="16" lean-forward="false" selection-start-line="120" selection-start-column="16" selection-end-line="120" selection-end-column="16" />
+              <folding>
+                <element signature="e#316#1327#0" expanded="false" />
+                <element signature="e#1402#3065#0" expanded="false" />
+                <element signature="e#4652#5210#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="reference.pdb" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/reference.pdb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="plot.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/mdanaly/plot.py">
+      <file leaf-file-name="DNA.pdb" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/DNA.pdb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="67" column="22" lean-forward="true" selection-start-line="67" selection-start-column="22" selection-end-line="67" selection-end-column="22" />
+            <state relative-caret-position="51">
+              <caret line="3" column="21" lean-forward="false" selection-start-line="3" selection-start-column="21" selection-end-line="3" selection-end-column="22" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="subplot.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/mdanaly/subplot.py">
+      <file leaf-file-name="algorithms.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dockml/algorithms.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1100">
-              <caret line="128" column="0" lean-forward="true" selection-start-line="128" selection-start-column="0" selection-end-line="128" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test_cmap_NbyN.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/test/test_cmap_NbyN.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="84">
-              <caret line="51" column="12" lean-forward="true" selection-start-line="51" selection-start-column="12" selection-end-line="51" selection-end-column="12" />
+            <state relative-caret-position="187">
+              <caret line="163" column="23" lean-forward="true" selection-start-line="163" selection-start-column="23" selection-end-line="163" selection-end-column="23" />
               <folding>
-                <element signature="e#23#37#0" expanded="true" />
+                <element signature="e#138#2865#0" expanded="false" />
+                <element signature="e#2888#4622#0" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test2.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test/test2.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="24" column="28" lean-forward="false" selection-start-line="24" selection-start-column="28" selection-end-line="24" selection-end-column="28" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="pyplot.py" pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/.conda/envs/py36/lib/python3.6/site-packages/matplotlib/pyplot.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="1061" column="4" lean-forward="false" selection-start-line="1061" selection-start-column="4" selection-end-line="1061" selection-end-column="4" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -200,6 +181,8 @@
       <find>opt</find>
       <find>shortname</find>
       <find>pdbf</find>
+      <find>center of</find>
+      <find>SummaryPDB</find>
     </findStrings>
     <replaceStrings>
       <replace>fn</replace>
@@ -214,13 +197,9 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/bin/cmap.py" />
-        <option value="$PROJECT_DIR$/bin/lipids.py" />
-        <option value="$PROJECT_DIR$/dockml/mlearn.py" />
         <option value="$PROJECT_DIR$/bin/genfeatures.py" />
         <option value="$PROJECT_DIR$/dockml/__init__.py" />
         <option value="$USER_HOME$/PRLBD/dockingML/docking_bindDB/test/test_features.py" />
-        <option value="$PROJECT_DIR$/mdanaly/extract.py" />
         <option value="$PROJECT_DIR$/mdanaly/lipids.py" />
         <option value="$PROJECT_DIR$/mdanaly/matrix.py" />
         <option value="$PROJECT_DIR$/bin/pmf2d.py" />
@@ -239,21 +218,17 @@
         <option value="$PROJECT_DIR$/dockml/test.py" />
         <option value="$PROJECT_DIR$/mdanaly/network.py" />
         <option value="$PROJECT_DIR$/dockml/dataclean.py" />
-        <option value="$PROJECT_DIR$/dockml/shiftpdb.py" />
         <option value="$PROJECT_DIR$/automd/autoMD.py" />
         <option value="$PROJECT_DIR$/automd/test.py" />
-        <option value="$PROJECT_DIR$/automd/sumpdb.py" />
         <option value="$PROJECT_DIR$/automd/cleanpdb.py" />
         <option value="$PROJECT_DIR$/dockml/classification.py" />
         <option value="$USER_HOME$/PRLBD/dockingML/DUDE/active/ener_min/run_energymin.py" />
         <option value="$USER_HOME$/PRLBD/dockingML/DUDE/active/mini/run_energymin.py" />
-        <option value="$PROJECT_DIR$/automd/gentop.py" />
         <option value="$PROJECT_DIR$/automd/gmxtop.py" />
         <option value="$PROJECT_DIR$/test/test_gmxtop.py" />
         <option value="$PROJECT_DIR$/setup.py" />
         <option value="$USER_HOME$/PRLBD/dockingML/fda_approved/test/test_gridfeature.py" />
         <option value="$PROJECT_DIR$/data/elementNegativity.dat" />
-        <option value="$PROJECT_DIR$/dockml/algorithms.py" />
         <option value="$PROJECT_DIR$/test/test2.py" />
         <option value="$PROJECT_DIR$/dockml/pdbIO.py" />
         <option value="$PROJECT_DIR$/test/test_gridfeatures.py" />
@@ -265,6 +240,14 @@
         <option value="$PROJECT_DIR$/mdanaly/cmap.py" />
         <option value="$PROJECT_DIR$/dockml/index.py" />
         <option value="$PROJECT_DIR$/test/test_cmap_NbyN.py" />
+        <option value="$PROJECT_DIR$/dockml/shiftpdb.py" />
+        <option value="$PROJECT_DIR$/automd/__init__.py" />
+        <option value="$PROJECT_DIR$/automd/gentop.py" />
+        <option value="$PROJECT_DIR$/automd/sumpdb.py" />
+        <option value="$PROJECT_DIR$/dockml/algorithms.py" />
+        <option value="$PROJECT_DIR$/test/test_rotateDNA.py" />
+        <option value="$PROJECT_DIR$/test/shiftPDB.py" />
+        <option value="$PROJECT_DIR$/mdanaly/extract.py" />
       </list>
     </option>
   </component>
@@ -288,12 +271,24 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="dockingML" type="b2602c69:ProjectViewProjectNode" />
               <item name="dockingML" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="dockingML" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dockingML" type="462c0819:PsiDirectoryNode" />
+              <item name="automd" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="dockingML" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dockingML" type="462c0819:PsiDirectoryNode" />
+              <item name="bin" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="dockingML" type="b2602c69:ProjectViewProjectNode" />
@@ -308,14 +303,17 @@
             <path>
               <item name="dockingML" type="b2602c69:ProjectViewProjectNode" />
               <item name="dockingML" type="462c0819:PsiDirectoryNode" />
+              <item name="mdanaly" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="dockingML" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dockingML" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -344,7 +342,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.test_cmap_NbyN">
+  <component name="RunManager" selected="Python.test_rotateDNA">
     <configuration default="true" type="Python.Ipnb" factoryName="Jupyter Notebook">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -563,23 +561,6 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
     </configuration>
-    <configuration name="test_features" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="$USER_HOME$/.conda/envs/amberAPI/bin/python2.7" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="dockingML" />
-      <option name="SCRIPT_NAME" value="$USER_HOME$/PRLBD/dockingML/docking_bindDB/test/test_features.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-    </configuration>
     <configuration name="test_gridfeature" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -597,21 +578,38 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
     </configuration>
+    <configuration name="test_rotateDNA" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="/applications/anaconda/3/bin/python3.5" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="dockingML" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test/test_rotateDNA.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+    </configuration>
     <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Python.amberAPI" />
-      <item index="1" class="java.lang.String" itemvalue="Python.test_features" />
-      <item index="2" class="java.lang.String" itemvalue="Python.plane_fit" />
-      <item index="3" class="java.lang.String" itemvalue="Python.test (1)" />
-      <item index="4" class="java.lang.String" itemvalue="Python.test_gridfeature" />
-      <item index="5" class="java.lang.String" itemvalue="Python.test_cmap_NbyN" />
+      <item index="1" class="java.lang.String" itemvalue="Python.plane_fit" />
+      <item index="2" class="java.lang.String" itemvalue="Python.test (1)" />
+      <item index="3" class="java.lang.String" itemvalue="Python.test_gridfeature" />
+      <item index="4" class="java.lang.String" itemvalue="Python.test_cmap_NbyN" />
+      <item index="5" class="java.lang.String" itemvalue="Python.test_rotateDNA" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.test_cmap_NbyN" />
-        <item index="1" class="java.lang.String" itemvalue="Python.test_gridfeature" />
-        <item index="2" class="java.lang.String" itemvalue="Python.test (1)" />
-        <item index="3" class="java.lang.String" itemvalue="Python.plane_fit" />
-        <item index="4" class="java.lang.String" itemvalue="Python.test_features" />
+        <item index="0" class="java.lang.String" itemvalue="Python.test_rotateDNA" />
+        <item index="1" class="java.lang.String" itemvalue="Python.test_cmap_NbyN" />
+        <item index="2" class="java.lang.String" itemvalue="Python.test_gridfeature" />
+        <item index="3" class="java.lang.String" itemvalue="Python.test (1)" />
+        <item index="4" class="java.lang.String" itemvalue="Python.plane_fit" />
       </list>
     </recent_temporary>
   </component>
@@ -692,19 +690,26 @@
       <option name="project" value="LOCAL" />
       <updated>1523854785927</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="from mars">
+      <created>1523855843038</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1523855843038</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1600" height="838" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.201875" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.163125" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4416776" sideWeight="0.22375" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16644824" sideWeight="0.23125" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2450852" sideWeight="0.59125" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4416776" sideWeight="0.77625" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38925296" sideWeight="0.76875" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -750,55 +755,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/dockml/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bin/pmf2d.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="5" lean-forward="false" selection-start-line="6" selection-start-column="5" selection-end-line="6" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/plane_fit.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1598">
-          <caret line="97" column="35" lean-forward="false" selection-start-line="97" selection-start-column="35" selection-end-line="97" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dockml/ppdock.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1581">
-          <caret line="98" column="21" lean-forward="false" selection-start-line="98" selection-start-column="21" selection-end-line="98" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/tsne.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2958">
-          <caret line="177" column="58" lean-forward="false" selection-start-line="177" selection-start-column="58" selection-end-line="177" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/test/butelase/docking/nhv/pep01/select_pose.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="28" column="0" lean-forward="true" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bin/t-SNE.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="6" lean-forward="false" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dockml/cmd.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -841,20 +797,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dockml/shiftpdb.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3094">
-          <caret line="183" column="51" lean-forward="false" selection-start-line="183" selection-start-column="51" selection-end-line="183" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bin/extract.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="27" lean-forward="false" selection-start-line="4" selection-start-column="27" selection-end-line="4" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/dynamics.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1513">
@@ -883,13 +825,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/automd/autoMD.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6919">
-          <caret line="415" column="12" lean-forward="false" selection-start-line="415" selection-start-column="12" selection-end-line="415" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/PRLBD/dockingML/DUDE/active/ener_min/run_energymin.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="675">
@@ -901,20 +836,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/automd/sumpdb.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="19" lean-forward="false" selection-start-line="3" selection-start-column="19" selection-end-line="3" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/automd/gentop.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4454">
-          <caret line="267" column="8" lean-forward="false" selection-start-line="267" selection-start-column="8" selection-end-line="267" selection-end-column="8" />
         </state>
       </provider>
     </entry>
@@ -1009,21 +930,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dockml/algorithms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="15" column="8" lean-forward="false" selection-start-line="15" selection-start-column="8" selection-end-line="15" selection-end-column="8" />
-          <folding>
-            <element signature="e#2888#4622#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bin/plot.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
           <caret line="6" column="6" lean-forward="false" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1031,15 +941,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1479">
           <caret line="94" column="0" lean-forward="false" selection-start-line="94" selection-start-column="0" selection-end-line="94" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#14#0" expanded="false" />
-            <element signature="e#1364#1509#0" expanded="false" />
-            <element signature="e#4128#7649#0" expanded="false" />
-            <element signature="e#4397#4419#0" expanded="false" />
-            <element signature="e#4516#4673#0" expanded="false" />
-            <element signature="e#4755#5464#0" expanded="false" />
-            <element signature="e#11169#27635#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1047,100 +948,55 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="782">
           <caret line="49" column="0" lean-forward="true" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
-          <folding>
-            <element signature="e#23#41#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dockml/pdbIO.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="541" column="0" lean-forward="false" selection-start-line="541" selection-start-column="0" selection-end-line="541" selection-end-column="0" />
-          <folding>
-            <element signature="e#25#34#0" expanded="true" />
-            <element signature="e#151#4540#0" expanded="false" />
-            <element signature="e#392#2030#0" expanded="false" />
-            <element signature="e#2808#3050#0" expanded="false" />
-            <element signature="e#4644#5529#0" expanded="false" />
-            <element signature="e#5576#6136#0" expanded="false" />
-            <element signature="e#6174#6453#0" expanded="false" />
-            <element signature="e#6495#6854#0" expanded="false" />
-            <element signature="e#6896#7255#0" expanded="false" />
-            <element signature="e#7302#8186#0" expanded="false" />
-            <element signature="e#8276#8948#0" expanded="false" />
-            <element signature="e#9002#9749#0" expanded="false" />
-            <element signature="e#9797#12400#0" expanded="false" />
-            <element signature="e#12456#12893#0" expanded="false" />
-            <element signature="e#12946#13476#0" expanded="false" />
-            <element signature="e#13983#16312#0" expanded="false" />
-            <element signature="e#16432#17055#0" expanded="false" />
-            <element signature="e#17107#17468#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/subplot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1100">
+        <state relative-caret-position="2091">
           <caret line="128" column="0" lean-forward="true" selection-start-line="128" selection-start-column="0" selection-end-line="128" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.conda/envs/py36/lib/python3.6/site-packages/matplotlib/pyplot.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="1061" column="4" lean-forward="false" selection-start-line="1061" selection-start-column="4" selection-end-line="1061" selection-end-column="4" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/plot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="67" column="22" lean-forward="true" selection-start-line="67" selection-start-column="22" selection-end-line="67" selection-end-column="22" />
-          <folding />
+        <state relative-caret-position="1020">
+          <caret line="67" column="22" lean-forward="false" selection-start-line="67" selection-start-column="22" selection-end-line="67" selection-end-column="22" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/dockml/index.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="277">
-          <caret line="99" column="66" lean-forward="true" selection-start-line="99" selection-start-column="66" selection-end-line="99" selection-end-column="66" />
-          <folding />
+        <state relative-caret-position="1632">
+          <caret line="99" column="66" lean-forward="false" selection-start-line="99" selection-start-column="66" selection-end-line="99" selection-end-column="66" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test/ref.pdb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-50175">
+        <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/dockml/features.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="174">
-          <caret line="304" column="41" lean-forward="true" selection-start-line="304" selection-start-column="0" selection-end-line="305" selection-end-column="81" />
-          <folding>
-            <element signature="e#25#60#0" expanded="true" />
-            <element signature="e#6503#6959#1" expanded="false" />
-            <element signature="e#11610#12264#0" expanded="false" />
-            <element signature="e#19504#22704#0" expanded="false" />
-            <element signature="e#24989#27017#0" expanded="false" />
-            <element signature="e#31691#32165#0" expanded="false" />
-            <element signature="e#32184#33705#0" expanded="false" />
-            <element signature="e#32188#32532#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="4947">
+          <caret line="304" column="41" lean-forward="false" selection-start-line="304" selection-start-column="0" selection-end-line="305" selection-end-column="81" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/test2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="24" column="28" lean-forward="false" selection-start-line="24" selection-start-column="28" selection-end-line="24" selection-end-column="28" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/cmap.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
-          <caret line="1081" column="57" lean-forward="true" selection-start-line="1081" selection-start-column="12" selection-end-line="1081" selection-end-column="57" />
+        <state relative-caret-position="3757">
+          <caret line="455" column="65" lean-forward="false" selection-start-line="455" selection-start-column="55" selection-end-line="455" selection-end-column="65" />
           <folding>
             <element signature="e#426#452#0" expanded="true" />
             <element signature="e#4703#5025#0" expanded="false" />
@@ -1161,20 +1017,150 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/test2.py">
+    <entry file="file://$USER_HOME$/.conda/envs/py36/lib/python3.6/site-packages/matplotlib/pyplot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="24" column="28" lean-forward="false" selection-start-line="24" selection-start-column="28" selection-end-line="24" selection-end-column="28" />
-          <folding />
+        <state relative-caret-position="17153">
+          <caret line="1061" column="4" lean-forward="false" selection-start-line="1061" selection-start-column="4" selection-end-line="1061" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dockml/pdbIO.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="498" column="22" lean-forward="false" selection-start-line="498" selection-start-column="22" selection-end-line="498" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mdanaly/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/automd/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="3" column="21" lean-forward="false" selection-start-line="3" selection-start-column="21" selection-end-line="3" selection-end-column="21" />
+          <folding>
+            <element signature="e#25#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/automd/gentop.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5168">
+          <caret line="309" column="23" lean-forward="false" selection-start-line="309" selection-start-column="23" selection-end-line="309" selection-end-column="23" />
+          <folding>
+            <element signature="e#25#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/automd/sumpdb.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+          <folding>
+            <element signature="e#25#39#0" expanded="true" />
+            <element signature="e#811#3244#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test/test_cmap_NbyN.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="51" column="12" lean-forward="true" selection-start-line="51" selection-start-column="12" selection-end-line="51" selection-end-column="12" />
+        <state relative-caret-position="476">
+          <caret line="36" column="73" lean-forward="false" selection-start-line="36" selection-start-column="73" selection-end-line="36" selection-end-column="73" />
           <folding>
             <element signature="e#23#37#0" expanded="true" />
+            <element signature="e#1842#3392#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dockml/shiftpdb.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="13" column="38" lean-forward="false" selection-start-line="13" selection-start-column="38" selection-end-line="13" selection-end-column="38" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#2489#3927#0" expanded="false" />
+            <element signature="e#4062#4895#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dockml/algorithms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="163" column="23" lean-forward="true" selection-start-line="163" selection-start-column="23" selection-end-line="163" selection-end-column="23" />
+          <folding>
+            <element signature="e#138#2865#0" expanded="false" />
+            <element signature="e#2888#4622#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/test_rotateDNA.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1258">
+          <caret line="82" column="0" lean-forward="false" selection-start-line="82" selection-start-column="0" selection-end-line="82" selection-end-column="0" />
+          <folding>
+            <element signature="e#23#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/reference.pdb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/DNA.pdb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="21" lean-forward="false" selection-start-line="3" selection-start-column="21" selection-end-line="3" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/shiftPDB.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/automd/autoMD.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3718">
+          <caret line="318" column="32" lean-forward="false" selection-start-line="318" selection-start-column="32" selection-end-line="318" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bin/extract.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="9" lean-forward="false" selection-start-line="5" selection-start-column="9" selection-end-line="5" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mdanaly/extract.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="120" column="16" lean-forward="false" selection-start-line="120" selection-start-column="16" selection-end-line="120" selection-end-column="16" />
+          <folding>
+            <element signature="e#316#1327#0" expanded="false" />
+            <element signature="e#1402#3065#0" expanded="false" />
+            <element signature="e#4652#5210#0" expanded="false" />
           </folding>
         </state>
       </provider>

@@ -26,11 +26,11 @@ def calculateNbyN(pdbfile, dcutoff, res1, res2, ndxlist) :
                              rank=0,
                              NbyN=True
                              )
-    #print(t)
+    print(res1, res2, t)
     return t
 
 def scatterFileList(ranksize, pdbFileList) :
-    load4each = int(math.ceil(float(len(fileList)) / float(ranksize)))
+    load4each = int(math.ceil(float(len(pdbFileList)) / float(ranksize)))
     filesList = []
 
     for i in range(ranksize - 1):
@@ -39,7 +39,28 @@ def scatterFileList(ranksize, pdbFileList) :
 
     return filesList
 
-if __name__ == "__main__" :
+def singleFile() :
+
+    filen = os.getcwd() + "/test/reference.pdb"
+
+    chain = ' '
+    resindex = [str(x) for x in range(1, 251)]
+    cutoff = 25.0
+    atomtype = "side-chain-noH"
+
+    ndxdict = defaultdict(list)
+    for res in resindex:
+        ndxdict[res] = ndx.PdbIndex().res_index(filen, chain,
+                                                residueNdx=[int(res)],
+                                                atomtype=atomtype,
+                                                atomList=[],
+                                                )
+
+    nbyn = [calculateNbyN(filen, cutoff, x, y, ndxdict) for x in resindex for y in resindex]
+
+    print(nbyn)
+
+def main() :
 
     pwd = os.getcwd()
 
@@ -77,7 +98,7 @@ if __name__ == "__main__" :
 
     for fn in filesList :
         count = 0
-        print("progress file name {}, number {} out of ".format(fn, count, len(filesList)))
+        print("progress file name {}, number {} out of {}".format(fn, count, len(filesList)))
 
         nbyn = [ calculateNbyN(fn, cutoff, x, y, ndxdict) for x in resindex for y in resindex ]
         #pair = [ [x, y] for x in resindex for y in resindex ]
@@ -85,9 +106,16 @@ if __name__ == "__main__" :
         results.append(nbyn)
         count += 1
 
+    results = []
     overallValuesList = comm.gather(results, root=0)
+    for olist in overallValuesList :
+        results += olist
+
     if rank == 0:
         np.savetxt("res_sidechain_cmap_nbyn.csv", np.array(overallValuesList), delimiter=',', fmt="%5.3f")
 
     print("Total Time Usage: ")
     print(datetime.now() - startTime)
+
+#main()
+singleFile()

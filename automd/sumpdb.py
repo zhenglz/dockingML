@@ -2,6 +2,7 @@
 
 import os, sys
 from automd import gentop
+from dockml import coordinatesPDB
 import numpy as np
 from collections import defaultdict
 import math
@@ -9,11 +10,11 @@ import urllib
 
 class SummaryPDB :
 
-    PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
-    aminoLibFile = PROJECT_ROOT + "/data/amino-acid.lib"
-
-    def __init__(self, pdbfile, aminoLibFile=aminoLibFile):
+    def __init__(self, pdbfile, aminoLibFile="amino-acid.lib"):
         self.pdbfile = pdbfile
+
+        PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+        aminoLibFile = PROJECT_ROOT + "/data/amino-acid.lib"
 
         resShortName = {}
         try :
@@ -102,19 +103,13 @@ class SummaryPDB :
         coordinates = []
 
         with open(pdb) as lines :
-            for s in lines :
-                if "ATOM" == s.split()[0] or "HETATM" == s.split()[0] and s.split()[1] in atomNdx :
-                    crd_list = []
-                    crd_list.append(float(s[30:38].strip()))
-                    crd_list.append(float(s[38:46].strip()))
-                    crd_list.append(float(s[46:54].strip()))
-                    coordinates.append(crd_list)
+            lines = [ x for x in lines if x.split()[0] in ['ATOM', 'HETATM']]
+            coordinates = coordinatesPDB().getAtomCrdFromLines(lines)
 
         coordinates = np.asarray(coordinates)
 
-        xcenter = np.mean(coordinates[:, 0])
-        ycenter = np.mean(coordinates[:, 1])
-        zcenter = np.mean(coordinates[:, 2])
+        com = np.array(coordinates).mean(axis=0)
+        xcenter, ycenter, zcenter = com[0], com[1], com[2]
 
         if molBox :
             xsize = 2 * max(np.max(coordinates[:, 0]) - xcenter,
@@ -125,7 +120,7 @@ class SummaryPDB :
                         np.abs(np.min(coordinates[:, 2]) - zcenter))
         else :
             xsize, ysize, zsize = 100, 100, 100
-        return([xcenter, ycenter, zcenter], [xsize, ysize, zsize])
+        return(com, [xsize, ysize, zsize])
 
     def details(self, verbose=False):
         chains = []
