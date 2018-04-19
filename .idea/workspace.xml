@@ -2,19 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/shiftPDB.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/test_rotateDNA.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/automd/__init__.py" afterPath="$PROJECT_DIR$/automd/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/automd/gentop.py" afterPath="$PROJECT_DIR$/automd/gentop.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/automd/sumpdb.py" afterPath="$PROJECT_DIR$/automd/sumpdb.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockingML.egg-info/PKG-INFO" afterPath="$PROJECT_DIR$/dockingML.egg-info/PKG-INFO" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockingML.egg-info/SOURCES.txt" afterPath="$PROJECT_DIR$/dockingML.egg-info/SOURCES.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockingML.egg-info/requires.txt" afterPath="$PROJECT_DIR$/dockingML.egg-info/requires.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockml/algorithms.py" afterPath="$PROJECT_DIR$/dockml/algorithms.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockml/shiftpdb.py" afterPath="$PROJECT_DIR$/dockml/shiftpdb.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mdanaly/extract.py" afterPath="$PROJECT_DIR$/mdanaly/extract.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/test_cmap_NbyN.py" afterPath="$PROJECT_DIR$/test/test_cmap_NbyN.py" />
     </list>
     <ignored path="dockingML.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -192,6 +180,11 @@
     </dirStrings>
   </component>
   <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="zhenglz &lt;astrozheng@gmail.com&gt;" />
+      </list>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
@@ -697,7 +690,14 @@
       <option name="project" value="LOCAL" />
       <updated>1523855843038</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="from mars">
+      <created>1524122597236</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1524122597236</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="ToolWindowManager">
