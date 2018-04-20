@@ -402,8 +402,8 @@ class GmxIndex :
 
         groupLN = OrderedDict()
 
+        linecount = 0
         for s in self.ndxlines :
-            linecount = 0
 
             if "[" in s and "]" in s :
                 groupLN[s.split()[1]] = linecount
@@ -416,7 +416,7 @@ class GmxIndex :
 
         gln = self.groupsLineNumber()
 
-        start_ln = gln[group]
+        start_ln = gln[group] + 1
         end_ln = 0
 
         if self.groups.index(group) == len(self.groups) - 1 :
