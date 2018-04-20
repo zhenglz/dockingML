@@ -3,6 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockml/index.py" afterPath="$PROJECT_DIR$/dockml/index.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mdanaly/extract.py" afterPath="$PROJECT_DIR$/mdanaly/extract.py" />
     </list>
     <ignored path="dockingML.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -35,19 +37,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test_cmap_NbyN.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test/test_cmap_NbyN.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="36" column="73" lean-forward="false" selection-start-line="36" selection-start-column="73" selection-end-line="36" selection-end-column="73" />
-              <folding>
-                <element signature="e#23#37#0" expanded="true" />
-                <element signature="e#1842#3392#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="test_rotateDNA.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/test_rotateDNA.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -73,7 +62,7 @@
       <file leaf-file-name="autoMD.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/automd/autoMD.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3718">
+            <state relative-caret-position="5270">
               <caret line="318" column="32" lean-forward="false" selection-start-line="318" selection-start-column="32" selection-end-line="318" selection-end-column="32" />
               <folding />
             </state>
@@ -90,15 +79,27 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="extract.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="extract.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mdanaly/extract.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="120" column="16" lean-forward="false" selection-start-line="120" selection-start-column="16" selection-end-line="120" selection-end-column="16" />
+            <state relative-caret-position="400">
+              <caret line="289" column="30" lean-forward="false" selection-start-line="289" selection-start-column="30" selection-end-line="289" selection-end-column="30" />
               <folding>
                 <element signature="e#316#1327#0" expanded="false" />
                 <element signature="e#1402#3065#0" expanded="false" />
-                <element signature="e#4652#5210#0" expanded="false" />
+                <element signature="e#5258#6950#1" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/dockml/index.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="336">
+              <caret line="436" column="16" lean-forward="false" selection-start-line="436" selection-start-column="16" selection-end-line="436" selection-end-column="16" />
+              <folding>
+                <element signature="e#109#123#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -231,7 +232,6 @@
         <option value="$PROJECT_DIR$/mdanaly/subplot.py" />
         <option value="$PROJECT_DIR$/dockml/features.py" />
         <option value="$PROJECT_DIR$/mdanaly/cmap.py" />
-        <option value="$PROJECT_DIR$/dockml/index.py" />
         <option value="$PROJECT_DIR$/test/test_cmap_NbyN.py" />
         <option value="$PROJECT_DIR$/dockml/shiftpdb.py" />
         <option value="$PROJECT_DIR$/automd/__init__.py" />
@@ -241,6 +241,7 @@
         <option value="$PROJECT_DIR$/test/test_rotateDNA.py" />
         <option value="$PROJECT_DIR$/test/shiftPDB.py" />
         <option value="$PROJECT_DIR$/mdanaly/extract.py" />
+        <option value="$PROJECT_DIR$/dockml/index.py" />
       </list>
     </option>
   </component>
@@ -264,8 +265,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -307,6 +306,8 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -697,7 +698,14 @@
       <option name="project" value="LOCAL" />
       <updated>1524122597236</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="from mars">
+      <created>1524122610786</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1524122610786</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -706,9 +714,9 @@
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.163125" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16644824" sideWeight="0.23125" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2450852" sideWeight="0.411875" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2450852" sideWeight="0.59125" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2450852" sideWeight="0.588125" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38925296" sideWeight="0.76875" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -965,13 +973,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dockml/index.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1632">
-          <caret line="99" column="66" lean-forward="false" selection-start-line="99" selection-start-column="66" selection-end-line="99" selection-end-column="66" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/ref.pdb">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1042,9 +1043,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
           <caret line="3" column="21" lean-forward="false" selection-start-line="3" selection-start-column="21" selection-end-line="3" selection-end-column="21" />
-          <folding>
-            <element signature="e#25#34#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1052,9 +1050,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5168">
           <caret line="309" column="23" lean-forward="false" selection-start-line="309" selection-start-column="23" selection-end-line="309" selection-end-column="23" />
-          <folding>
-            <element signature="e#25#39#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1062,10 +1057,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
           <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-          <folding>
-            <element signature="e#25#39#0" expanded="true" />
-            <element signature="e#811#3244#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1074,7 +1065,7 @@
         <state relative-caret-position="476">
           <caret line="36" column="73" lean-forward="false" selection-start-line="36" selection-start-column="73" selection-end-line="36" selection-end-column="73" />
           <folding>
-            <element signature="e#23#37#0" expanded="true" />
+            <element signature="e#23#37#0" expanded="false" />
             <element signature="e#1842#3392#0" expanded="false" />
           </folding>
         </state>
@@ -1139,7 +1130,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/automd/autoMD.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3718">
+        <state relative-caret-position="5270">
           <caret line="318" column="32" lean-forward="false" selection-start-line="318" selection-start-column="32" selection-end-line="318" selection-end-column="32" />
           <folding />
         </state>
@@ -1155,12 +1146,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/extract.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="120" column="16" lean-forward="false" selection-start-line="120" selection-start-column="16" selection-end-line="120" selection-end-column="16" />
+        <state relative-caret-position="400">
+          <caret line="289" column="30" lean-forward="false" selection-start-line="289" selection-start-column="30" selection-end-line="289" selection-end-column="30" />
           <folding>
             <element signature="e#316#1327#0" expanded="false" />
             <element signature="e#1402#3065#0" expanded="false" />
-            <element signature="e#4652#5210#0" expanded="false" />
+            <element signature="e#5258#6950#1" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dockml/index.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="336">
+          <caret line="436" column="16" lean-forward="false" selection-start-line="436" selection-start-column="16" selection-end-line="436" selection-end-column="16" />
+          <folding>
+            <element signature="e#109#123#0" expanded="true" />
           </folding>
         </state>
       </provider>

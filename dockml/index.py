@@ -8,8 +8,10 @@ Generate Gromacs Format Index File
 
 import sys, os
 from collections import defaultdict
+from collections import OrderedDict
 import argparse
 from argparse import RawTextHelpFormatter
+import linecache
 
 class PdbIndex :
     '''
@@ -382,6 +384,57 @@ class PdbIndex :
 
         print("\nGenerating Index File Completed!")
         return(1)
+
+class GmxIndex :
+
+    def __init__(self, index):
+        if os.path.exists(index) :
+            self.index = index
+        else:
+            print("File {} not exists!".format(index))
+            sys.exit(0)
+
+        self.ndxlines   = open(self.index).readlines()
+        self.groups     = [ x.split()[1] for x in self.ndxlines if ("[" in x and "]" in x) ]
+        self.totallines = len(self.ndxlines)
+
+    def groupsLineNumber(self):
+
+        groupLN = OrderedDict()
+
+        for s in self.ndxlines :
+            linecount = 0
+
+            if "[" in s and "]" in s :
+                groupLN[s.split()[1]] = linecount
+
+            linecount += 1
+
+        return groupLN
+
+    def groupContent(self, group):
+
+        gln = self.groupsLineNumber()
+
+        start_ln = gln[group]
+        end_ln = 0
+
+        if self.groups.index(group) == len(self.groups) - 1 :
+            end_ln = self.totallines - 1
+        else :
+            end_ln = gln[self.groups[self.groups.index(group) + 1]]
+
+        contents = [ self.ndxlines[x].strip("\n")+" " for x in range(start_ln, end_ln+1) ]
+
+        contents = " ".join(contents)
+
+        return contents.split()
+
+    def writeNdxGroup(self, group, elements, output="output.ndx"):
+
+        PdbIndex().atomList2File(elements, group, output)
+
+        return 1
 
 def main() :
 

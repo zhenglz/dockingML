@@ -153,27 +153,25 @@ class ExtractPDB :
 
     def extract_all(self, filename, structname):
 
-        filenum = 0
+        filenum = 1
+        tofile = open(structname + "_" + str(filenum) + '.pdb', 'w')
 
         with open(filename) as lines :
 
-            tofile = open(structname+"_"+str(filenum)+'.pdb', 'w')
-            print("START FRAME: %d "%(filenum))
-
             for s in lines :
-
-                if "ENDMDL" not in s :
-                    tofile.write(s)
-                else :
-                    tofile.write(s)
-                    filenum += 1
+                if "MODEL" in s :
+                    tofile = open(structname + "_" + str(filenum) + '.pdb', 'w')
                     print("START FRAME: %d " % (filenum))
 
+                elif "ENDMDL" in s :
+                    tofile.write(s)
                     tofile.close()
-                    tofile = open(structname + "_" + str(filenum) + '.pdb', 'w')
+                    filenum += 1
+                    print("START FRAME: %d " % (filenum))
+                else :
+                    tofile.write(s)
 
         return 1
-
 
     '''def extract_all(self, filename, structname):
         
@@ -289,7 +287,7 @@ class ExtractPDB :
                 elif command == "4" or command not in "01234":
                     print("\nExit now. \nHave a nice day!")
                     command = '5'
-                    sys.exit(0)
+                    sys.exit(1)
                     # return None
                 elif command == "0":
                     self.printinfor()
