@@ -422,7 +422,7 @@ class GmxIndex :
         if self.groups.index(group) == len(self.groups) - 1 :
             end_ln = self.totallines - 1
         else :
-            end_ln = gln[self.groups[self.groups.index(group) + 1]]
+            end_ln = gln[self.groups[self.groups.index(group) + 1]] - 1
 
         contents = [ self.ndxlines[x].strip("\n")+" " for x in range(start_ln, end_ln+1) ]
 
