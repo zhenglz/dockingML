@@ -149,13 +149,13 @@ class PdbIndex :
             tofile = open(outputNdxFile, 'wb')
 
         tofile.write('[ %s ] \n'% groupName )
-        i = 0
-        for atom in atomNdxList :
-            i += 1
+
+        for i, atom in enumerate(atomNdxList) :
             tofile.write('%6d ' % int(atom))
             if i % 15 == 0:
                 tofile.write('  \n')
 
+        tofile.write("\n")
         tofile.close()
         return 1
 

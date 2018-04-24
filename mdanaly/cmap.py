@@ -14,12 +14,16 @@ import numpy as np
 import argparse
 
 import dockml
+import mdanaly
+import dockml.pdbIO as pio
+import dockml.index as ndx
 
 from matplotlib import pyplot as plt
 from collections import defaultdict
 from argparse import RawTextHelpFormatter
 from datetime import datetime
 from mpi4py import MPI
+
 
 import time
 
@@ -829,6 +833,125 @@ class ContactMap:
             sys.exit(1)
 
         return args
+
+class CommunityCmap :
+
+    def __init__(self, cmap):
+        if os.path.isfile(cmap) :
+            try :
+                self.cmap = np.loadtxt(cmap, delimiter=",", comments="#")
+            except :
+                self.cmap = np.loadtxt(cmap, delimiter=" ", comments="#")
+        else :
+            self.cmap = cmap
+
+    def icriticalMap(self, icritical, dat):
+
+        map = np.sum(np.greater(dat, icritical), axis=0) / dat.shape[0]
+
+        return (map >= 0.48) * 1.0
+
+    def diagonalZeroed(self, cmap, xsize, outfile):
+        from mdanaly import matrix
+
+        map = np.reshape(cmap, (xsize, cmap.shape[0] / xsize))
+
+        # matrix 2 xyz
+        xyz = matrix.MatrixHandle().matrix2xyz(map)
+        mtx = matrix.MatrixHandle().neiborhood2zero(xyz, neiborsize=4, outtype='mtx')
+
+        np.savetxt(outfile, mtx, fmt="%3.1f", delimiter=" ")
+        return 1
+
+    def generateCmap(self):
+
+        #dat = np.loadtxt("all_cmapnbyn.csv", delimiter=",")
+        Icritical = np.arange(0, 15, 1.0)
+
+        for ic in Icritical:
+            imap = self.icriticalMap(ic, self.cmap)
+
+            self.diagonalZeroed(imap, int(np.sqrt(self.cmap.shape[1])), "cmap_I_%.2f" % ic)
+
+        return 1
+
+    def calculateNbyN(self, pdbfile, dcutoff, res1, res2, ndxlist):
+
+        cutoff = dcutoff ** 2
+
+        cmap = mdanaly.ContactMap(pdbfile)
+
+        crd1 = pio.coordinatesPDB().getAtomCrdByNdx(pdbfile, ndxlist[res1])
+        crd2 = pio.coordinatesPDB().getAtomCrdByNdx(pdbfile, ndxlist[res2])
+
+        t = cmap.residueContacts(resCrd1=crd1,
+                                 resCrd2=crd2,
+                                 distcutoff=cutoff,
+                                 verbose=False,
+                                 rank=0,
+                                 NbyN=True
+                                 )
+        # print(t)
+        return t
+
+    def scatterFileList(self, ranksize, pdbFileList):
+        load4each = int(math.ceil(float(len(pdbFileList)) / float(ranksize)))
+        filesList = []
+
+        for i in range(ranksize - 1):
+            filesList.append(pdbFileList[i * load4each: load4each * (i + 1)])
+        filesList.append(pdbFileList[(ranksize - 1) * load4each:])
+
+        return filesList
+
+    def mpiCmapNbyN(self, MAX, inpdb_prefix="S_%s.pdb",
+                    chain=" ", resindex =  [str(x) for x in range(1, 251)],
+                    cutoff=5.0, atomtype = "side-chain-noH"):
+
+        os.chdir(os.getcwd())
+
+        startTime = datetime.now()
+
+        comm = MPI.COMM_WORLD
+        size = comm.Get_size()
+        rank = comm.rank
+
+        fileList = [ inpdb_prefix % str(x) for x in range(1, MAX)]
+
+        ndxdict = defaultdict(list)
+        for res in resindex:
+            ndxdict[res] = ndx.PdbIndex().res_index(fileList[0], chain,
+                                                    residueNdx=[int(res)],
+                                                    atomtype=atomtype,
+                                                    atomList=[],
+                                                    )
+        if rank == 0:
+            pdbFileList = self.scatterFileList(size, fileList)
+        else:
+            pdbFileList = None
+
+        filesList = comm.scatter(pdbFileList, root=0)
+
+        results = []
+
+        for fn in filesList:
+            count = 0
+            print("progress file name {}, number {} out of ".format(fn, count, len(filesList)))
+
+            nbyn = [ self.calculateNbyN(fn, cutoff, x, y, ndxdict) for x in resindex for y in resindex]
+            # pair = [ [x, y] for x in resindex for y in resindex ]
+
+            results.append(nbyn)
+            count += 1
+
+        np.savetxt(str(rank) + "_res_sidechain_cmap_nbyn.csv", np.array(results), delimiter=',', fmt="%5.3f")
+
+        overallValuesList = comm.gather(results, root=0)
+        if rank == 0:
+            # np.savetxt("res_sidechain_cmap_nbyn.csv", np.array(overallValuesList), delimiter=',', fmt="%5.3f")
+            pass
+        print("Total Time Usage: ")
+        print(datetime.now() - startTime)
 
 def descriptions() :
     """

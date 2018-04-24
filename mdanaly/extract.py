@@ -157,7 +157,6 @@ class ExtractPDB :
         tofile = open(structname + "_" + str(filenum) + '.pdb', 'w')
 
         with open(filename) as lines :
-
             for s in lines :
                 if "MODEL" in s :
                     tofile = open(structname + "_" + str(filenum) + '.pdb', 'w')
@@ -168,7 +167,7 @@ class ExtractPDB :
                     tofile.close()
                     filenum += 1
                     print("START FRAME: %d " % (filenum))
-                else :
+                elif "ATOM" in s :
                     tofile.write(s)
 
         return 1
