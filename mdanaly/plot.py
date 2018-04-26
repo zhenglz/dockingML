@@ -629,6 +629,7 @@ def main() :
                                  legend_loc=args.legend_loc,
                                  legend_box=args.legend_box,
                                  alpha=args.alpha,
+                                 pmf=args.pmf
                                  )
 
     elif plotType in ['2D', '2d', '2ds'] :
