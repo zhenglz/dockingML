@@ -191,7 +191,8 @@ def plot1dTimeSeries(filename, color, xycol,
                      shiftX=0.0, shiftY=0.0,
                      legend_loc='',
                      legend_box=0,
-                     alpha=1.0
+                     alpha=1.0,
+                     pmf=False,
                      ):
     # define x y data
 
@@ -208,6 +209,9 @@ def plot1dTimeSeries(filename, color, xycol,
         xy = np.loadtxt(filename, comments=["#", "@"], usecols=set(xycol))
         x = xy[xstart:, 0] * xscale + shiftX
         y = xy[xstart:, -1] * yscale + shiftY
+
+        if pmf :
+            y = -2.5 * np.log( np.array(y) / max(y))
 
         plt.plot(x, y, color=color, label=label,
                  linestyle=linestyle, marker=marker,
