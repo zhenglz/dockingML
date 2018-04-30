@@ -104,15 +104,10 @@ class Mol2IO :
                 if isinstance(inf[0], list) :
                     if inf[0][0] == molID :
                         return filen
-                    else :
-                        pass
+
                 else :
                     if inf[0] == molID :
                         return filen
-                    else :
-                        pass
-            else :
-                pass
 
         return ""
 

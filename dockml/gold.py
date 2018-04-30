@@ -15,12 +15,30 @@ import subprocess as sp
 from .mol2IO import Mol2IO
 
 from argparse import RawTextHelpFormatter
-from collections import  OrderedDict
+from collections import OrderedDict
+from collections import defaultdict
 
 
 class GoldResults :
-    def __init__(self):
-        pass
+    def __init__(self, bestranking):
+        self.bestrank = bestranking
+        self.results = self.rankingResults(self.bestrank)
+
+    def rankingResults(self, lst):
+        '''
+        read the bestranking.lst file
+        duplicated results will be overided by last result record
+        results: dict, key: ligand values: scores and file paths
+        :return: defaultdict(list), the results
+        '''
+
+        results = defaultdict(list)
+
+        with open(lst) as lines :
+            for s in [ x for x in lines if "#" != x[0] ] :
+                results[s.split()[-1]] = [ x.strip("\'") for x in s.split()[:-1]]
+
+        return results
 
     def findOriginalLig(self, input, ligid, type="mol2"):
         """
@@ -55,33 +73,26 @@ class GoldResults :
 
         return ligcontent
 
-    def findDockedLig(self, filepath, ligid, filenum=1) :
+    def findDockedLig(self, ligid) :
         """
-        from the GOLD docking results, select only some of the important files.
+        from the GOLD docking results, select the result pose mol2 file
         based on their ligand id
-        :param filepath: str, path of the gold docking results
         :param ligid: str, the id of the ligand
-        :param filenum:
-        :return: files together with their absoult path
+        :return: filename
         """
 
-        filelist = glob.glob(filepath+"/gold_soln*.mol2")
-        thefiles = []
+        return self.results[ligid][-1]
 
-        ''' going to find the gold results file based on ligand id '''
-        for filename in filelist :
-            with open(filename) as lines :
+    def getGoldScore(self, ligid):
+        '''
 
-                for s in lines :
-                    if len(s.split()) > 0 and s.split()[0] in ligid.strip('./') :
-                       thefiles.append(filename)
+        :param ligid: str, ligand name
+        :return: float
+        '''
 
-            if len(thefiles) > filenum :
-                break
+        return float(self.results[ligid][0])
 
-        return thefiles
-
-    def rankingLst(self, outfile, shell=True, lstpath='output*/*.lst') :
+    def rankingLst(self, outfile, shell=True, lstpath='output*/*.lst', decending=False) :
         """
         sort the bestranking.lst files
         :param outfile: str, output file name
@@ -96,13 +107,23 @@ class GoldResults :
             return 1
         else :
             # pythonic style ranking
-            filedirect = os.listdir("./")
-            for fd in filedirect :
-                if lstpath.split("/")[0][:-1] in fd and os.path.isdir(fd) :
-                    files = os.listdir(fd)
-                    for f in files :
-                        if ".lst" in f and not os.path.isdir(fd + "/" + f) :
-                            pass
+            files = glob.glob(lstpath)
+
+            contents = []
+            for fn in files :
+                if os.path.exists(fn) :
+                    with open(fn) as lines :
+                        contents += [ [ x.split() for x in lines.readlines()
+                                        if "#" not in x ],
+                                      ]
+
+            contents.sort(key=lambda x: float(x[0]), reverse=decending )
+
+            lines = [ " ".join(x) for x in contents ]
+
+            with open(outfile) as tofile :
+                map(lambda x: tofile.write(x), lines)
+
             return 1
 
     def getLigandID(self, ligidinfor, pathname) :
@@ -117,9 +138,14 @@ class GoldResults :
             '''multiple ligand id directly'''
             ligandlist = ligidinfor
         else :
+
             ''' supposing the result ligands ids in file, each record per line '''
             ligandlist = []
             if ligidinfor in glob.glob(pathname) :
+
+                ligandlist.append( Mol2IO().properties(ligidinfor, "MOLECULE")[0] )
+
+                '''
                 lines = open(ligidinfor[0])
                 #ligandlist = []
                 for s in lines :
@@ -127,19 +153,30 @@ class GoldResults :
                         ligandlist.append(s.split()[0])
                 lines.close()
             else :
-                ligandlist.append(ligidinfor[0])
+                ligandlist.append(ligidinfor[0])'''
 
         return ligandlist
 
-    def getLigand(self, ligidfile, topNum, order):
+    def getLigand(self, lst, topNum, decending=False):
         '''
-        get top N ligands from the lst file
+        get top N ligands' file pathnames from the lst file
+        as well as their names
         :param ligidfile:
         :param topNum:
-        :param order:
+        :param decending:
         :return:
         '''
 
+        ligand_files = []
+
+        self.rankingLst("sorted_list", lst, decending=decending)
+
+        sorted = self.rankingResults("sorted_list")
+
+        ligands = sorted.keys()[-topNum:]
+        filenames = [ x[-1] for x in sorted.values()[-topNum:]]
+
+        '''
         # ligidfile is in relative path
         if ligidfile in os.listdir("./") :
             # this file exist and the format is similar to bestranking lst file
@@ -173,9 +210,10 @@ class GoldResults :
         else :
             print( "No such file  %s  in current folder! \n" % ligidfile)
             sys.exit(1)
+        '''
 
         # ligand locations are in absolute paths
-        return ligand
+        return filenames, ligands
 
     def catGOLDResult(self, input_receptor, input_ligand ):
         """
@@ -193,7 +231,6 @@ class GoldResults :
         else :
             print("input file (or files) missing. exit now")
             sys.exit(0)
-
 
 if __name__ == "__main__" :
 
