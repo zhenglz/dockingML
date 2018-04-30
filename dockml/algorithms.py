@@ -50,7 +50,7 @@ class BasicAlgorithm :
     def pmf(self, x, minX, kbt=2.5, max=1.0):
         """
         calculate PMF of a histogram vector
-        :param x:
+        :param x: float
         :param minX: float, avoid divide by zero problem
         :param kt: float, kt=2.5 when T=300K and unit is kJ/mol
         :param max:
