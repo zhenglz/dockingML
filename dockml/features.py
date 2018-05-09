@@ -295,7 +295,7 @@ class GridBasedFeature :
 
         return properties
 
-class BindingFeature:
+class BindingFeature :
 
     def __init__(self):
         if os.path.exists("AtomType.dat") and os.path.exists("elementNegativity.dat"):
@@ -368,12 +368,12 @@ class BindingFeature:
         return their xyz information and the detail information of each atom
         :param input: str, input receptor-ligand complex
         :param ligCode: str, res-name of the ligand
-        :return: recInfor, ligInfor, recatomLine, ligatomLine
+        :return: recXYZ, ligXYZ, recatomLine, ligatomLine
         '''
-        recInfor = defaultdict(list)
+        recXYZ = defaultdict(list)
         recatomLine = {}
         ligatomLine = {}
-        ligInfor = defaultdict(list)
+        ligXYZ = defaultdict(list)
 
         with open(input) as lines :
             lines = [ s for s in lines if ("ATOM" == s.split()[0]
@@ -387,15 +387,15 @@ class BindingFeature:
 
                 ## receptor information
                 if ligCode !=  s[17:20].strip() :
-                    recInfor[ atomID ] = self.getXYZCoord(s)
+                    recXYZ[ atomID ] = self.getXYZCoord(s)
                     recatomLine[atomID] = s
 
                 ## ligand information
                 elif ligCode ==  s[17:20].strip() :
-                    ligInfor[ atomID ] = self.getXYZCoord(s)
+                    ligXYZ[ atomID ] = self.getXYZCoord(s)
                     ligatomLine[atomID] = s
 
-        return recInfor, ligInfor, recatomLine, ligatomLine
+        return recXYZ, ligXYZ, recatomLine, ligatomLine
 
     def atomDistance(self, xyz1, xyz2) :
         '''
@@ -496,6 +496,7 @@ class BindingFeature:
                 ## count contacts in backbones
                 if line.split()[2] in backboneAtoms :
                     backCount[residueID] += self.switchFuction(distance, distanceCutoff*2.0)
+
                 ## count contacts in sidechains
                 elif line.split()[2] not in backboneAtoms :
                     sideCount[residueID] += self.switchFuction(distance, distanceCutoff*2.0)
@@ -532,12 +533,10 @@ class BindingFeature:
         d6  = distance ** 6
         d12 = distance ** 12
 
-        energy = C12 / d12 - C6 / d6
-
-        return energy
+        return C12 / d12 - C6 / d6
 
     def resVdWContribution(self, alldistpairs, recatomInfor, ligatomInfor,
-                           vdwParams, maxCutoff, pdbqt=True) :
+                           vdwParams, maxCutoff, pdbqt=False, repulsionMax=10.0 ) :
         """
         accumulated vdw for side-chain or backbone
         alldistpairs: the porteinID-LigID-Distance inforamtion
@@ -596,11 +595,13 @@ class BindingFeature:
             if atomtype1 not in vdwParams.keys() :
                 if atomtype1 == " N1+" :
                     atomtype1 = "N"
-                atomtype1 = "DU"
+                else :
+                    atomtype1 = "DU"
             if atomtype2 not in vdwParams.keys() :
                 if atomtype2 == " N1+":
                     atomtype2 = "N"
-                atomtype2 = "DU"
+                else :
+                    atomtype2 = "DU"
 
             # calculate L J potential per residue
             if alldistpairs[atom] <= maxCutoff:
@@ -615,10 +616,17 @@ class BindingFeature:
             else :
                 sideVdWEner[residueID] += energy
 
+        for key in backVdWEner.keys() :
+            if backVdWEner[key] > repulsionMax :
+                backVdWEner[key] = repulsionMax
+        for key in sideVdWEner.keys() :
+            if sideVdWEner[key] > repulsionMax :
+                sideVdWEner[key] = repulsionMax
+
         return recRes, backVdWEner, sideVdWEner
 
     def contactsAtomtype(self, alldistpairs, recatomInfor, ligatomInfor,
-                         vdwParams, distanceCutoff, pdbqt=True):
+                         vdwParams, distanceCutoff, pdbqt=False):
         # vdw counting based on different atom types
         # alldistpairs: the porteinID-LigID-Distance inforamtion
         # atomdetailInfor : the atomID-PDBline information
@@ -631,7 +639,7 @@ class BindingFeature:
 
         for atom in atoms :
             distance = alldistpairs[atom]
-            if distance <= distanceCutoff * 4 :
+            if distance <= distanceCutoff * 2 :
                 recline = recatomInfor[atom.split("+")[0]]
                 ligline = ligatomInfor[atom.split("+")[1]]
 
@@ -646,6 +654,7 @@ class BindingFeature:
                     if ligAtom == "N1+" :
                         ligAtom = "N"
                     else :
+                        print("DU {}".format(ligAtom))
                         ligAtom = "DU"
 
                 if pdbqt :
@@ -671,6 +680,15 @@ class BindingFeature:
     def coulombE(self, alldistpairs, recatomInfor, ligatomInfor,
                  maxCutoff, dielectric,
                  ):
+        """
+        calculate residue-ligand interaction coulomb energies
+        :param alldistpairs:
+        :param recatomInfor:
+        :param ligatomInfor:
+        :param maxCutoff:
+        :param dielectric:
+        :return:
+        """
         ## calculate eletrostatic interactions
         ## V = f (q1 * q2 ) / (epsilon * r12 )
         ## f = 1 / (4 * pi * epsilon) = 138.935 485 kJ * nm / (mol * e ^2)
@@ -742,30 +760,29 @@ class BindingFeature:
         # the Van der Waals interaction parameters,
         # the format is: { "C" : [0.339, 0.359824]; "DU" : [0.339, 0.359] }
         vdwParams = self.getVdWParams()
-        pdbfileLig = {}
-        lines = open(inputfile)
-        for s in lines :
-            if s[0] != "#" :
-                pdbfileLig[s.split()[0]] = s.split()[1]
-        lines.close()
+
+        with open(inputfile) as lines :
+            fnames_ligs = [ (x.split()[0], x.split()[1]) for x in lines if "#" not in x ]
+            pdbfileLig = dict(fnames_ligs)
 
         allcases = []
         colnames = []
         for i in range(len(pdbfileLig.keys())) :
             print("Progress: no. %d file, out of %d"%(i, len(pdbfileLig.keys())))
 
-            pdbfilename = sorted(pdbfileLig.keys())[i]
+            # obtain pro-lig complex file name
+            pdbfilename = fnames_ligs[i][0]
 
             # get atom information
             receptorXYZ, ligandXYZ, recatomDetailInfor, ligatomDetailInfor = \
-                self.getAtomInfor(pdbfilename, pdbfileLig[pdbfilename])
+                self.getAtomInfor(input=pdbfilename, ligCode=fnames_ligs[i][1])
 
             alldistpairs = self.atomDistMatrix(receptorXYZ, ligandXYZ)
             # containing all the atom-atom distances data
 
             # counting contacts of atom pairs. Backbone and SideChain are seperated.
             # this function pass the test
-            reslist2, backcount, sidecount = self.residueCounts(alldistpairs,
+            reslist1, backcount, sidecount = self.residueCounts(alldistpairs,
                                                                 recatomDetailInfor,
                                                                 distanceCutoff = vdwCountCutoff)
             # calculate Van der Waals contributions. Backbone and SideChain are seperated
@@ -774,6 +791,7 @@ class BindingFeature:
                                                                  recatomDetailInfor,
                                                                  ligatomDetailInfor,
                                                                  vdwParams ,
+                                                                 pdbqt=False,
                                                                  maxCutoff = vdwEnerCutoff)
 
             # for all the atomtypes combinations, what are the contacts counts given a cutoff as 6.0 angstrom?
@@ -784,7 +802,7 @@ class BindingFeature:
                                                    vdwParams,
                                                    distanceCutoff = vdwCountCutoff )
 
-            reslist2, backcol, sidecol = self.coulombE(alldistpairs,
+            reslist3, backcol, sidecol = self.coulombE(alldistpairs,
                                                        recatomDetailInfor,
                                                        ligatomDetailInfor,
                                                        maxCutoff=colEnerCutoff,
@@ -795,7 +813,7 @@ class BindingFeature:
 
             # now, print the information into files
             if i == 0:
-                reslist = sorted(reslist2)
+                reslist = sorted(list(set.union(set(reslist1), set(reslist2), set(reslist3))))
                 atomCombine = sorted(atomTypeCounts.keys())
 
                 for cn in ["countback", "countside", "vdwback", "vdwside", "columbback", "columbside"] :
@@ -867,11 +885,11 @@ def main() :
                         help="The input file, containing names of proteins and their ligands as well.")
     parser.add_argument("-out",default="output.dat",type=str,
                         help="The output binding features file name.")
-    parser.add_argument("-ac",type=int,default=1,
+    parser.add_argument("-ac",type=bool,default=True,
                         help="Atom counts between receptor and lignads.")
-    parser.add_argument("-tc",type=int,default=1,
+    parser.add_argument("-tc",type=bool,default=True,
                         help="Counting of contacts by atom types. ")
-    parser.add_argument("-vdwE", default=1, type=int,
+    parser.add_argument("-vdwE", default=True, type=bool,
                         help="Whether van del waals calculate energy per residue")
     parser.add_argument("-columb", type=bool, default=True,
                         help="Whether include columbic interactions. Default is True")

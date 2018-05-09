@@ -229,4 +229,3 @@ class Mol2IO :
 
         return 1
 
-

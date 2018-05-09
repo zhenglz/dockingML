@@ -22,9 +22,9 @@ from collections import defaultdict
 class GoldResults :
     def __init__(self, bestranking):
         self.bestrank = bestranking
-        self.results = self.rankingResults(self.bestrank)
+        self.results = self.lstResults(self.bestrank)
 
-    def rankingResults(self, lst):
+    def lstResults(self, lst):
         '''
         read the bestranking.lst file
         duplicated results will be overided by last result record
@@ -35,9 +35,10 @@ class GoldResults :
         results = defaultdict(list)
 
         with open(lst) as lines :
-            for s in [ x for x in lines if "#" != x[0] ] :
-                results[s.split()[-1]] = [ x.strip("\'") for x in s.split()[:-1]]
+            for s in [ x for x in lines if ("#" not in x and len(x.split())) ] :
+                results[ s.split()[-1] ] = s.split()[:-1]
 
+        # { ligid: lstline }
         return results
 
     def findOriginalLig(self, input, ligid, type="mol2"):
@@ -113,9 +114,7 @@ class GoldResults :
             for fn in files :
                 if os.path.exists(fn) :
                     with open(fn) as lines :
-                        contents += [ [ x.split() for x in lines.readlines()
-                                        if "#" not in x ],
-                                      ]
+                        contents += [x.split() for x in lines.readlines() if "#" not in x ]
 
             contents.sort(key=lambda x: float(x[0]), reverse=decending )
 
@@ -125,6 +124,18 @@ class GoldResults :
                 map(lambda x: tofile.write(x), lines)
 
             return 1
+
+    def sortResult(self, reverse=False):
+
+        contents = []
+        if os.path.exists(self.bestrank):
+            with open(self.bestrank) as lines:
+                for s in [ x for x in lines if ("#" not in x and len(x.split()))] :
+                    contents.append(s.split())
+
+        contents = sorted(contents, key=lambda x: float(x[0]), reverse=reverse)
+
+        return contents
 
     def getLigandID(self, ligidinfor, pathname) :
         '''
@@ -157,21 +168,19 @@ class GoldResults :
 
         return ligandlist
 
-    def getLigand(self, lst, topNum, decending=False):
+    def getLigand(self, lst, topNum, reverse=False):
         '''
         get top N ligands' file pathnames from the lst file
         as well as their names
         :param ligidfile:
         :param topNum:
-        :param decending:
+        :param reverse:
         :return:
         '''
 
-        ligand_files = []
+        self.rankingLst("sorted_list", lst, decending=reverse)
 
-        self.rankingLst("sorted_list", lst, decending=decending)
-
-        sorted = self.rankingResults("sorted_list")
+        sorted = self.lstResults("sorted_list")
 
         ligands = sorted.keys()[-topNum:]
         filenames = [ x[-1] for x in sorted.values()[-topNum:]]
@@ -215,7 +224,17 @@ class GoldResults :
         # ligand locations are in absolute paths
         return filenames, ligands
 
-    def catGOLDResult(self, input_receptor, input_ligand ):
+    def copyLigandPoseFile(self, pose, out):
+        try :
+
+            job = sp.Popen("cp {} {} ".format(pose, out), shell=True)
+            job.communicate()
+        except FileNotFoundError :
+            print(pose, " Not Found!")
+
+        return 1
+
+    def catGOLDResult(self, input_receptor, input_ligand):
         """
         cat two mol2 files, or both pdb files are accepted
         :param input_receptor: str, file name
@@ -232,9 +251,53 @@ class GoldResults :
             print("input file (or files) missing. exit now")
             sys.exit(0)
 
+class RankResults :
+
+    def __init__(self, lst):
+        self.bestrank = lst
+
+    def sortLst(self, reverse=False):
+        '''
+        sort a bestranking.lst file
+        :param lst: str, file name
+        :param reverse:
+        :return: a 2d array, [ [score, ..., ligid], ]
+        '''
+        return GoldResults(self.bestrank).sortResult(reverse=reverse)
+
+    def getTopLigandsID(self, topNum=100):
+        '''
+        return the ligand ids in the top ranking list
+        :param topNum:
+        :return:
+        '''
+
+        return [ x[-1] for x in self.sortLst(reverse=True)[: topNum]]
+
+    def commonTopLigandsID(self, lst_list, topNum=1000):
+        '''
+        input a list of bestranking files, return their common ranking ligands
+        :param lst_list:
+        :param topNum:
+        :return:
+        '''
+
+        com_top = set([])
+
+        for i in range(len(lst_list)) :
+            topligs = RankResults(lst_list[i]).getTopLigandsID(topNum)
+
+            if i == 0 :
+                com_top = set(topligs)
+            else :
+                com_top = com_top & set(topligs)
+
+        return com_top
+
+'''
 if __name__ == "__main__" :
 
-    description = ''' The script is used to extract specific structures after docking. '''
+    description = # The script is used to extract specific structures after docking. #
 
     parser = argparse.ArgumentParser(description=description, formatter_class=RawTextHelpFormatter)
     parser.add_argument('-id', type=str, default="ligands_id.dat",
@@ -255,7 +318,7 @@ if __name__ == "__main__" :
     parser.add_argument('-topn',type=int, default=100, help="How many top ranking ligands for extracting. Default is 10. ")
 
     args = parser.parse_args()
-    gr   = GoldResults()
+    gr   = GoldResults(args.rnk)
 
     if len(sys.argv) < 3 :
         parser.print_help()
@@ -266,7 +329,7 @@ if __name__ == "__main__" :
         outputpath += "/"
     dockedpath = args.dpath
 
-    ''' Prepare ligands for extracting '''
+    # Prepare ligands for extracting #
 
     if len(args.id) == 0 :
         print( "Error! Ligand file or ID missing!")
@@ -288,7 +351,7 @@ if __name__ == "__main__" :
         print( "Getting ranking ligands\' information failed!\nExit Now!\n")
         sys.exit(1)
 
-    ''' Extract ligand files from original ligand library file '''
+    # Extract ligand files from original ligand library file #
     if True :
 
         solutions = []
@@ -324,3 +387,5 @@ if __name__ == "__main__" :
             print("\n" + outputpath + "combined_soultions.mol2 file created! \nExit Now!\n")
     else :
         print( "Error! Ligand Library file should be a mol2 file!")
+
+'''

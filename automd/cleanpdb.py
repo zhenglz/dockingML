@@ -68,7 +68,7 @@ class CleanPDB :
         :return:
         '''
 
-        job = sp.Popen("awk \'$1 ~ /HETATM/ && $3 !~ /XX/ {print $0}\' %s > %s "%(inpdb, outpdb), shell=True)
+        job = sp.Popen("awk \'$1 ~ /AT/ && $NF !~ /Xx/ {print $0}\' %s > %s "%(inpdb, outpdb), shell=True)
         job.communicate()
 
         return 1

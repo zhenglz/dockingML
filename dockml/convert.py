@@ -22,13 +22,16 @@ class Convert :
         :param verbose:
         :return:
         '''
-        if os.path.exists(input) :
-            status = sp.check_output("%s %s -O %s " % (self.obabel, input, output), shell=True)
-            if verbose:
-                print(status)
-        else :
-            print(input + " is not exist!!!\nExit Now!")
-            sys.exit(0)
+        try :
+            if os.path.exists(input) :
+                status = sp.check_output("%s %s -O %s " % (self.obabel, input, output), shell=True)
+                if verbose:
+                    print(status)
+            else :
+                print(input + " is not exist!!!\nExit Now!")
+                #sys.exit(0)
+        except FileNotFoundError :
+            pass
 
         return 1
 

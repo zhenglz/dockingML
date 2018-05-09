@@ -1,0 +1,7 @@
+%Chk=Your-chkfile.chk
+%Mem=2048MB
+%NProcShared=8
+
+#P hf/6-31G* Opt=(Tight,CalcFC) Freq SCF(Conver=5) POP=MK IOp(6/33=2,6/42=6,6/50=1)
+
+Gaussian optimization output to be used by R.E.D.

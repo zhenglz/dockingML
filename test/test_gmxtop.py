@@ -1,6 +1,30 @@
 
 from automd.gmxtop import TopModifier, IndexModifier
 import os, sys
+from automd import gentop, cleanpdb
+import subprocess as sp
+
+def cleanMol2(pose, outname) :
+
+    gtop = gentop.GenerateTop()
+
+    gtop.runObabel('obabel', pose, outname+".pdb")
+
+    cpdb = cleanpdb.CleanPDB(outname+".pdb")
+
+    cpdb.removeLonePair(outname+".pdb", "cleaned_"+outname+".pdb")
+
+    gtop.runObabel('obabel', "cleaned_"+outname+".pdb", 'noL_'+outname+'.mol2')
+
+    return 'noL_'+outname+'.mol2'
+
+def ligandTop(ligmol2, nc) :
+    gtop = gentop.GenerateTop()
+
+    script = gtop.runAntechamber(ligmol2, netCharge=nc )
+
+    job = sp.Popen('sh ./{} {} {}'.format(script, ligmol2, 'AMBER'), shell=True)
+    job.communicate()
 
 def modifyTop() :
 
@@ -33,7 +57,7 @@ def motifyIndex() :
 
     mndx.appendFields(fields=['Protein', 'LIG'], output="output.ndx", field_name="")
 
-if __name__ == "__main__" :
+def tt() :
 
     opt = sys.argv[1]
 
@@ -41,3 +65,6 @@ if __name__ == "__main__" :
         modifyTop()
     elif opt in ['index', 'ndx', 'Index', 'INDEX'] :
         motifyIndex()
+
+pdb = cleanMol2(sys.argv[1], 'M1')
+ligandTop(pdb, 0)

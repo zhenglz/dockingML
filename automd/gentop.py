@@ -3,7 +3,7 @@
 import sys, os
 from datetime import time
 import subprocess as sp
-from automd import SummaryPDB
+from automd import sumpdb
 import argparse
 from argparse import RawDescriptionHelpFormatter, RawTextHelpFormatter
 
@@ -307,7 +307,7 @@ echo "AMBER : leaprc.ff90"
         # run antechamber here, may first generate a sh script and then wrap it up
         if netCharge is None :
             try:
-                spdb = SummaryPDB(pdbfile=infile)
+                spdb = sumpdb.SummaryPDB(pdbfile=infile)
                 netcharge = spdb.netCharges(inputMol=infile)
             except :
                 print("Getting netcharge error!")
@@ -323,7 +323,7 @@ echo "AMBER : leaprc.ff90"
                         "antechamber -i $1 -fi mol2 -o prep.$2 -fo prepi -at $2 -pf y -s 2 -c bcc -nc %d \n" % netcharge)
                 else:
                     tofile.write(s)
-        return("antechamber.sh")
+        return "antechamber.sh"
 
     def trimHydrogen(self, reduce, pdbin, pdbout, verbose=False) :
         """
