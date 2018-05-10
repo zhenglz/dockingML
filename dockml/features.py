@@ -813,7 +813,7 @@ class BindingFeature :
 
             # now, print the information into files
             if i == 0:
-                reslist = sorted(list(set.union(set(reslist1), set(reslist2), set(reslist3))))
+                reslist = sorted(list(set.intersection(set(reslist1), set(reslist2), set(reslist3))))
                 atomCombine = sorted(atomTypeCounts.keys())
 
                 for cn in ["countback", "countside", "vdwback", "vdwside", "columbback", "columbside"] :
