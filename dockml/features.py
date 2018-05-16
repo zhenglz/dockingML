@@ -757,6 +757,7 @@ class BindingFeature :
         :return:
         """
 
+        error_log = open("./error.log", 'w')
         # the Van der Waals interaction parameters,
         # the format is: { "C" : [0.339, 0.359824]; "DU" : [0.339, 0.359] }
         vdwParams = self.getVdWParams()
@@ -812,6 +813,7 @@ class BindingFeature :
             case = []
 
             # now, print the information into files
+            num_cols = 0
             if i == 0:
                 reslist = sorted(list(set.intersection(set(reslist1), set(reslist2), set(reslist3))))
                 atomCombine = sorted(atomTypeCounts.keys())
@@ -821,20 +823,30 @@ class BindingFeature :
 
                 colnames += [ "atomTCount" + "_" + x for x in atomCombine ]
 
-            # countback and countside
-            case += [ backcount[x] for x in reslist ]
-            case += [ sidecount[x] for x in reslist ]
+                num_cols = len(colnames)
 
-            # vdwback and vdwside
-            case += [ backvan[x] for x in reslist ]
-            case += [ sidevan[x] for x in reslist ]
+            try :
 
-            # columbback and cloumbback
-            case += [ backcol[x] for x in reslist ]
-            case += [ sidecol[x] for x in reslist ]
+                # countback and countside
+                case += [ backcount[x] for x in reslist ]
+                case += [ sidecount[x] for x in reslist ]
 
-            # atomTcount
-            case += [ atomTypeCounts[x] for x in atomCombine ]
+                # vdwback and vdwside
+                case += [ backvan[x] for x in reslist ]
+                case += [ sidevan[x] for x in reslist ]
+
+                # columbback and cloumbback
+                case += [ backcol[x] for x in reslist ]
+                case += [ sidecol[x] for x in reslist ]
+
+                # atomTcount
+                case += [ atomTypeCounts[x] for x in atomCombine ]
+            except :
+                if num_cols == 0 :
+                    num_cols = len(allcases[-1])
+                case = [ 0.0 ] * num_cols
+                error_log.write("%s errors here \n"%pdbfilename)
+                print("Errors: %s "%pdbfilename)
 
             allcases.append(case)
 
@@ -843,6 +855,8 @@ class BindingFeature :
         np.savetxt(outputfile, allcases, fmt="%.3f", delimiter=",",
                    header=",".join(colnames)
                    )
+
+        error_log.close()
 
         return 1
 

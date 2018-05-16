@@ -279,3 +279,64 @@ class ModelEvaluation :
             plt.savefig(figout)
 
         plt.show()
+
+class BindingFeatureClean :
+
+    def __init__(self, x, y):
+
+        self.X = x
+        self.Y = y
+
+        # normalized X
+        self.X = DataClean().normalization(self.X)
+
+    def removeAllZeroFeatures(self, data):
+
+        self.X = data.dropna(axis=0, how='all')
+
+    def feature_importance(self) :
+
+        # data importance
+        self.importance, self.X = \
+            FeatureSelection().featureImportance(self.X, self.Y, firstNo=int(self.X.shape[0] / 2))
+
+    def remove_highcorr(self):
+        # remove highly correlated features
+        self.X, self.key_features = FeatureSelection().removeCorrelated(self.X, 0.85)
+
+    def perform_pca(self):
+        # perform PCA projection
+        self.X, self.pca = FeatureSelection().PCA(self.X)
+
+    def loadDataSet(self, fn='positive.csv'):
+        '''
+        load data set and return a dataframe
+        :param fn:
+        :return: pandas dataframe
+        '''
+
+        return pd.read_csv(fn, header=0, sep=',')
+
+    def combineDataSet(self, df_1, df_2):
+        '''
+        combine two dataframe into one dataset
+        :param df_1:
+        :param df_2:
+        :return:
+        '''
+        return pd.concat([df_1, df_2])
+
+    def splitDataSet(self, data, ratio=0.8):
+        '''
+        split a dataset based on a ratio
+        return two dataset
+        :param data: panda dataframe
+        :param ratio: float
+        :return:
+        '''
+
+        msk = np.random.rand(data.shape[0]) < ratio
+        train_ = data[msk]
+        test_  = data[~msk]
+
+        return train_, test_

@@ -10,23 +10,34 @@ class BindingFeatureClean :
         self.X = x
         self.Y = y
 
+    def processPipeLine(self):
         # remove all zero
         self.X = self.removeAllZeroFeatures(self.X)
-
-        # normalized X
-        self.X = mlearn.DataClean().normalization(self.X)
+        print("Dropping all-zeroes columns ... ")
 
         # data importance
         self.importance, self.X = \
             mlearn.FeatureSelection().featureImportance(self.X, self.Y, firstNo=int(self.X.shape[0] / 2))
+        print("Calculating feature importances ... ")
 
         # remove highly correlated features
         self.X, self.key_features = mlearn.FeatureSelection().removeCorrelated(self.X, 0.85)
+        print("Remove highly correlated features ... ")
+
+        # normalized X
+        self.X = mlearn.DataClean().normalization(self.X)
+        print("Normalized dataset ... ")
 
         # perform PCA projection
         self.X, self.pca = mlearn.FeatureSelection().PCA(self.X)
+        print("PCA transform completed ... ")
 
     def loadDataSet(self, fn='positive.csv'):
+        '''
+        load data set and return a dataframe
+        :param fn:
+        :return: pandas dataframe
+        '''
 
         return pd.read_csv(fn, header=0, sep=',')
 
