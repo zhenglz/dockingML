@@ -24,8 +24,8 @@ class FeatureSelection :
 
         importance = np.array(model.feature_importances_)
 
-        if firstNo > importance.shape[0] :
-            firstNo = importance.shape[0]
+        #if firstNo > importance.shape[0] :
+        #    firstNo = importance.shape[0]
 
         select = (importance > sorted(importance, reverse=True)[firstNo])
         dataset_sel = X.iloc[:, select]
@@ -259,7 +259,7 @@ class ModelEvaluation :
         from matplotlib import pyplot as plt
 
         # find the TP-FP pairs
-        fpr, tpr, thresholds = roc_curve(self.Y, self.Y_pred, pos_label=pos_label)
+        fpr, tpr, thresholds = roc_curve(self.Y, self.Y_pred, pos_label=pos_label, drop_intermediate=False)
 
         # calculate Area Under Curve
         auc_score = auc(fpr, tpr)
@@ -340,3 +340,34 @@ class BindingFeatureClean :
         test_  = data[~msk]
 
         return train_, test_
+
+    def processPipeLine(self):
+        '''
+        assume a normalized dataset as input, return a PCA processed dataset
+        --------
+        :return:
+        '''
+
+        from dockml import FeatureSelection
+        from sklearn import preprocessing
+        # remove all zero
+        self.X = self.removeAllZeroFeatures(self.X)
+        print("Dropping all-zeroes columns ... ")
+
+        # normalized X
+        self.X = preprocessing.scale(self.X)
+        print("Normalized dataset ... ")
+        self.X = pd.DataFrame(self.X)
+
+        # data importance
+        self.importance, self.X = \
+            FeatureSelection().featureImportance(self.X, self.Y, firstNo=800)
+        print("Calculating feature importances ... ")
+
+        # remove highly correlated features
+        self.X, self.key_features = FeatureSelection().removeCorrelated(self.X, 0.85)
+        print("Remove highly correlated features ... ")
+
+        # perform PCA projection
+        self.X, self.pca = FeatureSelection().PCA(self.X)
+        print("PCA transform completed ... ")

@@ -648,19 +648,25 @@ class BindingFeature :
                 if pdbqt :
                     ligAtom = ligline.split()[-2]
                 else :
-                    ligAtom = ligline.split()[-1]
+                    #ligAtom = ligline.split()[-1]
+                    ligAtom =   ligline[13]
 
                 if ligAtom not in vdwParams.keys() :
                     if ligAtom == "N1+" :
                         ligAtom = "N"
                     else :
-                        print("DU {}".format(ligAtom))
-                        ligAtom = "DU"
+                        print("DU {}".format(ligAtom), ligline)
+                        if ligAtom == "L" :
+                            ligAtom = "Cl"
+                        else :
+                            ligAtom = "DU"
+
 
                 if pdbqt :
                     recAtom = recline.split()[-2]
                 else :
-                    recAtom = recline.split()[-1]
+                    #recAtom = recline.split()[-1]
+                    recAtom = recline[13]
 
                 if recAtom not in vdwParams.keys() :
                     if recAtom == "N1+" :
@@ -814,6 +820,7 @@ class BindingFeature :
 
             # now, print the information into files
             num_cols = 0
+            case_names = []
             if i == 0:
                 reslist = sorted(list(set.intersection(set(reslist1), set(reslist2), set(reslist3))))
                 atomCombine = sorted(atomTypeCounts.keys())
@@ -824,6 +831,7 @@ class BindingFeature :
                 colnames += [ "atomTCount" + "_" + x for x in atomCombine ]
 
                 num_cols = len(colnames)
+                case_names.append(pdbfilename)
 
             try :
 
@@ -841,15 +849,17 @@ class BindingFeature :
 
                 # atomTcount
                 case += [ atomTypeCounts[x] for x in atomCombine ]
+                case_names.append(pdbfilename)
+                allcases.append(case)
+
             except :
                 if num_cols == 0 :
                     num_cols = len(allcases[-1])
-                case = [ 0.0 ] * num_cols
+                #case = [ 0.0 ] * num_cols
                 error_log.write("%s errors here \n"%pdbfilename)
                 print("Errors: %s "%pdbfilename)
 
-            allcases.append(case)
-
+        error_log.write(",".join(case_names)+"\n")
         allcases = np.asarray(allcases)
 
         np.savetxt(outputfile, allcases, fmt="%.3f", delimiter=",",

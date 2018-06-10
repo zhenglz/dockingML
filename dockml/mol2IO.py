@@ -41,6 +41,8 @@ class Mol2IO :
 
         return props
 
+
+
     def triposInfor(self, input, property):
         """
         get the property information of the input file

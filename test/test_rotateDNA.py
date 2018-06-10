@@ -1,14 +1,17 @@
 #!/usr/bin/env python
 
-import numpy as np
-import dockml.pdbIO as pio
-import dockml.algorithms as dal
-import dockml.shiftpdb as spdb
-import mdanaly
-import sys, os
-import math
-import math3d as m3d
 import argparse
+import math
+import os
+import sys
+
+import numpy as np
+
+import automd.shiftpdb as spdb
+import dockml.algorithms as dal
+import dockml.pdbIO as pio
+
+
 #import automd.sumpdb as supdb
 
 def rotation_matrix(axis, theta):

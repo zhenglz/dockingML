@@ -1,5 +1,5 @@
 import os
-from .pdbIO import rewritePDB
+from dockml.pdbIO import rewritePDB
 
 class shiftPDB(rewritePDB) :
     """

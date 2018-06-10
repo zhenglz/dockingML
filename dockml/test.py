@@ -1,7 +1,8 @@
 #from dockml import pdbIO, index
 #from mdanaly import cmap
 
-import sys, os
+import sys
+
 
 def rewritePDB(pdb, chain="B") :
 
@@ -51,7 +52,7 @@ def contacts() :
 def getMMPBSA() :
 
     import numpy as np
-    import sys, os
+    import os
 
     dataset = []
     for i in range(1, 501) :
@@ -117,7 +118,6 @@ def findAtomNdx(pdbfile, resList, chain, atomType, verbose=False):
 
 
 def summpbsa():
-    import os
     import numpy as np
     import subprocess as sp
     from collections import defaultdict
@@ -218,7 +218,7 @@ def shiftDNA(input) :
     from dockml import pdbIO
     from dockml import algorithms
     import numpy as np
-    from dockml import shiftpdb
+    from automd import shiftpdb
 
     dt = 10 # angstrom
     out = "output.pdb"

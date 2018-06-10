@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import sys, os
-from datetime import time
 import subprocess as sp
-from automd import sumpdb
 import argparse
 from argparse import RawDescriptionHelpFormatter, RawTextHelpFormatter
 
@@ -307,7 +305,8 @@ echo "AMBER : leaprc.ff90"
         # run antechamber here, may first generate a sh script and then wrap it up
         if netCharge is None :
             try:
-                spdb = sumpdb.SummaryPDB(pdbfile=infile)
+                from automd import fixpdb
+                spdb = fixpdb.SummaryPDB(infile, "")
                 netcharge = spdb.netCharges(inputMol=infile)
             except :
                 print("Getting netcharge error!")

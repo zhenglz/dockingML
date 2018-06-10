@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 
+import os
+
 import numpy as np
 import pandas as pd
-from dockml import fixpdb
-import os
+
+from automd import fixpdb
 
 if __name__ == "__main__" :
 

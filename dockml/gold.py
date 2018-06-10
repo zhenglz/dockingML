@@ -9,15 +9,13 @@ import argparse
 import glob
 import os
 import sys
+import numpy as np
 import linecache
 import subprocess as sp
-
 from .mol2IO import Mol2IO
-
 from argparse import RawTextHelpFormatter
 from collections import OrderedDict
 from collections import defaultdict
-
 
 class GoldResults :
     def __init__(self, bestranking):
@@ -93,6 +91,57 @@ class GoldResults :
 
         return float(self.results[ligid][0])
 
+    def getElementWeight(self, inputFile="/home/liangzhen/bin/AtomType.dat"):
+        mwElement = defaultdict(list)
+
+        with open(inputFile) as lines :
+            for s in lines :
+                #mwparam = 0.0
+                if "#" not in s and ";" not in s and len(s.split()) > 3 :
+                    mwElement[s.split()[0]] = float(s.split()[2])
+        return mwElement
+
+    def molecularWeight(self, ligDockedFile):
+        ## calculate molecular weight of a mol2 file
+        mwElement = self.getElementWeight()
+        molecularW = 0.0
+        heavyAtomCount = 0
+
+        atomsField = False
+        #print "LIG DOCKED FILE HERE"
+        if os.path.exists(ligDockedFile) :
+
+            with open(ligDockedFile) as lines :
+                for s in lines :
+                    if len(s.split()) > 0 and "#" not in s :
+                        #print "read lines here"
+                        #print s
+
+                        if "@<TRIPOS>ATOM" in s :
+                            atomsField = True
+                        elif "@<TRIPOS>BOND" in s :
+                            atomsField = False
+
+                        elif atomsField and "****" not in s :
+                            ## heavy atom number count
+                            heavyAtomCount += 1
+
+                            if "H" not in s.split()[5] :
+                                ## heavy atom number count
+                                heavyAtomCount += 1
+                            else :
+                                pass
+
+                            if s.split()[5].split(".")[0] not in mwElement.keys():
+                                molecularW += mwElement["DU"]
+                            else:
+                                molecularW += mwElement[s.split()[5].split(".")[0]]
+
+            return heavyAtomCount, molecularW
+        else :
+            print(ligDockedFile, "  Not exist")
+            return -10000.0, 10000.0
+
     def rankingLst(self, outfile, shell=True, lstpath='output*/*.lst', decending=False) :
         """
         sort the bestranking.lst files
@@ -132,10 +181,17 @@ class GoldResults :
             with open(self.bestrank) as lines:
                 for s in [ x for x in lines if ("#" not in x and len(x.split()))] :
                     contents.append(s.split())
+        #ligfiles = [ x[-2].strip("\'") for x in contents ]
 
-        contents = sorted(contents, key=lambda x: float(x[0]), reverse=reverse)
+        #mws = map(self.molecularWeight, ligfiles)
+        #print(list(mws))
 
-        return contents
+        #scores = [ float(x[0]) for x in contents ]
+        #print(scores)
+
+        #new_scores = map(lambda x, y: x/y[-1], scores, mws)
+
+        return sorted(contents, key=lambda x: float(x[0]), reverse=reverse)
 
     def getLigandID(self, ligidinfor, pathname) :
         '''

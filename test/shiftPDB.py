@@ -3,7 +3,7 @@ def shiftDNA() :
     from dockml import pdbIO
     from dockml import algorithms
     import numpy as np
-    from dockml import shiftpdb
+    from automd import shiftpdb
 
     if len(sys.argv) < 3 :
         print("Number of arguments incorrect! Example: \npython shiftPDB.py input.pdb output.pdb 10.0 \n")

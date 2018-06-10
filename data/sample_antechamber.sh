@@ -1,7 +1,5 @@
 #!/bin/bash
 
-source /app/envs/amber_16
-
 if [ $# -ne 2 ]; then
     echo "Usage: input RED III.1  output, charge & spin & residuNAME read from Mol2"
     echo "Format: file_in(Mol2); atom_type(gaff or amber)"
