@@ -595,11 +595,19 @@ class BindingFeature :
             if atomtype1 not in vdwParams.keys() :
                 if atomtype1 == " N1+" :
                     atomtype1 = "N"
+                elif atomtype1 in ["L", "CL"]:
+                    atomtype1 = "Cl"
+                elif atomtype1 in ["B", "BR"]:
+                    atomtype1 = "Br"
                 else :
                     atomtype1 = "DU"
             if atomtype2 not in vdwParams.keys() :
                 if atomtype2 == " N1+":
                     atomtype2 = "N"
+                elif atomtype2 in ["L", "CL", "Cl"]:
+                    atomtype1 = "Cl"
+                elif atomtype2 in ["B", "BR", "R", "Br"]:
+                    atomtype1 = "Br"
                 else :
                     atomtype2 = "DU"
 
@@ -655,11 +663,14 @@ class BindingFeature :
                     if ligAtom == "N1+" :
                         ligAtom = "N"
                     else :
-                        print("DU {}".format(ligAtom), ligline)
-                        if ligAtom == "L" :
+
+                        if ligAtom in ["L", "CL", "Cl"] :
                             ligAtom = "Cl"
+                        elif ligAtom in ["B", "BR", "Br", "R"] :
+                            ligAtom = "Br"
                         else :
                             ligAtom = "DU"
+                            print("DU {}".format(ligAtom), ligline)
 
 
                 if pdbqt :
@@ -671,6 +682,8 @@ class BindingFeature :
                 if recAtom not in vdwParams.keys() :
                     if recAtom == "N1+" :
                         recAtom = "N"
+                    elif recAtom == "CL" :
+                        recAtom = "Cl"
                     else :
                         recAtom = "DU"
 
@@ -774,6 +787,9 @@ class BindingFeature :
 
         allcases = []
         colnames = []
+        num_cols = 0
+        case_names = []
+
         for i in range(len(pdbfileLig.keys())) :
             print("Progress: no. %d file, out of %d"%(i, len(pdbfileLig.keys())))
 
@@ -819,8 +835,6 @@ class BindingFeature :
             case = []
 
             # now, print the information into files
-            num_cols = 0
-            case_names = []
             if i == 0:
                 reslist = sorted(list(set.intersection(set(reslist1), set(reslist2), set(reslist3))))
                 atomCombine = sorted(atomTypeCounts.keys())
@@ -831,7 +845,7 @@ class BindingFeature :
                 colnames += [ "atomTCount" + "_" + x for x in atomCombine ]
 
                 num_cols = len(colnames)
-                case_names.append(pdbfilename)
+                #case_names.append(pdbfilename)
 
             try :
 
@@ -858,6 +872,9 @@ class BindingFeature :
                 #case = [ 0.0 ] * num_cols
                 error_log.write("%s errors here \n"%pdbfilename)
                 print("Errors: %s "%pdbfilename)
+
+        tofile = open("ligand_features_name.dat", "w")
+        tofile.write(",".join(case_names)+"\n")
 
         error_log.write(",".join(case_names)+"\n")
         allcases = np.asarray(allcases)
