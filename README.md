@@ -16,15 +16,19 @@ docking to lower down the false positive rate. Citable paper is coming soon.
 # How to install:
 <p>If you have git commond in your system with internet access, you could first download the codes
 to local folder, say /home/john/applications. <p>
-<p>
-Issue the following commonds:
+<p>Issue the following commonds:</p>
+<br>
 $ cd /home/john/applications
+<br>
 $ git clone zhenglz@github.com/zheng/dockingML.git
+<br>
 $ cd dockingML
+<br>
 $ pip install ./
-
+<br>
 Or if you have anaconda in your system, please add the following packages to your environment before you
 run the "pip install ."
+<br>
 $ conda install pandas mpi4py numpy matplotlib sklearn networkx
 </p>
 
