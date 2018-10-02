@@ -13,6 +13,21 @@ docking to lower down the false positive rate. Citable paper is coming soon.
 ### Contact: lzheng002@e.ntu.edu.sg
 ### Institute: School of Biological Sciences, Nanyang Technological University, Singapore
 
+# How to install:
+<p>If you have git commond in your system with internet access, you could first download the codes
+to local folder, say /home/john/applications. <p>
+<p>
+Issue the following commonds:
+$ cd /home/john/applications
+$ git clone zhenglz@github.com/zheng/dockingML.git
+$ cd dockingML
+$ pip install ./
+
+Or if you have anaconda in your system, please add the following packages to your environment before you
+run the "pip install ."
+$ conda install pandas mpi4py numpy matplotlib sklearn networkx
+</p>
+
 # The structure of the codes:
 
 ## Docking and docking results parse (dockml)
