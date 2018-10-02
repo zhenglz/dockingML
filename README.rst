@@ -59,5 +59,3 @@ interactions. <p>
 ### 3 Construct machine learning models
 
 ### 4 Rescoring large screening poses and select high potent ligands
-
-
