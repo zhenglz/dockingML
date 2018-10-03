@@ -297,7 +297,7 @@ class GridBasedFeature :
 
 class BindingFeature :
 
-    def __init__(self):
+    def __init__(self, vdwCutoff=6., vdwEnerCutoff=12., colEnerCutoff=12., contCutoff=12., disCutoff=3.5):
         if os.path.exists("AtomType.dat") and os.path.exists("elementNegativity.dat"):
             self.atomtype = "AtomType.dat"
             self.elenegat = "elementNegativity.dat"
@@ -306,6 +306,15 @@ class BindingFeature :
             DEFINITIONS_ROOT = os.path.join(PROJECT_ROOT, '../data/AtomType.dat')
             self.atomtype = DEFINITIONS_ROOT
             self.elenegat = os.path.join(PROJECT_ROOT, '../data/elementNegativity.dat')
+
+        # parameters
+        self.vdwCountCutoff = vdwCutoff
+        self.vdwEnerCutoff = vdwEnerCutoff
+        self.colEnerCutoff = colEnerCutoff
+        self.contactCutoff = contCutoff
+        self.distCutoff    = disCutoff
+
+        self.backboneAtoms = ["C", "N", "O", "CA"]
 
     def getVdWParams(self) :
         '''
@@ -445,7 +454,7 @@ class BindingFeature :
         """
         return(1.0 - math.pow((x / d0), n)) / (1.0 - math.pow((x / d0), m))
 
-    def residueCounts(self, alldistpairs, atomDetailInfor, distanceCutoff = 3.5, shortRangeCutoff=12.0) :
+    def residueCounts(self, alldistpairs, atomDetailInfor) :
         """
         input all the distances pairs
         return the number of contacts
@@ -454,14 +463,12 @@ class BindingFeature :
         distance unit is angstrom
         :param alldistpairs: dictionary, all distances
         :param atomDetailInfor: dictionary, detail information
-        :param distanceCutoff: float, distance cutoff
         :return:
         """
 
         atoms = alldistpairs.keys()
         recRes =[]
 
-        backboneAtoms = ["C", "N", "O", "CA"]
 
         for atom in atoms :
             res = atom.split("+")[0].split("_")[1] + "_" + \
@@ -483,7 +490,7 @@ class BindingFeature :
         for atom in atoms :
             # first set a distance cutoff check, only short range distances are considered
             distance = alldistpairs[atom]
-            if distance <= shortRangeCutoff :
+            if distance <= self.contactCutoff :
                 line = atomDetailInfor[atom.split("+")[0]]
 
                 ### add more chain ID, in case you have several different chains
@@ -494,12 +501,12 @@ class BindingFeature :
                             atom.split("+")[0].split("_")[3]
                 #residueID = line[17:20].strip() + "_" + line[22:26].strip()
                 ## count contacts in backbones
-                if line.split()[2] in backboneAtoms :
-                    backCount[residueID] += self.switchFuction(distance, distanceCutoff*2.0)
+                if line.split()[2] in self.backboneAtoms :
+                    backCount[residueID] += self.switchFuction(distance, self.distCutoff*2.0)
 
                 ## count contacts in sidechains
-                elif line.split()[2] not in backboneAtoms :
-                    sideCount[residueID] += self.switchFuction(distance, distanceCutoff*2.0)
+                elif line.split()[2] not in self.backboneAtoms :
+                    sideCount[residueID] += self.switchFuction(distance, self.distCutoff*2.0)
 
         return recRes, backCount, sideCount
 
@@ -536,7 +543,7 @@ class BindingFeature :
         return C12 / d12 - C6 / d6
 
     def resVdWContribution(self, alldistpairs, recatomInfor, ligatomInfor,
-                           vdwParams, maxCutoff, pdbqt=False, repulsionMax=10.0 ) :
+                           vdwParams, pdbqt=False, repulsionMax=10.0 ) :
         """
         accumulated vdw for side-chain or backbone
         alldistpairs: the porteinID-LigID-Distance inforamtion
@@ -553,7 +560,7 @@ class BindingFeature :
         atoms = alldistpairs.keys()
         recRes =[]
 
-        backboneAtoms = ["C", "N", "O", "CA"]
+        #backboneAtoms = ["C", "N", "O", "CA"]
 
         for atom in atoms :
             res = atom.split("+")[0].split("_")[1] + "_" + \
@@ -612,14 +619,14 @@ class BindingFeature :
                     atomtype2 = "DU"
 
             # calculate L J potential per residue
-            if alldistpairs[atom] <= maxCutoff:
+            if alldistpairs[atom] <= self.vdwEnerCutoff :
                 # transfer angstrom to nanometer by multiplying 0.1
                 energy = self.atomicVdWEnergy(atomtype1, atomtype2, alldistpairs[atom] * 0.1, vdwParams)
             else :
                 energy = 0.0
                 #energy = self.atomicVdWEnergy(atomtype1, atomtype2, maxCutoff, vdwParams)
 
-            if recline.split()[2] in backboneAtoms :
+            if recline.split()[2] in self.backboneAtoms :
                 backVdWEner[residueID] += energy
             else :
                 sideVdWEner[residueID] += energy
@@ -634,7 +641,7 @@ class BindingFeature :
         return recRes, backVdWEner, sideVdWEner
 
     def contactsAtomtype(self, alldistpairs, recatomInfor, ligatomInfor,
-                         vdwParams, distanceCutoff, pdbqt=False):
+                         vdwParams, pdbqt=False):
         # vdw counting based on different atom types
         # alldistpairs: the porteinID-LigID-Distance inforamtion
         # atomdetailInfor : the atomID-PDBline information
@@ -647,7 +654,7 @@ class BindingFeature :
 
         for atom in atoms :
             distance = alldistpairs[atom]
-            if distance <= distanceCutoff * 2 :
+            if distance <= self.distCutoff * 2 :
                 recline = recatomInfor[atom.split("+")[0]]
                 ligline = ligatomInfor[atom.split("+")[1]]
 
@@ -697,7 +704,7 @@ class BindingFeature :
         return atomTypeCounts
 
     def coulombE(self, alldistpairs, recatomInfor, ligatomInfor,
-                 maxCutoff=12.0, dielectric=1.0,
+                 dielectric=1.0,
                  ):
         """
         calculate residue-ligand interaction coulomb energies
@@ -715,10 +722,7 @@ class BindingFeature :
 
         ## all pair of atoms
         atoms = alldistpairs.keys()
-
         recRes = []
-
-        backboneAtoms = ["C", "N", "O", "CA"]
 
         for atom in atoms:
             res = atom.split("+")[0].split("_")[1] + "_" + \
@@ -734,7 +738,7 @@ class BindingFeature :
             sideElectroEner[res] = 0.0
 
         for atom in atoms:
-            if alldistpairs[atom] <= maxCutoff:
+            if alldistpairs[atom] <= self.vdwEnerCutoff:  #maxCutoff:
 
                 recline = recatomInfor[atom.split("+")[0]]
                 ligline = ligatomInfor[atom.split("+")[1]]
@@ -748,7 +752,7 @@ class BindingFeature :
                 q1 = float(recline.split()[-2])
                 q2 = float(ligline.split()[-2])
 
-                if recline.split()[2] in backboneAtoms :
+                if recline.split()[2] in self.backboneAtoms :
                     #if atom.split("+")[0].split("_")[0] in backboneAtoms :
                     # from angstrom to nanometer
                     backElectroEner[res] += f * q1 * q2 /(alldistpairs[atom] * 0.1 * dielectric)
@@ -760,19 +764,16 @@ class BindingFeature :
 
     def extractFeatures(self, inputfile="input.txt",
                         outputfile="output.dat",
-                        vdwCountCutoff=6.0,
-                        vdwEnerCutoff=12.0,
-                        colEnerCutoff=12.0,
                         dielec=4.0,
                         feature_terms = [ True, True, True, True],
                         ) :
         """
         extract necessary short range interaction features
-        :param inputfile:
-        :param outputfile:
-        :param vdwCountCutoff:
-        :param vdwEnerCutoff:
-        :param colEnerCutoff:
+        :param inputfile: str, file containing two cols, filename and ligand code
+        :param outputfile: str, file containing all energy terms
+        :param vdwCountCutoff: float
+        :param vdwEnerCutoff: float
+        :param colEnerCutoff: float
         :param dielec:
         :return:
         """
@@ -808,7 +809,7 @@ class BindingFeature :
             # this function pass the test
             reslist1, backcount, sidecount = self.residueCounts(alldistpairs,
                                                                 recatomDetailInfor,
-                                                                distanceCutoff = vdwCountCutoff)
+                                                                )
             # calculate Van der Waals contributions. Backbone and SideChain are seperated
             # this function works fine
             reslist2, backvan, sidevan = self.resVdWContribution(alldistpairs,
@@ -816,7 +817,7 @@ class BindingFeature :
                                                                  ligatomDetailInfor,
                                                                  vdwParams ,
                                                                  pdbqt=False,
-                                                                 maxCutoff = vdwEnerCutoff)
+                                                                 )
 
             # for all the atomtypes combinations, what are the contacts counts given a cutoff as 6.0 angstrom?
             # this function passes the test and works fine
@@ -824,12 +825,11 @@ class BindingFeature :
                                                    recatomDetailInfor,
                                                    ligatomDetailInfor,
                                                    vdwParams,
-                                                   distanceCutoff = vdwCountCutoff )
+                                                    )
 
             reslist3, backcol, sidecol = self.coulombE(alldistpairs,
                                                        recatomDetailInfor,
                                                        ligatomDetailInfor,
-                                                       maxCutoff=colEnerCutoff,
                                                        dielectric=dielec,
                                                        )
 
