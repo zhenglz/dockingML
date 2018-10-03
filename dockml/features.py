@@ -697,15 +697,15 @@ class BindingFeature :
         return atomTypeCounts
 
     def coulombE(self, alldistpairs, recatomInfor, ligatomInfor,
-                 maxCutoff, dielectric,
+                 maxCutoff=12.0, dielectric=1.0,
                  ):
         """
         calculate residue-ligand interaction coulomb energies
-        :param alldistpairs:
-        :param recatomInfor:
-        :param ligatomInfor:
-        :param maxCutoff:
-        :param dielectric:
+        :param alldistpairs: atom-distance information
+        :param recatomInfor: dict, atom_index: atom_line
+        :param ligatomInfor: dict, atom_index: atom_line
+        :param maxCutoff: float, cutoff of the columbic eneriges
+        :param dielectric: float, dielectric constant
         :return:
         """
         ## calculate eletrostatic interactions
@@ -748,7 +748,8 @@ class BindingFeature :
                 q1 = float(recline.split()[-2])
                 q2 = float(ligline.split()[-2])
 
-                if atom.split("+")[0].split("_")[0] in backboneAtoms :
+                if recline.split()[2] in backboneAtoms :
+                    #if atom.split("+")[0].split("_")[0] in backboneAtoms :
                     # from angstrom to nanometer
                     backElectroEner[res] += f * q1 * q2 /(alldistpairs[atom] * 0.1 * dielectric)
                 else :
