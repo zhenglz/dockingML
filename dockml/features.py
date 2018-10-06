@@ -697,9 +697,9 @@ class BindingFeature :
                 atomTypeCombination = recAtom + "_" + ligAtom
                 if atomTypeCombination not in atomTypeCounts.keys() :
                     # apply a switch function to smooth the transition
-                    atomTypeCounts[atomTypeCombination] = self.switchFuction(distance, distanceCutoff*2.0)
+                    atomTypeCounts[atomTypeCombination] = self.switchFuction(distance, self.distCutoff*2.0)
                 else :
-                    atomTypeCounts[atomTypeCombination] += self.switchFuction(distance, distanceCutoff*2.0)
+                    atomTypeCounts[atomTypeCombination] += self.switchFuction(distance, self.distCutoff*2.0)
 
         return atomTypeCounts
 
