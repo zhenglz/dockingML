@@ -297,7 +297,10 @@ class GridBasedFeature :
 
 class BindingFeature :
 
-    def __init__(self, vdwCutoff=6., vdwEnerCutoff=12., colEnerCutoff=12., contCutoff=12., disCutoff=3.5):
+    def __init__(self, vdwCutoff=6., vdwEnerCutoff=12.,
+                 colEnerCutoff=12., contCutoff=12., disCutoff=3.5,
+                 pdbqt=True,
+                 ):
         if os.path.exists("AtomType.dat") and os.path.exists("elementNegativity.dat"):
             self.atomtype = "AtomType.dat"
             self.elenegat = "elementNegativity.dat"
@@ -315,6 +318,10 @@ class BindingFeature :
         self.distCutoff    = disCutoff
 
         self.backboneAtoms = ["C", "N", "O", "CA"]
+        self.pdbqt = pdbqt
+
+        # attributes
+        self.vdwParameters_ = self.getVdWParams()
 
     def getVdWParams(self) :
         '''
@@ -510,23 +517,22 @@ class BindingFeature :
 
         return recRes, backCount, sideCount
 
-    def atomicVdWEnergy(self, atomtype1, atomtype2, distance, vdwParam) :
+    def atomicVdWEnergy(self, atomtype1, atomtype2, distance) :
         """
-        Calculate Van der Waals interaction energy
+        Calculate atomic level Van der Waals interaction energy
         VdW potential calculation, using combination rule 2
         vdwParam is a dictionary list, eg. { "O": [ 0.22617E-02, 0.74158E-0.6 ]; }
         unit of the parameters: nanometer
         :param atomtype1:
         :param atomtype2: dictionary, parameters of atom type and sigma epsilon
         :param distance: float
-        :param vdwParam: dictionary of lists
         :return: float, short range vdw energy
         """
 
-        Sigma_i   = vdwParam[atomtype1][0]
-        Epsilon_i = vdwParam[atomtype1][1]
-        Sigma_j   = vdwParam[atomtype2][0]
-        Epsilon_j = vdwParam[atomtype2][1]
+        Sigma_i   = self.vdwParameters_[atomtype1][0]
+        Epsilon_i = self.vdwParameters_[atomtype1][1]
+        Sigma_j   = self.vdwParameters_[atomtype2][0]
+        Epsilon_j = self.vdwParameters_[atomtype2][1]
 
         # combination rule 2 of vdw MM force field
         sigma_ij   = 0.5 * ( Sigma_i + Sigma_j )
@@ -543,17 +549,16 @@ class BindingFeature :
         return C12 / d12 - C6 / d6
 
     def resVdWContribution(self, alldistpairs, recatomInfor, ligatomInfor,
-                           vdwParams, pdbqt=False, repulsionMax=10.0 ) :
+                           vdwParams, repulsionMax=10.0 ) :
         """
         accumulated vdw for side-chain or backbone
         alldistpairs: the porteinID-LigID-Distance inforamtion
         atomdetailInfor : the atomID-PDBline information
-        :param alldistpairs:
+        :param alldistpairs: dict, all distances
         :param recatomInfor:
-        :param ligatomInfor:
-        :param vdwParams:
-        :param maxCutoff:
-        :param pdbqt:
+        :param ligatomInfor: dict, the ligand-ligand_line information
+        :param vdwParams:  dict, all vdw parameters
+        :param pdbqt: bool, whether it is a pdbqt file
         :return:
         """
 
@@ -562,16 +567,16 @@ class BindingFeature :
 
         #backboneAtoms = ["C", "N", "O", "CA"]
 
-        for atom in atoms :
+        for atom in atoms:
             res = atom.split("+")[0].split("_")[1] + "_" + \
                   atom.split("+")[0].split("_")[2] + "_" + \
                   atom.split("+")[0].split("_")[3]
-            if res not in recRes :
+            if res not in recRes:
                 recRes.append(res)  # get the full residue_seq_chain list
 
         backVdWEner = {}  # format is : {"ARE_175_A": -1.20 }
         sideVdWEner = {}  # format is : {"ARE_175_A": -1.20 }
-        for res in recRes :
+        for res in recRes:
             backVdWEner[res] = 0.0
             sideVdWEner[res] = 0.0
 
@@ -587,9 +592,9 @@ class BindingFeature :
             # atom element, related to the vdw C6 and C12 terms
             #atomtype1 = proAtomTypes[ recline.split()[2] + "_" + recline[17:20].strip() ]
             # if this is a pdbqt file line
-            if pdbqt :
-                atomtype1 = recline.split()[-2]
-                atomtype2 = ligline.split()[-2]
+            if self.pdbqt :
+                atomtype1 = recline.split()[-1]
+                atomtype2 = ligline.split()[-1]
             else :
                 # how to define the ligand atom type? Very difficult. May need to transfer file into Mol2 file
                 # then decide the atom type from the mol2 file
@@ -622,34 +627,41 @@ class BindingFeature :
             if alldistpairs[atom] <= self.vdwEnerCutoff :
                 # transfer angstrom to nanometer by multiplying 0.1
                 energy = self.atomicVdWEnergy(atomtype1, atomtype2, alldistpairs[atom] * 0.1, vdwParams)
-            else :
+            else:
                 energy = 0.0
                 #energy = self.atomicVdWEnergy(atomtype1, atomtype2, maxCutoff, vdwParams)
 
-            if recline.split()[2] in self.backboneAtoms :
+            if recline.split()[2] in self.backboneAtoms:
                 backVdWEner[residueID] += energy
-            else :
+            else:
                 sideVdWEner[residueID] += energy
 
-        for key in backVdWEner.keys() :
-            if backVdWEner[key] > repulsionMax :
+        for key in backVdWEner.keys():
+            if backVdWEner[key] > repulsionMax:
                 backVdWEner[key] = repulsionMax
-        for key in sideVdWEner.keys() :
-            if sideVdWEner[key] > repulsionMax :
+        for key in sideVdWEner.keys():
+            if sideVdWEner[key] > repulsionMax:
                 sideVdWEner[key] = repulsionMax
 
         return recRes, backVdWEner, sideVdWEner
 
-    def contactsAtomtype(self, alldistpairs, recatomInfor, ligatomInfor,
-                         vdwParams, pdbqt=False):
+    def contactsAtomtype(self, alldistpairs, recatomInfor, ligatomInfor,):
+
+        """
         # vdw counting based on different atom types
         # alldistpairs: the porteinID-LigID-Distance inforamtion
         # atomdetailInfor : the atomID-PDBline information
         # vdwParams is the C6 and C12 terms for different atom types
+        :param alldistpairs:
+        :param recatomInfor:
+        :param ligatomInfor:
+        :param pdbqt: bool, whether it is a pdbqt file
+        :return:
+        """
         atoms = alldistpairs.keys()
         atomTypeCounts = {}
-        for atomT1 in vdwParams.keys() :
-            for atomT2 in vdwParams.keys() :
+        for atomT1 in self.vdwParameters_.keys() :
+            for atomT2 in self.vdwParameters_.keys() :
                 atomTypeCounts[ atomT1 + "_" + atomT2 ] = 0.0
 
         for atom in atoms :
@@ -660,33 +672,32 @@ class BindingFeature :
 
                 # unrecognized atomtype occur, "dummy" atomtype is used
                 # create all the combinations of the atomtypes known
-                if pdbqt :
-                    ligAtom = ligline.split()[-2]
+                if self.pdbqt:
+                    ligAtom = ligline.split()[-1]
                 else :
                     #ligAtom = ligline.split()[-1]
-                    ligAtom =   ligline[13]
+                    ligAtom = ligline[13]
 
-                if ligAtom not in vdwParams.keys() :
-                    if ligAtom == "N1+" :
+                if ligAtom not in self.vdwParameters_.keys():
+                    if ligAtom == "N1+":
                         ligAtom = "N"
-                    else :
 
-                        if ligAtom in ["L", "CL", "Cl"] :
-                            ligAtom = "Cl"
-                        elif ligAtom in ["B", "BR", "Br", "R"] :
-                            ligAtom = "Br"
-                        else :
-                            ligAtom = "DU"
-                            print("DU {}".format(ligAtom), ligline)
+                    elif ligAtom in ["L", "CL", "Cl"] :
+                        ligAtom = "Cl"
+                    elif ligAtom in ["B", "BR", "Br", "R"] :
+                        ligAtom = "Br"
+                    else:
+                        ligAtom = "DU"
+                        print("DU {}".format(ligAtom), ligline)
 
 
-                if pdbqt :
-                    recAtom = recline.split()[-2]
+                if self.pdbqt :
+                    recAtom = recline.split()[-1]
                 else :
                     #recAtom = recline.split()[-1]
                     recAtom = recline[13]
 
-                if recAtom not in vdwParams.keys() :
+                if recAtom not in self.vdwParameters_.keys() :
                     if recAtom == "N1+" :
                         recAtom = "N"
                     elif recAtom == "CL" :
@@ -695,10 +706,10 @@ class BindingFeature :
                         recAtom = "DU"
 
                 atomTypeCombination = recAtom + "_" + ligAtom
-                if atomTypeCombination not in atomTypeCounts.keys() :
+                if atomTypeCombination not in atomTypeCounts.keys():
                     # apply a switch function to smooth the transition
                     atomTypeCounts[atomTypeCombination] = self.switchFuction(distance, self.distCutoff*2.0)
-                else :
+                else:
                     atomTypeCounts[atomTypeCombination] += self.switchFuction(distance, self.distCutoff*2.0)
 
         return atomTypeCounts
@@ -713,7 +724,7 @@ class BindingFeature :
         :param ligatomInfor: dict, atom_index: atom_line
         :param maxCutoff: float, cutoff of the columbic eneriges
         :param dielectric: float, dielectric constant
-        :return:
+        :return: tuple, (residues, backbone energies, sidechain energies)
         """
         ## calculate eletrostatic interactions
         ## V = f (q1 * q2 ) / (epsilon * r12 )
@@ -749,8 +760,11 @@ class BindingFeature :
 
                 #q1 = RecCharges[ recline[16:20].strip() + "_" + recline[12:16].strip()]
                 #q2 = LigCharges[ ligline[16:20].strip() + "_" + ligline[12:16].strip()]
-                q1 = float(recline.split()[-2])
-                q2 = float(ligline.split()[-2])
+                if self.pdbqt :
+                    q1 = float(recline.split()[-2])
+                    q2 = float(ligline.split()[-2])
+                else :
+                    q1, q2 = 0., 0.
 
                 if recline.split()[2] in self.backboneAtoms :
                     #if atom.split("+")[0].split("_")[0] in backboneAtoms :
@@ -760,7 +774,7 @@ class BindingFeature :
                     # from angstrom to nanometer
                     sideElectroEner[res] += f * q1 * q2 /(alldistpairs[atom] * 0.1 * dielectric)
 
-        return  recRes, backElectroEner, sideElectroEner
+        return recRes, backElectroEner, sideElectroEner
 
     def extractFeatures(self, inputfile="input.txt",
                         outputfile="output.dat",
@@ -840,30 +854,30 @@ class BindingFeature :
                 reslist = sorted(list(set.intersection(set(reslist1), set(reslist2), set(reslist3))))
                 atomCombine = sorted(atomTypeCounts.keys())
 
-                for cn in ["countback", "countside", "vdwback", "vdwside", "columbback", "columbside"] :
-                    colnames += [cn+"_"+ x for x in reslist]
+                for cn in ["countback", "countside", "vdwback", "vdwside", "columbback", "columbside"]:
+                    colnames += [cn+"_" + x for x in reslist]
 
-                colnames += [ "atomTCount" + "_" + x for x in atomCombine ]
+                colnames += ["atomTCount" + "_" + x for x in atomCombine]
 
                 num_cols = len(colnames)
-                #case_names.append(pdbfilename)
+                # case_names.append(pdbfilename)
 
             try :
 
                 # countback and countside
-                case += [ backcount[x] for x in reslist ]
-                case += [ sidecount[x] for x in reslist ]
+                case += [backcount[x] for x in reslist]
+                case += [sidecount[x] for x in reslist]
 
                 # vdwback and vdwside
-                case += [ backvan[x] for x in reslist ]
-                case += [ sidevan[x] for x in reslist ]
+                case += [backvan[x] for x in reslist]
+                case += [sidevan[x] for x in reslist]
 
                 # columbback and cloumbback
-                case += [ backcol[x] for x in reslist ]
-                case += [ sidecol[x] for x in reslist ]
+                case += [backcol[x] for x in reslist]
+                case += [sidecol[x] for x in reslist]
 
                 # atomTcount
-                case += [ atomTypeCounts[x] for x in atomCombine ]
+                case += [atomTypeCounts[x] for x in atomCombine]
                 case_names.append(pdbfilename)
                 allcases.append(case)
 
@@ -880,6 +894,7 @@ class BindingFeature :
         error_log.write(",".join(case_names)+"\n")
         allcases = np.asarray(allcases)
 
+        # output the features
         np.savetxt(outputfile, allcases, fmt="%.3f", delimiter=",",
                    header=",".join(colnames)
                    )
@@ -898,9 +913,9 @@ class LigandFingerPrints(BindingFeature) :
 
         elem_count = dict(zip(elements, np.zeros(len(elements))))
 
-        for atom in atominfor.keys() :
+        for atom in atominfor.keys():
 
-            if atominfor[atom][7] not in elements :
+            if atominfor[atom][7] not in elements:
                 elem_count["DU"] += 1
             else :
                 elem_count[atominfor[atom][7]] += 1
@@ -927,6 +942,8 @@ def main() :
                         help="The input file, containing names of proteins and their ligands as well.")
     parser.add_argument("-out",default="output.dat",type=str,
                         help="The output binding features file name.")
+
+    '''
     parser.add_argument("-ac",type=bool,default=True,
                         help="Atom counts between receptor and lignads.")
     parser.add_argument("-tc",type=bool,default=True,
@@ -936,7 +953,7 @@ def main() :
     parser.add_argument("-columb", type=bool, default=True,
                         help="Whether include columbic interactions. Default is True")
     parser.add_argument("-parm",default="AtomType.dat",type=str,
-                        help="The parameters for VDW of each type of atoms.")
+                        help="The parameters for VDW of each type of atoms.") '''
 
     args = parser.parse_args()
 
