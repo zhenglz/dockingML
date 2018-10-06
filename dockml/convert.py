@@ -14,7 +14,7 @@ class Convert :
 
     def __init__(self,  obabel="obabel"):
         self.obabel = obabel
-
+        print("Make sure you have openbabel installed and path exported.")
 
     def convert(self, input, output, verbose=True):
         '''
@@ -31,13 +31,14 @@ class Convert :
                 print(input + " is not exist!!!\nExit Now!")
                 #sys.exit(0)
         except FileNotFoundError :
-            pass
+            print("Converting file %s failed! "%input)
 
         return 1
 
     def removeLonePair(self, input, output):
         '''
         input a pdb file, remove the lone pair electron lines in the file
+        only when you have a GOLD docking result pose file, you need this function
         :param inpdb: str, a pdb file
         :param outpdb: str, a pdb file
         :return:
@@ -57,8 +58,8 @@ class Convert :
 
         '''
 
-        :param input:
-        :param output:
+        :param input: str, input pdb file
+        :param output: str, output pdb file
         :param hetatmsave: the resnames for saving
         :param dropWater: remove water molecules
         :param cleanedPDB:

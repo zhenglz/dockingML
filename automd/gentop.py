@@ -10,10 +10,13 @@ class GenerateTop :
         PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
         self.antechamber = PROJECT_ROOT + "/../data/sample_antechamber.sh"
 
+        # acpype for topology type convert
+        self.acpype = "acpype"
+
     def gmxTopBuilder(self, PDBFile, outputName, frcmodFile=None,
                       prepFile=None, ionName=[''], ionNum=[0],
                       solveBox=None, boxEdge=12,
-                      FField=["AMBER99SB", ], ACPYPE="acpype",
+                      FField=["AMBER99SB", ],
                       verbose=True):
         '''
         provide a coordination file, output a amber and gromacs topology file.
@@ -131,11 +134,13 @@ class GenerateTop :
 
         # convert AMBER format to GMX format
         #time.sleep(2)
-        if len(ACPYPE) :
+        if len(self.acpype) :
             try :
                 out = sp.check_output("%s -b %s -x %s.prmcrd -p %s.prmtop "
-                                      %(ACPYPE, outputName, outputName, outputName)
+                                      %(self.acpype, outputName, outputName, outputName)
                                       )
+                if verbose :
+                    print(out)
             except :
                 "Converting AMBER files using ACPYPE to GMX failed! "
 
@@ -221,15 +226,12 @@ class GenerateTop :
         :param verbose:
         :return:
         """
-        if os.path.exists(input) :
-            status = sp.check_output("%s %s -O %s "%(obabelexe, input, output), shell=True)
-            if verbose :
-                print(status)
-        else :
-            print( input + " is not exist!!!")
-            sys.exit(0)
 
-        return(1)
+        from dockml import convert
+
+        convert.Convert(obabel=obabelexe).convert(input, output, verbose=verbose)
+
+        return 1
 
     def top2itp(self, outputName, topFileName=None, verbose=True):
         """
