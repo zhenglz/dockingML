@@ -223,7 +223,7 @@ class GenerateTop :
         :param obabelexe:
         :param input:
         :param output:
-        :param verbose:
+        :param verbose:bool, default is True
         :return:
         """
 
