@@ -96,3 +96,15 @@ classification model then could be used to predict potential receptor binding
 molecules.
  </p>
 
+# Usage examples 
+## mdanaly examples
+### Using cmap to generate residue-residue contactmap
+<p> Add the /bin directory to your PATH. For example, the package is installed in the 
+$HOME/applications/python2.7/lib/python2.7/site-packages/dockingML, you could add
+the following in your $HOME/.bashrc file:</p>
+#### export PATH=$HOME/applications/python2.7/lib/python2.7/site-packages/dockingML/bin:$PATH
+<p> to generate cmap</p>
+<p> $ cmap.py -h  </p>
+<p> $ cmap.py -inp protein.pdb -out cmap.dat </p>
+<p> $ cmap.py -inp protein.pdb </p>
+
