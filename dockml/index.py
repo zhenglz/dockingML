@@ -11,33 +11,56 @@ from collections import defaultdict
 from collections import OrderedDict
 import argparse
 from argparse import RawTextHelpFormatter
-import linecache
 
-class PdbIndex :
-    '''
-    Input the reisude number sequence, then out put the required index atoms
-    '''
-    def __init__(self, ) :
-        self.backbone  = ['CA', 'N']
+class PdbIndex(object) :
+    """
+    Input the residue number sequence, then out put the required index atoms
+
+    Parameters
+    ----------
+
+    Attributes
+    ----------
+    backbone: list
+    mainchain: list
+    ca: list
+    phi: list
+    psi: list
+    """
+
+    def __init__(self):
+        self.backbone = ['CA', 'N']
         self.mainchain = ['CA', 'N', 'C', 'O']
-        self.ca        = ['CA']
-        self.phi       = ['C', 'N', 'CA', 'C']
-        self.psi       = ['N', 'CA', 'C', 'N']
+        self.ca = ['CA']
+        self.phi = ['C', 'N', 'CA', 'C']
+        self.psi = ['N', 'CA', 'C', 'N']
 
     def res_index(self, inpdb, chain, atomtype, residueNdx, atomList, dihedraltype="None"):
-        '''
+        """
         Obtain atom index from a reference pdb file
         provide information including: residue indexing, atomtype, atomname
 
-        :param inpdb:
-        :param chain:
-        :param atomtype: str, options: all-atom, non-hydrogen, dihedral
-        :param residueNdx: list, dimension 2*1
-        :param atomList: list, explicit atom name list
-        :param dihedraltype:
-        :param atomName:
-        :return: a list, of atom index
-        '''
+        Parameters
+        ----------
+        inpdb: str,
+            the input pdb file name
+        chain: str,
+            the chain identifier in a pdb file
+        atomtype: str, options: all-atom, non-hydrogen, dihedral
+            the atom type for index generation
+        residueNdx: iterable, shape = [2]
+            the residue index [ start, end ]
+        atomList: list,
+            explicit atom name list
+        dihedraltype: str, options= [ PHI, PSI, PHI_PSI]
+            the dihedral angle type
+
+        Returns
+        -------
+        indexlist: list,
+            a list of elements (integers) in certain group
+
+        """
 
         # atomInfor = {}
         indexlist = []
@@ -106,15 +129,27 @@ class PdbIndex :
                         else:
                             if s[12:16].strip() in atomList :
                                 indexlist.append(s.split()[1])
-        return(indexlist)
+        return indexlist
 
     def atomList(self, atomtype, atomname):
-        '''
-        provide information of atom type and atomname
-        :param atomtype:
-        :param atomname:
-        :return:
-        '''
+        """
+        Provide information of atom type and atomname
+
+        Parameters
+        ----------
+        atomtype: str,
+            the type of atoms for groupping
+        atomname: list, iterable, or array
+            a list of explict atom names
+
+        Returns
+        -------
+        atomList: list, or iterable, or array
+            a list of atom names
+        atomtype: str,
+            the atom types for groupping
+
+        """
         atomList = []
         if atomname :
             atomList = atomname
@@ -140,9 +175,28 @@ class PdbIndex :
             elif "PSI" in atomtype or "PHI" in atomtype or "phi" in atomtype or 'psi' in atomtype :
                 atomtype = "dihedral"
 
-        return(atomList , atomtype)
+        return atomList, atomtype
 
     def atomList2File(self, atomNdxList, groupName, outputNdxFile, append=True):
+        """
+        save a group of atom index into a file
+
+        Parameters
+        ----------
+        atomNdxList: list, or array, or iterable, or sequence
+            a list of atom index to be written into the output file
+        groupName: str,
+            the group name to be written into the output file
+        outputNdxFile: str,
+            the output file name
+        append: bool,
+            append the content into the end of the output file,
+            if it exists
+
+        Returns
+        -------
+
+        """
         if append :
             tofile = open(outputNdxFile, 'a')
         else :
@@ -157,7 +211,7 @@ class PdbIndex :
 
         tofile.write("\n")
         tofile.close()
-        return 1
+        return None
 
     def withSubGroup(self, isProtein=True, nucleic="nucleic-acid.lib"):
 
@@ -251,6 +305,13 @@ class PdbIndex :
         return atominfor
 
     def arguements(self) :
+        """
+
+        Returns
+        -------
+        args: ArgParser object
+        """
+
         d ='''
         ################################################################
         # Generate GMX Index from a PDB file
@@ -318,7 +379,7 @@ class PdbIndex :
             print("\nYou chose non of the arguement!\nDo nothing and exit now!\n")
             sys.exit(1)
 
-        return(args)
+        return args
 
     def genGMXIndex( self):
         '''
@@ -383,9 +444,25 @@ class PdbIndex :
                         tofile.write("%12d  1  1000  1000  1000  \n" % int(atom))
 
         print("\nGenerating Index File Completed!")
-        return(1)
+        return None
 
 class GmxIndex :
+    """Parse Gromacs Index File
+
+    Parameters
+    ------------
+    index: str,
+          the file name of the input index file
+
+    Attributes
+    ------------
+    ndxlines: list,
+          the lines in the index file
+    groups: list,
+          the list of groups in the index file
+    totallines: int,
+          total number of lines in the index file
+    """
 
     def __init__(self, index):
         if os.path.exists(index) :
@@ -399,6 +476,16 @@ class GmxIndex :
         self.totallines = len(self.ndxlines)
 
     def groupsLineNumber(self):
+        """Get the line number for each of the groups
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        groupLN: orderedDict, dict
+               the group-line_number information
+        """
 
         groupLN = OrderedDict()
 
@@ -413,11 +500,23 @@ class GmxIndex :
         return groupLN
 
     def groupContent(self, group):
+        """Fetch the content in a group given its group name
+
+        Parameters
+        ----------
+        group: str,
+              the name of a group
+
+        Returns
+        -------
+        contents.split(): list
+            the element in each group
+
+        """
 
         gln = self.groupsLineNumber()
 
         start_ln = gln[group] + 1
-        end_ln = 0
 
         if self.groups.index(group) == len(self.groups) - 1 :
             end_ln = self.totallines - 1
@@ -425,16 +524,28 @@ class GmxIndex :
             end_ln = gln[self.groups[self.groups.index(group) + 1]] - 1
 
         contents = [ self.ndxlines[x].strip("\n")+" " for x in range(start_ln, end_ln+1) ]
-
         contents = " ".join(contents)
 
         return contents.split()
 
     def writeNdxGroup(self, group, elements, output="output.ndx"):
+        """ Write a list of elements for a group into a file
+
+        Parameters
+        ----------
+        group: str,
+               the name of a new group
+        elements: list,
+               the list containing elements of a group
+        output: str,
+               the file name of an output index file
+
+        Returns
+        -------
+
+        """
 
         PdbIndex().atomList2File(elements, group, output)
-
-        return 1
 
 def main() :
 

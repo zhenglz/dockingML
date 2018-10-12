@@ -30,4 +30,5 @@ setup(name='dockingML',
       ],
       include_package_data=True,
       zip_safe=False,
+      scripts=['bin/cmap.py', 'bin/extract.py', 'bin/index.py'],
       )

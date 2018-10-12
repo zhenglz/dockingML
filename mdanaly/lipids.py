@@ -22,8 +22,8 @@ class lipidThickness :
         '''
 
         with open(self.pdb)as lines :
-            lines = [ x for x in lines if "ATOM" in x ]
-            plines = [ x for x in lines if ( (x[17:20] in self.lip) and (x.split()[2] in self.head) ) ]
+            lines = [x for x in lines if "ATOM" in x]
+            plines = [x for x in lines if ((x[17:20] in self.lip) and (x.split()[2] in self.head))]
 
             coord = dockml.coordinatesPDB()
             zvalues = np.asarray(coord.getAtomCrdFromLines(plines))[:, 2]
@@ -42,8 +42,8 @@ class lipidThickness :
 
         middle = edge[int(numbins/2)]
 
-        upleaflet = [ x for x in zvalues if x > middle ]
-        lowleaflet= [ x for x in zvalues if x < middle ]
+        upleaflet = [x for x in zvalues if x > middle]
+        lowleaflet= [x for x in zvalues if x < middle]
 
         up_aver = np.mean(upleaflet)
         low_aver = np.mean(lowleaflet)
@@ -71,7 +71,7 @@ class areaPerLipid :
         self.pdb = pdb
 
     def proteinArea(self, proCrds, vectors, restorePBC=False):
-        '''
+        """
         calculate protein area given a set of 2d points (xy data only)
         convex hull algorithm
         http://scipy-cookbook.readthedocs.io/items/Finding_Convex_Hull.html
@@ -79,7 +79,7 @@ class areaPerLipid :
         :param proCrds: ndarray, a list of xyz coordinates, 3*N array
         :param vectors: list, 3 elements, pbc xyz vector
         :return: area, float
-        '''
+        """
 
         if restorePBC :
             pbc = dockml.handlePBC()

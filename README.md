@@ -49,6 +49,7 @@ Update 2017.3.25 Modeller-9.18 was applied to perform protein processing to mode
 PDB2PQR was used to add missing residues where necessary.
 To-do: including OpenMM library for PDB structure processing.
 </p>
+
 ### 2. Ligand topology building
 <p>Using AmberTool and Acpype, charges and bonding, nonbonding parameters
 are calculated using AM1-BCC charge model for large set of ligands. 
@@ -102,7 +103,9 @@ molecules.
 <p> Add the /bin directory to your PATH. For example, the package is installed in the 
 $HOME/applications/python2.7/lib/python2.7/site-packages/dockingML, you could add
 the following in your $HOME/.bashrc file:</p>
+
 #### export PATH=$HOME/applications/python2.7/lib/python2.7/site-packages/dockingML/bin:$PATH
+
 <p> to generate cmap</p>
 <p> $ cmap.py -h  </p>
 <p> $ cmap.py -inp protein.pdb -out cmap.dat </p>
