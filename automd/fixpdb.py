@@ -78,7 +78,7 @@ class SummaryPDB :
         return com, [xsize, ysize, zsize]
 
     def netCharges(self, inputMol, ligName=None):
-        '''
+        """
         Deduce the total net charge of a molecule (mostly a small ligand).
         netCharges determine the net charge of a molecule, given a pdb file.
         if the input molecule is a pdbqt (Vina input), or pqr (APBS input type),
@@ -90,49 +90,70 @@ class SummaryPDB :
         last column of a pdbqt, pqr and mol2 file generally will be the atomic charge field,
           otherwise, a ValueError exception will be rasied.
 
-        :param inputMol: input file with atomic charges in the last column
-        :return int netCharge
-        '''
+        Parameters
+        ----------
+        inputMol: str,
+            input file with atomic charges in the last column
+        ligName: str,
+            ligand code
+
+        Returns
+        -------
+        netCharge: int,
+            the net charge of a compound
+        """
+
         extension = inputMol.split(".")[-1]
         netCharge = 0.0
 
-        with open(inputMol) as lines :
+        try:
+            from rdkit import Chem
+            if extension != "mol2":
+                from dockml import convert
+
+                convert.Convert("obabel").convert(input=inputMol,
+                                                  output=inputMol.split(".")[-1]+".mol2",
+                                                  verbose=True)
+                inputMol = inputMol.split(".")[-1]+".mol2"
+
+            m = Chem.MolFromMol2File(inputMol)
+            netCharge = Chem.GetFormalCharge(Mol=m) #Chem.rdmolops.GetFormalCharge(m)
+
+        except ModuleNotFoundError:
             if extension in ['pdbqt', 'pqr']:
-                for s in lines :
+                with open(inputMol) as lines:
+                    for s in lines:
 
-                    if s.split()[0] in ["ATOM", "HETATM"] and len(s.split()) > 5 :
-                        try :
-                            if ligName and ligName in s :
+                        if s.split()[0] in ["ATOM", "HETATM"] and len(s.split()) > 5:
+                            try :
+                                if ligName and ligName in s:
+                                    netCharge += float(s.split()[-1])
+                                elif not ligName :
+                                    netCharge += float(s.split()[-1])
+                            except ValueError :
+                                netCharge += 0.0
+                                print("Last column in %s is not a float point charge value."%inputMol)
+            elif extension in ['mol2']:
+
+                with open(inputMol) as lines:
+                    condition = 0
+                    for s in lines:
+                        if len(s.split()) and "@" in s:
+                            if "<TRIPOS>ATOM" in s:
+                                condition += 1
+                            elif "@<TRIPOS>BOND" in s:
+                                condition = 0
+                            else:
+                                pass
+                        elif condition and len(s.split()):
+                            try:
                                 netCharge += float(s.split()[-1])
-                            elif not ligName :
-                                netCharge += float(s.split()[-1])
-                        except ValueError :
-                            netCharge += 0.0
-                            print("Last column in %s is not a float point charge value."%inputMol)
-            elif extension in ['mol2'] :
-                condition = 0
-                for s in lines :
-                    if len(s.split()) and "@" in s :
-                        if "<TRIPOS>ATOM" in s :
-                            condition += 1
-                        elif "@<TRIPOS>BOND" in s :
-                            condition = 0
-                        else :
-                            pass
-                    elif condition and len(s.split() ):
-                        try:
-                            netCharge += float(s.split()[-1])
-                        except ValueError :
-                            netCharge += 0.0
-                            print("Last column in %s is not a float point charge value." % inputMol)
-                #print("NET CHARGE " * 10)
+                            except ValueError:
+                                netCharge += 0.0
+                                print("Last column in %s is not a float point charge value." % inputMol)
+                    # print("NET CHARGE " * 10)
 
-            else :
-                print("The file extention is not recognized. "
-                      "\nPlease provide a pdbqt, pqr, or a mol2 file.")
-                netCharge = 0.0
-
-        return(int(netCharge))
+        return int(netCharge)
 
     def details(self, verbose=False):
         '''

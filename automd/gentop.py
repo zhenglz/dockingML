@@ -4,176 +4,249 @@ import sys, os
 import subprocess as sp
 import argparse
 from argparse import RawDescriptionHelpFormatter, RawTextHelpFormatter
+from dockml import convert
+import time
+from automd import fixpdb
 
-class GenerateTop :
+class GenerateTop:
+    """
+
+    Parameters
+    ----------
+
+    Attributes
+    ----------
+    antechamber
+    acpype
+
+    """
+
     def __init__(self):
         PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
         self.antechamber = PROJECT_ROOT + "/../data/sample_antechamber.sh"
 
         # acpype for topology type convert
         self.acpype = "acpype"
+        self.leapin = "leapIn.in"
 
     def gmxTopBuilder(self, PDBFile, outputName, frcmodFile=None,
-                      prepFile=None, ionName=[''], ionNum=[0],
-                      solveBox=None, boxEdge=12,
-                      FField=["AMBER99SB", ],
+                      prepFile=None, ionName=['Na'], ionNum=[0],
+                      solveBox="TIP3PBOX", boxEdge=15,
+                      FField=["AMBER99SB", ], amberhome="/app/amber16",
                       verbose=True):
-        '''
+        """
         provide a coordination file, output a amber and gromacs topology file.
+        this is the entry point for generating a gmx topology.
 
-        required parameters
-
-        :param frcmodFile: not required if the molecule is a protein, or DNA, RNA
-        :param prepfile: not required if the molecule is a protein, or DNA, RNA
-        :param PDBFile: input, coordination file
-        :param outputName: output, output file name
-        :param ionName: optional
-        :param ionNum: optional
-        :param solveBox: optional, type of solvation box, default is TIP3PBOX
-        :param boxEdge: optional
-        :param FField: a set of amber force fields, generally, we could choose
+        Parameters
+        ----------
+        PDBFile
+        outputName: str, output,
+            output topology file
+        frcmodFile: str, input, optional
+            not required if the molecule is a protein, or DNA, RNA
+        prepFile: str, input
+            prepare file, generated from tleap and antechamber
+        ionName: list,
+            the names of the ions
+        ionNum: list,
+            the number of ions to be added
+        solveBox: str,
+            the solvent water box, default is TIP3PBOX
+        boxEdge: float,
+            the edge of water box
+        FField: list,
+            the force field for topology generation
+            a set of amber force fields, generally, we could choose
             99sb, 99sbildn, gaff, 12, 14sb
-        :param verbose:
-        :return: None
-        '''
+        amberhome: str,
+            the AMBERHOME path
+        verbose: bool,
+            print details
+
+        Returns
+        -------
+
+        """
 
         # check AMBERHOME PATH
-        AMBERHOME = sp.check_output("echo $AMBERHOME", shell=True)
-        #AMBERHOME = AMBERHOME[:-1] + "/"
-        if verbose :
-            print("Here is amber home path:")
-            print(AMBERHOME)
+        try:
+            AMBERHOME = sp.check_output("echo $AMBERHOME", shell=True)
+        except EnvironmentError:
+            print("AMBERHOME is not defined, using the default instead.")
+            AMBERHOME = amberhome
+            #sys.exit(0)
 
-        AMBERHOME = "/app/amber16"
+        if verbose:
+            print("Here is amber home path: ", AMBERHOME)
 
-        # multiple FF supoorted here
-        leapin = open("leapIn.in", 'wb')
-        for ff in FField:
-            # create tleap input file
-            if "gaff" in ff:
-                leapin.write("source leaprc.gaff \n".encode())
-            elif "ildn" in ff or "ILDN" in ff:
-                leapin.write("source oldff/leaprc.ff99SBildn  \n".encode())
-            elif ff == "AMBER99SB" or "amber99sb" == ff or "99sb" in ff.lower() :
-                leapin.write("source oldff/leaprc.ff99SB  \n".encode())
-            elif ff == "AMBER14SB" or "14" in ff:
-                leapin.write("source leaprc.ff14SB  \n".encode())
-            elif "leaprc." in ff:
-                leapin.write(("source %s  \n" % ff).encode())
-            else:
-                print( "Load Force Field File Error! \nExit Now!")
-                sys.exit(1)
+        if os.path.exists(self.leapin):
+            os.remove(self.leapin)
+        leap_contents = []
+
+        # multiple FF supoorted here. Prepare a leap.in file for leap.
+        leap_contents += self.writeFF2File(self.leapin, FField)
 
         # load amber frcmod and prep files
-        if frcmodFile :
-            leapin.write(("loadamberparams  " + frcmodFile + "  \n").encode())
-        if prepFile :
-            leapin.write(("loadamberprep " + prepFile + "  \n").encode())
-
-        if frcmodFile and prepFile :
-            leapin.write("pdb = LIG \n".encode())
-        else :
+        if frcmodFile and prepFile:
+            self.writePrepFrcmod2File(prepFile, frcmodFile)
+        else:
             # prepare PDB file and load it
             if ".pdb" in PDBFile:
-                leapin.write(("pdb = loadPDB  " + PDBFile + "  \n").encode())
-            elif ".mol2" in PDBFile :
-                # convert the mol2 file to pdb file using obabel
-                job = sp.Popen("obabel %s -O %s"%(PDBFile, PDBFile[:-4]+"pdb"), shell=True)
-                job.communicate()
-                leapin.write(("pdb = loadpdb " + PDBFile[:-4]+"pdb" + "  \n").encode())
-            elif len(PDBFile) >= 2 and ".pdb" not in PDBFile[0] :
-                leapin.write("pdb = sequence{ ".encode())
-                for item in PDBFile:
-                    leapin.write((item + " ").encode())
-                leapin.write(" } \n".encode())
-            else:
-                print( "Loading PDB file or Sequence file error!")
-                sys.exit(1)
+                leap_contents.append(("pdb = loadPDB  " + PDBFile + "  \n"))
 
-        # save a amber off file of the molecule
-        leapin.write(("saveoff pdb %s.lib \n" % outputName).encode())
+            elif ".mol2" in PDBFile:
+                # convert the mol2 file to pdb file using obabel
+                convert.Convert(obabel="obabel").convert(PDBFile, PDBFile[:-4]+"pdb", verbose=verbose)
+                leap_contents.append(("pdb = loadpdb " + PDBFile[:-4]+"pdb" + "  \n"))
+
+        # input residue sequence to generate topology
+        if len(PDBFile) >= 2 and ".pdb" not in PDBFile[0]:
+            leap_contents += self.writeSequence2File(PDBFile)
 
         # add counter ions and solvate solute into water box
-        if ionName and ionNum and ionNum[0] > 0 and ionName[0] != "X+":
-            if len(ionNum) == len(ionName):
-                for i in range(len(ionNum)):
-                    leapin.write(("addions2 pdb %s %d \n" % (ionName[i], ionNum[i])).encode())
-            else:
-                print( "\nAdd ions not successful!\n")
-        else:
-            "\nNot adding any ions!\n"
-        if solveBox :
-            if boxEdge :
-                leapin.write(("solvatebox pdb %s %f \n" % (solveBox, boxEdge)).encode())
-            else:
-                print( "\nBOX size not correctly set.\nExit Now!\n")
-                sys.exit(1)
-        else:
-            print( "\nNot setting simulation box!\n")
+        self.writeIonInfo2File(ionName, ionNum)
 
-        # check object
-        leapin.write("check pdb \n".encode())
-        leapin.write(("savepdb pdb %s  \n" % (outputName + ".pdb")).encode())
-        leapin.write(("saveoff pdb %s  \n"%(outputName+".lib")).encode())
-        leapin.write(("saveamberparm pdb %s.prmtop %s.prmcrd \n" % (outputName, outputName)).encode())
-        leapin.write("quit \n".encode())
-        leapin.close()
+        if solveBox and boxEdge:
+            leap_contents.append("solvatebox pdb %s %f \n" % (solveBox, boxEdge))
+        else:
+            print("\nNot setting simulation box!\n")
 
-        if verbose :
+        # save a amber off file of the molecule
+        leap_contents += self.writeSaveParam2File(outputName)
+
+        # write information to a leapin file
+        with open(self.leapin, 'w') as tofile:
+            for s in leap_contents:
+                tofile.writable(s)
+
+        if verbose:
             print("Generating a leap input file for tleap topology processing.")
 
         # run tleap
-        try :
-            out = sp.check_output("%s/bin/tleap -f leapIn.in  \n" % AMBERHOME, shell=True)
-
+        try:
+            out = sp.check_output("%s/bin/tleap -f %s  \n" % (AMBERHOME, self.leapin), shell=True)
+            print("Generating amber topology files! ")
             if verbose:
-                print(out.decode())
-
-        except :
-            print("tleap loading failed!")
+                print(out)
+        except SystemExit:
+            print("tleap loading failed! Exit now!")
+            sys.exit(0)
 
         # convert AMBER format to GMX format
-        #time.sleep(2)
-        if len(self.acpype) :
-            try :
+        time.sleep(2)
+        if len(self.acpype):
+            try:
                 out = sp.check_output("%s -b %s -x %s.prmcrd -p %s.prmtop "
                                       %(self.acpype, outputName, outputName, outputName)
                                       )
-                if verbose :
+                if verbose:
                     print(out)
-            except :
-                "Converting AMBER files using ACPYPE to GMX failed! "
-
-        else :
+            except SystemExit:
+                print("Converting AMBER files using ACPYPE to GMX failed! ")
+        else:
             try:
-                out = sp.check_output("Amb2gmx.pl --prmtop %s.prmtop --crd %s.prmcrd --outname gmx_%s " \
+                out = sp.check_output("Amb2gmx.pl --prmtop %s.prmtop --crd %s.prmcrd --outname gmx_%s "
                                       % (outputName, outputName, outputName), shell=True)
                 if verbose:
                     print(out.decode() + "\n\nGMX and Amber topologies created!")
 
-            except :
+            except SystemExit:
                 print("Converting AMBER files using AMB2GMX to GMX failed!")
 
-        return 1
+        return None
+
+    def writeFF2File(self, filename, ff_list):
+        leapin = []
+        for ff in ff_list :
+            # create tleap input file
+            if "gaff" in ff:
+                leapin.append("source leaprc.gaff \n")
+            elif "ildn" in ff or "ILDN" in ff:
+                leapin.append("source oldff/leaprc.ff99SBildn  \n")
+            elif ff == "AMBER99SB" or "amber99sb" == ff or "99sb" in ff.lower() :
+                leapin.append("source oldff/leaprc.ff99SB  \n")
+            elif ff == "AMBER14SB" or "14" in ff:
+                leapin.append("source leaprc.ff14SB  \n")
+            elif "leaprc." in ff:
+                leapin.append("source %s  \n" % ff)
+            else:
+                print("ff not in amber ff library. Pass")
+
+        return leapin
+
+    def writePrepFrcmod2File(self, prepFile, frcmodFile):
+        leap_contents = list()
+        leap_contents.append(("loadamberprep " + prepFile + "  \n"))
+        leap_contents.append(("loadamberparams  " + frcmodFile + "  \n"))
+        leap_contents.append("pdb = LIG \n")
+
+        return leap_contents
+
+    def writeSequence2File(self, seqs):
+        leap_contents = list()
+        leap_contents.append("pdb = sequence{ ")
+        for item in seqs:
+            leap_contents.append((item + " "))
+            leap_contents.append(" } \n")
+
+        return leap_contents
+
+    def writeSaveParam2File(self, outputName):
+        leapin = list()
+        leapin.append("check pdb \n")
+        leapin.append("savepdb pdb %s.pdb  \n" % outputName)
+        leapin.append("saveoff pdb %s.lib  \n"%outputName)
+        leapin.append("saveamberparm pdb %s.prmtop %s.prmcrd \n" % (outputName, outputName))
+        leapin.append("quit \n")
+
+        return leapin
+
+    def writeIonInfo2File(self, ionnames, ionnum):
+        leapin = list()
+        if len(ionnames) == len(ionnum) and len(ionnames):
+            for i in range(len(ionnum)):
+                leapin.append("addions2 pdb %s %d \n" % (ionnames[i], ionnum[i]))
+        else:
+            print("\nNot writing any ion information\n")
+
+        return leapin
+
 
     def pdb2gmx(self, pdb2gmx, pdbin,
                 groout, topolout,
                 protein=6, tip3p=1,
                 verbose=True):
         """
-        call system GMX pdb2gmx function
-        :param pdb2gmx:
-        :param pdbin:
-        :param groout:
-        :param topolout:
-        :param verbose:
-        :return:
+
+        Parameters
+        ----------
+        pdb2gmx: str,
+            system gmx pdb2gmx commond
+        pdbin: str,
+            input pdb file name
+        groout: str,
+            output gmx gro file name
+        topolout: str,
+            output gmx top file name
+        protein: bool,
+            this parameter is not used
+        tip3p: str,
+            this parameter is not used
+        verbose: bool,
+            print details
+
+        Returns
+        -------
+
         """
         cmd = "%s -f %s -o %s -p %s -ignh" % (pdb2gmx, pdbin, groout, topolout)
-        job = sp.Popen(cmd, shell=True)
-        job.communicate(input="%d \n %d \n"%(protein, tip3p))
+        out = sp.check_output(cmd, shell=True)
+        if verbose :
+            print(out)
+        #job.communicate(input="%d \n %d \n"%(protein, tip3p))
 
-        return 1
+        return None
 
     def addWatIon(self, editconf, genbox,
                   genion, grompp, top,
@@ -184,20 +257,25 @@ class GenerateTop :
                   ):
         """
         add water and ions
-        :param editconf:
-        :param genbox:
-        :param genion:
-        :param grompp:
-        :param top:
-        :param groin:
-        :param distance:
-        :param conc:
-        :param spc:
-        :param mdpfile:
-        :param verbose:
-        :return:
-        """
 
+        Parameters
+        ----------
+        editconf
+        genbox
+        genion
+        grompp
+        top
+        groin
+        distance
+        conc
+        spc
+        mdpfile
+        verbose
+
+        Returns
+        -------
+
+        """
         # genbox
         cmd1 = "%s -f %s -o %s -d %f -c " % (editconf, groin, "box_" + groin, distance)
         job = sp.Popen(cmd1, shell=True)
@@ -215,35 +293,25 @@ class GenerateTop :
         job = sp.Popen(cmd4, shell=True)
         job.communicate()
 
-        return 1
+        return None
 
-    def runObabel(self, obabelexe, input, output, verbose=True):
+    def top2itp(self, outputName, topFileName="", verbose=True):
         """
-        run openbabel
-        :param obabelexe:
-        :param input:
-        :param output:
-        :param verbose:bool, default is True
-        :return:
-        """
+        generate a .itp file from the .top file
 
-        from dockml import convert
+        Parameters
+        ----------
+        outputName
+        topFileName
+        verbose
 
-        convert.Convert(obabel=obabelexe).convert(input, output, verbose=verbose)
+        Returns
+        -------
 
-        return 1
-
-    def top2itp(self, outputName, topFileName=None, verbose=True):
-        """
-        prepare a itp file from top file
-        :param outputName:
-        :param topFileName:
-        :param verbose:
-        :return:
         """
         # generate itp file from gmx.top file
         itpfile = open(outputName + ".itp", 'w')
-        if not topFileName :
+        if not topFileName:
             topFileName = "gmx_" + outputName + ".top"
 
         with open(topFileName) as lines:
@@ -261,162 +329,180 @@ class GenerateTop :
                     else:
                         itpfile.write(s)
         itpfile.close()
-        if verbose :
+        if verbose:
             print("ITP file for %s generated! " % outputName)
-        return(1)
+        return None
 
     def runAntechamber(self, infile, netCharge=None):
-        '''
+        """
         run antechamber to generate RESP am1/bcc atomic charges
-        :param netcharge: input, number of netcharges of the molecule
-        :param antechamber: input, optional, a sample antechamber shell script
-        :return: the file name of the antechamber shell script
-        '''
+
+        Parameters
+        ----------
+        infile
+        netCharge
+
+        Returns
+        -------
+
+        """
 
         antechamber = self.antechamber
 
-        if not os.path.exists(antechamber) :
-            with open(antechamber, 'w') as tofile :
-                content = '''
-if [ $# -ne 2 ]; then
-echo "Usage: input RED III.1  output, charge & spin & residuNAME read from Mol2"
-echo "Format: file_in(Mol2); atom_type(gaff or amber)"
-exit
-fi
+        if not os.path.exists(antechamber):
+            print("Sample antachamber file not found. Exit now!")
+            sys.exit(1)
 
-antechamber -i $1 -fi mol2 -o prep.$2 -fo prepi -at $2 -pf y -s 2
-#antechamber -i $1 -fi mol2 -o prep.$2 -fo prepi -at $2 -pf y -s 2 -c resp
-parmchk -i prep.$2 -f prepi -o frcmod.$2 -a Y
-grep need frcmod.$2
-
-if test -f leap.in; then
-   rm leap.in
-fi
-
-echo "============================================="
-echo "dmfff = loadamberparams frcmod.$2" >> leap.in
-echo "loadamberprep prep.$2" >> leap.in
-
-echo "prepared run_parm.sh for tleap"
-echo "tleap -s -f ${AMBERHOME}dat/leap/cmd/leaprc.ff99 -f leap.in"
-echo "tleap -s -f ${AMBERHOME}dat/leap/cmd/leaprc.gaff -f leap.in"
-echo "general AMBER : leaprc.gaff"
-echo "AMBER : leaprc.ff90"
-                '''
-                tofile.write(content)
         # run antechamber here, may first generate a sh script and then wrap it up
-        if netCharge is None :
+        if not bool(netCharge):
             try:
-                from automd import fixpdb
                 spdb = fixpdb.SummaryPDB(infile, "")
                 netcharge = spdb.netCharges(inputMol=infile)
             except :
-                print("Getting netcharge error!")
+                print("Getting netcharge error! Using default number 0!")
                 netcharge = 0
-        else :
-            netcharge = netCharge
 
         tofile = open("antechamber.sh", 'w')
         with open(antechamber) as lines:
             for s in lines:
                 if len(s.split()) > 0 and s.split()[0] == "antechamber":
-                    tofile.write(
-                        "antechamber -i $1 -fi mol2 -o prep.$2 -fo prepi -at $2 -pf y -s 2 -c bcc -nc %d \n" % netcharge)
+                    tofile.write("antechamber -i $1 -fi mol2 -o prep.$2 -fo prepi -at $2 -pf y -s 2 -c bcc -nc %d \n"
+                                 % netCharge)
                 else:
                     tofile.write(s)
-        return "antechamber.sh"
+        tofile.close()
+
+        # run the antechamber script
+        try:
+            job = sp.Popen("sh ./antechamber.sh", shell=True)
+            job.communicate()
+        except SystemExit :
+            print("Run antachamber failed.")
+
+        return None
 
     def trimHydrogen(self, reduce, pdbin, pdbout, verbose=False) :
         """
-        remove hydrogens in pdb file
-        :param reduce:
-        :param pdbin:
-        :param pdbout:
-        :param verbose:
-        :return:
+        remove hydrogens in pdb file. call amber reduce function.
+
+        Parameters
+        ----------
+        reduce
+        pdbin
+        pdbout
+        verbose
+
+        Returns
+        -------
+
         """
+
         job = sp.check_output('%s -Trim %s > %s '%(reduce, pdbin, pdbout), shell=True)
 
-        if verbose :
+        if verbose:
             print(job)
 
-        return 1
+        return None
 
     def arguments(self):
-        '''
+        """
         Parse arguments in the command line mode.
 
-        :return: args, a parser.argument object
-        '''
+        GMX-AMBER, topology builder.\n
+        Provide a PDB file, or sometimes prep and frcmod files, itp and prmtop file will be given.
+        Copyright @ Liangzhen Zheng, contact astrozheng@gmail.com for any technique support. \n
+
+        Examples
+        --------
+        Show help information
+          python autoMD.py gentop -h
+
+        Generate Amberff14SB for a protein molecule
+          python autoMD.py gentop -inp your.pdb -out yourpdb -ff ff14
+
+        Generate Amberff14SB for peptide sequences
+          python autoMD.py gentop -aaseq ACE ALA CYS ALA HIS ASN NME -ff AMBER99SBildn -out peptide
+
+
+          For small molecules,
+          python autoMD.py gentop -inp ligand.mol2 -resp True -out LIG
+          python autoMD.py gentop -inp lig.pdb -out lig -ff gaff -prep amber.prep.lig -frcmod frcmod.log
+          python autoMD.py gentop -inp cplx.pdb -out cplx_box -ff gaff ildn
+                      -bt TIP3PBOX -d 1.2 -prep amber.prep.lig -frcmod frcmod.log
+
+        Returns
+        -------
+        args: ArgumentParser object
+        """
 
         # go current directory, pwd
         os.chdir(os.getcwd())
 
-        if 0 :
-            frcmodFile = "fit_R2.frcmod"
-            PDBFile = "trpcage.pdb"
-            outputName = "TRP"
-            FField = "AMBER99SB"
-            self.gmxTopBuilder(frcmodFile, PDBFile, outputName, FField)
+        d = '''
+        GMX-AMBER, topology builder.\n
+        Provide a PDB file, or sometimes prep and frcmod files, itp and prmtop file will be given.
+        Copyright @ Liangzhen Zheng, contact astrozheng@gmail.com for any technique support. \n
+        Examples:
+        Show help information 
+          python autoMD.py gentop -h
+          
+        Generate Amberff14SB for a protein molecule
+          python autoMD.py gentop -inp your.pdb -out yourpdb -ff ff14
+          
+        Generate Amberff14SB for peptide sequences
+          python autoMD.py gentop -aaseq ACE ALA CYS ALA HIS ASN NME -ff AMBER99SBildn -out peptide
+          
 
-        else:
-            d = '''
-            GMX-AMBER, topology builder.\n
-            Provide a PDB file, or sometimes prep and frcmod files, itp and prmtop file will be given.
-            Copyright @ Liangzhen Zheng, contact astrozheng@gmail.com for any technique support. \n
-            Examples:
-              python autoMD.py gentop -h
-              python autoMD.py gentop -inp your.pdb -out yourpdb -ff ff14
-              python autoMD.py gentop -aaseq ACE ALA CYS ALA HIS ASN NME -ff AMBER99SBildn -out peptide
-              python autoMD.py gentop -inp lig.pdb -out lig -ff gaff -prep amber.prep.lig -frcmod frcmod.log
-              python autoMD.py gentop -inp cplx.pdb -out cplx_box -ff gaff ildn
-                                      -bt TIP3PBOX -d 1.2 -prep amber.prep.lig -frcmod frcmod.log
-              python autoMD.py gentop -inp ligand.mol2 -resp True -nt 0 -out LIG
-            '''
-            parser = argparse.ArgumentParser(description=d, formatter_class=RawTextHelpFormatter)
-            parser.add_argument("-inp", type=str, default=None,
-                                help="The PDB file or a mol2 file for topology generating. Default is None\n")
-            parser.add_argument("-prep", type=str, default="amberff.prep",
-                                help="Prep file (amber format) stored coordinates and charges.\n"
-                                     "Default is None.")
-            parser.add_argument("-frcmod", type=str, default="frcmod",
-                                help="The additional parameters, stored in frcmod file (Amber format).\n")
-            parser.add_argument("-out", type=str, default="OUT", help="The output name. Default is OUT.\n")
-            parser.add_argument("-ion", type=str, nargs="+", default=["X+", ],
-                                help="The ions to be added to the system. Mutiple Ions supported. \n"
-                                     "Options are Na+, Cl-\n"
-                                     "Default is X+. \n")
-            parser.add_argument("-nion", type=int, nargs="+", default=[-1, ],
-                                help="Number of ions to be added. Default is -1. \n"
-                                     "Number of args must be the same as -ion. \n")
-            parser.add_argument("-bt", type=str, default=None,
-                                help="Box type, ff you wish to solvate the mol in water box, you should\n"
-                                     "provide an option: NA, TIP3PBOX, TIP4PEW, or TIP5PBOX. \n"
-                                     "Default choice is TIP3PBOX. \n")
-            parser.add_argument("-size", type=float, default=0,
-                                help="The size of your solvation box. Default is 0 angstrom. \n")
-            parser.add_argument("-ff", type=str, nargs='+', default=["AMBER99SB", ],
-                                help="The force field for simulation. Multiple force filed files were supported.\n"
-                                     "Options including: 99SB, 99SBildn, ff14, gaff\n"
-                                     "or use leaprc.xxx files here. Default is AMBER99SB. \n")
-            parser.add_argument("-aaseq", type=str, nargs='+', default=None,
-                                help="Amino acid sequences in case no PDB file provide.\n"
-                                     "Default is None. It is an optional argument.\n")
-            parser.add_argument("-resp", default=False, type=bool,
-                                help="If it is a small molecule, whose atomic charges \n"
-                                     "not defined, neither the bonding angles, we could \n"
-                                     "use RESP with bcc AM1 to determine charges and \n"
-                                     "prepare parameters. Options: True, False. \n"
-                                     "Defualt is False. \n")
-            parser.add_argument("-nc", default=None, type=int,
-                                help="This argument only works with \n"
-                                     "the -resp argument. Default is 0. \n")
+          For small molecules, 
+          python autoMD.py gentop -inp ligand.mol2 -resp True -out LIG
+          python autoMD.py gentop -inp lig.pdb -out lig -ff gaff -prep amber.prep.lig -frcmod frcmod.log
+          python autoMD.py gentop -inp cplx.pdb -out cplx_box -ff gaff ildn
+                      -bt TIP3PBOX -d 1.2 -prep amber.prep.lig -frcmod frcmod.log
+        '''
+        parser = argparse.ArgumentParser(description=d, formatter_class=RawTextHelpFormatter)
+        parser.add_argument("-inp", type=str, default=None,
+                            help="The PDB file or a mol2 file for topology generating. Default is None\n")
+        parser.add_argument("-prep", type=str, default="amberff.prep",
+                            help="Prep file (amber format) stored coordinates and charges.\n"
+                                 "Default is None.")
+        parser.add_argument("-frcmod", type=str, default="frcmod",
+                            help="The additional parameters, stored in frcmod file (Amber format).\n")
+        parser.add_argument("-out", type=str, default="OUT", help="The output name. Default is OUT.\n")
+        parser.add_argument("-ion", type=str, nargs="+", default=["X+", ],
+                            help="The ions to be added to the system. Mutiple Ions supported. \n"
+                                 "Options are Na+, Cl-\n"
+                                 "Default is X+. \n")
+        parser.add_argument("-nion", type=int, nargs="+", default=[-1, ],
+                            help="Number of ions to be added. Default is -1. \n"
+                                 "Number of args must be the same as -ion. \n")
+        parser.add_argument("-bt", type=str, default=None,
+                            help="Box type, ff you wish to solvate the mol in water box, you should\n"
+                                 "provide an option: NA, TIP3PBOX, TIP4PEW, or TIP5PBOX. \n"
+                                 "Default choice is TIP3PBOX. \n")
+        parser.add_argument("-size", type=float, default=0,
+                            help="The size of your solvation box. Default is 0 angstrom. \n")
+        parser.add_argument("-ff", type=str, nargs='+', default=["AMBER99SB", ],
+                            help="The force field for simulation. Multiple force filed files were supported.\n"
+                                 "Options including: 99SB, 99SBildn, ff14, gaff\n"
+                                 "or use leaprc.xxx files here. Default is AMBER99SB. \n")
+        parser.add_argument("-aaseq", type=str, nargs='+', default=None,
+                            help="Amino acid sequences in case no PDB file provide.\n"
+                                 "Default is None. It is an optional argument.\n")
+        parser.add_argument("-resp", default=False, type=bool,
+                            help="If it is a small molecule, whose atomic charges \n"
+                                 "not defined, neither the bonding angles, we could \n"
+                                 "use RESP with bcc AM1 to determine charges and \n"
+                                 "prepare parameters. Options: True, False. \n"
+                                 "Defualt is False. \n")
+        parser.add_argument("-nc", default=None, type=int,
+                            help="This argument only works with \n"
+                                 "the -resp argument. Default is 0. \n")
 
-            # args include the options in the argparser
-            args, unknown = parser.parse_known_args()
-            if len(sys.argv) < 3 :
-                parser.print_help()
-                print("Number of arguments are not correct! Exit Now!")
-                sys.exit(1)
+        # args include the options in the argparser
+        args, unknown = parser.parse_known_args()
+        if len(sys.argv) < 3:
+            parser.print_help()
+            print("Number of arguments are not correct! Exit Now!")
+            sys.exit(1)
 
-            return(args)
+        return args

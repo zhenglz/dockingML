@@ -382,11 +382,13 @@ class PdbIndex(object) :
         return args
 
     def genGMXIndex( self):
-        '''
-        run geneIndex
-        initialize argument parser function.
-        :return:
-        '''
+        """
+        run geneIndex, initialize argument parser function.
+
+        Returns
+        -------
+
+        """
         args = self.arguements()
 
         if len(args.residueRange) == 2:
@@ -548,9 +550,16 @@ class GmxIndex :
         PdbIndex().atomList2File(elements, group, output)
 
 def main() :
+    """
+    Entry_point of the pdb index and gromacs index modules
+
+    Returns
+    -------
+
+    """
 
     ndx = PdbIndex()
 
     ndx.genGMXIndex()
 
-    return 1
+    return None
