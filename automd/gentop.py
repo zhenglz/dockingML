@@ -212,7 +212,6 @@ class GenerateTop:
 
         return leapin
 
-
     def pdb2gmx(self, pdb2gmx, pdbin,
                 groout, topolout,
                 protein=6, tip3p=1,
@@ -222,7 +221,7 @@ class GenerateTop:
         Parameters
         ----------
         pdb2gmx: str,
-            system gmx pdb2gmx commond
+            system gmx pdb2gmx command
         pdbin: str,
             input pdb file name
         groout: str,
@@ -381,7 +380,7 @@ class GenerateTop:
 
         return None
 
-    def trimHydrogen(self, reduce, pdbin, pdbout, verbose=False) :
+    def trimHydrogen(self, reduce, pdbin, pdbout, verbose=False):
         """
         remove hydrogens in pdb file. call amber reduce function.
 
@@ -397,7 +396,7 @@ class GenerateTop:
 
         """
 
-        job = sp.check_output('%s -Trim %s > %s '%(reduce, pdbin, pdbout), shell=True)
+        job = sp.check_output('%s -Trim %s > %s ' % (reduce, pdbin, pdbout), shell=True)
 
         if verbose:
             print(job)

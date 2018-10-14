@@ -6,9 +6,17 @@ import pandas as pd
 import linecache
 from collections import defaultdict
 
-class rewritePDB :
+
+class rewritePDB(object):
     """
     Modify pdb file by changing atom indexing, resname, res sequence number and chain id
+
+    Parameters
+    ----------
+
+    Attributes
+    ----------
+
     """
     def __init__(self, inpdb):
         self.pdb = inpdb
@@ -94,34 +102,43 @@ class rewritePDB :
         given a pdb file (with coordinates in a protein pocket), but with wrong atom
         sequence order, try to re-order the pdb for amber topology building
 
-        :param input, str, the pdb file with the correct coordinates
-        :param atomseq_pdb: str, the pdb file with correct atom sequences
-        :param out_pdb: str, output pdb file name
-        :param chain:
-        :return:
+        Parameters
+        ----------
+        input:str,
+            the pdb file with the correct coordinates
+        atomseq_pdb:str,
+            the pdb file with correct atom sequences
+        out_pdb: str,
+            output pdb file name
+        chain: str, default is B
+            the chain identifier of a molecule
+
+        Returns
+        -------
+
         """
 
         tofile = open("temp.pdb", 'w')
 
-        crd_list ={}
+        crd_list = {}
 
         ln_target, ln_source = 0, 0
         # generate a dict { atomname: pdbline}
         with open(input) as lines :
-            for s in [x for x in lines if "ATOM" in x ] :
+            for s in [x for x in lines if ("ATOM" in x or "HETATM" in x)]:
                 crd_list[s.split()[2]] = s
                 ln_source += 1
 
-        # reorder the crd_pdb pdblines, acording to the atomseq_pdb lines
+        # reorder the crd_pdb pdblines, according to the atomseq_pdb lines
         with open(atomseq_pdb) as lines :
-            for s in [x for x in lines if "ATOM" in x ] :
+            for s in [x for x in lines if ("ATOM" in x or "HETATM" in x)]:
                 newline = crd_list[s.split()[2]]
                 tofile.write(newline)
                 ln_target += 1
 
         tofile.close()
 
-        if ln_source != ln_target :
+        if ln_source != ln_target:
             #pwd = os.getcwd()
             print("Error: Number of lines in source and target pdb files are not equal. (%s %s)"%(input, atomseq_pdb))
 
@@ -130,7 +147,7 @@ class rewritePDB :
 
         os.remove("temp.pdb")
 
-        return 1
+        return None
 
 class parsePDB :
     """
