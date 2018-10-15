@@ -7,6 +7,8 @@ from os import environ
 import subprocess as sp
 from collections import defaultdict
 
+from dockml import convert
+
 # import modeller for loop refinement
 try:
     from modeller import *
@@ -33,48 +35,63 @@ class SummaryPDB :
         self.resShortName = resShortName
 
     def centerOfMass(self, inputMol, atomNdx, obabelexe='obabel', molBox=False):
-        '''
-        Given a file (preferable PDB file format),
-            if not, the file will be convert into a pdb file,
-        and selected atom sequence number,
-        determine the COM of the coordinates
+        """
+        Given a file (preferable PDB file format), if not, the file will be convert into a pdb file,
+        and selected atom sequence number, determine the Center Of Mass of the coordinates
 
-        :param inputMol: a file, the input coordinates
-        :param atomNdx: a list, atom sequence number
-        :return: two lists, center of mass, format [0.0, 0.0, 0.0]
-                            boxsize, format [10.0, 10.0, 10.0]
-        '''
+        Parameters
+        ----------
+        inputMol: str,
+            input pdb file, or mol2 file, or pdbqt file
+        atomNdx: list,
+            the list of atom identifier
+        obabelexe: str,
+            the obabel executable command
+        molBox: bool, default is False
+            the pbc information of a box
+
+        Returns
+        -------
+        com: list,
+            the x, y, z coordinate of the com
+        [xsize, ysize, zsize]
+        """
 
         from dockml import pdbIO
         import numpy as np
 
         pdb = inputMol
-        if inputMol.split(".")[-1] not in ['pdb', 'pdbqt'] :
+        # convert the molecule file to pdb where necessary
+        if inputMol.split(".")[-1] not in ['pdb', 'pdbqt']:
             from automd import gentop
-            gpdb = gentop.GenerateTop()
-            gpdb.runObabel(obabelexe, inputMol, inputMol+".pdb")
+            #gpdb = gentop.GenerateTop()
+            converter = convert.Convert(obabel=obabelexe)
+            converter.convert(inputMol, inputMol+".pdb")
             pdb = inputMol + ".pdb"
+
         coordinates = []
 
-        with open(pdb) as lines :
+        with open(pdb) as lines:
 
             lines = [ x for x in lines if x.split()[0] in ['ATOM', 'HETATM']]
             coordinates = pdbIO.coordinatesPDB().getAtomCrdFromLines(lines)
 
         coordinates = np.asarray(coordinates)
-
+        # get the mean values of x, y and z coordinates
         com = np.array(coordinates).mean(axis=0)
         xcenter, ycenter, zcenter = com[0], com[1], com[2]
 
-        if molBox :
+        # when PBC box exists, add the PBC information
+        if molBox:
             xsize = 2 * max(np.max(coordinates[:, 0]) - xcenter,
                         np.abs(np.min(coordinates[:,0])-xcenter))
             ysize = 2 * max(np.max(coordinates[:, 1]) - ycenter,
                         np.abs(np.min(coordinates[:, 1]) - ycenter))
             zsize = 2 * max(np.max(coordinates[:, 2]) - zcenter,
                         np.abs(np.min(coordinates[:, 2]) - zcenter))
-        else :
+        else:
             xsize, ysize, zsize = 100, 100, 100
+
         return com, [xsize, ysize, zsize]
 
     def netCharges(self, inputMol, ligName=None):
@@ -109,7 +126,6 @@ class SummaryPDB :
         try:
             from rdkit import Chem
             if extension != "mol2":
-                from dockml import convert
 
                 convert.Convert("obabel").convert(input=inputMol,
                                                   output=inputMol.split(".")[-1]+".mol2",
@@ -219,21 +235,29 @@ class SummaryPDB :
         return chains, resNdx, resName, resAtom, resNameNdx
 
     def getFastaSeq(self, fastaFile):
-        '''
-        obtain fasta sequence from file
-        :param fastaFile:
-        :return:
-        '''
+        """
+        obtain fasta sequence from the input file
+
+        Parameters
+        ----------
+        fastaFile: str,
+            the input fasta file
+
+        Returns
+        -------
+        fastaseq: str,
+            the result fasta sequence, or the plain text sequence
+
+        """
+
         fastaseq = ''
-        try:
-            if os.path.isfile(fastaFile):
-                with open(fastaFile) as lines:
-                    for s in lines:
-                        if '>' not in s :
-                            #print s #strip()
-                            fastaseq += s.strip()
-        except IOError :
-            fastaseq = ''
+
+        if os.path.exists(fastaFile):
+            with open(fastaFile) as lines:
+                for s in lines:
+                    if '>' not in s:
+                        #print s #strip()
+                        fastaseq += s.strip("\n")
 
         return fastaseq
 
@@ -410,7 +434,7 @@ class FixPDB :
     def __init__(self):
         pass
 
-    def pdbDownloader(self, pdbCode, pdbout):
+    def pdbDownloader(self, pdbCode):
         if not os.path.exists(pdbCode + '.pdb'):
             try :
                 source = urllib.urlopen("http://www.rcsb.org/pdb/files/" + pdbCode + ".pdb")
@@ -419,7 +443,7 @@ class FixPDB :
             except urllib.URLError :
                 print( "URL error")
 
-        return(1)
+        return 1
 
     def saveHETATM(self, pdbin, chain=['A'], waterOnly=False):
         '''

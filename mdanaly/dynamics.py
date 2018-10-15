@@ -2,7 +2,8 @@
 
 import dockml
 import numpy as np
-import pyemma as pe
+import sklearn
+#import pyemma as pe
 import os,sys
 
 class PCA :
@@ -17,7 +18,9 @@ class PCA :
         :return:
         '''
 
-        pca_obj = pe.coordinates.pca(data)
+        #pca_obj = pe.coordinates.pca(data)
+        pca_obj = sklearn.decomposition.PCA(n_components=20)
+        pca_obj.fit(data)
 
         return pca_obj
 
