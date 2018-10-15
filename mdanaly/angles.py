@@ -231,7 +231,7 @@ def gmxangle(args):
         return angles
 
     else:
-        print("Some of the input file is not existed. Input again. ")
+        print("Some of the input file is not existed. Input again.")
         return np.array([])
 
 
