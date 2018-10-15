@@ -6,7 +6,7 @@ import sklearn
 #import pyemma as pe
 import os,sys
 
-class PCA :
+class PCA(object):
     def __init__(self):
         pass
 
@@ -24,45 +24,67 @@ class PCA :
 
         return pca_obj
 
-class essentialDynamics :
+
+class essentialDynamics(object):
+
     def __init__(self):
         pass
 
     def transformXYZ(self, xyz, vector, delta):
-        '''
+        """
         transform xyz along a vector
         eg. increase movements of an atom along the PC1 vectors
-        :param xyz: list, xyz value
-        :param vector: list, vectors for xyz
-        :param delta: stride, unit nano meter
-        :return: list, new list of xyz values
-        '''
 
-        newxyz = list(map(lambda x, y: x+ y*delta, xyz, vector))
+        Parameters
+        ----------
+        xyz: list,
+            xyz value
+        vector: list,
+            vectors for xyz
+        delta: float,
+            stride, unit nano meter
+
+        Returns
+        -------
+        newxyz: list,
+            new list of xyz values
+
+        """
+
+        newxyz = list(map(lambda x, y: x + y*delta, xyz, vector))
 
         return newxyz
 
     def pdbIncreaseMotion(self, pdbin, vectors, delta=0.5):
-        '''
+        """
         increase motions of a pdb given its PC component eigenvectors
-        :param pdbin:
-        :param vectors: ndarray, a M * 3 matrix, M means num of Ca atoms
-        :param delta:
-        :return:
-        '''
+
+        Parameters
+        ----------
+        pdbin
+        vectors: ndarray, shape=[ M, 3]
+            a M * 3 matrix, M means num of Ca atoms
+        delta
+
+        Returns
+        -------
+        newxyzs
+        newlines
+
+        """
 
         pdbio = dockml.coordinatesPDB()
 
-        with open(pdbin) as lines :
-            lines = [ x for x in lines if ("ATOM" in x or "HETATM" in x)]
+        with open(pdbin) as lines:
+            lines = [x for x in lines if ("ATOM" in x or "HETATM" in x)]
 
             coords = pdbio.getAtomCrdFromLines(lines)
 
             newxyzs =[]
             newlines=[]
 
-            if vectors.shape[0] == len(coords) :
-                for i in range(len(coords)) :
+            if vectors.shape[0] == len(coords):
+                for i in range(len(coords)):
                     newxyz = self.transformXYZ(coords[i], list(vectors[i]), delta)
                     newxyzs.append(newxyz)
                     newlines.append(pdbio.replaceCrdInPdbLine(lines[i], newxyz))
