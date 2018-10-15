@@ -24,17 +24,16 @@ class ComputeAngles(object):
 
     """
 
-
     def __init__(self, traj):
         self.traj = traj
 
-    def get_angles(self, index):
+    def get_angles(self, angle_index):
         """
         calculate angles between three atoms for a trajectory
 
         Parameters
         ----------
-        index: list, shape=[n, 3]
+        angle_index: list, shape=[n, 3]
             the atom indices for angle calculations
 
         Returns
@@ -45,17 +44,17 @@ class ComputeAngles(object):
 
         """
 
-        angles = mt.compute_angles(self.traj, angle_indices=index)
+        angles = mt.compute_angles(self.traj, angle_indices=angle_index)
 
         return angles
 
-    def get_dihedral_angles(self, index):
+    def get_dihedral_angles(self, angle_index):
         """
         calculate dihedral angles between four atoms for a trajectory
 
         Parameters
         ----------
-        index: list, shape=[n, 4]
+        angle_index: list, shape=[n, 4]
             the atom indices for angle calculations
 
         Returns
@@ -66,7 +65,7 @@ class ComputeAngles(object):
 
         """
 
-        angles = mt.compute_angles(self.traj, angle_indices=index)
+        angles = mt.compute_angles(self.traj, angle_indices=angle_index)
 
         return angles
 
@@ -90,7 +89,13 @@ def read_xtc(xtc, top, chunk=100, stride=2):
     trajs: list,
         a list of mdtraj trajectory object
     """
-    return mt.iterload(xtc, chunk=chunk, top=top, stride=stride)
+
+    trajs = []
+
+    for chunk in mt.iterload(xtc, chunk=chunk, top=top, stride=stride):
+        trajs.append(chunk)
+
+    return trajs
 
 
 def read_index(ndx, angle_type):
@@ -209,17 +214,23 @@ def gmxangle(args):
 
     if os.path.exists(args.f) and os.path.exists(args.n) and os.path.exists(args.s):
 
+        # prepare index atom slices
         ndx = read_index(args.n, args.type)
+
+        # load trajectories
         trajs = read_xtc(xtc=args.f, top=args.s)
 
         angles = np.array([])
 
-        for traj in trajs :
+        for i, traj in enumerate(trajs):
             cangle = ComputeAngles(traj)
+            print("Progress: %12d " % (i * traj.n_frames))
+
             if angles.shape[0] == 0:
                 angles = cangle.get_dihedral_angles(ndx)
             else:
                 angles = np.concatenate((angles, cangle.get_dihedral_angles(ndx)), axis=0)
+            #print("Progress: %12d " % (i * traj.n_frames))
 
         if args.cos in ["True", "true"]:
             cosine = True
@@ -233,10 +244,4 @@ def gmxangle(args):
     else:
         print("Some of the input file is not existed. Input again.")
         return np.array([])
-
-
-if __name__ == "__main__" :
-
-    # main entry point
-    gmxangle(arguments())
 
