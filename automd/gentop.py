@@ -16,14 +16,20 @@ class GenerateTop:
 
     Attributes
     ----------
-    antechamber
-    acpype
+    PROJECT_ROOT
+
+    antechamber: str,
+        the sample antechamber shell script
+    acpype: str,
+        the executable acpype commond, for topology format coverting
+    leapin: str, default is leapIn.in
+        the output file, feeding it for tleap to generating topologies
 
     """
 
     def __init__(self):
-        PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
-        self.antechamber = PROJECT_ROOT + "/../data/sample_antechamber.sh"
+        self.PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+        self.antechamber = self.PROJECT_ROOT + "/../data/sample_antechamber.sh"
 
         # acpype for topology type convert
         self.acpype = "acpype"
@@ -129,7 +135,7 @@ class GenerateTop:
             print("Generating amber topology files! ")
             if verbose:
                 print(out)
-        except SystemExit:
+        except SystemError:
             print("tleap loading failed! Exit now!")
             sys.exit(0)
 
@@ -142,7 +148,7 @@ class GenerateTop:
                                       )
                 if verbose:
                     print(out)
-            except SystemExit:
+            except SystemError:
                 print("Converting AMBER files using ACPYPE to GMX failed! ")
         else:
             try:
@@ -151,7 +157,7 @@ class GenerateTop:
                 if verbose:
                     print(out.decode() + "\n\nGMX and Amber topologies created!")
 
-            except SystemExit:
+            except SystemError:
                 print("Converting AMBER files using AMB2GMX to GMX failed!")
 
         return None
@@ -294,15 +300,19 @@ class GenerateTop:
 
         return None
 
-    def top2itp(self, outputName, topFileName="", verbose=True):
+    def top2itp(self, outputName, topFileName=None, verbose=True):
         """
-        generate a .itp file from the .top file
+        generate a .itp file from the .top file, the [ system ] part is
+        removed
 
         Parameters
         ----------
-        outputName
-        topFileName
-        verbose
+        outputName: str,
+            output itp file
+        topFileName: str,
+            input topology file
+        verbose: bool, default is True
+            whether print detail information
 
         Returns
         -------
@@ -334,12 +344,17 @@ class GenerateTop:
 
     def runAntechamber(self, infile, netCharge=None):
         """
-        run antechamber to generate RESP am1/bcc atomic charges
+        run antechamber to generate RESP am1/bcc atomic charges, meanwhile the gaff
+        parms for bonding and angles are also generated in prep and frcmod files
+        details could be found here: ambermd.org/doc12/Amber16.pdf
 
         Parameters
         ----------
-        infile
-        netCharge
+        infile: str,
+            input pdb file or mol2 file, which is used for sqm calculation for am1/bcc
+            charges
+        netCharge: int,
+            the netcharge of the molecule, or the total formal charges
 
         Returns
         -------
@@ -357,16 +372,19 @@ class GenerateTop:
             try:
                 spdb = fixpdb.SummaryPDB(infile, "")
                 netcharge = spdb.netCharges(inputMol=infile)
-            except :
+            except:
                 print("Getting netcharge error! Using default number 0!")
                 netcharge = 0
+        else:
+            netcharge = netCharge
 
         tofile = open("antechamber.sh", 'w')
         with open(antechamber) as lines:
             for s in lines:
                 if len(s.split()) > 0 and s.split()[0] == "antechamber":
-                    tofile.write("antechamber -i $1 -fi mol2 -o prep.$2 -fo prepi -at $2 -pf y -s 2 -c bcc -nc %d \n"
-                                 % netCharge)
+                    # antechamber -i in.pdb -fi pdb -o prep.AMBER -fo prepi -at AMBER -pf y -s 2 -c bcc -nc 1
+                    tofile.write("antechamber -i $1 -fi %s -o prep.$2 -fo prepi -at $2 -pf y -s 2 -c bcc -nc %d \n"
+                                 % (infile.split(".")[-1], netcharge))
                 else:
                     tofile.write(s)
         tofile.close()
@@ -375,7 +393,7 @@ class GenerateTop:
         try:
             job = sp.Popen("sh ./antechamber.sh", shell=True)
             job.communicate()
-        except SystemExit :
+        except SystemError :
             print("Run antachamber failed.")
 
         return None
@@ -386,10 +404,14 @@ class GenerateTop:
 
         Parameters
         ----------
-        reduce
-        pdbin
-        pdbout
-        verbose
+        reduce: str,
+            the amber reduce tool, the executable command
+        pdbin: str,
+            the input pdb file name
+        pdbout: str,
+            the output pdb file
+        verbose: bool, default is False
+            whether print detail information
 
         Returns
         -------
