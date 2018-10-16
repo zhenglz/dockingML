@@ -53,14 +53,14 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Python Console" value="141" />
-          <entry key="py" value="14793" />
+          <entry key="py" value="14800" />
           <entry key="txt" value="261" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="261" />
-          <entry key="Python" value="14934" />
+          <entry key="Python" value="14941" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -107,18 +107,18 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mdanaly/angles.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="261" column="60" selection-start-line="261" selection-start-column="60" selection-end-line="261" selection-end-column="60" />
+            <state relative-caret-position="238">
+              <caret line="180" column="60" selection-start-line="180" selection-start-column="60" selection-end-line="180" selection-end-column="60" />
               <folding>
                 <element signature="e#25#44#0" expanded="true" />
-                <marker date="1539704530552" expanded="true" signature="482:1037" ph="..." />
-                <marker date="1539704530552" expanded="true" signature="2015:2020" ph="..." />
-                <marker date="1539704530552" expanded="true" signature="2213:3206" ph="..." />
-                <marker date="1539704530552" expanded="true" signature="3883:3884" ph="..." />
-                <marker date="1539704530552" expanded="true" signature="3883:3889" ph="..." />
-                <marker date="1539704530552" expanded="true" signature="6254:6744" ph="..." />
-                <marker date="1539704530552" expanded="true" signature="7125:8486" ph="..." />
-                <marker date="1539704530552" expanded="true" signature="7125:8487" ph="..." />
+                <marker date="1539704640364" expanded="true" signature="482:1037" ph="..." />
+                <marker date="1539704640364" expanded="true" signature="2015:2020" ph="..." />
+                <marker date="1539704640364" expanded="true" signature="2213:3206" ph="..." />
+                <marker date="1539704640364" expanded="true" signature="3883:3884" ph="..." />
+                <marker date="1539704640364" expanded="true" signature="3883:3889" ph="..." />
+                <marker date="1539704640364" expanded="true" signature="6238:6728" ph="..." />
+                <marker date="1539704640364" expanded="true" signature="7109:8470" ph="..." />
+                <marker date="1539704640364" expanded="true" signature="7109:8471" ph="..." />
               </folding>
             </state>
           </provider>
@@ -578,13 +578,6 @@
       <option name="presentableId" value="Default" />
       <updated>1499093997611</updated>
     </task>
-    <task id="LOCAL-00001" summary="from mars">
-      <created>1514558256107</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1514558256107</updated>
-    </task>
     <task id="LOCAL-00002" summary="from mars">
       <created>1514607996743</created>
       <option name="number" value="00002" />
@@ -921,7 +914,14 @@
       <option name="project" value="LOCAL" />
       <updated>1539700312970</updated>
     </task>
-    <option name="localTasksCounter" value="50" />
+    <task id="LOCAL-00050" summary="add a gmx angle simulator for xtc based angles">
+      <created>1539704536632</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1539704536636</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1296,18 +1296,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/angles.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="261" column="60" selection-start-line="261" selection-start-column="60" selection-end-line="261" selection-end-column="60" />
+        <state relative-caret-position="238">
+          <caret line="180" column="60" selection-start-line="180" selection-start-column="60" selection-end-line="180" selection-end-column="60" />
           <folding>
             <element signature="e#25#44#0" expanded="true" />
-            <marker date="1539704530552" expanded="true" signature="482:1037" ph="..." />
-            <marker date="1539704530552" expanded="true" signature="2015:2020" ph="..." />
-            <marker date="1539704530552" expanded="true" signature="2213:3206" ph="..." />
-            <marker date="1539704530552" expanded="true" signature="3883:3884" ph="..." />
-            <marker date="1539704530552" expanded="true" signature="3883:3889" ph="..." />
-            <marker date="1539704530552" expanded="true" signature="6254:6744" ph="..." />
-            <marker date="1539704530552" expanded="true" signature="7125:8486" ph="..." />
-            <marker date="1539704530552" expanded="true" signature="7125:8487" ph="..." />
+            <marker date="1539704640364" expanded="true" signature="482:1037" ph="..." />
+            <marker date="1539704640364" expanded="true" signature="2015:2020" ph="..." />
+            <marker date="1539704640364" expanded="true" signature="2213:3206" ph="..." />
+            <marker date="1539704640364" expanded="true" signature="3883:3884" ph="..." />
+            <marker date="1539704640364" expanded="true" signature="3883:3889" ph="..." />
+            <marker date="1539704640364" expanded="true" signature="6238:6728" ph="..." />
+            <marker date="1539704640364" expanded="true" signature="7109:8470" ph="..." />
+            <marker date="1539704640364" expanded="true" signature="7109:8471" ph="..." />
           </folding>
         </state>
       </provider>

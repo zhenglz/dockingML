@@ -176,9 +176,9 @@ def arguments():
     parser.add_argument("-type", type=str, default="angle",
                         help="Input, optional. The angle type for calculation. Options are "
                              "angle, dihedral. Default is angle. ")
-    parser.add_argument("-cos", type=bool, default=False,
+    parser.add_argument("-cos", type=int, default=0,
                         help="Input, optional. Calculate the cosine values of the angles. "
-                             "Options are True, False. Default is False. ")
+                             "Options are 0, 1. Default is 0. ")
     parser.add_argument("-dt", type=int, default=2,
                         help="Input, optional. Skip frame with a gap of dt picoseconds. "
                              "Default is 2. ")
