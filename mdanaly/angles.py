@@ -178,7 +178,7 @@ def arguments():
     parser.add_argument("-cos", type=bool, default=False,
                         help="Input, optional. Calculate the cosine values of the angles. "
                              "Options are True, False. Default is False. ")
-    parser.add_argument("-dt", type=int, default=0,
+    parser.add_argument("-dt", type=int, default=2,
                         help="Input, optional. Skip frame with a gap of dt frames. "
                              "Default is 0. ")
     parser.add_argument("-ps", default=2, type=int,
@@ -249,7 +249,7 @@ def gmxangle(args):
             print(ndx)
 
         # load trajectories
-        trajs = read_xtc(xtc=args.f, top=args.s, chunk=1000) #, stride=int(args.dt / args.ps))
+        trajs = read_xtc(xtc=args.f, top=args.s, chunk=1000, stride=int(args.dt / args.ps))
         if args.v:
             print("Frame information: ")
             for i, traj in enumerate(trajs):
