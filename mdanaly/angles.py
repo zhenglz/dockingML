@@ -95,6 +95,8 @@ def read_xtc(xtc, top, chunk=100, stride=2):
     for chunk in mt.iterload(xtc, chunk=chunk, top=top, stride=stride):
         trajs.append(chunk)
 
+    print("Number of chunks: ", len(trajs))
+
     return trajs
 
 
@@ -124,6 +126,8 @@ def read_index(ndx, angle_type):
     print("You have selected: %s" % indexer.groups[n])
 
     elements = indexer.groupContent(indexer.groups[n])
+
+    elements = [int(x)-1 for x in elements]
     # if dihedral, four atoms index should be defined
     if angle_type == "dihedral":
         elements = np.reshape(np.array(elements), (-1, 4))
