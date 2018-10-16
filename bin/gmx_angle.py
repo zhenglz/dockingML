@@ -7,4 +7,4 @@ if __name__ == "__main__" :
     # main entry point
     angles.gmxangle(angles.arguments())
 
-    print("Completed!")
+    print("Angle Calculation Completed!")

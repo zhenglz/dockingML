@@ -198,7 +198,7 @@ def arguments():
     return args
 
 
-def write_angles(angles, fout, cosine=False, dt=2):
+def write_angles(angles, fout, cosine=0, dt=2):
     """
     write angles into a file
 
@@ -208,8 +208,8 @@ def write_angles(angles, fout, cosine=False, dt=2):
         the angles, N is number of frames, M is the number of angles
     fout: str,
         output file
-    cosine: bool,
-        whether save the cosine of the angles
+    cosine: int,
+        whether save the cosine of the angles, default is 0
     dt: int,
         the stride of the frames were saved or angles were calculated
 
@@ -217,7 +217,7 @@ def write_angles(angles, fout, cosine=False, dt=2):
     -------
 
     """
-    pi = 3.1415926
+    pi = 3.141592654
 
     if cosine:
         angles = np.cos(angles)
@@ -228,11 +228,10 @@ def write_angles(angles, fout, cosine=False, dt=2):
 
     dat = pd.DataFrame(angles)
     dat.index = np.arange(angles.shape[0]) * dt
-
-    dat.columns = ["Angles_"+str(x) for x in np.arange(angles.shape[0])]
+    dat.columns = ["Angles_"+str(x) for x in np.arange(angles.shape[1])]
 
     dat.to_csv(fout, sep="\t", float_format="%.3f", header=True, index=True)
-    #np.savetxt(fout, angles, fmt="%.3f", delimiter=",")
+    # np.savetxt(fout, angles, fmt="%.3f", delimiter=",")
 
     return angles
 
