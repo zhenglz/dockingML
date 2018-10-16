@@ -229,8 +229,7 @@ def write_angles(angles, fout, cosine=0, dt=2):
     dat = pd.DataFrame(angles)
     dat.index = np.arange(angles.shape[0]) * dt
     dat.columns = ["Angles_"+str(x) for x in np.arange(angles.shape[1])]
-
-    dat.to_csv(fout, sep="\t", float_format="%.3f", header=True, index=True)
+    dat.to_csv(fout, sep=",", float_format="%.3f", header=True, index=True)
     # np.savetxt(fout, angles, fmt="%.3f", delimiter=",")
 
     return angles
@@ -258,7 +257,7 @@ def gmxangle(args):
         ndx = read_index(args.n, args.type)
 
         if args.v:
-            print("Compute cosine of the angles: ", args.cos)
+            print("Compute cosine of the angles: ", bool(args.cos))
             print("Atom indices: ")
             print(ndx)
 
@@ -283,12 +282,17 @@ def gmxangle(args):
                 angles = np.concatenate((angles, cangle.get_dihedral_angles(ndx)), axis=0)
                 # print("Progress: %12d " % (i * traj.n_frames))
 
+        if args.v:
+            print("Write angles to output file: ", args.o)
+
         # write angles to an output file
         angles = write_angles(angles, args.o, cosine=args.cos, dt=args.dt)
 
-        return angles
+        # return angles
 
     else:
-        print("Some of the input file is not existed. Input again.")
-        return np.array([])
+        print("Some of the input files are not existed. Input again.")
+        # return np.array([])
+
+    sys.exit(1)
 

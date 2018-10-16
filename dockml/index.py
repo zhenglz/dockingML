@@ -74,22 +74,22 @@ class PdbIndex(object) :
             print("Error!! No residue index provided. ")
             resSeqNdx = []
 
-        if atomtype == "dihedral" :
+        if atomtype == "dihedral":
             indexlist = []
-            for resndx in resSeqNdx :
+            for resndx in resSeqNdx:
                 phitype = self.phi
                 phipair = [-1, -1, -1, -1]
                 phindxadd = [-1, 0, 0, 0]
-                for i in range(4) :
+                for i in range(4):
                     with open(inpdb) as lines :
                         for s in lines :
                             if len(s.split()) > 1 and s.split()[0] == "ATOM" \
                                     and s[21] == chain and int(s[22:26].strip()) == resndx + phindxadd[i] \
-                                    and s[12:16].strip() == phitype[i] :
+                                    and s[12:16].strip() == phitype[i]:
                                 phipair[i] = int(s.split()[1])
 
                 psitype = self.psi
-                psindxadd = [ 0, 0, 0, 1]
+                psindxadd = [0, 0, 0, 1]
                 psipair = [-1, -1, -1, -1]
                 for i in range(4):
                     with open(inpdb) as lines:
@@ -100,12 +100,12 @@ class PdbIndex(object) :
                                 psipair[i] = int(s.split()[1])
                                 # break
 
-                if "PHI" in dihedraltype :
+                if "PHI" in dihedraltype:
                     indexlist.append(psipair)
-                if "PSI" in dihedraltype :
+                if "PSI" in dihedraltype:
                     indexlist.append(phipair)
         else :
-            with open(inpdb) as lines :
+            with open(inpdb) as lines:
                 for s in lines :
                     if len(s.split()) > 1 and s.split()[0] == "ATOM" and s[21] == chain and \
                                     int(s[22:26].strip()) in resSeqNdx :
@@ -399,9 +399,10 @@ class PdbIndex(object) :
             residueNdx = args.residueRange
         else:
             print("\nNumber of residue id is not correct. \nExit Now. ")
+            residueNdx = None
             sys.exit(1)
 
-        if args.dihedralType :
+        if args.dihedralType:
 
             atomlist,atomtype = self.atomList(args.dihedralType, args.atomname)
         else :
@@ -412,15 +413,15 @@ class PdbIndex(object) :
                                  residueNdx= args.residueRange, atomList=atomlist,
                                  atomtype=atomtype, dihedraltype=args.dihedralType
                                  )
-        if args.appendFile :
+        if args.appendFile:
             append = 'a'
         else :
             append = 'wb'
         tofile = open(args.output, append)
 
-        if args.groupName :
+        if args.groupName:
             tofile.write('[ %s ] \n' % (args.groupName.strip()))
-        else :
+        else:
             tofile.write('[ %s_%d_%d ] \n' % (args.chainId, args.residueRange[0], args.residueRange[-1]))
 
         if atomtype == "dihedral":

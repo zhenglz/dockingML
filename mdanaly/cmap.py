@@ -23,9 +23,28 @@ from collections import defaultdict
 from argparse import RawTextHelpFormatter
 from datetime import datetime
 from mpi4py import MPI
-
-
 import time
+
+
+class CoordinationNumber(object):
+
+    def __init__(self):
+        pass
+
+    def atom_index(self):
+        # TODO: get necessary atom index
+        return NotImplementedError
+
+    def atom_crds(self):
+        # TODO: get atom coordinates through mt traj
+        return NotImplementedError
+
+    def coord_num(self):
+        # TODO: calculation coordination numbers
+        return NotImplementedError
+
+    # TODO: other functions
+
 
 class DrawCMap :
     def __init__(self):
@@ -144,7 +163,18 @@ class DrawCMap :
 
         return 1
 
+
 class ContactMap:
+    """
+
+    Parameters
+    ----------
+
+    Attributes
+    ----------
+
+    """
+
     def __init__(self, hugePDBFile) :
         self.mfPDB = hugePDBFile
 

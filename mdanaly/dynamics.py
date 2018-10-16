@@ -6,24 +6,6 @@ import sklearn
 #import pyemma as pe
 import os,sys
 
-class PCA(object):
-    def __init__(self):
-        pass
-
-    def pca(self, data, no_ev):
-        '''
-        perform PCA analysis
-        :param data:
-        :param no_ev:
-        :return:
-        '''
-
-        #pca_obj = pe.coordinates.pca(data)
-        pca_obj = sklearn.decomposition.PCA(n_components=20)
-        pca_obj.fit(data)
-
-        return pca_obj
-
 
 class essentialDynamics(object):
 
