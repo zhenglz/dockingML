@@ -249,7 +249,7 @@ def gmxangle(args):
             print(ndx)
 
         # load trajectories
-        trajs = read_xtc(xtc=args.f, top=args.s, chunk=1000, stride=int(args.dt / args.ps))
+        trajs = read_xtc(xtc=args.f, top=args.s, chunk=1000) #, stride=int(args.dt / args.ps))
         if args.v:
             print("Frame information: ")
             for i, traj in enumerate(trajs):
