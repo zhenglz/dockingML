@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 
-import sys
+import os, sys
 import dockml
 import numpy as np
 from scipy.spatial import ConvexHull
 import argparse
 from argparse import RawTextHelpFormatter
 
-class lipidThickness :
+
+class LipidThickness(object):
 
     def __init__(self, pdb, lipRes=['DOPC'], headatoms=["P"]):
 
@@ -16,12 +17,20 @@ class lipidThickness :
         self.head= headatoms
 
     def getZvalues(self):
-        '''
-        get all z coordinates of selected residues and their head group atoms
-        :return:
-        '''
+        """
+        Get all z coordinates of selected residues and their head group atoms.
 
-        with open(self.pdb)as lines :
+        Returns
+        -------
+        zvalues: numpy ndarray, shape=[N, 1]
+            the z-coordinates of lines, N is number of atoms
+        """
+
+        if not os.path.exists(self.pdb):
+            print("PDB file %s not exist. Exit now! " % self.pdb)
+            sys.exit(0)
+
+        with open(self.pdb)as lines:
             lines = [x for x in lines if "ATOM" in x]
             plines = [x for x in lines if ((x[17:20] in self.lip) and (x.split()[2] in self.head))]
 
@@ -31,12 +40,28 @@ class lipidThickness :
         return zvalues
 
     def deltaZcoord(self, zvalues, numbins=20):
-        '''
-        find the up leaflet and low leaflet average Z values
-        :param zvalues:
-        :param numbins:
-        :return:
-        '''
+        """
+        Find the up leaflet and low leaflet average Z values.
+
+        Parameters
+        ----------
+        zvalues: numpy ndarray,
+            the z-coordinates of a group of atoms
+        numbins: int,
+            number of bins for histogram
+
+        Returns
+        -------
+        deltaZ: float,
+            the average distance between upper leaflet and lower leaflet
+        middle: float,
+            the middle layer z-coordinates
+        up_aver: float
+            the average z-coordinate of the upper leaflet
+        low_aver: float
+            the average z-coordinate of the lower leaflet
+
+        """
 
         hist, edge = np.histogram(zvalues, bins=int(numbins))
 
@@ -65,21 +90,36 @@ class lipidThickness :
 
         return len(upleaflet), len(lowleaflet)
 
-class areaPerLipid :
+class AreaPerLipid :
 
     def __init__(self, pdb):
         self.pdb = pdb
 
     def proteinArea(self, proCrds, vectors, restorePBC=False):
         """
-        calculate protein area given a set of 2d points (xy data only)
-        convex hull algorithm
+        Calculate protein area given a set of 2d points (xy data only)
+        convex hull algorithm.
+
+        Detail method could be found here:
         http://scipy-cookbook.readthedocs.io/items/Finding_Convex_Hull.html
         https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.ConvexHull.html
-        :param proCrds: ndarray, a list of xyz coordinates, 3*N array
-        :param vectors: list, 3 elements, pbc xyz vector
-        :return: area, float
+
+        Parameters
+        ----------
+        proCrds: ndarray,
+            a list of xyz coordinates, 3*N array
+        vectors: list, 3 elements,
+            pbc xyz vector
+        restorePBC: bool,
+            whether restore PBC box
+
+        Returns
+        -------
+        area: float
+            the area of the protein area, unit square angstrom
+
         """
+
 
         if restorePBC :
             pbc = dockml.handlePBC()
@@ -99,6 +139,7 @@ class areaPerLipid :
 
             # convex hull algorithm to determine the area occupied by atoms
             hull = ConvexHull(np.concatenate((xy_coords, vdw_dummy)))
+            # TODO: check the area calculation result
             area = hull.area
 
             return area
@@ -215,8 +256,8 @@ def main() :
     for f in files :
         print("Frame %s " % (f) )
 
-        apl = areaPerLipid(f)
-        lip = lipidThickness(f, args.res, args.head)
+        apl = AreaPerLipid(f)
+        lip = LipidThickness(f, args.res, args.head)
 
         zv = lip.getZvalues()
 
@@ -234,15 +275,15 @@ def main() :
         thick, middle, up, low = lip.deltaZcoord(zv, args.grid)
         up_num_lip, low_num_lip = lip.lipidsNum(zv, middle)
 
-        up_zrange = [ up - layer_step, up + layer_step]
-        low_zrange= [ low - layer_step, low+ layer_step]
+        up_zrange = [up - layer_step, up + layer_step]
+        low_zrange = [low - layer_step, low+ layer_step]
 
         # calculate protein atom area, restore PBC if required
         up_proarea = apl.proteinArea(apl.selectProteinAtomsCrds(up_zrange), pbc, restorePBC=args.restore)
         low_proarea = apl.proteinArea(apl.selectProteinAtomsCrds(low_zrange), pbc, restorePBC=args.restore)
 
         up_alp = (total_area - up_proarea )  / float(up_num_lip)
-        low_alp= (total_area - low_proarea) / float(low_num_lip)
+        low_alp = (total_area - low_proarea) / float(low_num_lip)
 
         alp_aver = (total_area * 2 - up_proarea - low_proarea) / float(up_num_lip+low_num_lip)
 

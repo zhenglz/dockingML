@@ -6,7 +6,6 @@ Extract PDB files
 """
 
 import sys
-import linecache
 import argparse
 from argparse import RawTextHelpFormatter
 

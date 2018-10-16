@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from .io import *
-
 import numpy as np
 from matplotlib import pyplot as plt
 import networkx as nx
@@ -12,6 +10,25 @@ import argparse
 from argparse import RawTextHelpFormatter
 
 from dockml import pdbIO
+
+class CommunityHandler :
+    def __init__(self) :
+        pass
+
+    def readCommunityFile(self, filein, nres_cutoff=6):
+        """
+        read community output file, set a cutoff for least number of community
+        """
+        comm = []
+        with open(filein) as lines :
+            for s in lines :
+                if "The residues in community" in s :
+                    resi = s.split(":")[-1].split()
+                    resi = [ (int(x)) for x in resi ]
+                    if len(resi) >= nres_cutoff :
+                        comm.append(resi)
+        return comm
+
 
 class ParseCommunity :
 
