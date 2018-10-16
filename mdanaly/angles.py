@@ -2,6 +2,7 @@
 
 import mdtraj as mt
 import numpy as np
+import pandas as pd
 import argparse
 from argparse import RawTextHelpFormatter
 from dockml import index
@@ -179,8 +180,8 @@ def arguments():
                         help="Input, optional. Calculate the cosine values of the angles. "
                              "Options are True, False. Default is False. ")
     parser.add_argument("-dt", type=int, default=2,
-                        help="Input, optional. Skip frame with a gap of dt frames. "
-                             "Default is 0. ")
+                        help="Input, optional. Skip frame with a gap of dt picoseconds. "
+                             "Default is 2. ")
     parser.add_argument("-ps", default=2, type=int,
                         help="Input, optional. How many picoseconds the frames are stored in"
                              "trajectory file. Default is 2. ")
@@ -197,7 +198,7 @@ def arguments():
     return args
 
 
-def write_angles(angles, fout, cosine=True):
+def write_angles(angles, fout, cosine=False, dt=2):
     """
     write angles into a file
 
@@ -209,6 +210,8 @@ def write_angles(angles, fout, cosine=True):
         output file
     cosine: bool,
         whether save the cosine of the angles
+    dt: int,
+        the stride of the frames were saved or angles were calculated
 
     Returns
     -------
@@ -223,7 +226,13 @@ def write_angles(angles, fout, cosine=True):
     else:
         angles = (angles / pi) * 180
 
-    np.savetxt(fout, angles, fmt="%.3f", delimiter=",")
+    dat = pd.DataFrame(angles)
+    dat.index = np.arange(angles.shape[0]) * dt
+
+    dat.columns = ["Angles_"+str(x) for x in np.arange(angles.shape[0])]
+
+    dat.to_csv(fout, sep="\t", float_format="%.3f", header=True, index=True)
+    #np.savetxt(fout, angles, fmt="%.3f", delimiter=",")
 
     return angles
 
@@ -250,6 +259,7 @@ def gmxangle(args):
         ndx = read_index(args.n, args.type)
 
         if args.v:
+            print("Compute cosine of the angles: ", args.cos)
             print("Atom indices: ")
             print(ndx)
 
@@ -272,10 +282,10 @@ def gmxangle(args):
                 angles = cangle.get_dihedral_angles(ndx)
             else:
                 angles = np.concatenate((angles, cangle.get_dihedral_angles(ndx)), axis=0)
-            #print("Progress: %12d " % (i * traj.n_frames))
+                # print("Progress: %12d " % (i * traj.n_frames))
 
         # write angles to an output file
-        angles = write_angles(angles, args.o, cosine=args.cos)
+        angles = write_angles(angles, args.o, cosine=args.cos, dt=args.dt)
 
         return angles
 
