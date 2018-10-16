@@ -70,7 +70,7 @@ class ComputeAngles(object):
         return angles
 
 
-def read_xtc(xtc, top, chunk=100, stride=2):
+def read_xtc(xtc, top, chunk=100, stride=1):
     """
 
     Parameters
