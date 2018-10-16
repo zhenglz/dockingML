@@ -215,12 +215,17 @@ def write_angles(angles, fout, cosine=True):
 
     """
     pi = 3.1415926
-    angles = (angles / 180.0) * pi
 
     if cosine:
         angles = np.cos(angles)
+        #np.savetxt(fout, angles, fmt="%.3f", delimiter=",")
+        #return angles
+    else:
+        angles = (angles / pi) * 180
 
     np.savetxt(fout, angles, fmt="%.3f", delimiter=",")
+
+    return angles
 
 
 def gmxangle(args):
@@ -270,7 +275,7 @@ def gmxangle(args):
             #print("Progress: %12d " % (i * traj.n_frames))
 
         # write angles to an output file
-        write_angles(angles, args.o, cosine=args.cos)
+        angles = write_angles(angles, args.o, cosine=args.cos)
 
         return angles
 
