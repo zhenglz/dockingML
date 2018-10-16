@@ -3,11 +3,10 @@
 import mdtraj as mt
 import numpy as np
 import pandas as pd
-import argparse
-from argparse import RawTextHelpFormatter
 from dockml import index
 import sys
 import os
+from mdanaly import gmxcli
 
 
 class ComputeAngles(object):
@@ -71,36 +70,6 @@ class ComputeAngles(object):
         return angles
 
 
-def read_xtc(xtc, top, chunk=100, stride=1):
-    """
-
-    Parameters
-    ----------
-    xtc: str,
-        input xtc file name
-    top: str,
-        input topology information file, a pdb
-    chunk: int,
-        number of frame per chunk
-    stride: int,
-        dt, save a frame every N number of frames
-
-    Returns
-    -------
-    trajs: list,
-        a list of mdtraj trajectory object
-    """
-
-    trajs = []
-
-    for chunk in mt.iterload(xtc, chunk=chunk, top=top, stride=stride):
-        trajs.append(chunk)
-
-    print("Number of chunks: ", len(trajs))
-
-    return trajs
-
-
 def read_index(ndx, angle_type):
     """
     read gromacs index file and get atom indices
@@ -139,6 +108,7 @@ def read_index(ndx, angle_type):
 
 def arguments():
     """
+    Parse the gmx style command arguments
 
     Returns
     -------
@@ -162,37 +132,21 @@ def arguments():
     
     """
 
-    parser = argparse.ArgumentParser(description=d, formatter_class=RawTextHelpFormatter)
+    parser = gmxcli.GromacsCommanLine(d)
 
-    parser.add_argument("-f", type=str, default="md.xtc",
-                        help="Input. The xtc trajectory file name. ")
-    parser.add_argument("-s", type=str, default="reference.pdb",
-                        help="Input. Reference pdb file, where topology information holds. ")
-    parser.add_argument("-n", type=str, default="index.ndx",
-                        help="Input. Gromacs type index file, where atom indices information "
-                             "holds for angle calculation.")
-    parser.add_argument("-o", type=str, default="angles.csv",
-                        help="Output. The output angle file name. Default is angle.csv. ")
-    parser.add_argument("-type", type=str, default="angle",
-                        help="Input, optional. The angle type for calculation. Options are "
-                             "angle, dihedral. Default is angle. ")
-    parser.add_argument("-cos", type=int, default=0,
-                        help="Input, optional. Calculate the cosine values of the angles. "
-                             "Options are 0, 1. Default is 0. ")
-    parser.add_argument("-dt", type=int, default=2,
-                        help="Input, optional. Skip frame with a gap of dt picoseconds. "
-                             "Default is 2. ")
-    parser.add_argument("-ps", default=2, type=int,
-                        help="Input, optional. How many picoseconds the frames are stored in"
-                             "trajectory file. Default is 2. ")
-    parser.add_argument("-v", default=False, type=bool,
-                        help="Input, optional. Whether print detail information. "
-                             "Default is False. ")
+    parser.parser.add_argument("-type", type=str, default="angle",
+                               help="Input, optional. \n"
+                               "The angle type for calculation. Options are \n"
+                               "angle, dihedral. Default is angle. ")
+    parser.parser.add_argument("-cos", type=int, default=0,
+                               help="Input, optional. \n"
+                               "Calculate the cosine values of the angles.\n"
+                               "Options are 0, 1. Default is 0. ")
 
-    args = parser.parse_args()
+    args = parser.parse_arguments()
 
     if len(sys.argv) < 3:
-        parser.print_help()
+        parser.parser.print_help()
         sys.exit(0)
 
     return args
@@ -232,8 +186,6 @@ def write_angles(angles, fout, cosine=0, dt=2):
     dat.to_csv(fout, sep=",", float_format="%.3f", header=True, index=True)
     # np.savetxt(fout, angles, fmt="%.3f", delimiter=",")
 
-    return angles
-
 
 def gmxangle(args):
     """
@@ -262,7 +214,7 @@ def gmxangle(args):
             print(ndx)
 
         # load trajectories
-        trajs = read_xtc(xtc=args.f, top=args.s, chunk=1000, stride=int(args.dt / args.ps))
+        trajs = gmxcli.read_xtc(xtc=args.f, top=args.s, chunk=1000, stride=int(args.dt / args.ps))
         if args.v:
             print("Frame information: ")
             for i, traj in enumerate(trajs):
@@ -270,6 +222,7 @@ def gmxangle(args):
 
         angles = np.array([])
 
+        # for each traj chunk, calculate angles, and cat them together
         for i, traj in enumerate(trajs):
             cangle = ComputeAngles(traj)
             if args.v:
@@ -286,9 +239,7 @@ def gmxangle(args):
             print("Write angles to output file: ", args.o)
 
         # write angles to an output file
-        angles = write_angles(angles, args.o, cosine=args.cos, dt=args.dt)
-
-        # return angles
+        write_angles(angles, args.o, cosine=args.cos, dt=args.dt)
 
     else:
         print("Some of the input files are not existed. Input again.")
