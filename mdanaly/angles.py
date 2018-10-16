@@ -59,7 +59,7 @@ class ComputeAngles(object):
 
         Returns
         -------
-        angles: ndarray, shape=[N, M]
+        angles: numpy ndarray, shape=[N, M]
             angles, N is number of frames, M is the number
             of the angles per frame
 
@@ -180,6 +180,9 @@ def arguments():
     parser.add_argument("-ps", default=2, type=int,
                         help="Input, optional. How many picoseconds the frames are stored in"
                              "trajectory file. Default is 2. ")
+    parser.add_argument("-v", default=False, type=bool,
+                        help="Input, optional. Whether print detail information. "
+                             "Default is False. ")
 
     args = parser.parse_args()
 
@@ -237,14 +240,24 @@ def gmxangle(args):
         # prepare index atom slices
         ndx = read_index(args.n, args.type)
 
+        if args.v:
+            print("Atom indices: ")
+            print(ndx)
+
         # load trajectories
         trajs = read_xtc(xtc=args.f, top=args.s, chunk=1000, stride=int(args.dt / args.ps))
+        if args.v:
+            print("Frame information: ")
+            for i, traj in enumerate(trajs):
+                print("Trajectory %3d: %12d frames" % (i, traj.n_frames))
 
         angles = np.array([])
 
         for i, traj in enumerate(trajs):
             cangle = ComputeAngles(traj)
-            print("Progress: %12d " % (i * traj.n_frames))
+            if args.v:
+                print("Progress: %12d " % (i * traj.n_frames))
+                print(angles.shape)
 
             if angles.shape[0] == 0:
                 angles = cangle.get_dihedral_angles(ndx)

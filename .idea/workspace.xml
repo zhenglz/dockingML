@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="add a gmx angle simulator for xtc based angles">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dockml/index.py" beforeDir="false" afterPath="$PROJECT_DIR$/dockml/index.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mdanaly/angles.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/angles.py" afterDir="false" />
     </list>
     <ignored path="dockingML.iws" />
@@ -41,26 +42,26 @@
         <counts>
           <entry key="dat" value="2" />
           <entry key="lib" value="1" />
-          <entry key="py" value="25" />
+          <entry key="py" value="26" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="PLAIN_TEXT" value="3" />
-          <entry key="Python" value="25" />
+          <entry key="Python" value="26" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Python Console" value="141" />
-          <entry key="py" value="14013" />
+          <entry key="py" value="14330" />
           <entry key="txt" value="261" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="261" />
-          <entry key="Python" value="14154" />
+          <entry key="Python" value="14471" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -76,21 +77,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="395">
               <caret line="30" column="19" selection-start-line="30" selection-start-column="19" selection-end-line="30" selection-end-column="19" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dockml/pdbIO.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="9" column="25" selection-start-line="9" selection-start-column="25" selection-end-line="9" selection-end-column="25" />
-              <folding>
-                <element signature="e#159#4775#0" />
-                <element signature="e#4798#14194#0" />
-                <element signature="e#14218#16547#0" />
-                <element signature="e#16576#18481#0" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -122,19 +108,28 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mdanaly/angles.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="159">
-              <caret line="155" column="97" selection-start-line="155" selection-start-column="97" selection-end-line="155" selection-end-column="97" />
+            <state relative-caret-position="44">
+              <caret line="259" column="28" selection-start-line="259" selection-start-column="28" selection-end-line="259" selection-end-column="28" />
               <folding>
                 <element signature="e#25#44#0" expanded="true" />
-                <marker date="1539660253924" expanded="true" signature="462:1017" ph="..." />
-                <marker date="1539660253924" expanded="true" signature="1989:1994" ph="..." />
-                <marker date="1539660253924" expanded="true" signature="2142:3090" ph="..." />
-                <marker date="1539660253924" expanded="true" signature="3767:3768" ph="..." />
-                <marker date="1539660253924" expanded="true" signature="3767:3773" ph="..." />
-                <marker date="1539660253924" expanded="true" signature="5853:5996" ph="..." />
-                <marker date="1539660253924" expanded="true" signature="6377:7329" ph="..." />
-                <marker date="1539660253924" expanded="true" signature="6377:7330" ph="..." />
+                <marker date="1539671159071" expanded="true" signature="462:1017" ph="..." />
+                <marker date="1539671159071" expanded="true" signature="1995:2000" ph="..." />
+                <marker date="1539671159071" expanded="true" signature="2148:3096" ph="..." />
+                <marker date="1539671159071" expanded="true" signature="3773:3774" ph="..." />
+                <marker date="1539671159071" expanded="true" signature="3773:3779" ph="..." />
+                <marker date="1539671159071" expanded="true" signature="6049:6192" ph="..." />
+                <marker date="1539671159071" expanded="true" signature="6573:7846" ph="..." />
+                <marker date="1539671159071" expanded="true" signature="6573:7847" ph="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dockml/index.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-351">
+              <caret line="528" column="37" lean-forward="true" selection-start-line="528" selection-start-column="37" selection-end-line="528" selection-end-column="37" />
             </state>
           </provider>
         </entry>
@@ -196,7 +191,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>position</find>
       <find>vector</find>
       <find>MD</find>
       <find>MDAN</find>
@@ -226,6 +220,7 @@
       <find>SystemExit</find>
       <find>conver</find>
       <find>pyemma</find>
+      <find>Comp</find>
     </findStrings>
     <replaceStrings>
       <replace>fn</replace>
@@ -289,7 +284,6 @@
         <option value="$PROJECT_DIR$/bin/extract.py" />
         <option value="$PROJECT_DIR$/bin/index.py" />
         <option value="$PROJECT_DIR$/mdanaly/lipids.py" />
-        <option value="$PROJECT_DIR$/dockml/index.py" />
         <option value="$PROJECT_DIR$/bin/lipids.py" />
         <option value="$PROJECT_DIR$/dockml/pdbIO.py" />
         <option value="$PROJECT_DIR$/automd/gentop.py" />
@@ -297,6 +291,7 @@
         <option value="$PROJECT_DIR$/mdanaly/dynamics.py" />
         <option value="$PROJECT_DIR$/setup.py" />
         <option value="$PROJECT_DIR$/bin/gmx_angle.py" />
+        <option value="$PROJECT_DIR$/dockml/index.py" />
         <option value="$PROJECT_DIR$/mdanaly/angles.py" />
       </list>
     </option>
@@ -871,7 +866,14 @@
       <option name="project" value="LOCAL" />
       <updated>1539622320934</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="add a gmx angle simulator for xtc based angles">
+      <created>1539660261582</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1539660261582</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1131,13 +1133,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dockml/index.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6443">
-          <caret line="383" column="8" selection-start-line="383" selection-start-column="8" selection-end-line="383" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bin/lipids.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -1244,20 +1239,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/dockml/index.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-351">
+          <caret line="528" column="37" lean-forward="true" selection-start-line="528" selection-start-column="37" selection-end-line="528" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/angles.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="159">
-          <caret line="155" column="97" selection-start-line="155" selection-start-column="97" selection-end-line="155" selection-end-column="97" />
+        <state relative-caret-position="44">
+          <caret line="259" column="28" selection-start-line="259" selection-start-column="28" selection-end-line="259" selection-end-column="28" />
           <folding>
             <element signature="e#25#44#0" expanded="true" />
-            <marker date="1539660253924" expanded="true" signature="462:1017" ph="..." />
-            <marker date="1539660253924" expanded="true" signature="1989:1994" ph="..." />
-            <marker date="1539660253924" expanded="true" signature="2142:3090" ph="..." />
-            <marker date="1539660253924" expanded="true" signature="3767:3768" ph="..." />
-            <marker date="1539660253924" expanded="true" signature="3767:3773" ph="..." />
-            <marker date="1539660253924" expanded="true" signature="5853:5996" ph="..." />
-            <marker date="1539660253924" expanded="true" signature="6377:7329" ph="..." />
-            <marker date="1539660253924" expanded="true" signature="6377:7330" ph="..." />
+            <marker date="1539671159071" expanded="true" signature="462:1017" ph="..." />
+            <marker date="1539671159071" expanded="true" signature="1995:2000" ph="..." />
+            <marker date="1539671159071" expanded="true" signature="2148:3096" ph="..." />
+            <marker date="1539671159071" expanded="true" signature="3773:3774" ph="..." />
+            <marker date="1539671159071" expanded="true" signature="3773:3779" ph="..." />
+            <marker date="1539671159071" expanded="true" signature="6049:6192" ph="..." />
+            <marker date="1539671159071" expanded="true" signature="6573:7846" ph="..." />
+            <marker date="1539671159071" expanded="true" signature="6573:7847" ph="..." />
           </folding>
         </state>
       </provider>

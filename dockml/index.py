@@ -525,7 +525,7 @@ class GmxIndex :
         else :
             end_ln = gln[self.groups[self.groups.index(group) + 1]] - 1
 
-        contents = [ self.ndxlines[x].strip("\n")+" " for x in range(start_ln, end_ln+1) ]
+        contents = [self.ndxlines[x].strip("\n")+" " for x in range(start_ln, end_ln+1)]
         contents = " ".join(contents)
 
         return contents.split()
