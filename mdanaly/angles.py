@@ -65,7 +65,7 @@ class ComputeAngles(object):
 
         """
 
-        angles = mt.compute_angles(self.traj, angle_indices=angle_index)
+        angles = mt.compute_dihedrals(self.traj, indices=angle_index)
 
         return angles
 
@@ -121,6 +121,7 @@ def read_index(ndx, angle_type):
         print("%3d    %s " % (i, g))
     #print("Your choice: ")
     n = int(input("Your choice:  "))
+    print("You have selected: %s" % indexer.groups[n])
 
     elements = indexer.groupContent(indexer.groups[n])
     # if dihedral, four atoms index should be defined
@@ -141,6 +142,19 @@ def arguments():
     """
 
     d = """
+    Calculate angles of a xtc trajectory. This function is simply designed to simulation
+    gmx angle module, but provide a direct way to save the result.
+    
+    Examples:
+    Print help information
+    gmx_angles.py -h
+    
+    Calculate angles
+    gmx_angles.py -f traj.xtc -n index.ndx -s reference.pdb -o angles.csv -type angle -dt 10 -cos False
+    
+    Calculate dihedral angles
+    gmx_angles.py -f traj.xtc -n index.ndx -s reference.pdb -o dihedral_angles.csv -type dihedral -dt 10 -cos False
+    
     """
 
     parser = argparse.ArgumentParser(description=d, formatter_class=RawTextHelpFormatter)
@@ -152,18 +166,24 @@ def arguments():
     parser.add_argument("-n", type=str, default="index.ndx",
                         help="Input. Gromacs type index file, where atom indices information "
                              "holds for angle calculation.")
+    parser.add_argument("-o", type=str, default="angles.csv",
+                        help="Output. The output angle file name. Default is angle.csv. ")
     parser.add_argument("-type", type=str, default="angle",
                         help="Input, optional. The angle type for calculation. Options are "
                              "angle, dihedral. Default is angle. ")
-    parser.add_argument("-cos", type=str, default="False",
+    parser.add_argument("-cos", type=bool, default=False,
                         help="Input, optional. Calculate the cosine values of the angles. "
                              "Options are True, False. Default is False. ")
-    parser.add_argument("-o", type=str, default="angles.csv",
-                        help="Output. The output angle file name. Default is angle.csv. ")
+    parser.add_argument("-dt", type=int, default=0,
+                        help="Input, optional. Skip frame with a gap of dt frames. "
+                             "Default is 0. ")
+    parser.add_argument("-ps", default=2, type=int,
+                        help="Input, optional. How many picoseconds the frames are stored in"
+                             "trajectory file. Default is 2. ")
 
     args = parser.parse_args()
 
-    if len(sys.argv) < 3 :
+    if len(sys.argv) < 3:
         parser.print_help()
         sys.exit(0)
 
@@ -218,7 +238,7 @@ def gmxangle(args):
         ndx = read_index(args.n, args.type)
 
         # load trajectories
-        trajs = read_xtc(xtc=args.f, top=args.s)
+        trajs = read_xtc(xtc=args.f, top=args.s, chunk=1000, stride=int(args.dt / args.ps))
 
         angles = np.array([])
 
@@ -232,12 +252,8 @@ def gmxangle(args):
                 angles = np.concatenate((angles, cangle.get_dihedral_angles(ndx)), axis=0)
             #print("Progress: %12d " % (i * traj.n_frames))
 
-        if args.cos in ["True", "true"]:
-            cosine = True
-        else:
-            cosine = False
-
-        write_angles(angles, args.o, cosine)
+        # write angles to an output file
+        write_angles(angles, args.o, cosine=args.cos)
 
         return angles
 

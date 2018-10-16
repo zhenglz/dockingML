@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="update docstring in gentop module">
+    <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="add a gmx angle simulator for xtc based angles">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/automd/fixpdb.py" beforeDir="false" afterPath="$PROJECT_DIR$/automd/fixpdb.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mdanaly/angles.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/angles.py" afterDir="false" />
     </list>
     <ignored path="dockingML.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -33,34 +33,34 @@
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.7" value="1" />
           <entry key="project.open.time.8" value="2" />
-          <entry key="project.open.time.9" value="3" />
-          <entry key="project.opened" value="20" />
+          <entry key="project.open.time.9" value="4" />
+          <entry key="project.opened" value="21" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="dat" value="2" />
           <entry key="lib" value="1" />
-          <entry key="py" value="22" />
+          <entry key="py" value="25" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="PLAIN_TEXT" value="3" />
-          <entry key="Python" value="22" />
+          <entry key="Python" value="25" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Python Console" value="58" />
-          <entry key="py" value="8709" />
-          <entry key="txt" value="172" />
+          <entry key="Python Console" value="141" />
+          <entry key="py" value="14013" />
+          <entry key="txt" value="261" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="172" />
-          <entry key="Python" value="8767" />
+          <entry key="PLAIN_TEXT" value="261" />
+          <entry key="Python" value="14154" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -72,36 +72,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/data/elementNegativity.dat">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/data/AtomType.dat">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="13" column="41" selection-start-line="13" selection-start-column="41" selection-end-line="13" selection-end-column="41" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/automd/gentop.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3502">
-              <caret line="302" column="50" selection-start-line="302" selection-start-column="50" selection-end-line="302" selection-end-column="50" />
-              <folding>
-                <element signature="e#25#39#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/setup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="17" column="43" lean-forward="true" selection-start-line="17" selection-start-column="43" selection-end-line="17" selection-end-column="43" />
+            <state relative-caret-position="395">
+              <caret line="30" column="19" selection-start-line="30" selection-start-column="19" selection-end-line="30" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -121,14 +95,55 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/automd/fixpdb.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="98">
-              <caret line="436" column="35" lean-forward="true" selection-start-line="436" selection-start-column="35" selection-end-line="436" selection-end-column="35" />
+            <state relative-caret-position="7514">
+              <caret line="442" column="17" selection-start-line="442" selection-start-column="17" selection-end-line="442" selection-end-column="17" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/mdanaly/dynamics.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-3162">
+              <caret selection-end-column="23" />
+              <folding>
+                <element signature="e#25#38#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/mdanaly/angles.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="159">
+              <caret line="155" column="97" selection-start-line="155" selection-start-column="97" selection-end-line="155" selection-end-column="97" />
+              <folding>
+                <element signature="e#25#44#0" expanded="true" />
+                <marker date="1539660253924" expanded="true" signature="462:1017" ph="..." />
+                <marker date="1539660253924" expanded="true" signature="1989:1994" ph="..." />
+                <marker date="1539660253924" expanded="true" signature="2142:3090" ph="..." />
+                <marker date="1539660253924" expanded="true" signature="3767:3768" ph="..." />
+                <marker date="1539660253924" expanded="true" signature="3767:3773" ph="..." />
+                <marker date="1539660253924" expanded="true" signature="5853:5996" ph="..." />
+                <marker date="1539660253924" expanded="true" signature="6377:7329" ph="..." />
+                <marker date="1539660253924" expanded="true" signature="6377:7330" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bin/gmx_angle.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="153">
+              <caret line="9" column="23" selection-start-line="9" selection-start-column="23" selection-end-line="9" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -147,8 +162,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/automd/autoMD.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="22" column="18" selection-start-line="22" selection-start-column="18" selection-end-line="22" selection-end-column="18" />
+            <state relative-caret-position="153">
+              <caret line="17" column="25" lean-forward="true" selection-start-line="17" selection-start-column="25" selection-end-line="17" selection-end-column="25" />
               <folding>
                 <element signature="e#507#12708#0" />
               </folding>
@@ -181,7 +196,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>genNodeEdges</find>
       <find>position</find>
       <find>vector</find>
       <find>MD</find>
@@ -211,6 +225,7 @@
       <find>convert</find>
       <find>SystemExit</find>
       <find>conver</find>
+      <find>pyemma</find>
     </findStrings>
     <replaceStrings>
       <replace>fn</replace>
@@ -232,9 +247,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$USER_HOME$/PRLBD/dockingML/DUDE/active/mini/run_energymin.py" />
-        <option value="$PROJECT_DIR$/automd/gmxtop.py" />
-        <option value="$USER_HOME$/PRLBD/dockingML/fda_approved/test/test_gridfeature.py" />
         <option value="$PROJECT_DIR$/data/elementNegativity.dat" />
         <option value="$PROJECT_DIR$/test/test_gridfeatures.py" />
         <option value="$PROJECT_DIR$/dockml/fixpdb.py" />
@@ -279,10 +291,13 @@
         <option value="$PROJECT_DIR$/mdanaly/lipids.py" />
         <option value="$PROJECT_DIR$/dockml/index.py" />
         <option value="$PROJECT_DIR$/bin/lipids.py" />
-        <option value="$PROJECT_DIR$/setup.py" />
         <option value="$PROJECT_DIR$/dockml/pdbIO.py" />
         <option value="$PROJECT_DIR$/automd/gentop.py" />
         <option value="$PROJECT_DIR$/automd/fixpdb.py" />
+        <option value="$PROJECT_DIR$/mdanaly/dynamics.py" />
+        <option value="$PROJECT_DIR$/setup.py" />
+        <option value="$PROJECT_DIR$/bin/gmx_angle.py" />
+        <option value="$PROJECT_DIR$/mdanaly/angles.py" />
       </list>
     </option>
   </component>
@@ -308,6 +323,21 @@
               <item name="dockingML" type="b2602c69:ProjectViewProjectNode" />
               <item name="dockingML" type="462c0819:PsiDirectoryNode" />
               <item name="automd" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="dockingML" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dockingML" type="462c0819:PsiDirectoryNode" />
+              <item name="bin" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="dockingML" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dockingML" type="462c0819:PsiDirectoryNode" />
+              <item name="dockml" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="dockingML" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dockingML" type="462c0819:PsiDirectoryNode" />
+              <item name="mdanaly" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -813,11 +843,39 @@
       <option name="project" value="LOCAL" />
       <updated>1539584195922</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="update docstring in gentop module">
+      <created>1539613906089</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1539613906089</updated>
+    </task>
+    <task id="LOCAL-00039" summary="add a gmx angle simulator for xtc based angles">
+      <created>1539620845800</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1539620845800</updated>
+    </task>
+    <task id="LOCAL-00040" summary="add a gmx angle simulator for xtc based angles">
+      <created>1539620981198</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1539620981198</updated>
+    </task>
+    <task id="LOCAL-00041" summary="add a gmx angle simulator for xtc based angles">
+      <created>1539622320934</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1539622320934</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1360" height="636" extended-state="6" />
+    <frame x="-1" y="-1" width="1362" height="641" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16529544" />
@@ -830,9 +888,9 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Version Control" order="7" visible="true" weight="0.18786693" />
       <window_info anchor="bottom" id="Terminal" order="8" />
-      <window_info anchor="bottom" id="Python Console" order="9" sideWeight="0.5871354" weight="0.26705652" />
+      <window_info anchor="bottom" id="Python Console" order="9" sideWeight="0.5871354" weight="0.5636008" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.41286463" side_tool="true" weight="0.35420743" />
       <window_info anchor="bottom" id="Messages" order="11" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -841,6 +899,32 @@
       <window_info anchor="right" id="Data View" order="3" />
       <window_info anchor="right" x="100" y="122" width="1400" height="638" id="Documentation" order="4" type="FLOATING" />
     </layout>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">
@@ -860,7 +944,8 @@
     <MESSAGE value="update gentop module" />
     <MESSAGE value="update docstring in dockml index module" />
     <MESSAGE value="update docstring in gentop module" />
-    <option name="LAST_COMMIT_MESSAGE" value="update docstring in gentop module" />
+    <MESSAGE value="add a gmx angle simulator for xtc based angles" />
+    <option name="LAST_COMMIT_MESSAGE" value="add a gmx angle simulator for xtc based angles" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -884,27 +969,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/test/test_GOLD_Results.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="663">
-          <caret line="43" column="42" selection-start-line="43" selection-start-column="42" selection-end-line="43" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/automd/gaussian.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="884">
-          <caret line="53" column="29" selection-start-line="53" selection-start-column="29" selection-end-line="53" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/sample_gaussian.inp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="49" selection-start-line="6" selection-start-column="49" selection-end-line="6" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dockingML.egg-info/top_level.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1094,34 +1158,15 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/.conda/envs/py36/lib/python3.6/site-packages/rdkit/Chem/__init__.py">
+    <entry file="file://$PROJECT_DIR$/automd/gentop.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
+        <state relative-caret-position="5032">
+          <caret line="302" column="50" selection-start-line="302" selection-start-column="50" selection-end-line="302" selection-end-column="50" />
           <folding>
-            <element signature="e#390#414#0" expanded="true" />
+            <element signature="e#25#39#0" expanded="true" />
           </folding>
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/automd/autoMD.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="22" column="18" selection-start-line="22" selection-start-column="18" selection-end-line="22" selection-end-column="18" />
-          <folding>
-            <element signature="e#507#12708#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/lipids.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1275">
-          <caret line="80" column="28" selection-start-line="80" selection-start-column="28" selection-end-line="80" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bin/cmap.py">
-      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/dockml/pdbIO.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -1136,29 +1181,83 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/automd/gentop.py">
+    <entry file="file://$USER_HOME$/.conda/envs/py36/lib/python3.6/site-packages/rdkit/Chem/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3502">
-          <caret line="302" column="50" selection-start-line="302" selection-start-column="50" selection-end-line="302" selection-end-column="50" />
+        <state>
           <folding>
-            <element signature="e#25#39#0" expanded="true" />
+            <element signature="e#390#414#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/mdanaly/lipids.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1275">
+          <caret line="80" column="28" selection-start-line="80" selection-start-column="28" selection-end-line="80" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bin/cmap.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/setup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="43" lean-forward="true" selection-start-line="17" selection-start-column="43" selection-end-line="17" selection-end-column="43" />
+        <state relative-caret-position="395">
+          <caret line="30" column="19" selection-start-line="30" selection-start-column="19" selection-end-line="30" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/automd/autoMD.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="17" column="25" lean-forward="true" selection-start-line="17" selection-start-column="25" selection-end-line="17" selection-end-column="25" />
+          <folding>
+            <element signature="e#507#12708#0" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/automd/fixpdb.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="98">
-          <caret line="436" column="35" lean-forward="true" selection-start-line="436" selection-start-column="35" selection-end-line="436" selection-end-column="35" />
+        <state relative-caret-position="7514">
+          <caret line="442" column="17" selection-start-line="442" selection-start-column="17" selection-end-line="442" selection-end-column="17" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mdanaly/dynamics.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3162">
+          <caret selection-end-column="23" />
+          <folding>
+            <element signature="e#25#38#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bin/gmx_angle.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="23" selection-start-line="9" selection-start-column="23" selection-end-line="9" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mdanaly/angles.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="159">
+          <caret line="155" column="97" selection-start-line="155" selection-start-column="97" selection-end-line="155" selection-end-column="97" />
+          <folding>
+            <element signature="e#25#44#0" expanded="true" />
+            <marker date="1539660253924" expanded="true" signature="462:1017" ph="..." />
+            <marker date="1539660253924" expanded="true" signature="1989:1994" ph="..." />
+            <marker date="1539660253924" expanded="true" signature="2142:3090" ph="..." />
+            <marker date="1539660253924" expanded="true" signature="3767:3768" ph="..." />
+            <marker date="1539660253924" expanded="true" signature="3767:3773" ph="..." />
+            <marker date="1539660253924" expanded="true" signature="5853:5996" ph="..." />
+            <marker date="1539660253924" expanded="true" signature="6377:7329" ph="..." />
+            <marker date="1539660253924" expanded="true" signature="6377:7330" ph="..." />
           </folding>
         </state>
       </provider>
