@@ -147,7 +147,7 @@ class PCA(object):
         self.eigvalues_ = eigval_
         self.eigvalues_ratio_ = self.pca_obj.explained_variance_ratio_
 
-        return eigval_
+        return None
 
     def eigvectors(self):
         """
@@ -165,7 +165,7 @@ class PCA(object):
 
         self.eigvectors_ = eigvect_
 
-        return eigvect_
+        return None
 
 
 class CoordinationPCA(object):
