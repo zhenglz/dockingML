@@ -3,6 +3,7 @@
 import numpy as np
 import pandas as pd
 import sklearn
+from sklearn import decomposition
 import mdtraj as mt
 from mdanaly import gmxcli
 
@@ -87,7 +88,8 @@ class PCA(object):
         self.X_scaled = Xs
 
         # using sklearn, perform PCA analysis based on scaled dataset
-        pca_obj = sklearn.decomposition.PCA(n_components=self.n_components)
+        # sklearn.decomposition
+        pca_obj = decomposition.PCA(n_components=self.n_components)
         pca_obj.fit(self.X_scaled)
 
         # train and transform the dataset
