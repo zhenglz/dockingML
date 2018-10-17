@@ -2,9 +2,9 @@ import numpy as np
 import argparse
 from argparse import RawTextHelpFormatter
 import sys
-from dockml import index
 
-class TimeStamp :
+
+class TimeStamp(object):
 
     def __init__(self):
         pass
@@ -58,14 +58,15 @@ class TimeStamp :
 
         return 1
 
-def arguments() :
+
+def arguments():
 
     d = """
-    extract specific frames from a local minimium 
-    given a file contains two columns, select data points 
+    Extract specific frames from a local minimium 
+    Given a file contains two columns, select data points 
     within up and low boundarys
     
-    examples: 
+    Examples: 
     
     timestampy -h
     
@@ -73,7 +74,7 @@ def arguments() :
     
     """
 
-    parser = argparse.ArgumentParser(description=d)
+    parser = argparse.ArgumentParser(description=d, formatter_class=RawTextHelpFormatter)
     parser.add_argument('-dat', type=str, help="Input data set")
     parser.add_argument('-dt', type=int, default=10,
                         help="Time step used in the dataset file. Default is 10. \n")
@@ -96,7 +97,8 @@ def arguments() :
 
     return args
 
-def main() :
+
+def main():
 
     args = arguments()
 
@@ -108,7 +110,7 @@ def main() :
 
     indexes = dp[:, 0]
 
-    if len(args.gn) :
+    if len(args.gn):
         groupname = args.gn
     else :
         groupname = "+".join([str(x) for x in args.up ]) + "_" + "+".join([str(x) for x in args.low ])
@@ -118,3 +120,4 @@ def main() :
 
     print("Completed ... ... ")
     sys.exit(1)
+

@@ -92,6 +92,11 @@ class GromacsCommanLine(object):
         """
         self.args = self.parser.parse_args()
 
+        # print help information
+        if len(sys.argv) < 3:
+            self.parser.print_help()
+            sys.exit(0)
+
         return self
 
 
