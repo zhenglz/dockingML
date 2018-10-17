@@ -142,6 +142,10 @@ def arguments():
                                help="Input, optional. \n"
                                "Calculate the cosine values of the angles.\n"
                                "Options are 0, 1. Default is 0. ")
+    parser.parser.add_argument("-sin", type=int, default=0,
+                               help="Input, optional. \n"
+                               "Calculate the sine values of the angles.\n"
+                               "Options are 0, 1. Default is 0. ")
 
     args = parser.parse_arguments()
 
@@ -152,7 +156,7 @@ def arguments():
     return args
 
 
-def write_angles(angles, fout, cosine=0, dt=2):
+def write_angles(angles, fout, cosine=0, sine=0, dt=2):
     """
     write angles into a file
 
@@ -164,6 +168,8 @@ def write_angles(angles, fout, cosine=0, dt=2):
         output file
     cosine: int,
         whether save the cosine of the angles, default is 0
+    sine: int,
+        whether save the sine of the angles, default is 0
     dt: int,
         the stride of the frames were saved or angles were calculated
 
@@ -173,18 +179,24 @@ def write_angles(angles, fout, cosine=0, dt=2):
     """
     pi = 3.141592654
 
-    if cosine:
-        angles = np.cos(angles)
-        #np.savetxt(fout, angles, fmt="%.3f", delimiter=",")
-        #return angles
+    if cosine and sine:
+        angles_1 = np.cos(angles)
+        angles_2 = np.sin(angles)
+        new_angles = np.concatenate((angles_1, angles_2), axis=1)
+    elif cosine and not sine:
+        new_angles = np.cos(angles)
+    elif not cosine and sine:
+        new_angles = np.sin(angles)
     else:
-        angles = (angles / pi) * 180
+        new_angles = (angles / pi) * 180
 
-    dat = pd.DataFrame(angles)
-    dat.index = np.arange(angles.shape[0]) * dt
-    dat.columns = ["Angles_"+str(x) for x in np.arange(angles.shape[1])]
+    dat = pd.DataFrame(new_angles)
+    dat.index = np.arange(new_angles.shape[0]) * dt
+    dat.columns = ["Angles_"+str(x) for x in np.arange(new_angles.shape[1])]
     dat.to_csv(fout, sep=",", float_format="%.3f", header=True, index=True)
     # np.savetxt(fout, angles, fmt="%.3f", delimiter=",")
+
+    return None
 
 
 def gmxangle(args):
