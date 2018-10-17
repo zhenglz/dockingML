@@ -169,6 +169,16 @@ class PCA(object):
         return None
 
 
+class ContactMapPCA(object):
+
+    def __init__(self):
+        pass
+
+    def generate_cmap(self):
+        # TODO: generate a contactmap for each frame
+        pass
+
+
 class CoordinationPCA(object):
     """
     Perform trajectory coordinates PCA analysis using mdtraj
@@ -325,9 +335,17 @@ def xyz_pca(args):
                                    chunk=1000, stride=int(args.dt/args.ps),
                                    atom_selection=args.select)
 
+    dat = pd.DataFrame(xyz)
+    dat.index = np.arange(xyz.shape[0]) * args.dt
+
+    if args.b > 0:
+        dat = dat[dat.index >= args.b]
+    if args.e > 0 and args.e > args.b:
+        dat = dat[dat.index <= args.e]
+
     # perform PCA calculation using xyz coordinates
     pca = PCA(n_components=args.proj)
-    pca.fit(xyz)
+    pca.fit(dat)
     xyz_transformed = pca.X_transformed_
 
     write_results(X_transformed=xyz_transformed, variance_ratio=pca.eigvalues_ratio_,
@@ -336,7 +354,7 @@ def xyz_pca(args):
     return None
 
 
-def write_results(X_transformed, variance_ratio, X_out, variance_out, dt):
+def write_results(X_transformed, variance_ratio, X_out, variance_out, col_index):
     """
     Write PCA results into files:
     1. transformed dataset
@@ -349,6 +367,7 @@ def write_results(X_transformed, variance_ratio, X_out, variance_out, dt):
     X_out: str
     variance_out: str
     dt: int
+    col_index: numpy array
 
     Returns
     -------
@@ -356,7 +375,8 @@ def write_results(X_transformed, variance_ratio, X_out, variance_out, dt):
     """
     # save the data into a file
     dat = pd.DataFrame(X_transformed)
-    dat.index = np.arange(X_transformed.shape[0]) * dt
+    dat.index = col_index
+    #dat.index = np.arange(X_transformed.shape[0]) * dt
     dat.columns = ["PC_%d" % x for x in np.arange(X_transformed.shape[1])]
     dat.to_csv(X_out, sep=",", header=True, index=True,
                index_label="time(ps)", float_format="%.3f")
@@ -385,20 +405,32 @@ def general_pca(args):
 
     """
 
+    # load dataset
     if args.skip_index:
         X = pd.read_csv(args.f, sep=",", header=0, index_col=0)
     else:
         X = pd.read_csv(args.f, sep=",", header=0)
 
+    # slice the dataset
+    dat = X.copy()
+    if args.b > 0:
+        dat = dat[dat.index >= args.b]
+    if args.e > 0 and args.e > args.b:
+        dat = dat[dat.index <= args.e]
+
+    index_col = dat.index
+
+    # calculate PCA
     pca = PCA(n_components=args.proj)
+    pca.fit(dat)
 
-    pca.fit(X)
-
+    # get transformed dataset
     X_transformed = pca.X_transformed_
     variance_ratio = pca.eigvalues_ratio_
 
+    # write result
     write_results(X_transformed=X_transformed, variance_ratio=variance_ratio,
-                  X_out=args.o, variance_out=args.var_ratio, dt=args.dt)
+                  X_out=args.o, variance_out=args.var_ratio, col_index=index_col)
     return None
 
 
@@ -408,6 +440,8 @@ def arguments():
     Perform PCA analysis of the xyz coordinates of selected atoms
 
     Example: 
+    Print help information
+    gmx_pca.py -h
 
     """
     parser = gmxcli.GromacsCommanLine(d=d)

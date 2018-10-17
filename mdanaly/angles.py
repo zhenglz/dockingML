@@ -159,7 +159,7 @@ def arguments():
     return args
 
 
-def write_angles(angles, fout, cosine, sine, dt=2):
+def write_angles(angles, fout, cosine, sine, dt=2, begin=0, end=-1):
     """
     write angles into a file
 
@@ -196,6 +196,12 @@ def write_angles(angles, fout, cosine, sine, dt=2):
     dat = pd.DataFrame(new_angles)
     dat.index = np.arange(new_angles.shape[0]) * dt
     dat.columns = ["Angles_"+str(x) for x in np.arange(new_angles.shape[1])]
+
+    if begin > 0:
+        dat = dat[dat.index >= begin]
+    if end > 0 and end > begin:
+        dat = dat[dat.index <= end]
+
     dat.to_csv(fout, sep=",", float_format="%.3f", header=True, index=True)
     # np.savetxt(fout, angles, fmt="%.3f", delimiter=",")
 
@@ -254,7 +260,7 @@ def gmxangle(args):
             print("Write angles to output file: ", args.o)
 
         # write angles to an output file
-        write_angles(angles, args.o, cosine=args.cos, sine=args.sin, dt=args.dt)
+        write_angles(angles, args.o, cosine=args.cos, sine=args.sin, dt=args.dt, begin=args.b, end=args.e)
 
     else:
         print("Some of the input files are not existed. Input again.")

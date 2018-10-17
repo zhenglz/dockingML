@@ -69,6 +69,12 @@ class GromacsCommanLine(object):
         parser.add_argument("-v", default=False, type=lambda x: (str(x).lower() == "true"),
                             help="Input, optional. \n"
                                  "Whether print detail information. Default is False. ")
+        parser.add_argument("-b", default=0, type=int,
+                            help="Input, optional. \n"
+                                 "The beginning frame of the calculation. Default is 0. ")
+        parser.add_argument("-e", default=-1, type=int,
+                            help="Input, optional. \n"
+                                 "The ending frame of the calculation. Default is -1. ")
 
         self.parser = parser
 
