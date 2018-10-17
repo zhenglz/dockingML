@@ -100,6 +100,7 @@ class PCA(object):
         self.pca_obj = pca_obj
 
         # get eigval and eigvect
+        print("Obtain eigvalues and eigvectors ...... ")
         self.eigvalues()
         self.eigvectors()
 
@@ -142,7 +143,7 @@ class PCA(object):
 
         """
 
-        eigval_ = self.pca_obj.explained_variance
+        eigval_ = self.pca_obj.explained_variance_
 
         self.eigvalues_ = eigval_
         self.eigvalues_ratio_ = self.pca_obj.explained_variance_ratio_
