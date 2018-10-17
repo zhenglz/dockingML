@@ -139,14 +139,14 @@ def arguments():
                                help="Input, optional. \n"
                                "The angle type for calculation. Options are \n"
                                "angle, dihedral. Default is angle. ")
-    parser.parser.add_argument("-cos", type=int, default=0,
+    parser.parser.add_argument("-cos", type=lambda x: (str(x).lower() == "true"), default=False,
                                help="Input, optional. \n"
                                "Calculate the cosine values of the angles.\n"
-                               "Options are 0, 1. Default is 0. ")
-    parser.parser.add_argument("-sin", type=int, default=0,
+                               "Options are True, False. Default is False. ")
+    parser.parser.add_argument("-sin", type=lambda x: (str(x).lower() == "true"), default=False,
                                help="Input, optional. \n"
                                "Calculate the sine values of the angles.\n"
-                               "Options are 0, 1. Default is 0. ")
+                               "Options are True, False. Default is False. ")
 
     parser.parse_arguments()
     args = parser.args
@@ -159,7 +159,7 @@ def arguments():
     return args
 
 
-def write_angles(angles, fout, cosine=0, sine=0, dt=2):
+def write_angles(angles, fout, cosine, sine, dt=2):
     """
     write angles into a file
 
@@ -254,8 +254,8 @@ def gmxangle(args):
             print("Write angles to output file: ", args.o)
 
         # write angles to an output file
-        #print("Writing angles to output file %s ......" % args.o)
-        write_angles(angles, args.o, cosine=args.cos, dt=args.dt)
+        # print("Writing angles to output file %s ......" % args.o)
+        write_angles(angles, args.o, cosine=args.cos, sine=args.sin, dt=args.dt)
 
     else:
         print("Some of the input files are not existed. Input again.")
