@@ -56,13 +56,13 @@ def plot2dScatter(filenames,
 
     """
 
-    X = np.loadtxt(filenames[0], comments=["#", "@"], usecols=[xcol, ycol], dtype=float, delimiter=sep)[:, 1]
+    X = np.loadtxt(filenames[0], comments=["#", "@"], usecols=[xcol, ycol], dtype=float, delimiter=sep, skiprows=1)[:, 1]
     X = X * xscale + xshift
-    Y = np.loadtxt(filenames[1], comments=["#", "@"], usecols=[xcol, ycol], dtype=float, delimiter=sep)[:, 1]
+    Y = np.loadtxt(filenames[1], comments=["#", "@"], usecols=[xcol, ycol], dtype=float, delimiter=sep, skiprows=1)[:, 1]
     Y = Y * yscale + yshift
 
     if len(colors) == 0 :
-        colors = np.loadtxt(filenames[0], comments=["#", "@"], delimiter=sep)[:, 0] * timescale
+        colors = np.loadtxt(filenames[0], comments=["#", "@"], delimiter=sep, skiprows=1)[:, 0] * timescale
 
     # draw plot
     plt.scatter(X, Y, c=colors, marker=marker, alpha=alpha, cmap=cmaptype)
@@ -100,7 +100,7 @@ def plot2dFes(filename, dtype=[], zlim=[],
     if len(dtype) :
         fes = np.loadtxt(filename, comments=["#","@"],
                          dtype={'names':('Rec', 'Lig', 'Cmap'), 'formats':(dtype[0], dtype[1], dtype[2])},
-                         usecols=xyzcols, delimiter=sep)
+                         usecols=xyzcols, delimiter=sep, skiprows=1)
         x_size = len(set(fes['Rec']))
         y_size = len(set(fes['Lig']))
 
@@ -122,7 +122,7 @@ def plot2dFes(filename, dtype=[], zlim=[],
             y = np.reshape(np.asarray(y) + yshift, (y_size, x_size))
 
     else:
-        fes = np.loadtxt(filename, comments="#", usecols=xyzcols, delimiter=sep)
+        fes = np.loadtxt(filename, comments="#", usecols=xyzcols, delimiter=sep, skiprows=1)
 
         # get x and y size
         x_size = len(set(fes[:, 0]))
@@ -204,7 +204,7 @@ def plot1dTimeSeries(filename, color, xycol,
     # define x y data
 
     if xycol[0] < 0:
-        xy = np.loadtxt(filename, comments=["#", "@"], usecols=set(xycol), delimiter=sep)
+        xy = np.loadtxt(filename, comments=["#", "@"], usecols=set(xycol), delimiter=sep, skiprows=1)
         y = xy[xstart:, 0] * yscale + shiftY
         x = np.asarray(range(len(list(y)))) * xscale + shiftX
 
@@ -213,7 +213,7 @@ def plot1dTimeSeries(filename, color, xycol,
                  linewidth=linewidth, alpha=alpha,
                  )
     else:
-        xy = np.loadtxt(filename, comments=["#", "@"], usecols=set(xycol), delimiter=sep)
+        xy = np.loadtxt(filename, comments=["#", "@"], usecols=set(xycol), delimiter=sep, skiprows=1)
         x = xy[xstart:, 0] * xscale + shiftX
         y = xy[xstart:, -1] * yscale + shiftY
 
@@ -271,7 +271,7 @@ def plot1Dhistogram(filename, color,
                     legend_loc='', legend_box=0,
                     alpha=1.0, sep=","
                     ):
-    data = np.loadtxt(filename, comments=["#","@"], usecols=[xcol], delimiter=sep)
+    data = np.loadtxt(filename, comments=["#","@"], usecols=[xcol], delimiter=sep, skiprows=1)
 
     X = data[xstart:] * xscale
 
@@ -329,7 +329,7 @@ def plot1Dhistogram(filename, color,
 def histBins(files, num_bins=20, xcol=1, xscale=1.0, xstart=0, xshift=0, sep=","):
     X, bins = [], []
     for f in files :
-        x = np.loadtxt(f, comments=["#", '@'], usecols=[int(xcol)], delimiter=sep)[xstart: ] * xscale + xshift
+        x = np.loadtxt(f, comments=["#", '@'], usecols=[int(xcol)], delimiter=sep, skiprows=1)[xstart:] * xscale + xshift
         X = X + list(x)
 
     for i in range(num_bins) :
