@@ -1,12 +1,49 @@
+# -*- coding: utf-8 -*-
+
 import numpy as np
 import pandas as pd
 import sklearn
 import mdtraj as mt
 from mdanaly import gmxcli
 
-class PCA(object):
 
-    def __init__(self, n_components=2):
+class PCA(object):
+    """
+    A PCA module for data analysis.
+
+    Parameters
+    ----------
+    n_components: int, default is 20.
+        number of remain dimensions after PCA analysis
+
+    Attributes
+    ----------
+    trained_: bool,
+        whether the pca object has been trained
+    X_transformed_: numpy ndarray, shape=[N, M]
+        the transformed X dataset,
+        N is number of samples, M is the reduced dimensions,
+        M = n_components
+    scaled_: bool,
+        whether the X dataset has been scaled. It is required for
+        PCA calculation.
+    scaler_: sklearn preprocessing StandardScaler object
+        the scaler object
+    X_scaled_: numpy ndarray, shape=[N, M]
+        the scaled X dataset,
+        N is number of samples, M is the number of dimensions
+    pca_obj: sklearn decomposition PCA object,
+        the pca object
+    eigvalues_: numpy array,
+        the eigvalues of the new axis
+    eigvalues_ratio: numpy array,
+        the percentage ratio of the new axis variances
+    eigvectors_: numpy ndarray,
+        # TODO: to to completed here
+
+    """
+
+    def __init__(self, n_components=20):
         self.n_components = n_components
 
         # attributes
@@ -53,9 +90,9 @@ class PCA(object):
         pca_obj = sklearn.decomposition.PCA(n_components=self.n_components)
         pca_obj.fit(self.X_scaled)
 
-        # train the dataset
-        self.trained_ = True
+        # train and transform the dataset
         self.X_transformed_ = pca_obj.transform(X)
+        self.trained_ = True
 
         self.pca_obj = pca_obj
 
@@ -158,7 +195,7 @@ class CoordinationPCA(object):
         self.traj = traj
         self.ref = top
 
-        self.topology = mt.load(self.ref).topology
+        self.topology = mt.load(self.ref).toology
 
         self.n_atoms_ = self.traj.n_atoms
 
@@ -176,7 +213,7 @@ class CoordinationPCA(object):
 
     def xyz_coordinates(self, atom_indices=None):
 
-        if atom_indices == None:
+        if atom_indices is None:
             atom_indices = self.superpose_atom_indices_
 
         if not self.superimposed_:
@@ -195,6 +232,31 @@ class CoordinationPCA(object):
 
 
 def iterload_xyz_coordinates(xtcfile, top, chunk, stride, atom_selection="name CA"):
+    """
+    Load a large gromacs xtc trajectory file using mdtraj.iterload method, and extract
+    the atom xyz coordinates.
+
+    Parameters
+    ----------
+    xtcfile: str, format gromacs xtc
+        the gromacs xtc trajectory file
+    top: str, format pdb
+        the reference pdb file
+    chunk: int,
+        number of frames to load per time
+    stride: int,
+        skip n frames when loading trajectory file
+    atom_selection: str,
+        the atom selection language
+
+    Returns
+    -------
+    xyz: numpy array, shape = [N, M]
+        the xyz coordinates dataset,
+        N is number of samples, or frames
+        M is n_atoms * 3
+
+    """
 
     trajs = gmxcli.read_xtc(xtc=xtcfile, top=top, chunk=chunk, stride=stride)
 
@@ -202,7 +264,7 @@ def iterload_xyz_coordinates(xtcfile, top, chunk, stride, atom_selection="name C
 
     for traj in trajs:
         copca = CoordinationPCA(traj, top, atom_selection)
-        #copca.superimpose()
+        # copca.superimpose()
 
         if xyz.shape[0] == 0:
             xyz = copca.xyz_coordinates()
@@ -212,34 +274,20 @@ def iterload_xyz_coordinates(xtcfile, top, chunk, stride, atom_selection="name C
     return xyz
 
 
-def xyz_pca():
-
-    # prepare gmx style argument for pca calculation
-    d = """
-    Perform PCA analysis of the xyz coordinates of selected atoms
-    
-    Example: 
-    
+def xyz_pca(args):
     """
-    parser = gmxcli.GromacsCommanLine(d=d)
+    Perform xyz coordinate based PCA calculation based on Gromacs XTC files.
 
-    parser.arguments()
 
-    parser.parser.add_argument("-proj", type=int, default=2,
-                               help="Input, optional. \n"
-                                    "How many number of dimensions to output. \n"
-                                    "Default is 2.")
-    parser.parser.add_argument("-select", type=str, default="name CA",
-                               help="Input, optional. \n"
-                                    "Atom selected for PCA calculation. \n"
-                                    "Default is name CA.")
-    parser.parser.add_argument("-var_ratio", type=str, default="explained_variance_ratio.dat",
-                               help="Output, optional. \n"
-                                    "Output file name containing explained eigen values variance ratio. \n"
-                                    "Default is explained_variance_ratio.dat. ")
+    Parameters
+    ----------
+    args: argparse object,
+        the arguments holder
 
-    parser.parse_arguments()
-    args = parser.args
+    Returns
+    -------
+
+    """
 
     # obtain all xyz coordinates in a long trajectory file
     xyz = iterload_xyz_coordinates(xtcfile=args.f, top=args.s,
@@ -251,22 +299,124 @@ def xyz_pca():
     pca.fit(xyz)
     xyz_transformed = pca.X_transformed_
 
+    write_results(X_transformed=xyz_transformed, variance_ratio=pca.eigvalues_ratio_,
+                  X_out=args.o, variance_out=args.var_ratio, dt=args.dt)
+
+    return None
+
+def write_results(X_transformed, variance_ratio, X_out, variance_out, dt):
+    """
+    Write PCA results into files:
+    1. transformed dataset
+    2. explained variance ratio
+
+    Parameters
+    ----------
+    X_transformed: numpy ndarray
+    variance_ratio: numpy array
+    X_out: str
+    variance_out: str
+    dt: int
+
+    Returns
+    -------
+
+    """
     # save the data into a file
-    dat = pd.DataFrame(xyz_transformed)
-    dat.index = np.arange(xyz_transformed.shape[0]) * args.dt
-    dat.columns = ["PC_%d" % x for x in np.array(xyz_transformed.shape[1])]
-    dat.to_csv(args.o, sep=",", header=True, index=True,
+    dat = pd.DataFrame(X_transformed)
+    dat.index = np.arange(X_transformed.shape[0]) * dt
+    dat.columns = ["PC_%d" % x for x in np.array(X_transformed.shape[1])]
+    dat.to_csv(X_out, sep=",", header=True, index=True,
                index_label="time(ps)", float_format="%.3f")
 
     # save variance ratio into a file
-    variance = list(pca.eigvalues_ratio_)
+    variance = list(variance_ratio)
     eigval = pd.DataFrame()
     eigval["PC"] = np.arange(len(variance))
     eigval["eigval_ratio"] = variance
-    eigval.to_csv(args.var_ratio, sep=",", header=True, index=False, float_format="%.3f")
+    eigval.to_csv(variance_out, sep=",", header=True, index=False, float_format="%.3f")
 
     return None
 
 
+def general_pca(args):
+    """
+    Perform PCA calculation given a clean dataset file.
+
+    Parameters
+    ----------
+    args: argparse object
+        the arguments holder
+
+    Returns
+    -------
+
+    """
+
+    X = pd.read_csv(args.f, sep=",", header=0)
+
+    pca = PCA(n_components=10)
+
+    pca.fit(X)
+
+    X_transformed = pca.X_transformed_
+    variance_ratio= pca.eigvalues_ratio_
+
+    write_results(X_transformed=X_transformed, variance_ratio=variance_ratio,
+                  X_out=args.o, variance_out=args.var_ratio, dt=args.dt)
+    return None
+
+
+def arguments():
+    # prepare gmx style argument for pca calculation
+    d = """
+    Perform PCA analysis of the xyz coordinates of selected atoms
+
+    Example: 
+
+    """
+    parser = gmxcli.GromacsCommanLine(d=d)
+
+    parser.arguments()
+
+    parser.parser.add_argument("-mode", type=str, default="general",
+                               help="Input, optional. \n"
+                                    "The PCA calculation mode. \n"
+                                    "Options: general, xyz, cmap \n"
+                                    "general: perform general PCA using a well formated dataset file. \n"
+                                    "xyz: perform xyz coordinate PCA analysis using a trajectory xtc file. \n"
+                                    "cmap: perform contact map PCA analysis using a trajectory xtc file. ")
+    parser.parser.add_argument("-proj", type=int, default=2,
+                               help="Input, optional. \n"
+                                    "How many number of dimensions to output. \n"
+                                    "Default is 2.")
+    parser.parser.add_argument("-select", type=str, default="name CA",
+                               help="Input, optional, it works with mode = xyz \n"
+                                    "Atom selected for PCA calculation. \n"
+                                    "Default is name CA.")
+    parser.parser.add_argument("-var_ratio", type=str, default="explained_variance_ratio.dat",
+                               help="Output, optional. \n"
+                                    "Output file name containing explained eigen values variance ratio. \n"
+                                    "Default is explained_variance_ratio.dat. ")
+
+    parser.parse_arguments()
+    args = parser.args
+
+    return args
+
+
+def main():
+
+    args = arguments()
+
+    if args.mode == "xyz":
+        xyz_pca(args=args)
+
+    elif args.mode == "general":
+        general_pca(args=args)
+
+    elif args.mode == "cmap":
+        # TODO: to be completed.
+        return NotImplementedError
 
 
