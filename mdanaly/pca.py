@@ -88,7 +88,7 @@ class PCA(object):
         self.X_scaled = Xs
 
         # using sklearn, perform PCA analysis based on scaled dataset
-        # sklearn.decomposition
+        print("Perform PCA decompostion now ...... ")
         pca_obj = decomposition.PCA(n_components=self.n_components)
         pca_obj.fit(self.X_scaled)
 
@@ -351,7 +351,7 @@ def write_results(X_transformed, variance_ratio, X_out, variance_out, dt):
     # save the data into a file
     dat = pd.DataFrame(X_transformed)
     dat.index = np.arange(X_transformed.shape[0]) * dt
-    dat.columns = ["PC_%d" % x for x in np.array(X_transformed.shape[1])]
+    dat.columns = ["PC_%d" % x for x in np.arange(X_transformed.shape[1])]
     dat.to_csv(X_out, sep=",", header=True, index=True,
                index_label="time(ps)", float_format="%.3f")
 
