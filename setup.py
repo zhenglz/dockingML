@@ -31,5 +31,5 @@ setup(name='dockingML',
       ],
       include_package_data=True,
       zip_safe=False,
-      scripts=['bin/cmap.py', 'bin/extract.py', 'bin/index.py'],
+      scripts=['bin/gmx_cmap.py', 'bin/gmx_extract.py', 'bin/gmx_index.py'],
       )
