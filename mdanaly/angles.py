@@ -133,6 +133,7 @@ def arguments():
     """
 
     parser = gmxcli.GromacsCommanLine(d)
+    parser.arguments()
 
     parser.parser.add_argument("-type", type=str, default="angle",
                                help="Input, optional. \n"
