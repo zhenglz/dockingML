@@ -125,10 +125,10 @@ def arguments():
     gmx_angles.py -h
     
     Calculate angles
-    gmx_angles.py -f traj.xtc -n index.ndx -s reference.pdb -o angles.csv -type angle -dt 10 -cos False
+    gmx_angles.py -f traj.xtc -n index.ndx -s reference.pdb -o angles.csv -type angle -dt 10 -cos 0
     
     Calculate dihedral angles
-    gmx_angles.py -f traj.xtc -n index.ndx -s reference.pdb -o dihedral_angles.csv -type dihedral -dt 10 -cos False
+    gmx_angles.py -f traj.xtc -n index.ndx -s reference.pdb -o dihedral_angles.csv -type dihedral -dt 10 -cos 0
     
     """
 
@@ -148,7 +148,8 @@ def arguments():
                                "Calculate the sine values of the angles.\n"
                                "Options are 0, 1. Default is 0. ")
 
-    args = parser.parse_arguments()
+    parser.parse_arguments()
+    args = parser.args
 
     # print help information
     if len(sys.argv) < 3:
