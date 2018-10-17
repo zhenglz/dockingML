@@ -251,6 +251,7 @@ def gmxangle(args):
             print("Write angles to output file: ", args.o)
 
         # write angles to an output file
+        print("Writing angles to output file %s ......" % args.o)
         write_angles(angles, args.o, cosine=args.cos, dt=args.dt)
 
     else:
