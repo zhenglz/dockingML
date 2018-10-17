@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="add coordination number module">
+      <change afterPath="$PROJECT_DIR$/bin/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mdanaly/coordNum.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/coordNum.py" afterDir="false" />
     </list>
     <ignored path="dockingML.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -41,11 +41,13 @@
         <counts>
           <entry key="dat" value="2" />
           <entry key="lib" value="1" />
+          <entry key="md" value="1" />
           <entry key="py" value="59" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
+          <entry key="Markdown" value="1" />
           <entry key="PLAIN_TEXT" value="3" />
           <entry key="Python" value="59" />
         </counts>
@@ -53,12 +55,14 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Python Console" value="264" />
+          <entry key="md" value="1272" />
           <entry key="py" value="30065" />
           <entry key="txt" value="497" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
+          <entry key="Markdown" value="1272" />
           <entry key="PLAIN_TEXT" value="497" />
           <entry key="Python" value="30329" />
         </counts>
@@ -93,15 +97,6 @@
               <folding>
                 <element signature="e#25#44#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bin/gmx_cmap.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
             </state>
           </provider>
         </entry>
@@ -173,7 +168,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mdanaly/coordNum.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-187">
@@ -190,6 +185,18 @@
                 <marker date="1539799817315" expanded="true" signature="2878:2879" ph="..." />
                 <marker date="1539799817315" expanded="true" signature="2878:2884" ph="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/bin/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="544">
+                <caret line="32" column="38" lean-forward="true" selection-start-line="32" selection-start-column="38" selection-end-line="32" selection-end-column="38" />
+              </first_editor>
+              <second_editor />
             </state>
           </provider>
         </entry>
@@ -256,7 +263,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/data/AtomType.dat" />
         <option value="$PROJECT_DIR$/test/test_features.py" />
         <option value="$PROJECT_DIR$/test/test_GOLD_Results.py" />
         <option value="$PROJECT_DIR$/automd/gaussian.py" />
@@ -307,6 +313,7 @@
         <option value="$PROJECT_DIR$/mdanaly/angles.py" />
         <option value="$PROJECT_DIR$/mdanaly/gmxcli.py" />
         <option value="$PROJECT_DIR$/mdanaly/coordNum.py" />
+        <option value="$PROJECT_DIR$/bin/README.md" />
       </list>
     </option>
   </component>
@@ -592,13 +599,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1499093997611</updated>
-    </task>
-    <task id="LOCAL-00027" summary="from mars">
-      <created>1526460592623</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1526460592625</updated>
     </task>
     <task id="LOCAL-00028" summary="from mars">
       <created>1526460600184</created>
@@ -936,7 +936,14 @@
       <option name="project" value="LOCAL" />
       <updated>1539799519947</updated>
     </task>
-    <option name="localTasksCounter" value="76" />
+    <task id="LOCAL-00076" summary="add coordination number module">
+      <created>1539799820866</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1539799820866</updated>
+    </task>
+    <option name="localTasksCounter" value="77" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1042,13 +1049,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/dockml/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="10" column="21" selection-start-line="10" selection-start-column="21" selection-end-line="10" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dockml/gold.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3111">
@@ -1412,6 +1412,16 @@
             <marker date="1539799817315" expanded="true" signature="2878:2879" ph="..." />
             <marker date="1539799817315" expanded="true" signature="2878:2884" ph="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bin/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="544">
+            <caret line="32" column="38" lean-forward="true" selection-start-line="32" selection-start-column="38" selection-end-line="32" selection-end-column="38" />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
