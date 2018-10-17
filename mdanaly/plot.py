@@ -20,42 +20,49 @@ def plot2dScatter(filenames,
                   xscale=1.0, yscale=1.0, timescale=0.001,
                   xlab="X", ylab="Y",
                   marker='x', alpha=0.8,
-                  pmf=False,
+                  pmf=False, sep=","
                   ) :
     """
-    get X data from the first file and Y data from next file in filenames
+    Get X data from the first file and Y data from next file in filenames
     draw a time series scatter
-    :param filenames:
-    :param xlim:
-    :param ylim:
-    :param xcol:
-    :param ycol:
-    :param colors:
-    :param cmaptype:
-    :param title:
-    :param label:
-    :param dpi:
-    :param savefile:
-    :param fz:
-    :param xshift:
-    :param yshift:
-    :param xscale:
-    :param yscale:
-    :param timescale:
-    :param xlab:
-    :param ylab:
-    :param marker:
-    :param alpha:
-    :param pmf:
-    :return:
+
+    Parameters
+    ----------
+    filenames
+    xlim
+    ylim
+    xcol
+    ycol
+    colors
+    cmaptype
+    title
+    label
+    dpi
+    savefile
+    fz
+    xshift
+    yshift
+    xscale
+    yscale
+    timescale
+    xlab
+    ylab
+    marker
+    alpha
+    pmf
+
+    Returns
+    -------
+
     """
-    X = np.loadtxt(filenames[0], comments=["#", "@"], usecols=[xcol, ycol], dtype=float)[:, 1]
+
+    X = np.loadtxt(filenames[0], comments=["#", "@"], usecols=[xcol, ycol], dtype=float, delimiter=sep)[:, 1]
     X = X * xscale + xshift
-    Y = np.loadtxt(filenames[1], comments=["#", "@"], usecols=[xcol, ycol], dtype=float)[:, 1]
+    Y = np.loadtxt(filenames[1], comments=["#", "@"], usecols=[xcol, ycol], dtype=float, delimiter=sep)[:, 1]
     Y = Y * yscale + yshift
 
     if len(colors) == 0 :
-        colors = np.loadtxt(filenames[0], comments=["#", "@"],)[:, 0] * timescale
+        colors = np.loadtxt(filenames[0], comments=["#", "@"], delimiter=sep)[:, 0] * timescale
 
     # draw plot
     plt.scatter(X, Y, c=colors, marker=marker, alpha=alpha, cmap=cmaptype)
@@ -87,19 +94,19 @@ def plot2dFes(filename, dtype=[], zlim=[],
               pmf=False, MIN=1.0, cmaptype='bwr',
               xshift=0.0, yshift=0.0,
               xlim=[], ylim=[],
-              mesh=False,
+              mesh=False, sep=",",
               ) :
     # load file
     if len(dtype) :
         fes = np.loadtxt(filename, comments=["#","@"],
                          dtype={'names':('Rec', 'Lig', 'Cmap'), 'formats':(dtype[0], dtype[1], dtype[2])},
-                         usecols=xyzcols)
+                         usecols=xyzcols, delimiter=sep)
         x_size = len(set(fes['Rec']))
         y_size = len(set(fes['Lig']))
 
         #z = np.reshape(fes['Cmap'], (y_size, x_size))
         z = np.array(fes[:, 2]).reshape((y_size, x_size))
-        if mesh :
+        if mesh:
             x = sorted(list(set(fes['Rec'].astype(np.float))))
             y = sorted(list(set(fes['Lig'].astype(np.float))))
             x.append(x[1] - x[0] + x[-1])
@@ -107,22 +114,22 @@ def plot2dFes(filename, dtype=[], zlim=[],
 
             x = np.asarray(x) + xshift
             y = np.asarray(y) + yshift
-        else :
+        else:
             x = [float(str(item).split("_")[0]) for item in list(fes['Rec'])]
             y = [float(str(item).split("_")[0]) for item in list(fes['Lig'])]
             # 1d arrary to 2d
             x = np.reshape(np.asarray(x) + xshift, (y_size, x_size))
             y = np.reshape(np.asarray(y) + yshift, (y_size, x_size))
 
-    else :
-        fes = np.loadtxt(filename, comments="#", usecols=xyzcols)
+    else:
+        fes = np.loadtxt(filename, comments="#", usecols=xyzcols, delimiter=sep)
 
         # get x and y size
         x_size = len(set(fes[:, 0]))
         y_size = len(set(fes[:, 1]))
-        print( "X Y size", x_size, y_size)
+        print("X Y size", x_size, y_size)
 
-        if mesh :
+        if mesh:
             x = sorted(list(set(fes[:, 0].astype(np.float))))
             y = sorted(list(set(fes[:, 1].astype(np.float))))
             x.append(x[1] - x[0] + x[-1])
@@ -131,7 +138,7 @@ def plot2dFes(filename, dtype=[], zlim=[],
             x = np.asarray(x) + xshift
             y = np.asarray(y) + yshift
 
-        else :
+        else:
             # 1d arrary to 2d
             x = np.reshape(fes[:,0] + xshift, (y_size,x_size))
             y = np.reshape(fes[:,1] + yshift, (y_size,x_size))
@@ -162,15 +169,15 @@ def plot2dFes(filename, dtype=[], zlim=[],
     plt.xlabel(xlab, fontsize=fz)
     plt.ylabel(ylab, fontsize=fz)
 
-    if len(xlim) :
+    if len(xlim):
         plt.xlim(xlim)
-    if len(ylim) :
+    if len(ylim):
         plt.ylim(ylim)
 
-    if title :
+    if title:
         plt.title(title)
 
-    if savefile :
+    if savefile:
         plt.savefig(savefile, dpi=dpi)
 
     plt.show()
@@ -192,12 +199,12 @@ def plot1dTimeSeries(filename, color, xycol,
                      legend_loc='',
                      legend_box=0,
                      alpha=1.0,
-                     pmf=False,
+                     pmf=False, sep=","
                      ):
     # define x y data
 
-    if xycol[0] < 0 :
-        xy = np.loadtxt(filename, comments=["#", "@"], usecols=set(xycol))
+    if xycol[0] < 0:
+        xy = np.loadtxt(filename, comments=["#", "@"], usecols=set(xycol), delimiter=sep)
         y = xy[xstart:, 0] * yscale + shiftY
         x = np.asarray(range(len(list(y)))) * xscale + shiftX
 
@@ -205,12 +212,12 @@ def plot1dTimeSeries(filename, color, xycol,
                  linestyle=linestyle, marker=marker,
                  linewidth=linewidth, alpha=alpha,
                  )
-    else :
-        xy = np.loadtxt(filename, comments=["#", "@"], usecols=set(xycol))
+    else:
+        xy = np.loadtxt(filename, comments=["#", "@"], usecols=set(xycol), delimiter=sep)
         x = xy[xstart:, 0] * xscale + shiftX
         y = xy[xstart:, -1] * yscale + shiftY
 
-        if pmf :
+        if pmf:
             y = -2.5 * np.log( np.array(y) / max(y))
 
         plt.plot(x, y, color=color, label=label,
@@ -218,17 +225,17 @@ def plot1dTimeSeries(filename, color, xycol,
                  linewidth=linewidth
                  )
 
-    if title :
+    if title:
         plt.title(title)
 
-    if len(xlab) :
+    if len(xlab):
         plt.xlabel(xlab, fontsize=fz)
-    if len(ylab) :
+    if len(ylab):
         plt.ylabel(ylab, fontsize=fz)
 
-    if len(xlim) :
+    if len(xlim):
         plt.xlim(xlim)
-    if len(ylim) :
+    if len(ylim):
         plt.ylim(ylim)
 
     #print legend_box
@@ -262,9 +269,9 @@ def plot1Dhistogram(filename, color,
                     linestyle='', marker='',
                     pmf=False, MIN=1.0,
                     legend_loc='', legend_box=0,
-                    alpha=1.0,
+                    alpha=1.0, sep=","
                     ):
-    data = np.loadtxt(filename, comments=["#","@"], usecols=[xcol])
+    data = np.loadtxt(filename, comments=["#","@"], usecols=[xcol], delimiter=sep)
 
     X = data[xstart:] * xscale
 
@@ -279,10 +286,10 @@ def plot1Dhistogram(filename, color,
     #print prob
     #print bin_edges
 
-    if pmf :
+    if pmf:
         prob = list(hist)
-        for i in range(len(prob)) :
-            if prob[i] < MIN :
+        for i in range(len(prob)):
+            if prob[i] < MIN:
                 prob[i] = MIN / 2.0
         prob = -2.5 * np.log( np.asarray(prob) / float(np.max(prob)))
 
@@ -305,7 +312,7 @@ def plot1Dhistogram(filename, color,
         plt.ylim(ylim)
 
     if showlegend:
-        if len(legend_loc) > 0 :
+        if len(legend_loc) > 0:
             plt.legend(loc=legend_loc, frameon=legend_box)
         else :
             plt.legend(frameon=legend_box)
@@ -318,17 +325,19 @@ def plot1Dhistogram(filename, color,
 
     return 1
 
-def histBins(files, num_bins=20, xcol=1, xscale=1.0, xstart=0, xshift=0) :
+
+def histBins(files, num_bins=20, xcol=1, xscale=1.0, xstart=0, xshift=0, sep=","):
     X, bins = [], []
     for f in files :
-        x = np.loadtxt(f, comments=["#", '@'], usecols=[int(xcol)])[xstart: ] * xscale + xshift
+        x = np.loadtxt(f, comments=["#", '@'], usecols=[int(xcol)], delimiter=sep)[xstart: ] * xscale + xshift
         X = X + list(x)
 
     for i in range(num_bins) :
         bins.append(np.min(X) + float(i) * (np.max(X) - np.min(X)) / float(num_bins))
     return bins
 
-def main() :
+
+def main():
     os.chdir(os.getcwd())
 
     d = '''
@@ -379,6 +388,8 @@ def main() :
                              "Options: 1 (on) and 0 (off). \n")
     parser.add_argument('-alpha', default=1.0, type=float,
                         help="Alpha value, the transparency of lines and markers. Default is 1.0\n")
+    parser.add_argument('-sep', default=",", type=str,
+                        help="Input file separator string. Default is , .")
     if plotType in ['FES','fes','XYZ','xyz', '2d', '2D'] :
         parser.add_argument('-xyzcol', type=int, nargs="+", default=[0, 1, 2], help="Column indeices for xyz data.")
         parser.add_argument('-zlim',type=float, nargs="+", default=[0.0,1.0],
@@ -465,25 +476,26 @@ def main() :
                       pmf=args.pmf, MIN=args.minX, cmaptype=args.cmaptype,
                       xshift=args.xshift[0], yshift=args.yshift[0],
                       xlim=args.xlim, ylim=args.ylim, mesh=args.mesh,
+                      sep=args.sep
                       )
     elif plotType in ['timeseries', 'XY', 'xy'] or plotType in ["hist", 'histogram', 'Hist', 'H'] :
         if len(args.data) <= 1 :
             separated = True
-        else :
+        else:
             separated = args.separated
 
-        if separated :
-            for i in range(len(args.data)) :
-                if len(args.colors) >= len(args.data) :
+        if separated:
+            for i in range(len(args.data)):
+                if len(args.colors) >= len(args.data):
                     color = args.colors[i]
                 else :
                     color = colors[i]
 
-                if len(args.labels) >= len(args.data) :
+                if len(args.labels) >= len(args.data):
                     label = args.labels[i]
                 else :
                     label = ""
-                if plotType in ["hist", 'histogram', 'Hist', 'H'] :
+                if plotType in ["hist", 'histogram', 'Hist', 'H']:
                     plot1Dhistogram(filename=args.data[i],
                                     xscale=args.xyscale[0],
                                     color=color,
@@ -501,7 +513,7 @@ def main() :
                                     pmf=args.pmf, MIN=args.minX,
                                     legend_loc=args.legend_loc,
                                     legend_box=args.legend_box,
-                                    alpha=args.alpha,
+                                    alpha=args.alpha, sep=args.sep,
                                     )
                 elif plotType in ['timeseries', 'XY', 'xy'] :
                     plot1dTimeSeries(filename=args.data[i],
@@ -519,7 +531,7 @@ def main() :
                                      shiftX=args.xshift[0], shiftY=args.yshift[0],
                                      legend_loc=args.legend_loc,
                                      legend_box=args.legend_box,
-                                     alpha=args.alpha,
+                                     alpha=args.alpha, sep=args.sep
                                      )
         else :
             if plotType in ["hist", 'histogram', 'Hist', 'H'] :
@@ -527,7 +539,7 @@ def main() :
                                       xcol=args.xycol[0],
                                       xscale=args.xyscale[0],
                                       xstart=args.xstart,
-                                      xshift=args.xshift[0] )
+                                      xshift=args.xshift[0], sep=args.sep)
 
             for i in range(len(args.data)-1) :
                 if len(args.colors) >= len(args.data) :
@@ -559,9 +571,9 @@ def main() :
                                     pmf=args.pmf, MIN=args.minX,
                                     legend_loc=args.legend_loc,
                                     legend_box=args.legend_box,
-                                    alpha=args.alpha,
+                                    alpha=args.alpha, sep=args.sep,
                                     )
-                elif plotType in ['timeseries', 'XY', 'xy'] :
+                elif plotType in ['timeseries', 'XY', 'xy']:
                     plot1dTimeSeries(filename=args.data[i],
                                      color=color, xycol=args.xycol,
                                      xstart=args.xstart,
@@ -577,7 +589,7 @@ def main() :
                                      shiftX=args.xshift[i], shiftY=args.yshift[i],
                                      legend_loc=args.legend_loc,
                                      legend_box=args.legend_box,
-                                     alpha=args.alpha,
+                                     alpha=args.alpha, sep=args.sep,
                                      )
 
             if len(args.labels) >= len(args.data):
@@ -609,7 +621,7 @@ def main() :
                                 pmf=args.pmf, MIN=args.minX,
                                 legend_loc=args.legend_loc,
                                 legend_box=args.legend_box,
-                                alpha=args.alpha,
+                                alpha=args.alpha, sep=args.sep,
                                 )
             elif plotType in ['timeseries', 'XY', 'xy']:
                 plot1dTimeSeries(filename=args.data[len(args.data)-1],
@@ -629,7 +641,7 @@ def main() :
                                  legend_loc=args.legend_loc,
                                  legend_box=args.legend_box,
                                  alpha=args.alpha,
-                                 pmf=args.pmf
+                                 pmf=args.pmf, sep=args.sep,
                                  )
 
     elif plotType in ['2D', '2d', '2ds'] :
