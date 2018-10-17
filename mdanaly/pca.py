@@ -93,10 +93,15 @@ class PCA(object):
         pca_obj.fit(self.X_scaled)
 
         # train and transform the dataset
+        print("Transform dataset now ...... ")
         self.X_transformed_ = pca_obj.transform(X)
         self.trained_ = True
 
         self.pca_obj = pca_obj
+
+        # get eigval and eigvect
+        self.eigvalues()
+        self.eigvectors()
 
         return pca_obj
 
@@ -381,12 +386,12 @@ def general_pca(args):
 
     X = pd.read_csv(args.f, sep=",", header=0)
 
-    pca = PCA(n_components=10)
+    pca = PCA(n_components=args.proj)
 
     pca.fit(X)
 
     X_transformed = pca.X_transformed_
-    variance_ratio= pca.eigvalues_ratio_
+    variance_ratio = pca.eigvalues_ratio_
 
     write_results(X_transformed=X_transformed, variance_ratio=variance_ratio,
                   X_out=args.o, variance_out=args.var_ratio, dt=args.dt)
