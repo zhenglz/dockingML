@@ -200,18 +200,41 @@ class CoordinationPCA(object):
         self.n_atoms_ = self.traj.n_atoms
 
         self.superimposed_ = False
-        self.superpose_atom_indices_ = self.top.select(atom_selection)
+        self.superpose_atom_indices_ = self.topology.select(atom_selection)
 
         self.xyz = None
 
     def superimpose(self):
+        """
+        Superimpose the trajectory to a reference structure.
 
-        self.traj.superpose(self.top, frame=0, atom_indices=self.superpose_atom_indices_)
+        Returns
+        -------
+        self: the object itself
+
+        """
+
+        self.traj.superpose(self.ref, frame=0, atom_indices=self.superpose_atom_indices_)
         self.superimposed_ = True
 
         return self
 
     def xyz_coordinates(self, atom_indices=None):
+        """
+        Extract xyz coordinates for selected atoms for a trajectory object
+
+        Parameters
+        ----------
+        atom_indices: numpy array,
+            the atom index for selected atoms
+
+        Returns
+        -------
+        xyz: numpy ndarray, shape = [N, M]
+            N is number of samples, or frames
+            M is the multiply of number of atoms and 3
+
+        """
 
         if atom_indices is None:
             atom_indices = self.superpose_atom_indices_
@@ -303,6 +326,7 @@ def xyz_pca(args):
                   X_out=args.o, variance_out=args.var_ratio, dt=args.dt)
 
     return None
+
 
 def write_results(X_transformed, variance_ratio, X_out, variance_out, dt):
     """
@@ -412,11 +436,15 @@ def main():
     if args.mode == "xyz":
         xyz_pca(args=args)
 
+        return None
+
     elif args.mode == "general":
         general_pca(args=args)
 
+        return None
+
     elif args.mode == "cmap":
         # TODO: to be completed.
-        return NotImplementedError
 
+        return NotImplementedError
 

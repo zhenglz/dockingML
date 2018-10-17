@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="all coordinate pca module">
+    <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="add coordinate pca module">
+      <change afterPath="$PROJECT_DIR$/bin/gmx_pca.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/lipids.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/lipids.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/t-SNE.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/t-SNE.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mdanaly/pca.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/pca.py" afterDir="false" />
     </list>
     <ignored path="dockingML.iws" />
@@ -21,7 +24,7 @@
       <usages-collector id="statistics.lifecycle.project">
         <counts>
           <entry key="project.closed" value="8" />
-          <entry key="project.open.time.10" value="2" />
+          <entry key="project.open.time.10" value="3" />
           <entry key="project.open.time.13" value="1" />
           <entry key="project.open.time.14" value="1" />
           <entry key="project.open.time.18" value="2" />
@@ -34,33 +37,33 @@
           <entry key="project.open.time.7" value="1" />
           <entry key="project.open.time.8" value="2" />
           <entry key="project.open.time.9" value="4" />
-          <entry key="project.opened" value="21" />
+          <entry key="project.opened" value="22" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="dat" value="2" />
           <entry key="lib" value="1" />
-          <entry key="py" value="38" />
+          <entry key="py" value="41" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="PLAIN_TEXT" value="3" />
-          <entry key="Python" value="38" />
+          <entry key="Python" value="41" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Python Console" value="141" />
-          <entry key="py" value="25232" />
-          <entry key="txt" value="370" />
+          <entry key="py" value="25670" />
+          <entry key="txt" value="372" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="370" />
-          <entry key="Python" value="25373" />
+          <entry key="PLAIN_TEXT" value="372" />
+          <entry key="Python" value="25811" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -72,48 +75,12 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/mdanaly/cmap.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="13">
-              <caret line="45" column="27" selection-start-line="45" selection-start-column="27" selection-end-line="45" selection-end-column="27" />
-              <folding>
-                <element signature="e#426#452#0" expanded="true" />
-                <element signature="e#777#4613#0" />
-                <marker date="1539708291390" expanded="true" signature="788:1185" ph="..." />
-                <marker date="1539708291390" expanded="true" signature="853:862" ph="..." />
-                <marker date="1539708291390" expanded="true" signature="955:964" ph="..." />
-                <marker date="1539708291390" expanded="true" signature="1069:1078" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/mdanaly/gmxcli.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="44" column="77" selection-start-line="44" selection-start-column="77" selection-end-line="44" selection-end-column="77" />
-              <folding>
-                <element signature="e#25#39#0" expanded="true" />
-                <marker date="1539712483053" expanded="true" signature="420:421" ph="..." />
-                <marker date="1539712483053" expanded="true" signature="420:426" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mdanaly/angles.py">
           <provider selected="true" editor-type-id="text-editor">
             <state>
               <caret selection-end-column="23" />
               <folding>
                 <element signature="e#25#44#0" expanded="true" />
-                <marker date="1539712483017" expanded="true" signature="451:1006" ph="..." />
-                <marker date="1539712483017" expanded="true" signature="1603:2596" ph="..." />
-                <marker date="1539712483017" expanded="true" signature="4505:4974" ph="..." />
-                <marker date="1539712483017" expanded="true" signature="5355:6851" ph="..." />
-                <marker date="1539712483017" expanded="true" signature="5355:6869" ph="..." />
               </folding>
             </state>
           </provider>
@@ -132,9 +99,27 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bin/t-SNE.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="102">
+              <caret line="6" selection-start-line="6" selection-end-line="6" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bin/lipids.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="8" selection-start-line="8" selection-end-line="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mdanaly/extract.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2159">
+            <state relative-caret-position="119">
               <caret line="7" column="10" selection-start-line="7" selection-start-column="10" selection-end-line="7" selection-end-column="10" />
             </state>
           </provider>
@@ -143,7 +128,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mdanaly/lipids.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1411">
+            <state relative-caret-position="187">
               <caret line="16" column="18" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="18" />
               <folding>
                 <element signature="e#25#39#0" expanded="true" />
@@ -152,24 +137,30 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mdanaly/pca.py">
           <provider selected="true" editor-type-id="text-editor">
             <state>
-              <caret column="23" selection-start-column="23" selection-end-column="23" />
+              <caret selection-end-column="23" />
               <folding>
-                <element signature="e#0#18#0" expanded="true" />
-                <marker date="1539753840474" expanded="true" signature="1256:1606" ph="..." />
-                <marker date="1539753840474" expanded="true" signature="5091:5092" ph="..." />
-                <marker date="1539753840474" expanded="true" signature="5091:5097" ph="..." />
-                <marker date="1539753840474" expanded="true" signature="5153:5433" ph="..." />
-                <marker date="1539753840474" expanded="true" signature="5455:5465" ph="..." />
-                <marker date="1539753840474" expanded="true" signature="6845:6847" ph="..." />
-                <marker date="1539753840474" expanded="true" signature="7237:7240" ph="..." />
-                <marker date="1539753840474" expanded="true" signature="8409:9017" ph="..." />
-                <marker date="1539753840474" expanded="true" signature="9223:9571" ph="..." />
-                <marker date="1539753840474" expanded="true" signature="11368:11614" ph="..." />
+                <element signature="e#25#43#0" expanded="true" />
+                <marker date="1539788370458" expanded="true" signature="1256:1606" ph="..." />
+                <marker date="1539788370458" expanded="true" signature="5091:5092" ph="..." />
+                <marker date="1539788370458" expanded="true" signature="5091:5097" ph="..." />
+                <marker date="1539788370458" expanded="true" signature="5153:5438" ph="..." />
+                <marker date="1539788370458" expanded="true" signature="5611:5621" ph="..." />
+                <marker date="1539788370458" expanded="true" signature="7398:7400" ph="..." />
+                <marker date="1539788370458" expanded="true" signature="7790:7793" ph="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/bin/gmx_pca.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="170">
+              <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
             </state>
           </provider>
         </entry>
@@ -177,8 +168,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/913087099/scipy/spatial/qhull.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="278" column="19" lean-forward="true" selection-start-line="278" selection-start-column="19" selection-end-line="278" selection-end-column="19" />
+            <state relative-caret-position="4641">
+              <caret line="278" column="19" selection-start-line="278" selection-start-column="19" selection-end-line="278" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -186,20 +177,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/913087099/builtins.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-4582">
+            <state relative-caret-position="69003">
               <caret line="4059" column="8" selection-start-line="4059" selection-start-column="8" selection-end-line="4059" selection-end-column="8" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/mdanaly/__init__.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="11" column="21" selection-start-line="11" selection-start-column="21" selection-end-line="11" selection-end-column="21" />
-              <folding>
-                <element signature="e#25#34#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -243,8 +222,8 @@
       <find>coordinate</find>
       <find>coordinat</find>
       <find>coordination</find>
-      <find>CommunityH</find>
       <find>Comp</find>
+      <find>CommunityH</find>
     </findStrings>
     <replaceStrings>
       <replace>fn</replace>
@@ -266,8 +245,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/mdanaly/subplot.py" />
-        <option value="$PROJECT_DIR$/test/test_cmap_NbyN.py" />
         <option value="$PROJECT_DIR$/dockml/shiftpdb.py" />
         <option value="$PROJECT_DIR$/test/test_rotateDNA.py" />
         <option value="$PROJECT_DIR$/test/shiftPDB.py" />
@@ -301,7 +278,6 @@
         <option value="$PROJECT_DIR$/dockml/convert.py" />
         <option value="$PROJECT_DIR$/bin/extract.py" />
         <option value="$PROJECT_DIR$/bin/index.py" />
-        <option value="$PROJECT_DIR$/bin/lipids.py" />
         <option value="$PROJECT_DIR$/dockml/pdbIO.py" />
         <option value="$PROJECT_DIR$/automd/gentop.py" />
         <option value="$PROJECT_DIR$/automd/fixpdb.py" />
@@ -316,7 +292,10 @@
         <option value="$PROJECT_DIR$/mdanaly/extract.py" />
         <option value="$PROJECT_DIR$/mdanaly/lipids.py" />
         <option value="$PROJECT_DIR$/mdanaly/gmxcli.py" />
+        <option value="$PROJECT_DIR$/bin/t-SNE.py" />
+        <option value="$PROJECT_DIR$/bin/lipids.py" />
         <option value="$PROJECT_DIR$/mdanaly/pca.py" />
+        <option value="$PROJECT_DIR$/bin/gmx_pca.py" />
       </list>
     </option>
   </component>
@@ -330,7 +309,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -362,6 +340,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -602,13 +581,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1499093997611</updated>
-    </task>
-    <task id="LOCAL-00008" summary="from mars">
-      <created>1520959290988</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1520959290988</updated>
     </task>
     <task id="LOCAL-00009" summary="from mars">
       <created>1523854785927</created>
@@ -946,14 +918,21 @@
       <option name="project" value="LOCAL" />
       <updated>1539751226935</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="add coordinate pca module">
+      <created>1539753853311</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1539753853311</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="-1" width="1362" height="641" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16529544" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16529544" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -1023,7 +1002,8 @@
     <MESSAGE value="start a module for coordination number calculation" />
     <MESSAGE value="add gmx-style argument parser" />
     <MESSAGE value="all coordinate pca module" />
-    <option name="LAST_COMMIT_MESSAGE" value="all coordinate pca module" />
+    <MESSAGE value="add coordinate pca module" />
+    <option name="LAST_COMMIT_MESSAGE" value="add coordinate pca module" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1047,8 +1027,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/.PyCharmCE2017.2/system/python_stubs/913087099/builtins.py" />
-    <entry file="file://$PROJECT_DIR$/dockml/dataclean.py" />
     <entry file="file://$USER_HOME$/.conda/envs/py36/lib/python3.6/site-packages/sklearn/decomposition/__init__.py" />
     <entry file="file://$USER_HOME$/.conda/envs/py36/lib/python3.6/site-packages/sklearn/decomposition/pca.py" />
     <entry file="file://$PROJECT_DIR$/test/test_PRLBD_VS.py">
@@ -1167,13 +1145,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bin/lipids.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" selection-start-line="7" selection-end-line="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/data/nucleic-acid.lib">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1191,20 +1162,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5032">
           <caret line="302" column="50" selection-start-line="302" selection-start-column="50" selection-end-line="302" selection-end-column="50" />
-          <folding>
-            <element signature="e#25#39#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/.conda/envs/py36/lib/python3.6/site-packages/rdkit/Chem/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#390#414#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/bin/cmap.py">
       <provider selected="true" editor-type-id="text-editor" />
@@ -1213,9 +1175,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
           <caret line="17" column="25" lean-forward="true" selection-start-line="17" selection-start-column="25" selection-end-line="17" selection-end-column="25" />
-          <folding>
-            <element signature="e#507#12708#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1223,9 +1182,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="7514">
           <caret line="442" column="17" selection-start-line="442" selection-start-column="17" selection-end-line="442" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1254,9 +1210,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
           <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
-          <folding>
-            <element signature="e#25#38#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1291,63 +1244,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
           <caret line="11" column="21" selection-start-line="11" selection-start-column="21" selection-end-line="11" selection-end-column="21" />
-          <folding>
-            <element signature="e#25#34#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/io.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" selection-start-line="7" selection-end-line="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/network.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="23" selection-start-column="23" selection-end-column="23" />
-          <folding>
-            <element signature="e#25#43#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/extract.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2159">
-          <caret line="7" column="10" selection-start-line="7" selection-start-column="10" selection-end-line="7" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/913087099/scipy/spatial/qhull.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="278" column="19" lean-forward="true" selection-start-line="278" selection-start-column="19" selection-end-line="278" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/913087099/builtins.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4582">
-          <caret line="4059" column="8" selection-start-line="4059" selection-start-column="8" selection-end-line="4059" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/lipids.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1411">
-          <caret line="16" column="18" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="18" />
-          <folding>
-            <element signature="e#25#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/mdanaly/io.py" />
     <entry file="file://$PROJECT_DIR$/mdanaly/gmxcli.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
+        <state relative-caret-position="663">
           <caret line="44" column="77" selection-start-line="44" selection-start-column="77" selection-end-line="44" selection-end-column="77" />
           <folding>
             <element signature="e#25#39#0" expanded="true" />
@@ -1372,23 +1275,82 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/pca.py">
+    <entry file="file://$PROJECT_DIR$/mdanaly/network.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret column="23" selection-start-column="23" selection-end-column="23" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
-            <marker date="1539753840474" expanded="true" signature="1256:1606" ph="..." />
-            <marker date="1539753840474" expanded="true" signature="5091:5092" ph="..." />
-            <marker date="1539753840474" expanded="true" signature="5091:5097" ph="..." />
-            <marker date="1539753840474" expanded="true" signature="5153:5433" ph="..." />
-            <marker date="1539753840474" expanded="true" signature="5455:5465" ph="..." />
-            <marker date="1539753840474" expanded="true" signature="6845:6847" ph="..." />
-            <marker date="1539753840474" expanded="true" signature="7237:7240" ph="..." />
-            <marker date="1539753840474" expanded="true" signature="8409:9017" ph="..." />
-            <marker date="1539753840474" expanded="true" signature="9223:9571" ph="..." />
-            <marker date="1539753840474" expanded="true" signature="11368:11614" ph="..." />
+            <element signature="e#25#43#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bin/t-SNE.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mdanaly/extract.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="10" selection-start-line="7" selection-start-column="10" selection-end-line="7" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mdanaly/lipids.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="16" column="18" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="18" />
+          <folding>
+            <element signature="e#25#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/913087099/scipy/spatial/qhull.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4641">
+          <caret line="278" column="19" selection-start-line="278" selection-start-column="19" selection-end-line="278" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/913087099/builtins.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="69003">
+          <caret line="4059" column="8" selection-start-line="4059" selection-start-column="8" selection-end-line="4059" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bin/lipids.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mdanaly/pca.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-column="23" />
+          <folding>
+            <element signature="e#25#43#0" expanded="true" />
+            <marker date="1539788370458" expanded="true" signature="1256:1606" ph="..." />
+            <marker date="1539788370458" expanded="true" signature="5091:5092" ph="..." />
+            <marker date="1539788370458" expanded="true" signature="5091:5097" ph="..." />
+            <marker date="1539788370458" expanded="true" signature="5153:5438" ph="..." />
+            <marker date="1539788370458" expanded="true" signature="5611:5621" ph="..." />
+            <marker date="1539788370458" expanded="true" signature="7398:7400" ph="..." />
+            <marker date="1539788370458" expanded="true" signature="7790:7793" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bin/gmx_pca.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
         </state>
       </provider>
     </entry>
