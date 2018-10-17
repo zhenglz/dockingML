@@ -385,7 +385,10 @@ def general_pca(args):
 
     """
 
-    X = pd.read_csv(args.f, sep=",", header=0)
+    if args.skip_index:
+        X = pd.read_csv(args.f, sep=",", header=0, index_col=0)
+    else:
+        X = pd.read_csv(args.f, sep=",", header=0)
 
     pca = PCA(n_components=args.proj)
 
@@ -430,6 +433,10 @@ def arguments():
                                help="Output, optional. \n"
                                     "Output file name containing explained eigen values variance ratio. \n"
                                     "Default is explained_variance_ratio.dat. ")
+    parser.parser.add_argument("-skip_index", type=lambda x: (str(x).lower() == "true"), default=True,
+                               help="Input, optional. Working with mode == general \n"
+                                    "Generally, there would be an index column in the input file, choose\n"
+                                    "to whether skip the index column. Default is True. ")
 
     parser.parse_arguments()
     args = parser.args

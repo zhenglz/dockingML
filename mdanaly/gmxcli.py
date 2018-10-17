@@ -66,7 +66,7 @@ class GromacsCommanLine(object):
                             help="Input, optional. \n"
                                  "How many picoseconds the frames are stored in\n"
                                  "trajectory file. Default is 2. ")
-        parser.add_argument("-v", default=False, type=bool,
+        parser.add_argument("-v", default=False, type=lambda x: (str(x).lower() == "true"),
                             help="Input, optional. \n"
                                  "Whether print detail information. Default is False. ")
 
