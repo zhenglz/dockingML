@@ -1,20 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="rename some modules">
-      <change afterPath="$PROJECT_DIR$/mdanaly/coordNum.py" afterDir="false" />
+    <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="add coordination number module">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/genfeatures.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/genfeatures.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/gmx_cmap.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/gmx_cmap.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/ppdock.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/ppdock.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/t-SNE.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/timestamp.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/timestamp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mdanaly/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mdanaly/angles.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/angles.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mdanaly/gmxcli.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/gmxcli.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mdanaly/pca.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/pca.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mdanaly/timestamp.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/timestamp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mdanaly/tsne.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mdanaly/coordNum.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/coordNum.py" afterDir="false" />
     </list>
     <ignored path="dockingML.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -64,14 +53,14 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Python Console" value="264" />
-          <entry key="py" value="29777" />
-          <entry key="txt" value="464" />
+          <entry key="py" value="30065" />
+          <entry key="txt" value="497" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="464" />
-          <entry key="Python" value="30041" />
+          <entry key="PLAIN_TEXT" value="497" />
+          <entry key="Python" value="30329" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -187,19 +176,19 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mdanaly/coordNum.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="93" column="63" selection-start-line="93" selection-start-column="63" selection-end-line="93" selection-end-column="63" />
+            <state relative-caret-position="-187">
+              <caret line="98" column="19" lean-forward="true" selection-start-line="98" selection-start-column="19" selection-end-line="98" selection-end-column="19" />
               <folding>
                 <element signature="e#25#49#0" expanded="true" />
-                <marker date="1539799500734" expanded="true" signature="196:197" ph="..." />
-                <marker date="1539799500734" expanded="true" signature="196:202" ph="..." />
-                <marker date="1539799500734" expanded="true" signature="270:543" ph="..." />
-                <marker date="1539799500734" expanded="true" signature="565:574" ph="..." />
-                <marker date="1539799500734" expanded="true" signature="1569:1574" ph="..." />
-                <marker date="1539799500734" expanded="true" signature="1569:1678" ph="..." />
-                <marker date="1539799500734" expanded="true" signature="2034:2039" ph="..." />
-                <marker date="1539799500734" expanded="true" signature="2221:2222" ph="..." />
-                <marker date="1539799500734" expanded="true" signature="2221:2227" ph="..." />
+                <marker date="1539799817315" expanded="true" signature="196:197" ph="..." />
+                <marker date="1539799817315" expanded="true" signature="196:202" ph="..." />
+                <marker date="1539799817315" expanded="true" signature="270:569" ph="..." />
+                <marker date="1539799817315" expanded="true" signature="591:600" ph="..." />
+                <marker date="1539799817315" expanded="true" signature="2226:2231" ph="..." />
+                <marker date="1539799817315" expanded="true" signature="2226:2335" ph="..." />
+                <marker date="1539799817315" expanded="true" signature="2691:2696" ph="..." />
+                <marker date="1539799817315" expanded="true" signature="2878:2879" ph="..." />
+                <marker date="1539799817315" expanded="true" signature="2878:2884" ph="..." />
               </folding>
             </state>
           </provider>
@@ -604,13 +593,6 @@
       <option name="presentableId" value="Default" />
       <updated>1499093997611</updated>
     </task>
-    <task id="LOCAL-00026" summary="from mars">
-      <created>1525941069532</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1525941069532</updated>
-    </task>
     <task id="LOCAL-00027" summary="from mars">
       <created>1526460592623</created>
       <option name="number" value="00027" />
@@ -947,7 +929,14 @@
       <option name="project" value="LOCAL" />
       <updated>1539795121770</updated>
     </task>
-    <option name="localTasksCounter" value="75" />
+    <task id="LOCAL-00075" summary="add coordination number module">
+      <created>1539799519947</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1539799519947</updated>
+    </task>
+    <option name="localTasksCounter" value="76" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1028,7 +1017,8 @@
     <MESSAGE value="add sine value for angles module" />
     <MESSAGE value="include gmx begin and end of trajectory" />
     <MESSAGE value="rename some modules" />
-    <option name="LAST_COMMIT_MESSAGE" value="rename some modules" />
+    <MESSAGE value="add coordination number module" />
+    <option name="LAST_COMMIT_MESSAGE" value="add coordination number module" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1408,19 +1398,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/coordNum.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="93" column="63" selection-start-line="93" selection-start-column="63" selection-end-line="93" selection-end-column="63" />
+        <state relative-caret-position="-187">
+          <caret line="98" column="19" lean-forward="true" selection-start-line="98" selection-start-column="19" selection-end-line="98" selection-end-column="19" />
           <folding>
             <element signature="e#25#49#0" expanded="true" />
-            <marker date="1539799500734" expanded="true" signature="196:197" ph="..." />
-            <marker date="1539799500734" expanded="true" signature="196:202" ph="..." />
-            <marker date="1539799500734" expanded="true" signature="270:543" ph="..." />
-            <marker date="1539799500734" expanded="true" signature="565:574" ph="..." />
-            <marker date="1539799500734" expanded="true" signature="1569:1574" ph="..." />
-            <marker date="1539799500734" expanded="true" signature="1569:1678" ph="..." />
-            <marker date="1539799500734" expanded="true" signature="2034:2039" ph="..." />
-            <marker date="1539799500734" expanded="true" signature="2221:2222" ph="..." />
-            <marker date="1539799500734" expanded="true" signature="2221:2227" ph="..." />
+            <marker date="1539799817315" expanded="true" signature="196:197" ph="..." />
+            <marker date="1539799817315" expanded="true" signature="196:202" ph="..." />
+            <marker date="1539799817315" expanded="true" signature="270:569" ph="..." />
+            <marker date="1539799817315" expanded="true" signature="591:600" ph="..." />
+            <marker date="1539799817315" expanded="true" signature="2226:2231" ph="..." />
+            <marker date="1539799817315" expanded="true" signature="2226:2335" ph="..." />
+            <marker date="1539799817315" expanded="true" signature="2691:2696" ph="..." />
+            <marker date="1539799817315" expanded="true" signature="2878:2879" ph="..." />
+            <marker date="1539799817315" expanded="true" signature="2878:2884" ph="..." />
           </folding>
         </state>
       </provider>

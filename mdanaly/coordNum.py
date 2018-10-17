@@ -22,12 +22,25 @@ class CoordinationNumber(object):
         self.distances_ = np.array([])
 
         self.coord_number_ = np.array([])
+        self.cutoff = 0.5
 
     def atom_slices(self):
         # TODO: get atom slices
         return NotImplementedError
 
     def iterload_xtc(self, chunk=1000):
+        """
+
+        Parameters
+        ----------
+        chunk: int, default is 1000
+            number of frames to load per chunk
+
+        Returns
+        -------
+        self: CoordinationNumber object
+
+        """
 
         if not self.xtc_loaded_:
             self.trajs = []
@@ -42,6 +55,14 @@ class CoordinationNumber(object):
         return self
 
     def compute_pair_distances(self):
+        """
+        Compute atom pair distances using mdtraj.
+
+        Returns
+        -------
+        self: CoordinationNumber object
+
+        """
 
         for traj in self.trajs:
 
@@ -55,11 +76,25 @@ class CoordinationNumber(object):
         return self
 
     def compute_coord_number(self, cutoff=0.35):
+        """
+
+        Parameters
+        ----------
+        cutoff: float,
+            the distance cutoff for coordination number calculation
+
+        Returns
+        -------
+        self: CoordinationNumber object
+
+        """
+
+        self.cutoff = cutoff
 
         if self.distances_.shape[0] == 0:
             self.compute_pair_distances()
 
-        self.coord_number_ = np.sum(self.distances_ <= cutoff, axis=1)
+        self.coord_number_ = np.sum(self.distances_ <= self.cutoff, axis=1)
 
         return self
 
