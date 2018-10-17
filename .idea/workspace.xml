@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="add coordinate pca module">
+    <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="add sine value for angles module">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mdanaly/angles.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/angles.py" afterDir="false" />
     </list>
@@ -41,26 +41,26 @@
         <counts>
           <entry key="dat" value="2" />
           <entry key="lib" value="1" />
-          <entry key="py" value="41" />
+          <entry key="py" value="42" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="PLAIN_TEXT" value="3" />
-          <entry key="Python" value="41" />
+          <entry key="Python" value="42" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Python Console" value="217" />
-          <entry key="py" value="26195" />
-          <entry key="txt" value="372" />
+          <entry key="py" value="26287" />
+          <entry key="txt" value="406" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="372" />
-          <entry key="Python" value="26412" />
+          <entry key="PLAIN_TEXT" value="406" />
+          <entry key="Python" value="26504" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -71,25 +71,27 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/mdanaly/angles.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/mdanaly/gmxcli.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="57">
-              <caret line="194" column="59" selection-start-line="194" selection-start-column="59" selection-end-line="194" selection-end-column="59" />
+            <state relative-caret-position="450">
+              <caret line="44" column="77" selection-start-line="44" selection-start-column="77" selection-end-line="44" selection-end-column="77" />
               <folding>
-                <element signature="e#25#44#0" expanded="true" />
+                <element signature="e#25#39#0" expanded="true" />
+                <marker date="1539712483053" expanded="true" signature="420:421" ph="..." />
+                <marker date="1539712483053" expanded="true" signature="420:426" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/mdanaly/network.py">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/mdanaly/angles.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="23" selection-start-column="23" selection-end-column="23" />
+            <state relative-caret-position="323">
+              <caret line="152" column="28" selection-start-line="152" selection-start-column="28" selection-end-line="152" selection-end-column="28" />
               <folding>
-                <element signature="e#25#43#0" expanded="true" />
+                <element signature="e#25#44#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -579,27 +581,6 @@
       <option name="presentableId" value="Default" />
       <updated>1499093997611</updated>
     </task>
-    <task id="LOCAL-00015" summary="from mars">
-      <created>1524214749529</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1524214749529</updated>
-    </task>
-    <task id="LOCAL-00016" summary="from mars">
-      <created>1524543319750</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1524543319750</updated>
-    </task>
-    <task id="LOCAL-00017" summary="from mars">
-      <created>1524543329503</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1524543329503</updated>
-    </task>
     <task id="LOCAL-00018" summary="from mars">
       <created>1524733143000</created>
       <option name="number" value="00018" />
@@ -922,13 +903,35 @@
       <option name="project" value="LOCAL" />
       <updated>1539789391119</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="add coordinate pca module">
+      <created>1539790034007</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1539790034007</updated>
+    </task>
+    <task id="LOCAL-00065" summary="add sine value for angles module">
+      <created>1539790114360</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1539790114360</updated>
+    </task>
+    <task id="LOCAL-00066" summary="add sine value for angles module">
+      <created>1539790235165</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1539790235165</updated>
+    </task>
+    <option name="localTasksCounter" value="67" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="-1" width="1362" height="641" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16529544" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16529544" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -999,7 +1002,8 @@
     <MESSAGE value="add gmx-style argument parser" />
     <MESSAGE value="all coordinate pca module" />
     <MESSAGE value="add coordinate pca module" />
-    <option name="LAST_COMMIT_MESSAGE" value="add coordinate pca module" />
+    <MESSAGE value="add sine value for angles module" />
+    <option name="LAST_COMMIT_MESSAGE" value="add sine value for angles module" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1244,18 +1248,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/io.py" />
-    <entry file="file://$PROJECT_DIR$/mdanaly/gmxcli.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="663">
-          <caret line="44" column="77" selection-start-line="44" selection-start-column="77" selection-end-line="44" selection-end-column="77" />
-          <folding>
-            <element signature="e#25#39#0" expanded="true" />
-            <marker date="1539712483053" expanded="true" signature="420:421" ph="..." />
-            <marker date="1539712483053" expanded="true" signature="420:426" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/network.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -1335,10 +1327,22 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/mdanaly/gmxcli.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="44" column="77" selection-start-line="44" selection-start-column="77" selection-end-line="44" selection-end-column="77" />
+          <folding>
+            <element signature="e#25#39#0" expanded="true" />
+            <marker date="1539712483053" expanded="true" signature="420:421" ph="..." />
+            <marker date="1539712483053" expanded="true" signature="420:426" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/angles.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="194" column="59" selection-start-line="194" selection-start-column="59" selection-end-line="194" selection-end-column="59" />
+        <state relative-caret-position="323">
+          <caret line="152" column="28" selection-start-line="152" selection-start-column="28" selection-end-line="152" selection-end-column="28" />
           <folding>
             <element signature="e#25#44#0" expanded="true" />
           </folding>

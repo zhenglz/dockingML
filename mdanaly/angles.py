@@ -150,6 +150,7 @@ def arguments():
 
     args = parser.parse_arguments()
 
+    # print help information
     if len(sys.argv) < 3:
         parser.parser.print_help()
         sys.exit(0)
