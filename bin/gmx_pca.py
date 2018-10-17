@@ -6,5 +6,5 @@ from mdanaly import pca
 
 if __name__ == "__main__":
 
-    pca.main()
+    pca.gmxpca()
 

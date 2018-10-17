@@ -254,12 +254,10 @@ def gmxangle(args):
             print("Write angles to output file: ", args.o)
 
         # write angles to an output file
-        # print("Writing angles to output file %s ......" % args.o)
         write_angles(angles, args.o, cosine=args.cos, sine=args.sin, dt=args.dt)
 
     else:
         print("Some of the input files are not existed. Input again.")
-        # return np.array([])
 
     sys.exit(1)
 

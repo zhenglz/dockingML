@@ -3,7 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="add sine value for angles module">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/gmx_pca.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/gmx_pca.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mdanaly/angles.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/angles.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mdanaly/pca.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/pca.py" afterDir="false" />
     </list>
     <ignored path="dockingML.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -53,14 +55,14 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Python Console" value="217" />
-          <entry key="py" value="26643" />
+          <entry key="py" value="26667" />
           <entry key="txt" value="406" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="406" />
-          <entry key="Python" value="26860" />
+          <entry key="Python" value="26884" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -85,11 +87,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mdanaly/angles.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="289">
-              <caret line="144" column="55" selection-start-line="144" selection-start-column="55" selection-end-line="144" selection-end-column="55" />
+              <caret line="259" column="70" selection-start-line="259" selection-start-column="70" selection-end-line="259" selection-end-column="70" />
               <folding>
                 <element signature="e#25#44#0" expanded="true" />
               </folding>
@@ -139,27 +141,27 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mdanaly/pca.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="438" column="88" selection-start-line="438" selection-start-column="88" selection-end-line="438" selection-end-column="88" />
+            <state relative-caret-position="102">
+              <caret line="446" column="10" selection-start-line="446" selection-start-column="10" selection-end-line="446" selection-end-column="10" />
               <folding>
                 <element signature="e#25#43#0" expanded="true" />
-                <marker date="1539791092869" expanded="true" signature="1290:1640" ph="..." />
-                <marker date="1539791092869" expanded="true" signature="5354:5355" ph="..." />
-                <marker date="1539791092869" expanded="true" signature="5354:5360" ph="..." />
-                <marker date="1539791092869" expanded="true" signature="5416:5701" ph="..." />
-                <marker date="1539791092869" expanded="true" signature="5874:5884" ph="..." />
-                <marker date="1539791092869" expanded="true" signature="7661:7663" ph="..." />
-                <marker date="1539791092869" expanded="true" signature="8053:8056" ph="..." />
+                <marker date="1539791746537" expanded="true" signature="1290:1640" ph="..." />
+                <marker date="1539791746537" expanded="true" signature="5354:5355" ph="..." />
+                <marker date="1539791746537" expanded="true" signature="5354:5360" ph="..." />
+                <marker date="1539791746537" expanded="true" signature="5416:5701" ph="..." />
+                <marker date="1539791746537" expanded="true" signature="5874:5884" ph="..." />
+                <marker date="1539791746537" expanded="true" signature="7661:7663" ph="..." />
+                <marker date="1539791746537" expanded="true" signature="8053:8056" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/bin/gmx_pca.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+            <state relative-caret-position="136">
+              <caret line="8" column="16" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
             </state>
           </provider>
         </entry>
@@ -291,10 +293,10 @@
         <option value="$PROJECT_DIR$/mdanaly/lipids.py" />
         <option value="$PROJECT_DIR$/bin/t-SNE.py" />
         <option value="$PROJECT_DIR$/bin/lipids.py" />
-        <option value="$PROJECT_DIR$/bin/gmx_pca.py" />
         <option value="$PROJECT_DIR$/mdanaly/gmxcli.py" />
-        <option value="$PROJECT_DIR$/mdanaly/pca.py" />
         <option value="$PROJECT_DIR$/mdanaly/angles.py" />
+        <option value="$PROJECT_DIR$/mdanaly/pca.py" />
+        <option value="$PROJECT_DIR$/bin/gmx_pca.py" />
       </list>
     </option>
   </component>
@@ -580,13 +582,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1499093997611</updated>
-    </task>
-    <task id="LOCAL-00021" summary="from mars">
-      <created>1525104004807</created>
-      <option name="number" value="00021" />
-      <option name="presentableId" value="LOCAL-00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1525104004807</updated>
     </task>
     <task id="LOCAL-00022" summary="from mars">
       <created>1525106372233</created>
@@ -924,7 +919,14 @@
       <option name="project" value="LOCAL" />
       <updated>1539791097747</updated>
     </task>
-    <option name="localTasksCounter" value="70" />
+    <task id="LOCAL-00070" summary="add sine value for angles module">
+      <created>1539791672066</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1539791672066</updated>
+    </task>
+    <option name="localTasksCounter" value="71" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1303,30 +1305,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bin/gmx_pca.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/pca.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="438" column="88" selection-start-line="438" selection-start-column="88" selection-end-line="438" selection-end-column="88" />
-          <folding>
-            <element signature="e#25#43#0" expanded="true" />
-            <marker date="1539791092869" expanded="true" signature="1290:1640" ph="..." />
-            <marker date="1539791092869" expanded="true" signature="5354:5355" ph="..." />
-            <marker date="1539791092869" expanded="true" signature="5354:5360" ph="..." />
-            <marker date="1539791092869" expanded="true" signature="5416:5701" ph="..." />
-            <marker date="1539791092869" expanded="true" signature="5874:5884" ph="..." />
-            <marker date="1539791092869" expanded="true" signature="7661:7663" ph="..." />
-            <marker date="1539791092869" expanded="true" signature="8053:8056" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/gmxcli.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -1342,10 +1320,34 @@
     <entry file="file://$PROJECT_DIR$/mdanaly/angles.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
-          <caret line="144" column="55" selection-start-line="144" selection-start-column="55" selection-end-line="144" selection-end-column="55" />
+          <caret line="259" column="70" selection-start-line="259" selection-start-column="70" selection-end-line="259" selection-end-column="70" />
           <folding>
             <element signature="e#25#44#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mdanaly/pca.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="446" column="10" selection-start-line="446" selection-start-column="10" selection-end-line="446" selection-end-column="10" />
+          <folding>
+            <element signature="e#25#43#0" expanded="true" />
+            <marker date="1539791746537" expanded="true" signature="1290:1640" ph="..." />
+            <marker date="1539791746537" expanded="true" signature="5354:5355" ph="..." />
+            <marker date="1539791746537" expanded="true" signature="5354:5360" ph="..." />
+            <marker date="1539791746537" expanded="true" signature="5416:5701" ph="..." />
+            <marker date="1539791746537" expanded="true" signature="5874:5884" ph="..." />
+            <marker date="1539791746537" expanded="true" signature="7661:7663" ph="..." />
+            <marker date="1539791746537" expanded="true" signature="8053:8056" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bin/gmx_pca.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="16" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
         </state>
       </provider>
     </entry>

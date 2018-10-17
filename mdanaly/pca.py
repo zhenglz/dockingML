@@ -444,7 +444,7 @@ def arguments():
     return args
 
 
-def main():
+def gmxpca():
 
     args = arguments()
 
