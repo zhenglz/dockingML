@@ -14,7 +14,7 @@ class LipidThickness(object):
 
         self.pdb = pdb
         self.lip = lipRes
-        self.head= headatoms
+        self.head = headatoms
 
     def getZvalues(self):
         """
@@ -120,8 +120,7 @@ class AreaPerLipid :
 
         """
 
-
-        if restorePBC :
+        if restorePBC:
             pbc = dockml.handlePBC()
             pbcVec = [
                 [0.0, vectors[0]],
@@ -134,7 +133,7 @@ class AreaPerLipid :
 
         xy_coords = np.asarray(coords)[:, :2]
 
-        if xy_coords.shape[0] :
+        if xy_coords.shape[0]:
             vdw_dummy = self.atomVdWBoundary(xy_coords)
 
             # convex hull algorithm to determine the area occupied by atoms
