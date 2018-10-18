@@ -431,10 +431,10 @@ class CoordinationPCA(object):
 
     def __init__(self, traj, top, atom_selection="name CA"):
         self.traj = traj
-        self.ref = top
+        self.ref = mt.load(top)
 
         # topology
-        self.topology = mt.load(self.ref).topology
+        self.topology = self.ref.topology
 
         self.n_atoms_ = self.traj.n_atoms
 
@@ -551,11 +551,15 @@ def xyz_pca(args):
 
     """
 
+    if args.v:
+        print("Start to load trajectory file ...... ")
+
     # obtain all xyz coordinates in a long trajectory file
     xyz = iterload_xyz_coordinates(xtcfile=args.f, top=args.s,
-                                   chunk=1000, stride=int(args.dt/args.ps),
+                                   chunk=10000, stride=int(args.dt/args.ps),
                                    atom_selection=args.select)
 
+    # add time index into dataframe
     dat = pd.DataFrame(xyz)
     dat.index = np.arange(xyz.shape[0]) * args.dt
 
@@ -564,13 +568,18 @@ def xyz_pca(args):
     if args.e > 0 and args.e > args.b:
         dat = dat[dat.index <= args.e]
 
+    if args.v:
+        print("Perform PCA anlysis ...... ")
     # perform PCA calculation using xyz coordinates
     pca = PCA(n_components=args.proj)
     pca.fit(dat)
     xyz_transformed = pca.X_transformed_
 
+    if args.v:
+        print("Save result into output file ...... ")
+    # write result to output file
     write_results(X_transformed=xyz_transformed, variance_ratio=pca.eigvalues_ratio_,
-                  X_out=args.o, variance_out=args.var_ratio, dt=args.dt)
+                  X_out=args.o, variance_out=args.var_ratio, col_index=dat.index)
 
     return None
 

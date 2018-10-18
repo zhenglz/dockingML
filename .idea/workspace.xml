@@ -3,12 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="add coordination number module">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/automd/autoMD.py" beforeDir="false" afterPath="$PROJECT_DIR$/automd/autoMD.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/bin/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dockml/amino-acid.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dockml/convert.py" beforeDir="false" afterPath="$PROJECT_DIR$/dockml/convert.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dockml/input.pdb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dockml/output.pdb" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/mdanaly/pca.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/pca.py" afterDir="false" />
     </list>
     <ignored path="dockingML.iws" />
@@ -62,7 +56,7 @@
         <counts>
           <entry key="Python Console" value="264" />
           <entry key="md" value="1480" />
-          <entry key="py" value="30888" />
+          <entry key="py" value="31174" />
           <entry key="txt" value="497" />
         </counts>
       </usages-collector>
@@ -70,7 +64,7 @@
         <counts>
           <entry key="Markdown" value="1480" />
           <entry key="PLAIN_TEXT" value="497" />
-          <entry key="Python" value="31152" />
+          <entry key="Python" value="31438" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -171,18 +165,18 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mdanaly/pca.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="143">
-              <caret line="435" column="50" lean-forward="true" selection-start-line="435" selection-start-column="50" selection-end-line="435" selection-end-column="50" />
+            <state relative-caret-position="279">
+              <caret line="578" column="51" selection-start-line="578" selection-start-column="51" selection-end-line="578" selection-end-column="51" />
               <folding>
                 <element signature="e#25#43#0" expanded="true" />
-                <marker date="1539860959217" expanded="true" signature="7389:7739" ph="..." />
-                <marker date="1539860959217" expanded="true" signature="10556:10693" ph="..." />
-                <marker date="1539860959217" expanded="true" signature="11679:11680" ph="..." />
-                <marker date="1539860959217" expanded="true" signature="11679:11685" ph="..." />
-                <marker date="1539860959217" expanded="true" signature="11741:12027" ph="..." />
-                <marker date="1539860959217" expanded="true" signature="12200:12210" ph="..." />
-                <marker date="1539860959217" expanded="true" signature="13987:13989" ph="..." />
-                <marker date="1539860959217" expanded="true" signature="14379:14382" ph="..." />
+                <marker date="1539863624036" expanded="true" signature="7389:7739" ph="..." />
+                <marker date="1539863624036" expanded="true" signature="10556:10693" ph="..." />
+                <marker date="1539863624036" expanded="true" signature="11679:11680" ph="..." />
+                <marker date="1539863624036" expanded="true" signature="11679:11685" ph="..." />
+                <marker date="1539863624036" expanded="true" signature="11741:12046" ph="..." />
+                <marker date="1539863624036" expanded="true" signature="12219:12229" ph="..." />
+                <marker date="1539863624036" expanded="true" signature="14006:14008" ph="..." />
+                <marker date="1539863624036" expanded="true" signature="14398:14401" ph="..." />
               </folding>
             </state>
           </provider>
@@ -587,20 +581,6 @@
       <option name="presentableId" value="Default" />
       <updated>1499093997611</updated>
     </task>
-    <task id="LOCAL-00029" summary="fix columbic backbone energy zero bug">
-      <created>1538572251875</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1538572251875</updated>
-    </task>
-    <task id="LOCAL-00030" summary="fix columbic backbone energy zero bug">
-      <created>1538584056405</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1538584056405</updated>
-    </task>
     <task id="LOCAL-00031" summary="fix bug in atomtype count function">
       <created>1538836586469</created>
       <option name="number" value="00031" />
@@ -930,7 +910,21 @@
       <option name="project" value="LOCAL" />
       <updated>1539800908645</updated>
     </task>
-    <option name="localTasksCounter" value="78" />
+    <task id="LOCAL-00078" summary="add coordination number module">
+      <created>1539860966409</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1539860966412</updated>
+    </task>
+    <task id="LOCAL-00079" summary="add coordination number module">
+      <created>1539860983434</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1539860983435</updated>
+    </task>
+    <option name="localTasksCounter" value="80" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1416,18 +1410,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/pca.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="143">
-          <caret line="435" column="50" lean-forward="true" selection-start-line="435" selection-start-column="50" selection-end-line="435" selection-end-column="50" />
+        <state relative-caret-position="279">
+          <caret line="578" column="51" selection-start-line="578" selection-start-column="51" selection-end-line="578" selection-end-column="51" />
           <folding>
             <element signature="e#25#43#0" expanded="true" />
-            <marker date="1539860959217" expanded="true" signature="7389:7739" ph="..." />
-            <marker date="1539860959217" expanded="true" signature="10556:10693" ph="..." />
-            <marker date="1539860959217" expanded="true" signature="11679:11680" ph="..." />
-            <marker date="1539860959217" expanded="true" signature="11679:11685" ph="..." />
-            <marker date="1539860959217" expanded="true" signature="11741:12027" ph="..." />
-            <marker date="1539860959217" expanded="true" signature="12200:12210" ph="..." />
-            <marker date="1539860959217" expanded="true" signature="13987:13989" ph="..." />
-            <marker date="1539860959217" expanded="true" signature="14379:14382" ph="..." />
+            <marker date="1539863624036" expanded="true" signature="7389:7739" ph="..." />
+            <marker date="1539863624036" expanded="true" signature="10556:10693" ph="..." />
+            <marker date="1539863624036" expanded="true" signature="11679:11680" ph="..." />
+            <marker date="1539863624036" expanded="true" signature="11679:11685" ph="..." />
+            <marker date="1539863624036" expanded="true" signature="11741:12046" ph="..." />
+            <marker date="1539863624036" expanded="true" signature="12219:12229" ph="..." />
+            <marker date="1539863624036" expanded="true" signature="14006:14008" ph="..." />
+            <marker date="1539863624036" expanded="true" signature="14398:14401" ph="..." />
           </folding>
         </state>
       </provider>
