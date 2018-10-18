@@ -433,6 +433,7 @@ class CoordinationPCA(object):
         self.traj = traj
         self.ref = top
 
+        # topology
         self.topology = mt.load(self.ref).topology
 
         self.n_atoms_ = self.traj.n_atoms
