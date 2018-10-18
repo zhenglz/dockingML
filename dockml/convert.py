@@ -5,11 +5,22 @@ import os
 import sys
 import subprocess as sp
 
-class Convert :
+
+class Convert(object):
 
     """
-    convert structure files, using obabel (binary file)
+    Convert structure files, using obabel (binary file)
     may change another way in future
+
+    Parameters
+    ----------
+
+    Attributes
+    ----------
+
+    Methods
+    -------
+
     """
 
     def __init__(self,  obabel="obabel"):
