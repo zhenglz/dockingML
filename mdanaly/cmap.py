@@ -23,30 +23,198 @@ from collections import defaultdict
 from argparse import RawTextHelpFormatter
 from datetime import datetime
 from mpi4py import MPI
+import mdtraj as mt
 import time
 
+class CoordinatesXYZ(object):
+    """
+    Perform trajectory coordinates PCA analysis using mdtraj
 
-class CoordinationNumber(object):
+    Parameters
+    ----------
+    traj: mdtraj.Trajectory object,
+        a mdtraj trajectory, where the coordinates are stored
+    top: str, format pdb
+        the reference pdb file name
+    atom_selection: str, default is name CA
+        the atom selection for pca calculation.
 
-    def __init__(self):
-        pass
+    Attributes
+    ----------
+    topology: mdtraj.Trajectory.topology object
+        the mdtraj trajectory topology object
+    n_atoms_: int,
+        number of atoms in the trajectory
+    superimposed_: bool,
+        whether the trajectory has been superimposed
+    superpose_atom_indices: numpy array,
+        the atom indices, starting from 0, format is int
+    xyz: numpy ndarray, shape=[N, M]
+        the original xyz coordinates of selected atoms
+        N is number of samples, or frames
+        M is the multiply of atoms * 3
 
-    def atom_index(self):
-        # TODO: get necessary atom index
-        return NotImplementedError
+    Methods
+    -------
+    superimpose
+    xyz_coordinates
 
-    def atom_crds(self):
-        # TODO: get atom coordinates through mt traj
-        return NotImplementedError
+    See Also
+    --------
+    ContactMapPCA
+
+    """
+
+    def __init__(self, traj, top, atom_selection="name CA"):
+        self.traj = traj
+        self.ref = mt.load(top)
+
+        # topology
+        self.topology = self.ref.topology
+
+        self.n_atoms_ = self.traj.n_atoms
+
+        self.superimposed_ = False
+        self.superpose_atom_indices_ = self.topology.select(atom_selection)
+
+        self.xyz = None
+
+    def superimpose(self):
+        """
+        Superimpose the trajectory to a reference structure.
+
+        Returns
+        -------
+        self: the object itself
+
+        """
+
+        self.traj.superpose(self.ref, frame=0, atom_indices=self.superpose_atom_indices_)
+        self.superimposed_ = True
+
+        return self
+
+    def xyz_coordinates(self, atom_indices=None):
+        """
+        Extract xyz coordinates for selected atoms for a trajectory object
+
+        Parameters
+        ----------
+        atom_indices: numpy array,
+            the atom index for selected atoms
+
+        Returns
+        -------
+        xyz: numpy ndarray, shape = [N, M]
+            N is number of samples, or frames
+            M is the multiply of number of atoms and 3
+
+        """
+
+        if atom_indices is None:
+            atom_indices = self.superpose_atom_indices_
+
+        if not self.superimposed_:
+            print("Trajectory is not superimposed. Superimpose it to reference now...")
+            self.superimpose()
+
+        traj = self.traj.atom_slice(atom_indices=atom_indices, inplace=False)
+
+        xyz = traj.xyz
+
+        xyz = np.reshape(xyz, (xyz.shape[0], xyz.shape[1]*3))
+
+        self.xyz = xyz
+
+        return xyz
+
+
+class ContactMap(object):
+
+    def __init__(self, traj, group_a, group_b, cutoff=0.35):
+
+        self.traj = traj
+        self.cutoff = cutoff
+
+        self.atom_group_a = group_a
+        self.atom_group_b = group_b
+
+        self.atom_pairs_ = None
+        self.dist_matrix_ = None
+        self.cmap_ = None
+
+        self.distmtx_computed_ = False
+
+    def distance_matrix(self):
+
+        distmtx = mt.compute_distances(self.traj, atom_pairs=self.atom_pairs_)
+
+        self.dist_matrix_ = distmtx
+        self.distmtx_computed_ = True
+
+        return distmtx
+
+    def generate_cmap(self, shape='array'):
+        # TODO: generate a contactmap for each frame
+        if not self.distmtx_computed_:
+            self.distance_matrix()
+
+        cmap = (self.dist_matrix_ <= self.cutoff) * 1.0
+
+        if shape == "array":
+            pass
+        elif shape == "matrix":
+            cmap = np.reshape(cmap, (cmap.shape[0], self.atom_group_a.shape[0], self.atom_group_b.shape[0]))
+        else:
+            pass
+
+        self.cmap_ = cmap
+
+        return cmap
+
+    def generate_atom_pairs(self):
+
+        atom_pairs = []
+
+        for a in self.atom_group_a:
+            for b in self.atom_group_b:
+                atom_pairs.append([a, b])
+
+        self.atom_pairs_ = atom_pairs
+
+        return self
+
+
+class DistanceMatrixMap(ContactMap):
+
+    def __init__(self, traj, group_a, group_b, cutoff):
+        ContactMap(traj, group_a, group_b, cutoff)
+
+    def distance_matrix(self):
+        if not self.distmtx_computed_:
+            self.distance_matrix()
+
+        return self.dist_matrix_
+
+
+class CoordinationNumber(ContactMap):
+
+    def __init__(self, traj, group_a, group_b, cutoff):
+        ContactMap.__init__(traj, group_a, group_b, cutoff)
+
+        self.coord_number_ = None
 
     def coord_num(self):
         # TODO: calculation coordination numbers
-        return NotImplementedError
+        if not self.distmtx_computed_:
+            self.generate_cmap(shape="array")
 
-    # TODO: other functions
+        coord_number = np.sum(self.dist_matrix_, axis=1)
+
+        self.coord_number_ = coord_number
 
 
-class DrawCMap :
+class DrawCMap(object):
     def __init__(self):
         pass
 
@@ -164,7 +332,7 @@ class DrawCMap :
         return 1
 
 
-class ContactMap:
+class ContactMap2:
     """
 
     Parameters

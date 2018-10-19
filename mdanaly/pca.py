@@ -4,9 +4,9 @@ import numpy as np
 import pandas as pd
 import sklearn
 from sklearn import decomposition
-import mdtraj as mt
+from mdanaly import cmap
 from mdanaly import gmxcli
-
+import mdtraj as mt
 
 class tSNE(object):
 
@@ -384,113 +384,37 @@ class PCA(object):
         return None
 
 
-class ContactMapPCA(object):
-
-    def __init__(self):
-        pass
-
-    def generate_cmap(self):
-        # TODO: generate a contactmap for each frame
-        pass
-
-
-class CoordinationPCA(object):
+def datset_subset(dat, begin, end):
     """
-    Perform trajectory coordinates PCA analysis using mdtraj
+    Subset a dataset given the index range
 
     Parameters
     ----------
-    traj: mdtraj.Trajectory object,
-        a mdtraj trajectory, where the coordinates are stored
-    top: str, format pdb
-        the reference pdb file name
-    atom_selection: str, default is name CA
-        the atom selection for pca calculation.
+    dat: pandas DataFrame,
+        the dataset for subsetting
+    begin: int,
+        the beginning index
+    end:
+        the ending index
 
-    Attributes
-    ----------
-    topology: mdtraj.Trajectory.topology object
-        the mdtraj trajectory topology object
-    n_atoms_: int,
-        number of atoms in the trajectory
-    superimposed_: bool,
-        whether the trajectory has been superimposed
-    superpose_atom_indices: numpy array,
-        the atom indices, starting from 0, format is int
-    xyz: numpy ndarray, shape=[N, M]
-        the original xyz coordinates of selected atoms
-        N is number of samples, or frames
-        M is the multiply of atoms * 3
-
-    Methods
+    Returns
     -------
-    superimpose
-    xyz_coordinates
+    X: pandas DataFrame,
+        the processed dataset
 
     """
 
-    def __init__(self, traj, top, atom_selection="name CA"):
-        self.traj = traj
-        self.ref = mt.load(top)
+    # TODO: add a check whether the datatype is pandas dataframe
 
-        # topology
-        self.topology = self.ref.topology
+    X = dat.copy
 
-        self.n_atoms_ = self.traj.n_atoms
+    # slice the dataset
+    if begin > 0:
+        X = X[X.index >= begin]
+    if end > 0 and end > begin:
+        X = X[X.index <= begin]
 
-        self.superimposed_ = False
-        self.superpose_atom_indices_ = self.topology.select(atom_selection)
-
-        self.xyz = None
-
-    def superimpose(self):
-        """
-        Superimpose the trajectory to a reference structure.
-
-        Returns
-        -------
-        self: the object itself
-
-        """
-
-        self.traj.superpose(self.ref, frame=0, atom_indices=self.superpose_atom_indices_)
-        self.superimposed_ = True
-
-        return self
-
-    def xyz_coordinates(self, atom_indices=None):
-        """
-        Extract xyz coordinates for selected atoms for a trajectory object
-
-        Parameters
-        ----------
-        atom_indices: numpy array,
-            the atom index for selected atoms
-
-        Returns
-        -------
-        xyz: numpy ndarray, shape = [N, M]
-            N is number of samples, or frames
-            M is the multiply of number of atoms and 3
-
-        """
-
-        if atom_indices is None:
-            atom_indices = self.superpose_atom_indices_
-
-        if not self.superimposed_:
-            print("Trajectory is not superimposed. Superimpose it to reference now...")
-            self.superimpose()
-
-        traj = self.traj.atom_slice(atom_indices=atom_indices, inplace=False)
-
-        xyz = traj.xyz
-
-        xyz = np.reshape(xyz, (xyz.shape[0], xyz.shape[1]*3))
-
-        self.xyz = xyz
-
-        return xyz
+    return X
 
 
 def iterload_xyz_coordinates(xtcfile, top, chunk, stride, atom_selection="name CA"):
@@ -513,7 +437,7 @@ def iterload_xyz_coordinates(xtcfile, top, chunk, stride, atom_selection="name C
 
     Returns
     -------
-    xyz: numpy array, shape = [N, M]
+    xyz: pandas dataframe, shape = [N, M]
         the xyz coordinates dataset,
         N is number of samples, or frames
         M is n_atoms * 3
@@ -525,7 +449,7 @@ def iterload_xyz_coordinates(xtcfile, top, chunk, stride, atom_selection="name C
     xyz = np.array([])
 
     for traj in trajs:
-        copca = CoordinationPCA(traj, top, atom_selection)
+        copca = cmap.CoordinatesXYZ(traj, top, atom_selection)
         # copca.superimpose()
 
         if xyz.shape[0] == 0:
@@ -533,55 +457,9 @@ def iterload_xyz_coordinates(xtcfile, top, chunk, stride, atom_selection="name C
         else:
             xyz = np.concatenate((xyz, copca.xyz_coordinates()), axis=0)
 
+    xyz = pd.DataFrame(xyz)
+
     return xyz
-
-
-def xyz_pca(args):
-    """
-    Perform xyz coordinate based PCA calculation based on Gromacs XTC files.
-
-
-    Parameters
-    ----------
-    args: argparse object,
-        the arguments holder
-
-    Returns
-    -------
-
-    """
-
-    if args.v:
-        print("Start to load trajectory file ...... ")
-
-    # obtain all xyz coordinates in a long trajectory file
-    xyz = iterload_xyz_coordinates(xtcfile=args.f, top=args.s,
-                                   chunk=10000, stride=int(args.dt/args.ps),
-                                   atom_selection=args.select)
-
-    # add time index into dataframe
-    dat = pd.DataFrame(xyz)
-    dat.index = np.arange(xyz.shape[0]) * args.dt
-
-    if args.b > 0:
-        dat = dat[dat.index >= args.b]
-    if args.e > 0 and args.e > args.b:
-        dat = dat[dat.index <= args.e]
-
-    if args.v:
-        print("Perform PCA anlysis ...... ")
-    # perform PCA calculation using xyz coordinates
-    pca = PCA(n_components=args.proj)
-    pca.fit(dat)
-    xyz_transformed = pca.X_transformed_
-
-    if args.v:
-        print("Save result into output file ...... ")
-    # write result to output file
-    write_results(X_transformed=xyz_transformed, variance_ratio=pca.eigvalues_ratio_,
-                  X_out=args.o, variance_out=args.var_ratio, col_index=dat.index)
-
-    return None
 
 
 def write_results(X_transformed, variance_ratio, X_out, variance_out, col_index):
@@ -621,37 +499,59 @@ def write_results(X_transformed, variance_ratio, X_out, variance_out, col_index)
     return None
 
 
-def general_pca(args):
+def load_dataset(fn, skip_index=True, sep=","):
+    """
+    Load a dataset file.
+
+    Parameters
+    ----------
+    fn: str,
+        input dataset file name, a csv comma separated file
+    skip_index: bool,
+        whether skip the first col and using it as index
+    sep: str,
+        the delimiter or spacer in the dataset file
+
+    Returns
+    -------
+    X: pandas DataFrame, shape=[N, M]
+        N is number of samples, M is the number of dimensions.
+
+    """
+
+    # load dataset, assign the index information
+    if skip_index:
+        X = pd.read_csv(fn, sep=",", header=0, index_col=0)
+    else:
+        X = pd.read_csv(fn, sep=",", header=0)
+
+    return X
+
+
+def run_pca(dat, proj=10, output="transformed.csv", var_ratio_out="variance_explained.dat"):
     """
     Perform PCA calculation given a clean dataset file.
 
     Parameters
     ----------
-    args: argparse object
-        the arguments holder
+    dat: pandas DataFrame, or a numpy ndarray, shape=[N, M]
+        N is the number of samples, M is the number of dimensions.
+    proj: int,
+        number of projections to output
+    output: str,
+        the transformed or projected dataset output file name, format is csv
+    var_ratio_out: str,
+        the variance explained ratio of the eigvalues output file name
 
     Returns
     -------
 
     """
 
-    # load dataset
-    if args.skip_index:
-        X = pd.read_csv(args.f, sep=",", header=0, index_col=0)
-    else:
-        X = pd.read_csv(args.f, sep=",", header=0)
-
-    # slice the dataset
-    dat = X.copy()
-    if args.b > 0:
-        dat = dat[dat.index >= args.b]
-    if args.e > 0 and args.e > args.b:
-        dat = dat[dat.index <= args.e]
-
     index_col = dat.index
 
     # calculate PCA
-    pca = PCA(n_components=args.proj)
+    pca = PCA(n_components=proj)
     pca.fit(dat)
 
     # get transformed dataset
@@ -660,8 +560,137 @@ def general_pca(args):
 
     # write result
     write_results(X_transformed=X_transformed, variance_ratio=variance_ratio,
-                  X_out=args.o, variance_out=args.var_ratio, col_index=index_col)
+                  X_out=output, variance_out=var_ratio_out, col_index=index_col)
     return None
+
+
+def iterload_cmap(args):
+    """
+    Load a trajectory file and calculate the atom contactmap.
+
+    Parameters
+    ----------
+    args: argparse object
+        the argument options
+
+    Returns
+    -------
+
+    """
+
+    # TODO: add a residue based selection module here
+
+    atoms_selections = args.selct.split()
+    if len(atoms_selections) == 2:
+        atoms_selections = atoms_selections
+    else:
+        atoms_selections = [atoms_selections[0]] * 2
+
+    top = mt.load(args.s).topology
+
+    atom_grp_a = top.select("name %s" % atoms_selections[0])
+    atom_grp_b = top.select("name %s" % atoms_selections[1])
+
+    trajs = gmxcli.read_xtc(xtc=args.f, top=args.s, chunk=1000, stride=int(args.dt/args.ps))
+
+    cmap_dat = np.array([])
+
+    for traj in trajs:
+        contmap = cmap.ContactMap(traj=traj, group_a=atom_grp_a, group_b=atom_grp_b, cutoff=args.cutoff)
+
+        if cmap_dat.shape[0] == 0:
+            cmap_dat = contmap.cmap_
+        else:
+            cmap_dat = np.concatenate((cmap_dat, contmap.cmap_), axis=1)
+
+    cmap_dat = pd.DataFrame(cmap_dat)
+
+    return cmap_dat
+
+
+def cmap_pca(args):
+    """
+    Perform PCA calculation based on contact map between atoms along the
+    trajectory.
+
+    Parameters
+    ----------
+    args: argparse object,
+        the arguments options
+
+    Returns
+    -------
+
+    """
+
+    # contmap is a pd.DataFrame containing the contact map information
+    contmap = iterload_cmap(args)
+    contmap.index = np.arange(contmap.shape[0]) * args.dt
+
+    # process the begin end information
+    contmap = datset_subset(contmap, begin=args.b, end=args.e)
+
+    # run pca and write result to outputs
+    run_pca(contmap, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio)
+
+
+def general_pca(args):
+    """
+    Perform PCA calculation based on an input dataset file (preferably a csv file).
+
+    Parameters
+    ----------
+    args: argparse object,
+        the arguments options
+
+    Returns
+    -------
+
+    """
+
+    # dat is a pd.DataFrame with index information
+    dat = load_dataset(args.f, args.skip_index)
+
+    # process the begin end information
+    dat = datset_subset(dat, begin=args.b, end=args.e)
+
+    # run pca and write result to outputs
+    run_pca(dat, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio)
+
+    return None
+
+def xyz_pca(args):
+    """
+    Perform xyz coordinate based PCA calculation based on Gromacs XTC files.
+
+
+    Parameters
+    ----------
+    args: argparse object,
+        the arguments holder
+
+    Returns
+    -------
+
+    """
+
+    if args.v:
+        print("Start to load trajectory file ...... ")
+
+    # obtain all xyz coordinates in a long trajectory file
+    dat = iterload_xyz_coordinates(xtcfile=args.f, top=args.s,
+                                   chunk=10000, stride=int(args.dt/args.ps),
+                                   atom_selection=args.select)
+
+    # add time index into dataframe
+    # dat = pd.DataFrame(xyz)
+    dat.index = np.arange(dat.shape[0]) * args.dt
+
+    # process the begin end information
+    dat = datset_subset(dat, begin=args.b, end=args.e)
+
+    # run pca and write result to outputs
+    run_pca(dat, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio)
 
 
 def arguments():
@@ -685,6 +714,10 @@ def arguments():
                                     "general: perform general PCA using a well formated dataset file. \n"
                                     "xyz: perform xyz coordinate PCA analysis using a trajectory xtc file. \n"
                                     "cmap: perform contact map PCA analysis using a trajectory xtc file. ")
+    parser.parser.add_argument("-cutoff", default=0.35, type=float,
+                               help="Input, optional, it works with mode =cmap \n"
+                                    "The distance cutoff for contactmap calculation. Unit is nanometer.\n"
+                                    "Default is 0.35. ")
     parser.parser.add_argument("-proj", type=int, default=2,
                                help="Input, optional. \n"
                                     "How many number of dimensions to output. \n"
@@ -724,6 +757,7 @@ def gmxpca():
 
     elif args.mode == "cmap":
         # TODO: to be completed.
+        cmap_pca(args=args)
 
-        return NotImplementedError
+        return None
 
