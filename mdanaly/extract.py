@@ -9,89 +9,106 @@ import sys
 import argparse
 from argparse import RawTextHelpFormatter
 
-class ExtractPDB :
+
+class ExtractPDB(object):
     def __init__(self, filename=""):
         self.fn = filename
 
-    def extract_pdb(self,filename, structname, first_n_frame):
-        '''
-        from a big pdb file to extract single PDB structure file
+    def extract_pdb(self, filename, structname, first_n_frame):
+        """From a big pdb file to extract single PDB structure file
 
-        :param filename:
-        :param structname:
-        :param first_n_frame:
-        :return:
-        '''
+        Parameters
+        ----------
+        filename: str,
+            the input filename
+        structname: str,
+            the output separated filename header
+        first_n_frame: int,
+            only output the first n frames
+
+        Returns
+        -------
+
+        """
 
         lines = open(filename)
         file_no = 1
-        pdbline = open(structname+'_'+str(file_no)+'.pdb','w')
+        pdbline = open(structname+'_'+str(file_no)+'.pdb', 'w')
 
         for s in lines :
 
-            if  "MODEL" in s :
-                if file_no != 1 :
-                    pdbline = open(structname+'_'+str(file_no)+'.pdb','w')
+            if "MODEL" in s:
+                if file_no != 1:
+                    pdbline = open(structname+'_'+str(file_no)+'.pdb', 'w')
                 pdbline.write(s)
                 print("Start Model " + str(file_no))
                 file_no += 1
 
-            elif "ATOM" == s.split()[0] or "TER" == s.split()[0] :
+            elif "ATOM" == s.split()[0] or "TER" == s.split()[0]:
                 pdbline.write(s)
 
-            elif "ENDMDL" in s :
+            elif "ENDMDL" in s:
                 pdbline.write(s)
                 pdbline.close()
 
-            else :
+            else:
                 pass
 
             if first_n_frame != 0 and file_no > first_n_frame + 1 :
-                print( "Extract only the first "+str(first_n_frame))
+                print("Extract only the first "+str(first_n_frame))
                 break
 
-        print( "Finished!\n\n")
+        print("Finished!\n\n")
 
     def extract_frame(self, filename, structname, no_frames=[]):
+        """Extract only selected frames.
+
+        Parameters
+        ----------
+        filename: str,
+            the input pdb filename
+        structname: str,
+            the output separated filename header
+        no_frames: list,
+            the list of frames ids to be extracted
+
+        Returns
+        -------
+
         """
-        extract a list of frames
-        :param filename:
-        :param structname:
-        :param no_frames:
-        :return:
-        """
+
         lines = open(filename)
         print( "The models of the pdb file is : ")
-        for s in lines :
-            if "MODEL" in s :
-                print( "    "+s[:-1])
+        for s in lines:
+            if "MODEL" in s:
+                print("    "+s[:-1])
         lines.close()
 
-        if not len(no_frames) :
-            try :
-                print( "Which frames would you want to extract ? ")
+        if not len(no_frames):
+            try:
+                print("Which frames would you want to extract ? ")
                 frames = input("Input the frame number(s) here (multi numbers are accepted):  ")
-                frame_list = [ int(x) for x in frames.split()]
-            except IOError :
+                frame_list = [int(x) for x in frames.split()]
+            except IOError:
                 print("You haven't select correct frames.")
                 frame_list = []
-        else :
+        else:
             frame_list = no_frames
 
-        for frame_no in frame_list :
+        for frame_no in frame_list:
 
-            lines  = open(filename)
+            lines = open(filename)
             condition = False
-            for s in lines :
-                if "MODEL" in s and int(frame_no) == int(s.split()[1])  :
-                    newline = open(structname+"_"+str(frame_no)+".pdb","w")
+            for s in lines:
+                if "MODEL" in s and int(frame_no) == int(s.split()[1]):
+                    newline = open(structname+"_"+str(frame_no)+".pdb", "w")
                     newline.write(s)
                     condition = True
-                elif "ATOM" in s and condition :
+                elif "ATOM" in s and condition:
                     newline.write(s)
-                elif condition and "ENDMDL" in s :
+                elif condition and "ENDMDL" in s:
                     condition = False
-                elif "MODEL" in s and int(frame_no)+1 == int(s.split()[1]) :
+                elif "MODEL" in s and int(frame_no)+1 == int(s.split()[1]):
                     condition = False
                     break
                 else :
@@ -99,13 +116,16 @@ class ExtractPDB :
             newline.close()
             lines.close()
 
-        print( "Finished writing frames to separated files!\n\n")
+        print("Finished writing frames to separated files!\n\n")
         return 1
 
     def printinfor(self):
         """
-        print instructions
-        :return:
+        Print instructions
+
+        Returns
+        -------
+
         """
 
         d = """
@@ -117,38 +137,45 @@ class ExtractPDB :
         """
 
         print(d)
-        return 1
 
     def indexCoord(self, filename):
-        '''
-        provide a large coordination file, eg, a pdb file or a mol2 file,
+        """Provide a large coordination file, eg, a pdb file or a mol2 file,
         return the indexing of the frames
 
-        :param filename: the file name of a large multiple-frames coordination file
+        Parameters
+        ----------
+        filename: str,
+            the file name of a large multiple-frames coordination file
             either a pdb, a pdbqt or a mol2 file
-        :return: the indexing of the first line of a multiple-frame file
-        '''
+
+        Returns
+        -------
+        indexing: list,
+            the indexing of the first line of a multiple-frame file
+
+        """
+
         indexing = []
-        lineNumber=-1
+        lineNumber = -1
 
         extention = filename.split(".")[-1]
 
-        with open(filename) as lines :
-            if extention in ['pdb', 'pdbqt'] :
+        with open(filename) as lines:
+            if extention in ['pdb', 'pdbqt']:
                 for s in lines :
                     lineNumber += 1
-                    if len(s.split()) > 1 and "MODEL" == s.split()[0] :
+                    if len(s.split()) > 1 and "MODEL" == s.split()[0]:
                         indexing.append(lineNumber)
-            elif extention in ['mol2'] :
+            elif extention in ['mol2']:
                 for s in lines :
                     lineNumber += 1
-                    if "@<TRIPOS>MOLECULE" in s :
+                    if "@<TRIPOS>MOLECULE" in s:
                         indexing.append(lineNumber)
             else:
                 print("Only a pdb file, a pdbqt file or a mol2 file supported.")
                 sys.exit(0)
 
-        return(indexing)
+        return indexing
 
     def extract_all(self, filename, structname):
 
@@ -255,11 +282,14 @@ class ExtractPDB :
         return(options)
 
     def runExtract(self):
-        '''
-        run ExtractPDB class
+        """run ExtractPDB class
         extract frames from a multiple-frames pdb file or mol2 file
-        :return: None
-        '''
+
+        Returns
+        -------
+
+        """
+
         args = self.arguments()
 
         pdbfile = args.input
@@ -291,7 +321,9 @@ class ExtractPDB :
                     self.printinfor()
                     command = input("Your choice:  ")
 
-def main() :
+
+def main():
 
     ext = ExtractPDB("")
     ext.runExtract()
+

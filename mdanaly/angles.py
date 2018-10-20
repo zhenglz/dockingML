@@ -106,7 +106,28 @@ def read_index(ndx, angle_type):
 
     return elements
 
-def arguments():
+
+def descriptions():
+    d = """
+    Calculate angles of a xtc trajectory. This function is simply designed to simulation
+    gmx angle module, but provide a direct way to save the result.
+
+    Examples:
+    Print help information
+    gmx_angles.py -h
+
+    Calculate angles
+    gmx_angles.py -f traj.xtc -n index.ndx -s reference.pdb -o angles.csv -type angle -dt 10 -cos 0
+
+    Calculate dihedral angles
+    gmx_angles.py -f traj.xtc -n index.ndx -s reference.pdb -o dihedral_angles.csv -type dihedral -dt 10 -cos 0
+
+    """
+
+    return d
+
+
+def arguments(d):
     """
     Parse the gmx style command arguments
 
@@ -114,22 +135,6 @@ def arguments():
     -------
     args: Argparser object,
         the argparse object holding the arguement information
-    """
-
-    d = """
-    Calculate angles of a xtc trajectory. This function is simply designed to simulation
-    gmx angle module, but provide a direct way to save the result.
-    
-    Examples:
-    Print help information
-    gmx_angles.py -h
-    
-    Calculate angles
-    gmx_angles.py -f traj.xtc -n index.ndx -s reference.pdb -o angles.csv -type angle -dt 10 -cos 0
-    
-    Calculate dihedral angles
-    gmx_angles.py -f traj.xtc -n index.ndx -s reference.pdb -o dihedral_angles.csv -type dihedral -dt 10 -cos 0
-    
     """
 
     parser = gmxcli.GromacsCommanLine(d)
@@ -203,14 +208,12 @@ def write_angles(angles, fout, cosine, sine, dt=2, begin=0, end=-1):
     return None
 
 
-def gmxangle(args):
+def gmxangle():
     """
     A gromacs g_angle simulator which works the same way as the gromacs tool
 
     Parameters
     ----------
-    args: argparse object,
-        the arguements for input and output as well as the parameters
 
     Returns
     -------
@@ -218,6 +221,8 @@ def gmxangle(args):
         the angles, N is number of frames, M is the number of angles per frame
 
     """
+
+    args = arguments(descriptions())
 
     if os.path.exists(args.f) and os.path.exists(args.n) and os.path.exists(args.s):
 

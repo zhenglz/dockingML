@@ -6,6 +6,7 @@ import sklearn
 from sklearn import decomposition
 from mdanaly import cmap
 from mdanaly import gmxcli
+from mdanaly import angles
 import mdtraj as mt
 
 class tSNE(object):
@@ -563,8 +564,7 @@ def run_pca(dat, proj=10, output="transformed.csv", var_ratio_out="variance_expl
                   X_out=output, variance_out=var_ratio_out, col_index=index_col)
     return None
 
-
-def iterload_cmap(args):
+def gen_cmap(args):
     """
     Load a trajectory file and calculate the atom contactmap.
 
@@ -608,6 +608,32 @@ def iterload_cmap(args):
     return cmap_dat
 
 
+def gen_dihedrals(args):
+    d = """
+    Performing dihedral PCA. 
+    """
+    args = arguments()
+
+    elements = angles.read_index(args.n, angle_type="dihedral")
+
+    dih_angles = np.array([])
+
+    trajs = gmxcli.read_xtc(args.f, args.s, chunk=100, stride=int(args.dt / args.ps))
+
+    for traj in trajs:
+
+        dang = angles.ComputeAngles(traj)
+        if dih_angles.shape == 0:
+            dih_angles = dang.get_dihedral_angles(elements)
+        else:
+            dih_angles = np.concatenate((dih_angles, dang.get_dihedral_angles(elements)))
+
+    dih_angles = pd.DataFrame(dih_angles)
+    dih_angles.index = np.arange(dih_angles.shape[0]) * args.dt
+
+    return dih_angles
+
+
 def cmap_pca(args):
     """
     Perform PCA calculation based on contact map between atoms along the
@@ -624,7 +650,7 @@ def cmap_pca(args):
     """
 
     # contmap is a pd.DataFrame containing the contact map information
-    contmap = iterload_cmap(args)
+    contmap = gen_cmap(args)
     contmap.index = np.arange(contmap.shape[0]) * args.dt
 
     # process the begin end information
@@ -693,6 +719,15 @@ def xyz_pca(args):
     run_pca(dat, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio)
 
 
+def dihedral_pac(args):
+
+    dih_angles = gen_dihedrals(args)
+
+    dih_angles = datset_subset(dih_angles, begin=args.b, end=args.e)
+
+    run_pca(dih_angles, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio)
+
+
 def arguments():
     # prepare gmx style argument for pca calculation
     d = """
@@ -756,8 +791,11 @@ def gmxpca():
         return None
 
     elif args.mode == "cmap":
-        # TODO: to be completed.
         cmap_pca(args=args)
 
         return None
 
+    elif args.mode == "dihedral":
+        dihedral_pac(args=args)
+
+        return None

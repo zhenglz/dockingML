@@ -45,7 +45,7 @@ class GromacsCommanLine(object):
                                          formatter_class=RawTextHelpFormatter)
 
         parser.add_argument("-f", type=str, default="md.xtc",
-                            help="Input. Options: .xtc \n"
+                            help="Input. Options: .xtc, .pdb \n"
                                  "The xtc trajectory file name. ")
         parser.add_argument("-s", type=str, default="reference.pdb",
                             help="Input. Options: .pdb \n"
@@ -53,14 +53,15 @@ class GromacsCommanLine(object):
         parser.add_argument("-n", type=str, default="index.ndx",
                             help="Input, optional. Options: .ndx \n"
                                  "Gromacs type index file, where atom indices information \n"
-                                 "holds for angle calculation.")
+                                 "holds for angle calculation. Default is index.ndx. ")
         parser.add_argument("-o", type=str, default="output.csv",
                             help="Output. Options: .dat, .xvg, .csv \n"
                                  "The output file name. \n"
-                                 "Default is output.csv. ")
+                                 "Default is output.csv, with header and index, \n"
+                                 "as well as the comma separator. ")
         parser.add_argument("-dt", type=int, default=2,
                             help="Input, optional. \n"
-                                 "Skip frame with a gap of dt picoseconds. \n"
+                                 "Skip frames with a gap of dt picoseconds. \n"
                                  "Default is 2. ")
         parser.add_argument("-ps", default=2, type=int,
                             help="Input, optional. \n"

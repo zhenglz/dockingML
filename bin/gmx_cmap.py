@@ -3,5 +3,5 @@
 from mdanaly import cmap
 
 if __name__ == "__main__":
-    cmap.main()
+    cmap.iterload_cmap()
 

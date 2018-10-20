@@ -9,10 +9,10 @@ Generate Gromacs Format Index File
 import sys, os
 from collections import defaultdict
 from collections import OrderedDict
-import argparse
-from argparse import RawTextHelpFormatter
+from mdanaly import gmxcli
 
-class PdbIndex(object) :
+
+class PdbIndex(object):
     """
     Input the residue number sequence, then out put the required index atoms
 
@@ -21,11 +21,23 @@ class PdbIndex(object) :
 
     Attributes
     ----------
-    backbone: list
-    mainchain: list
-    ca: list
-    phi: list
+    backbone: list,
+        residue backbone atom name list
+    mainchain: list,
+        residue mainchain atom name list
+    ca: list,
+        residue alpha carbon atom list
+    phi: list,
+        residue phi torsion angle atom name list
     psi: list
+        residue psi torsion angle atom name list
+
+    Examples
+    --------
+
+    See Also
+    --------
+
     """
 
     def __init__(self):
@@ -179,7 +191,7 @@ class PdbIndex(object) :
 
     def atomList2File(self, atomNdxList, groupName, outputNdxFile, append=True):
         """
-        save a group of atom index into a file
+        Save a group of atom index into a gromacs-format index file
 
         Parameters
         ----------
@@ -333,49 +345,46 @@ class PdbIndex(object) :
         python autoMD.py index -inp S_1.pdb -out index.ndx -at dihedral -chain ' ' -res 78 100 -dihedral PHI
 
         '''
+        parser = gmxcli.GromacsCommanLine(d=d)
 
-        parser = argparse.ArgumentParser(description=d, formatter_class=RawTextHelpFormatter)
-        # parser.add_argument('-h','--help', help="Show this help information. \n")
-        parser.add_argument('-pdb', '--pdbfile',type=str, default='input.pdb',
-                            help="Input PDB file for generating Index. ")
-        parser.add_argument('-out', '--output',type=str, default='output.ndx',
-                            help="Output Index file including atoms sequence number.\n"
-                                 "Default name is output.ndx \n")
-        parser.add_argument('-at', '--atomtype',type=str, default ='allatom',
+        parser.arguments()
+
+        parser.parser.add_argument('-at', '--atomtype',type=str, default ='allatom',
                             help="Selected atom type for generating index. \n"
                                  "Options including: allatom, mainchain, \n"
                                  "non-hydrogen, c-alpha, backbone, sidechain, dihedral\n"
                                  "Default choice is: allatom \n")
-        parser.add_argument('-an','--atomname', type=str, default=[], nargs='+',
+        parser.parser.add_argument('-an','--atomname', type=str, default=[], nargs='+',
                             help="Select atom by atom names. A list of atom names \n"
                                  "could be supplied. If not given, all atom names are \n"
                                  "considered. Default is [].")
-        parser.add_argument('-chain', '--chainId',type=str, default= "A",
+        parser.parser.add_argument('-chain', '--chainId',type=str, default= "A",
                             help="Protein chain identifier. Default chain ID is A. \n")
-        parser.add_argument('-res', '--residueRange',type=int, nargs= '+',
+        parser.parser.add_argument('-res', '--residueRange',type=int, nargs= '+',
                             help="Residue sequence number for index generating. \n"
                                  "Example, -res 1 100, generateing atom index within \n"
                                  "residues 1 to 100. Default is None.")
-        parser.add_argument('-posres', '--positionRestraint',default=False,
+        parser.parser.add_argument('-posres', '--positionRestraint',default=False,
                             help="Generate a postion restraint file for selected index.\n"
                                  "Default name is posres.itp \n")
-        parser.add_argument('-dihe', '--dihedralType',default=None, type =str,
+        parser.parser.add_argument('-dihe', '--dihedralType',default=None, type =str,
                             help="Whether generate dihedral angles index (quadruplex).\n"
                                  "Phi and Psi are considered. Optional choices are: \n"
                                  "PHI, PSI, PHI_PSI, or NA. Default is NA. \n")
-        parser.add_argument('-gn','--groupName', type=str, default=None,
+        parser.parser.add_argument('-gn','--groupName', type=str, default=None,
                             help="The name of the group of atoms selected. \n"
                                  "Default is None.")
-        parser.add_argument('-append', '--appendFile', default=True, type=bool,
+        parser.parser.add_argument('-append', '--appendFile', default=True, type=bool,
                             help="Append the group of index to the output file. \n"
                                  "Options: True, False. \n"
                                  "Default is True.")
 
-        args, unknown = parser.parse_known_args()
+        args = parser.parse_arguments()
 
         # decide to print help message
-        if len(sys.argv) < 3 :# no enough arguements, exit now
-            parser.print_help()
+        if len(sys.argv) < 3:
+            # no enough arguments, exit now
+            parser.parser.print_help()
             print("\nYou chose non of the arguement!\nDo nothing and exit now!\n")
             sys.exit(1)
 
@@ -449,7 +458,8 @@ class PdbIndex(object) :
         print("\nGenerating Index File Completed!")
         return None
 
-class GmxIndex :
+
+class GmxIndex(object):
     """Parse Gromacs Index File
 
     Parameters
@@ -468,14 +478,14 @@ class GmxIndex :
     """
 
     def __init__(self, index):
-        if os.path.exists(index) :
+        if os.path.exists(index):
             self.index = index
         else:
             print("File {} not exists!".format(index))
             sys.exit(0)
 
         self.ndxlines   = open(self.index).readlines()
-        self.groups     = [ x.split()[1] for x in self.ndxlines if ("[" in x and "]" in x) ]
+        self.groups     = [x.split()[1] for x in self.ndxlines if ("[" in x and "]" in x)]
         self.totallines = len(self.ndxlines)
 
     def groupsLineNumber(self):
@@ -493,9 +503,9 @@ class GmxIndex :
         groupLN = OrderedDict()
 
         linecount = 0
-        for s in self.ndxlines :
+        for s in self.ndxlines:
 
-            if "[" in s and "]" in s :
+            if "[" in s and "]" in s:
                 groupLN[s.split()[1]] = linecount
 
             linecount += 1
@@ -521,9 +531,9 @@ class GmxIndex :
 
         start_ln = gln[group] + 1
 
-        if self.groups.index(group) == len(self.groups) - 1 :
+        if self.groups.index(group) == len(self.groups) - 1:
             end_ln = self.totallines - 1
-        else :
+        else:
             end_ln = gln[self.groups[self.groups.index(group) + 1]] - 1
 
         contents = [self.ndxlines[x].strip("\n")+" " for x in range(start_ln, end_ln+1)]
@@ -550,7 +560,8 @@ class GmxIndex :
 
         PdbIndex().atomList2File(elements, group, output)
 
-def main() :
+
+def main():
     """
     Entry_point of the pdb index and gromacs index modules
 
@@ -564,3 +575,4 @@ def main() :
     ndx.genGMXIndex()
 
     return None
+

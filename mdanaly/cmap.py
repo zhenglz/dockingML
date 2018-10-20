@@ -11,16 +11,15 @@
 
 import glob, math, sys, os
 import numpy as np
-import argparse
+import pandas as pd
 
-import dockml
-import mdanaly
+from mdanaly import gmxcli
+from mdanaly import pca
 import dockml.pdbIO as pio
 import dockml.index as ndx
 
 from matplotlib import pyplot as plt
 from collections import defaultdict
-from argparse import RawTextHelpFormatter
 from datetime import datetime
 from mpi4py import MPI
 import mdtraj as mt
@@ -61,11 +60,11 @@ class CoordinatesXYZ(object):
 
     See Also
     --------
-    ContactMapPCA
+
 
     """
 
-    def __init__(self, traj, top, atom_selection="name CA"):
+    def __init__(self, traj, top, atom_selection="CA"):
         self.traj = traj
         self.ref = mt.load(top)
 
@@ -75,7 +74,7 @@ class CoordinatesXYZ(object):
         self.n_atoms_ = self.traj.n_atoms
 
         self.superimposed_ = False
-        self.superpose_atom_indices_ = self.topology.select(atom_selection)
+        self.superpose_atom_indices_ = self.topology.select("name {}".format(atom_selection))
 
         self.xyz = None
 
@@ -118,10 +117,11 @@ class CoordinatesXYZ(object):
             print("Trajectory is not superimposed. Superimpose it to reference now...")
             self.superimpose()
 
+        # subset a trajectory
         traj = self.traj.atom_slice(atom_indices=atom_indices, inplace=False)
 
+        # extract the xyz coordinates
         xyz = traj.xyz
-
         xyz = np.reshape(xyz, (xyz.shape[0], xyz.shape[1]*3))
 
         self.xyz = xyz
@@ -140,39 +140,79 @@ class ContactMap(object):
         self.atom_group_b = group_b
 
         self.atom_pairs_ = None
+        if self.atom_pairs_ is None:
+            self.generate_atom_pairs()
+
         self.dist_matrix_ = None
         self.cmap_ = None
 
         self.distmtx_computed_ = False
+        self.cmap_computed_ = False
 
     def distance_matrix(self):
+        """
+        Calculate the atom distance matrix.
 
-        distmtx = mt.compute_distances(self.traj, atom_pairs=self.atom_pairs_)
+        Returns
+        -------
+        self.dist_matrix_: np.ndarray, shape=[A, B]
+            A is number of atoms in rec, B is number of atoms in lig
 
-        self.dist_matrix_ = distmtx
-        self.distmtx_computed_ = True
+        """
 
-        return distmtx
+        if not self.distmtx_computed_:
+            distmtx = mt.compute_distances(self.traj, atom_pairs=self.atom_pairs_)
+
+            self.dist_matrix_ = distmtx
+            self.distmtx_computed_ = True
+
+        return self.dist_matrix_
 
     def generate_cmap(self, shape='array'):
-        # TODO: generate a contactmap for each frame
+        """
+        Calculate atom cmap data.
+
+        Parameters
+        ----------
+        shape: str,
+            the type of cmap output, array like or matrix like.
+            Default is array. Options are: array, matrix
+
+        Returns
+        -------
+        self.cmap_: np.ndarray, shape=[N, A*B]
+            the output cmap data, with N samples, and A*B elements per sample
+
+        """
         if not self.distmtx_computed_:
             self.distance_matrix()
 
-        cmap = (self.dist_matrix_ <= self.cutoff) * 1.0
+        if not self.cmap_computed_:
+            cmap = (self.dist_matrix_ <= self.cutoff) * 1.0
 
-        if shape == "array":
-            pass
-        elif shape == "matrix":
-            cmap = np.reshape(cmap, (cmap.shape[0], self.atom_group_a.shape[0], self.atom_group_b.shape[0]))
-        else:
-            pass
+            if shape == "array":
+                pass
+            elif shape == "matrix":
+                cmap = np.reshape(cmap, (cmap.shape[0], self.atom_group_a.shape[0],
+                                         self.atom_group_b.shape[0]))
+            else:
+                pass
 
-        self.cmap_ = cmap
+            self.cmap_ = cmap
+            self.cmap_computed_ = True
 
-        return cmap
+        return self.cmap_
 
     def generate_atom_pairs(self):
+        """
+        Generate atom pairs list.
+
+        Returns
+        -------
+        self.atom_pairs: list,
+            the atom pair list, which hold the atoms for distance calculation.
+
+        """
 
         atom_pairs = []
 
@@ -182,7 +222,7 @@ class ContactMap(object):
 
         self.atom_pairs_ = atom_pairs
 
-        return self
+        return self.atom_pairs_
 
 
 class DistanceMatrixMap(ContactMap):
@@ -215,6 +255,7 @@ class CoordinationNumber(ContactMap):
 
 
 class DrawCMap(object):
+
     def __init__(self):
         pass
 
@@ -1032,7 +1073,8 @@ class ContactMap2:
 
         return args
 
-class CommunityCmap :
+
+class CommunityCmap:
 
     def __init__(self, cmap):
         if os.path.isfile(cmap) :
@@ -1151,7 +1193,8 @@ class CommunityCmap :
         print("Total Time Usage: ")
         print(datetime.now() - startTime)
 
-def descriptions() :
+
+def descriptions():
     """
     return descriptions of the script
     :return:
@@ -1201,6 +1244,127 @@ def descriptions() :
 
         '''
     return d
+
+
+def arguments():
+
+    parser = gmxcli.GromacsCommanLine(d=descriptions())
+
+    parser.arguments()
+
+    parser.parser.add_argument('-rc',type=str,nargs='+', default=['A','1','250'],
+                               help="The receptor chains and residue index for Cmap construction.\n"
+                                    "You must enter a chain name, start residue index, and end chain index.\n"
+                                    "Default is: A 1 250 \n")
+    parser.parser.add_argument('-lc', type=str, nargs='+', default=['A','1','250'],
+                               help="The ligand chains and residue index for Cmap construction.\n"
+                                    "You must enter a chain name, start residue index, and end chain index.\n"
+                                    "Default is: B 1 250 \n" )
+    parser.parser.add_argument('-cutoff',type=float,default=0.35,
+                               help="Distance Cutoff for determining contacts. \n"
+                                    "Default is 3.5 (angstrom). \n")
+    parser.parser.add_argument('-atomtype',type=str,nargs='+', default=[],
+                               help="Atom types for Receptor and Ligand in Contact Map Calculation. \n"
+                                    "Only selected atoms will be considered.\n"
+                                    "Options: CA, Backbone, MainChain, All, non-H(All-H), lig-all. \n"
+                                    "CA, alpha-carbon atoms. Backbone, backbone atoms in peptides. \n"
+                                    "MainChain, including CA and N atoms. All, means all atoms.\n"
+                                    "non-H, non-hydrogen atoms, all the heavy atoms. \n"
+                                    "lig-all trys to consider all the atoms of a ligand (H atoms not considered). \n"
+                                    "Two choices should be provided for receptor and ligand respectively. \n"
+                                    "If only one atomtype given, the 2nd will be the same as 1st.\n"
+                                    "Default is: [] \n")
+    parser.parser.add_argument('-atomname1', type=str, nargs='+', default=[],
+                               help="Atom names for Recetpor in Contact Map. \n"
+                                    "Default is []. ")
+    parser.parser.add_argument('-atomname2', type=str, nargs='+', default=[],
+                               help="Atom names for Ligand in Contact Map. \n"
+                                    "Default is []. ")
+    parser.parser.add_argument('-eletype', type=str, nargs="+", default=[],
+                               help="Choose the specific elements for atom indexing to construct the cmap."
+                                    "Default is empty.")
+    parser.parser.add_argument('-switch', type=str, default='True',
+                               help="Apply a switch function for determing Ca-Ca contacts for a smooth transition. \n"
+                                    "Only work with atomtype as CA. Options: True(T, t. TRUE), False(F, f, FALSE) \n"
+                                    "Default is False. \n")
+    parser.parser.add_argument('-np', default=0, type=int,
+                               help='Number of Processers for MPI. Interger value expected. \n'
+                                    'If 4 is given, means using 4 cores or processers.\n'
+                                    'If 1 is given, means not using MPI, using only 1 Core.\n'
+                                    'Default is 1. ')
+    parser.parser.add_argument('-test', default=0, type=int,
+                               help="Do a test with only a number of frames. For example, 4 frames. \n"
+                                    "Default value is 0. ")
+    parser.parser.add_argument('-NbyN', type=bool, default=False,
+                               help="For community analysis, calculate atom contact number, normalized. \n"
+                                    "Default is False.")
+    parser.parser.add_argument('-verbose', default=False , type=bool,
+                               help="Verbose. Default is False.")
+    parser.parser.add_argument('-details', default=None, type=str,
+                              help="Provide detail contact information and write out to a file. \n"
+                                   "Default is None.")
+    parser.parser.add_argument('-opt', default="TimeSeries", type=str,
+                               help="Optional setting controls. Default is TimeSeries. \n"
+                                    "TimeSeries, using splited files and get average cmap.\n"
+                                    "Separated, create time series contact map, suitable for ligand "
+                                    "protein contact information.\n"
+                                    "Options: S(Separated), TS (TimeSeries).\n")
+
+    args = parser.parse_arguments()
+
+    return args
+
+
+def iterload_cmap():
+
+    pwd = os.getcwd()
+    os.chdir(pwd)
+
+    # for calculation time counting
+    startTime = datetime.now()
+
+    # argument options
+    args = arguments()
+
+    contact_map = np.array([])
+
+    # TODO: atom selection method required
+    group_a = np.array([])
+    group_b = np.array([])
+
+    rec_index = np.array([])
+    lig_index = np.array([])
+
+    # read gromacs trajectory
+    trajs = gmxcli.read_xtc(args.f, args.s, chunk=100, stride=int(args.dt/args.ps))
+
+    for traj in trajs:
+        # calculate cmap information
+        contmap = ContactMap(traj, group_a, group_b, cutoff=args.cutoff)
+        contmap.generate_cmap(shape="array")
+        if contact_map.shape[0] == 0:
+            contact_map = contmap.cmap_
+        else:
+            contact_map = np.concatenate((contact_map, contmap.cmap_), axis=1)
+
+    # subset the results
+    contact_map = pd.DataFrame(contact_map)
+    contact_map.index = np.arange(contact_map.shape[0]) * args.dt
+    contact_map = pca.datset_subset(contact_map, args.b, args.e)
+
+    # get mean cmap data
+    results = np.mean(contact_map, axis=0)
+    results = np.reshape(results, (rec_index.shape[0], lig_index.shape[0]))
+
+    # save results to an output file
+    results = pd.DataFrame(results)
+    results.index = rec_index
+    results.columns = lig_index
+
+    results.to_csv(args.o, sep=",", header=True, index=True, float_format="%.3f")
+
+    print("Total Time Usage: ")
+    print(datetime.now() - startTime)
 
 def main() :
     ## change to working directory
