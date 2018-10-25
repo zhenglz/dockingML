@@ -1,7 +1,27 @@
 # -*- coding: utf-8 -*-
 
-def workingflow() :
-    wf = """
+
+class WorkingFlow(object):
+
+    def __init__(self, calc_type):
+        self.calc_type = calc_type
+
+        self.permited_types_ = ["community", "pca", "cmpa"]
+
+    def community_network(self):
+
+        TYPE = "community"
+
+        if self.calc_type in TYPE:
+            print(workingflow(TYPE))
+
+        return None
+
+
+def workingflow(calc_type):
+    working_flow = {}
+
+    comm = """
     Working flow of the network generation
 
     1. Correlation analysis / ContactMap analysis
@@ -22,6 +42,6 @@ def workingflow() :
         Network based graph could be generated using networkx lib in python
 
     """
-    print(wf)
+    working_flow["community"] = comm
 
-    return 1
+    return working_flow[calc_type]

@@ -6,57 +6,98 @@ import sys
 
 class TimeStamp(object):
 
-    def __init__(self):
-        pass
+    """
 
-    def selectDataPoints(self, dataf, upbounds, lowbounds, dt=100, usecols=[0, 1]):
+    Parameters
+    ----------
+    fn: str,
+        the input dataset file.
+
+    Attributes
+    ----------
+
+
+    """
+
+    def __init__(self, fn, with_index=True):
+        self.df = fn
+        self.with_index = with_index
+
+        self.selected_ = None
+
+    def selectDataPoints(self, upbounds, lowbounds, dt=100, usecols=[0, 1]):
+        """Select the time points where values locate in up and low boundaries
+
+        Parameters
+        ----------
+        upbounds: list,
+            the upper bound of the cols
+        lowbounds: list,
+            the lower bound of the cols
+        dt: int,
+            the gap between frames
+        usecols: list
+            the list of cols for input
+
+        Returns
+        -------
+        selected: np.ndarray, shape=[N, M]
+            the selected dataframe, N is number of frames or samples
+            M is the number of dimensions.
+
         """
-        select the time points where values locate in up and low boundaries
-        :param dataf: str, input data file name
-        :param upbounds: list of float, up boundaries for the two cols
-        :param lowbounds:list of float, low boundaries for the two cols
-        :param dt: int, delta time step
-        :param usecols: list of int, using which two cols values
-        :return: ndarray, M*3 shape
-        """
 
-        df = np.loadtxt(dataf, comments="#", usecols=usecols)
-        timestamp = np.arange(df.shape[0]) * dt
+        df = np.loadtxt(self.df, comments=["#", "@"], usecols=set(usecols))
 
-        timestamp = np.array([timestamp]).T
+        if not self.with_index:
+            timestamp = np.arange(df.shape[0]) * dt
+            timestamp = np.array([timestamp]).T
+            # add time stamp information
+            df = np.concatenate((timestamp, df), axis=1)
 
-        # add time stamp information
-        df = np.concatenate((timestamp, df), axis=1)
+            self.with_index = True
 
-        selected = df
+        selected = df.copy()
 
-        for i in range(len(upbounds)) :
-            selected = selected[ selected[:, i+1] < upbounds[i] ]
-            selected = selected[ selected[:, i+1] > lowbounds[i]]
+        for i in range(len(upbounds)):
+            selected = selected[selected[:, i+1] < upbounds[i]]
+            selected = selected[selected[:, i+1] > lowbounds[i]]
+
+        self.selected_ = selected
 
         return selected
 
-    def outputIndex(self, output, groupname, indexes):
-        """
-        output atom index into a gmx index file
-        :param output: str, output index file name
-        :param groupname: str, group name in index file
-        :param indexes: list of interger
-        :return:
+    def outputIndex(self, output, groupname):
+        """Output atom index into a gromacs index file.
+
+        Parameters
+        ----------
+        output: str,
+            the output index file name
+        groupname:
+            the output group name
+
+        Returns
+        -------
+
         """
 
         tofile = open(output, 'a')
-        tofile.write("[ %s ] \n"%(groupname))
+        tofile.write("[ %s ] \n" % groupname)
         i = 0
-        for atom in indexes :
-            i += 1
-            tofile.write('%6d ' % atom)
-            if i % 15 == 0:
-                tofile.write('  \n')
-        tofile.write(" \n")
-        tofile.close()
 
-        return 1
+        if self.with_index:
+            for atom in self.selected_[:, 0]:
+                i += 1
+                tofile.write('%6d ' % atom)
+                if i % 15 == 0:
+                    tofile.write('  \n')
+            tofile.write(" \n")
+            tofile.close()
+        else:
+            print("Index information not provided. Exit now!")
+
+        return None
 
 
 def arguments():
@@ -91,7 +132,7 @@ def arguments():
 
     args = parser.parse_args()
 
-    if len(sys.argv) < 2 :
+    if len(sys.argv) < 2:
         parser.print_help()
         sys.exit(0)
 
@@ -102,21 +143,19 @@ def main():
 
     args = arguments()
 
-    ts = TimeStamp()
+    ts = TimeStamp(args.dat)
 
     print("Selecting data points ... ... ")
 
-    dp = ts.selectDataPoints(args.dat, args.up, args.low, dt=args.dt, usecols=args.cols)
-
-    indexes = dp[:, 0]
+    ts.selectDataPoints(args.up, args.low, dt=args.dt, usecols=args.cols)
 
     if len(args.gn):
-        groupname = args.gn
+        group_name = args.gn
     else :
-        groupname = "+".join([str(x) for x in args.up ]) + "_" + "+".join([str(x) for x in args.low ])
+        group_name = "+".join([str(x) for x in args.up]) + "_" + "+".join([str(x) for x in args.low])
 
     print("Writing data point time stamp ... ... ")
-    ts.outputIndex(args.out, groupname, [int(x) for x in indexes])
+    ts.outputIndex(args.out, group_name)
 
     print("Completed ... ... ")
     sys.exit(1)

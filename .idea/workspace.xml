@@ -2,17 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="modify the PCA module">
-      <change afterPath="$PROJECT_DIR$/bin/gmx_coordnum.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/gmx_angle.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/gmx_angle.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/gmx_cmap.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/gmx_cmap.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dockml/index.py" beforeDir="false" afterPath="$PROJECT_DIR$/dockml/index.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mdanaly/angles.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/angles.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mdanaly/cmap.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/cmap.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mdanaly/coordNum.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/coordNum.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mdanaly/extract.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/extract.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mdanaly/gmxcli.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/gmxcli.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mdanaly/pca.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/pca.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mdanaly/timestamp.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/timestamp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mdanaly/workingflow.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/workingflow.py" afterDir="false" />
     </list>
     <ignored path="dockingML.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -29,9 +21,9 @@
     <session id="-103499696">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="9" />
+          <entry key="project.closed" value="10" />
           <entry key="project.open.time.10" value="3" />
-          <entry key="project.open.time.12" value="1" />
+          <entry key="project.open.time.12" value="3" />
           <entry key="project.open.time.13" value="1" />
           <entry key="project.open.time.14" value="2" />
           <entry key="project.open.time.18" value="2" />
@@ -44,7 +36,7 @@
           <entry key="project.open.time.7" value="1" />
           <entry key="project.open.time.8" value="2" />
           <entry key="project.open.time.9" value="5" />
-          <entry key="project.opened" value="25" />
+          <entry key="project.opened" value="27" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -52,21 +44,21 @@
           <entry key="dat" value="2" />
           <entry key="lib" value="1" />
           <entry key="md" value="1" />
-          <entry key="py" value="76" />
+          <entry key="py" value="78" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="Markdown" value="1" />
           <entry key="PLAIN_TEXT" value="3" />
-          <entry key="Python" value="76" />
+          <entry key="Python" value="78" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Python Console" value="580" />
           <entry key="md" value="1480" />
-          <entry key="py" value="39818" />
+          <entry key="py" value="40954" />
           <entry key="txt" value="518" />
         </counts>
       </usages-collector>
@@ -74,7 +66,7 @@
         <counts>
           <entry key="Markdown" value="1480" />
           <entry key="PLAIN_TEXT" value="518" />
-          <entry key="Python" value="40398" />
+          <entry key="Python" value="41534" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -86,32 +78,9 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/mdanaly/gmxcli.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="68" column="65" lean-forward="true" selection-start-line="68" selection-start-column="65" selection-end-line="68" selection-end-column="65" />
-              <folding>
-                <element signature="e#25#39#0" expanded="true" />
-                <marker date="1539995121462" expanded="true" signature="420:421" ph="..." />
-                <marker date="1539995121462" expanded="true" signature="420:426" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bin/gmx_angle.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" column="20" selection-start-line="7" selection-start-column="20" selection-end-line="7" selection-end-column="20" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mdanaly/pca.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="12869">
+            <state relative-caret-position="13498">
               <caret line="801" selection-start-line="801" selection-end-line="801" />
               <folding>
                 <element signature="e#25#43#0" expanded="true" />
@@ -132,7 +101,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dockml/index.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="9826">
+            <state relative-caret-position="9775">
               <caret line="578" selection-start-line="578" selection-end-line="578" />
               <folding>
                 <element signature="e#109#123#0" expanded="true" />
@@ -141,13 +110,34 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mdanaly/extract.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="833">
-              <caret line="291" lean-forward="true" selection-start-line="291" selection-end-line="291" />
+            <state relative-caret-position="4913">
+              <caret line="291" selection-start-line="291" selection-end-line="291" />
               <folding>
                 <element signature="e#74#84#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/mdanaly/timestamp.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2618">
+              <caret line="157" column="35" selection-start-line="157" selection-start-column="35" selection-end-line="157" selection-end-column="35" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/mdanaly/workingflow.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="342">
+              <caret line="46" column="33" selection-start-line="46" selection-start-column="33" selection-end-line="46" selection-end-column="33" />
+              <folding>
+                <marker date="1540014760700" expanded="true" signature="52:343" ph="..." />
               </folding>
             </state>
           </provider>
@@ -258,7 +248,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/dockml/dataclean.py" />
         <option value="$PROJECT_DIR$/test/test_PRLBD_VS.py" />
         <option value="$PROJECT_DIR$/automd/sumpdb.py" />
         <option value="$PROJECT_DIR$/automd/__init__.py" />
@@ -293,7 +282,6 @@
         <option value="$PROJECT_DIR$/bin/ppdock.py" />
         <option value="$PROJECT_DIR$/bin/genfeatures.py" />
         <option value="$PROJECT_DIR$/bin/timestamp.py" />
-        <option value="$PROJECT_DIR$/mdanaly/timestamp.py" />
         <option value="$PROJECT_DIR$/bin/README.md" />
         <option value="$PROJECT_DIR$/dockml/vinadock.py" />
         <option value="$PROJECT_DIR$/dockml/convert.py" />
@@ -309,6 +297,8 @@
         <option value="$PROJECT_DIR$/mdanaly/gmxcli.py" />
         <option value="$PROJECT_DIR$/dockml/index.py" />
         <option value="$PROJECT_DIR$/mdanaly/extract.py" />
+        <option value="$PROJECT_DIR$/mdanaly/timestamp.py" />
+        <option value="$PROJECT_DIR$/mdanaly/workingflow.py" />
       </list>
     </option>
   </component>
@@ -942,8 +932,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="-1" width="1362" height="641" extended-state="6" />
-    <editor active="true" />
+    <frame x="0" y="0" width="1360" height="636" extended-state="6" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16529544" />
       <window_info id="Structure" order="1" weight="0.25" />
@@ -1045,13 +1034,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/dockml/features.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15419">
-          <caret line="915" column="36" selection-start-line="915" selection-start-column="36" selection-end-line="915" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/automd/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -1208,13 +1190,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/timestamp.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" selection-start-line="5" selection-end-line="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bin/matrix.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1271,9 +1246,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3604">
           <caret line="218" column="11" selection-start-line="218" selection-start-column="11" selection-end-line="218" selection-end-column="11" />
-          <folding>
-            <element signature="e#25#44#0" expanded="true" />
-          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mdanaly/gmxcli.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1071">
+          <caret line="68" column="65" selection-start-line="68" selection-start-column="65" selection-end-line="68" selection-end-column="65" />
         </state>
       </provider>
     </entry>
@@ -1286,7 +1265,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/pca.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="12869">
+        <state relative-caret-position="13498">
           <caret line="801" selection-start-line="801" selection-end-line="801" />
           <folding>
             <element signature="e#25#43#0" expanded="true" />
@@ -1298,6 +1277,33 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
           <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dockml/index.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="9775">
+          <caret line="578" selection-start-line="578" selection-end-line="578" />
+          <folding>
+            <element signature="e#109#123#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mdanaly/extract.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4913">
+          <caret line="291" selection-start-line="291" selection-end-line="291" />
+          <folding>
+            <element signature="e#74#84#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mdanaly/timestamp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2618">
+          <caret line="157" column="35" selection-start-line="157" selection-start-column="35" selection-end-line="157" selection-end-column="35" />
         </state>
       </provider>
     </entry>
@@ -1336,34 +1342,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/gmxcli.py">
+    <entry file="file://$PROJECT_DIR$/mdanaly/workingflow.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="68" column="65" lean-forward="true" selection-start-line="68" selection-start-column="65" selection-end-line="68" selection-end-column="65" />
+        <state relative-caret-position="342">
+          <caret line="46" column="33" selection-start-line="46" selection-start-column="33" selection-end-line="46" selection-end-column="33" />
           <folding>
-            <element signature="e#25#39#0" expanded="true" />
-            <marker date="1539995121462" expanded="true" signature="420:421" ph="..." />
-            <marker date="1539995121462" expanded="true" signature="420:426" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dockml/index.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9826">
-          <caret line="578" selection-start-line="578" selection-end-line="578" />
-          <folding>
-            <element signature="e#109#123#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/extract.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="833">
-          <caret line="291" lean-forward="true" selection-start-line="291" selection-end-line="291" />
-          <folding>
-            <element signature="e#74#84#0" expanded="true" />
+            <marker date="1540014760700" expanded="true" signature="52:343" ph="..." />
           </folding>
         </state>
       </provider>
