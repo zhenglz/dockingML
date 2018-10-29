@@ -129,6 +129,24 @@ class CoordinatesXYZ(object):
 
 
 class ContactMap(object):
+    """
+
+    Parameters
+    ----------
+
+    Attributes
+    ----------
+    atom_group_a: list,
+        the list of atom index for cmap x-axis
+    atom_group_b: list,
+        the list of atom index for cmap y-axis
+    atom_pairs_: ndarray, shape=[N, 2]
+        the atom pairs for distance calculation, N is the number
+        of atom pairs.
+
+    Methods
+    -------
+    """
 
     def __init__(self, traj, group_a, group_b, cutoff=0.35):
 
@@ -139,8 +157,6 @@ class ContactMap(object):
         self.atom_group_b = group_b
 
         self.atom_pairs_ = None
-        if self.atom_pairs_ is None:
-            self.generate_atom_pairs()
 
         self.dist_matrix_ = None
         self.cmap_ = None
@@ -159,13 +175,16 @@ class ContactMap(object):
 
         """
 
+        if not self.atom_pairs_:
+            self.generate_atom_pairs()
+
         if not self.distmtx_computed_:
             distmtx = mt.compute_distances(self.traj, atom_pairs=self.atom_pairs_)
 
             self.dist_matrix_ = distmtx
             self.distmtx_computed_ = True
 
-        return self.dist_matrix_
+        return self
 
     def generate_cmap(self, shape='array'):
         """
@@ -200,7 +219,7 @@ class ContactMap(object):
             self.cmap_ = cmap
             self.cmap_computed_ = True
 
-        return self.cmap_
+        return self
 
     def generate_atom_pairs(self):
         """
@@ -219,7 +238,7 @@ class ContactMap(object):
             for b in self.atom_group_b:
                 atom_pairs.append([a, b])
 
-        self.atom_pairs_ = atom_pairs
+        self.atom_pairs_ = np.array(atom_pairs)
 
         return self.atom_pairs_
 
@@ -1355,11 +1374,11 @@ def iterload_cmap():
     # TODO: atom selection method required
     indx = ndx.PdbIndex()
     group_a = indx.res_index(args.s, args.rc[0], args.atomtype[0], [int(args.rc[1]), int(args.rc[2])], [])
-    group_a = np.array(group_a)
+    #group_a = np.array(group_a)
     group_b = indx.res_index(args.s, args.lc[0], args.atomtype[-1], [int(args.lc[1]), int(args.lc[2])], [])
 
-    rec_index = group_a
-    lig_index = group_b
+    rec_index = int(args.rc[2]) - int(args.rc[1]) + 1
+    lig_index = int(args.lc[2]) - int(args.lc[1]) + 1
 
     # read gromacs trajectory
     trajs = gmxcli.read_xtc(args.f, args.s, chunk=100, stride=int(args.dt/args.ps))
@@ -1367,7 +1386,10 @@ def iterload_cmap():
     for traj in trajs:
         # calculate cmap information
         contmap = ContactMap(traj, group_a, group_b, cutoff=args.cutoff)
+
         contmap.generate_cmap(shape="array")
+        print(contmap.atom_pairs_)
+
         if contact_map.shape[0] == 0:
             contact_map = contmap.cmap_
         else:
@@ -1380,7 +1402,7 @@ def iterload_cmap():
 
     # get mean cmap data
     results = np.mean(contact_map, axis=0)
-    results = np.reshape(results, (rec_index.shape[0], lig_index.shape[0]))
+    results = np.reshape(results, (rec_index, lig_index))
 
     # save results to an output file
     results = pd.DataFrame(results)
