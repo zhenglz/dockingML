@@ -1334,9 +1334,9 @@ def arguments():
                                     "protein contact information.\n"
                                     "Options: S(Separated), TS (TimeSeries).\n")
 
-    args = parser.parse_arguments()
+    parser.parse_arguments()
 
-    return args
+    return parser.args
 
 
 def iterload_cmap():
