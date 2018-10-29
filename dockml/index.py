@@ -47,7 +47,7 @@ class PdbIndex(object):
         self.phi = ['C', 'N', 'CA', 'C']
         self.psi = ['N', 'CA', 'C', 'N']
 
-    def res_index(self, inpdb, chain, atomtype, residueNdx, atomList, dihedraltype="None"):
+    def res_index(self, inpdb, chain, atomtype, residueNdx, atomList, dihedraltype=["None"]):
         """
         Obtain atom index from a reference pdb file
         provide information including: residue indexing, atomtype, atomname
@@ -120,11 +120,11 @@ class PdbIndex(object):
             with open(inpdb) as lines:
                 for s in lines :
                     if len(s.split()) > 1 and s.split()[0] == "ATOM" and s[21] == chain and \
-                                    int(s[22:26].strip()) in resSeqNdx :
-                        if atomtype == "non-hydrogen" :
+                                    int(s[22:26].strip()) in resSeqNdx:
+                        if atomtype == "non-hydrogen":
                             if s[13] != "H" and s.split()[2][0] != "H" and s.split()[-1] != "H" :
                                 indexlist.append(s.split()[1])
-                        elif atomtype == "all-atom" :
+                        elif atomtype == "all-atom":
                             ## all atoms
                             indexlist.append(s.split()[1])
                         elif atomtype == "side-chain-noH" :

@@ -1354,9 +1354,9 @@ def iterload_cmap():
 
     # TODO: atom selection method required
     indx = ndx.PdbIndex()
-    group_a = indx.res_index(args.s, args.rc[0], args.atomtype[0], args.rc[1:], [])
+    group_a = indx.res_index(args.s, args.rc[0], args.atomtype[0], [int(args.rc[1]), int(args.rc[2])], [])
     group_a = np.array(group_a)
-    group_b = indx.res_index(args.s, args.lc[0], args.atomtype[-1], args.lc[1:], [])
+    group_b = indx.res_index(args.s, args.lc[0], args.atomtype[-1], [int(args.lc[1]), int(args.lc[2])], [])
 
     rec_index = group_a
     lig_index = group_b
