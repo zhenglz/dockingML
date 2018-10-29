@@ -228,7 +228,6 @@ class ContactMap(object):
             the atom pair list, which hold the atoms for distance calculation.
 
         """
-
         atom_pairs = []
 
         for a in self.atom_group_a:
