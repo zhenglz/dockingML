@@ -1279,9 +1279,6 @@ def arguments():
                                     "The ligand chains and residue index for Cmap construction.\n"
                                     "You must enter a chain name, start residue index, and end chain index.\n"
                                     "Default is: B 1 250 \n")
-    parser.parser.add_argument("-chain", default=['A', 'A'], type=str, nargs="+",
-                               help="Input, optional. \n"
-                                    "The chain identifiers for receptor and the ligand. Default is A A. ")
     parser.parser.add_argument('-cutoff',type=float,default=0.35,
                                help="Distance Cutoff for determining contacts. \n"
                                     "Default is 3.5 (angstrom). \n")
@@ -1357,9 +1354,9 @@ def iterload_cmap():
 
     # TODO: atom selection method required
     indx = ndx.PdbIndex()
-    group_a = indx.res_index(args.s, args.chain[0], args.rc[-1], args.rc[:-1], [])
+    group_a = indx.res_index(args.s, args.rc[0], args.atomtype[0], args.rc[1:], [])
     group_a = np.array(group_a)
-    group_b = indx.res_index(args.s, args.chain[-1], args.lc[-1], args.lc[:-1], [])
+    group_b = indx.res_index(args.s, args.lc[0], args.atomtype[-1], args.lc[1:], [])
 
     rec_index = group_a
     lig_index = group_b
