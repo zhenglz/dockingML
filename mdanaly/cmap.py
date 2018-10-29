@@ -157,6 +157,7 @@ class ContactMap(object):
         self.atom_group_b = group_b
 
         self.atom_pairs_ = None
+        self.generate_atom_pairs()
 
         self.dist_matrix_ = None
         self.cmap_ = None
@@ -174,9 +175,6 @@ class ContactMap(object):
             A is number of atoms in rec, B is number of atoms in lig
 
         """
-
-        if not self.atom_pairs_:
-            self.generate_atom_pairs()
 
         if not self.distmtx_computed_:
             distmtx = mt.compute_distances(self.traj, atom_pairs=self.atom_pairs_)
