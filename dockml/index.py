@@ -79,10 +79,10 @@ class PdbIndex(object):
         resSeqNdx = []
         if len(residueNdx) == 1 :
             resSeqNdx = range(residueNdx[0], residueNdx[0] +1)
-        elif len(residueNdx) >= 2 and len(residueNdx) % 2 == 0 :
-            for k in range(int(len(residueNdx)/2)) :
+        elif len(residueNdx) >= 2 and len(residueNdx) % 2 == 0:
+            for k in range(int(len(residueNdx)/2)):
                 resSeqNdx += range(residueNdx[k*2], residueNdx[k*2+1]+1)
-        else :
+        else:
             print("Error!! No residue index provided. ")
             resSeqNdx = []
 

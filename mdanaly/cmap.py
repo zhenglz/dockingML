@@ -23,7 +23,6 @@ from collections import defaultdict
 from datetime import datetime
 from mpi4py import MPI
 import mdtraj as mt
-import time
 
 class CoordinatesXYZ(object):
     """
@@ -1074,18 +1073,31 @@ class ContactMap2:
         return args
 
 
-class CommunityCmap:
+class CommunityCmap(object):
 
-    def __init__(self, cmap):
-        if os.path.isfile(cmap) :
-            try :
-                self.cmap = np.loadtxt(cmap, delimiter=",", comments="#")
-            except :
-                self.cmap = np.loadtxt(cmap, delimiter=" ", comments="#")
-        else :
+    def __init__(self, cmap, sep=","):
+
+        if os.path.isfile(cmap):
+            try:
+                self.cmap = np.loadtxt(cmap, delimiter=sep, comments="#")
+            except FileExistsError:
+                print("File %s not exists! " % cmap)
+        else:
             self.cmap = cmap
 
     def icriticalMap(self, icritical, dat):
+        """
+        Calculate whether the icritical number is suitable
+
+        Parameters
+        ----------
+        icritical
+        dat: np.ndarray, shape = [N, M]
+
+        Returns
+        -------
+        True, or False
+        """
 
         map = np.sum(np.greater(dat, icritical), axis=0) / dat.shape[0]
 
@@ -1101,7 +1113,8 @@ class CommunityCmap:
         mtx = matrix.MatrixHandle().neiborhood2zero(xyz, neiborsize=4, outtype='mtx')
 
         np.savetxt(outfile, mtx, fmt="%3.1f", delimiter=" ")
-        return 1
+
+        return mtx
 
     def generateCmap(self):
 
@@ -1193,12 +1206,16 @@ class CommunityCmap:
         print("Total Time Usage: ")
         print(datetime.now() - startTime)
 
-
 def descriptions():
     """
-    return descriptions of the script
-    :return:
+    Generate utility description.
+
+    Returns
+    -------
+    d: str,
+        the description content
     """
+
     d = '''
         ########################################################################
         #  Generating contact probability map                                  #
@@ -1252,19 +1269,25 @@ def arguments():
 
     parser.arguments()
 
-    parser.parser.add_argument('-rc',type=str,nargs='+', default=['A','1','250'],
-                               help="The receptor chains and residue index for Cmap construction.\n"
+    parser.parser.add_argument('-rc', type=str, nargs='+', default=['A', '1', '250'],
+                               help="Input, optional. \n"
+                                    "The receptor chains and residue index for Cmap construction.\n"
                                     "You must enter a chain name, start residue index, and end chain index.\n"
                                     "Default is: A 1 250 \n")
     parser.parser.add_argument('-lc', type=str, nargs='+', default=['A','1','250'],
-                               help="The ligand chains and residue index for Cmap construction.\n"
+                               help="Input, optional. \n"
+                                    "The ligand chains and residue index for Cmap construction.\n"
                                     "You must enter a chain name, start residue index, and end chain index.\n"
-                                    "Default is: B 1 250 \n" )
+                                    "Default is: B 1 250 \n")
+    parser.parser.add_argument("-chain", default=['A', 'A'], type=str, nargs="+",
+                               help="Input, optional. \n"
+                                    "The chain identifiers for receptor and the ligand. Default is A A. ")
     parser.parser.add_argument('-cutoff',type=float,default=0.35,
                                help="Distance Cutoff for determining contacts. \n"
                                     "Default is 3.5 (angstrom). \n")
-    parser.parser.add_argument('-atomtype',type=str,nargs='+', default=[],
-                               help="Atom types for Receptor and Ligand in Contact Map Calculation. \n"
+    parser.parser.add_argument('-atomtype', type=str, nargs='+', default=[],
+                               help="Input, optional. \n"
+                                    "Atom types for Receptor and Ligand in Contact Map Calculation. \n"
                                     "Only selected atoms will be considered.\n"
                                     "Options: CA, Backbone, MainChain, All, non-H(All-H), lig-all. \n"
                                     "CA, alpha-carbon atoms. Backbone, backbone atoms in peptides. \n"
@@ -1275,16 +1298,20 @@ def arguments():
                                     "If only one atomtype given, the 2nd will be the same as 1st.\n"
                                     "Default is: [] \n")
     parser.parser.add_argument('-atomname1', type=str, nargs='+', default=[],
-                               help="Atom names for Recetpor in Contact Map. \n"
+                               help="Input, optional. \n"
+                                    "Atom names for Recetpor in Contact Map. \n"
                                     "Default is []. ")
     parser.parser.add_argument('-atomname2', type=str, nargs='+', default=[],
-                               help="Atom names for Ligand in Contact Map. \n"
+                               help="Input, optional. \n"
+                                    "Atom names for Ligand in Contact Map. \n"
                                     "Default is []. ")
     parser.parser.add_argument('-eletype', type=str, nargs="+", default=[],
-                               help="Choose the specific elements for atom indexing to construct the cmap."
+                               help="Input, optional. \n"
+                                    "Choose the specific elements for atom indexing to construct the cmap."
                                     "Default is empty.")
     parser.parser.add_argument('-switch', type=str, default='True',
-                               help="Apply a switch function for determing Ca-Ca contacts for a smooth transition. \n"
+                               help="Input, optional. \n"
+                                    "Apply a switch function for determing Ca-Ca contacts for a smooth transition. \n"
                                     "Only work with atomtype as CA. Options: True(T, t. TRUE), False(F, f, FALSE) \n"
                                     "Default is False. \n")
     parser.parser.add_argument('-np', default=0, type=int,
@@ -1301,8 +1328,8 @@ def arguments():
     parser.parser.add_argument('-verbose', default=False , type=bool,
                                help="Verbose. Default is False.")
     parser.parser.add_argument('-details', default=None, type=str,
-                              help="Provide detail contact information and write out to a file. \n"
-                                   "Default is None.")
+                               help="Provide detail contact information and write out to a file. \n"
+                                    "Default is None.")
     parser.parser.add_argument('-opt', default="TimeSeries", type=str,
                                help="Optional setting controls. Default is TimeSeries. \n"
                                     "TimeSeries, using splited files and get average cmap.\n"
@@ -1329,11 +1356,13 @@ def iterload_cmap():
     contact_map = np.array([])
 
     # TODO: atom selection method required
-    group_a = np.array([])
-    group_b = np.array([])
+    indx = ndx.PdbIndex()
+    group_a = indx.res_index(args.s, args.chain[0], args.rc[-1], args.rc[:-1], [])
+    group_a = np.array(group_a)
+    group_b = indx.res_index(args.s, args.chain[-1], args.lc[-1], args.lc[:-1], [])
 
-    rec_index = np.array([])
-    lig_index = np.array([])
+    rec_index = group_a
+    lig_index = group_b
 
     # read gromacs trajectory
     trajs = gmxcli.read_xtc(args.f, args.s, chunk=100, stride=int(args.dt/args.ps))
@@ -1366,7 +1395,7 @@ def iterload_cmap():
     print("Total Time Usage: ")
     print(datetime.now() - startTime)
 
-def main() :
+"""def main() :
     ## change to working directory
     pwd = os.getcwd()
     os.chdir(pwd)
@@ -1582,3 +1611,4 @@ def main() :
         print("Contact map calculation completed! Exit Now!")
         MPI.Finalize()
         sys.exit(1)
+"""
