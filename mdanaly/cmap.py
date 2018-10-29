@@ -5,13 +5,14 @@
 # Script for generating contact probability map     #
 # Author: ZHENG Liangzhen                           #
 # Email: LZHENG002@e.ntu.edu.sg                     #
-# Version: V3.2                                     #
+# Version: V4.1                                     #
 # Date: 23 Nov 2017                                 #
 #####################################################
 
 import glob, math, sys, os
 import numpy as np
 import pandas as pd
+import mdanaly
 
 from mdanaly import gmxcli
 from mdanaly import pca
@@ -1216,10 +1217,9 @@ class CommunityCmap(object):
 
         overallValuesList = comm.gather(results, root=0)
         if rank == 0:
-            # np.savetxt("res_sidechain_cmap_nbyn.csv", np.array(overallValuesList), delimiter=',', fmt="%5.3f")
-            pass
-        print("Total Time Usage: ")
-        print(datetime.now() - startTime)
+            print("Total Time Usage: ")
+            print(datetime.now() - startTime)
+
 
 def descriptions():
     """
@@ -1410,220 +1410,3 @@ def iterload_cmap():
     print("Total Time Usage: ")
     print(datetime.now() - startTime)
 
-"""def main() :
-    ## change to working directory
-    pwd = os.getcwd()
-    os.chdir(pwd)
-
-    startTime = datetime.now()
-
-    d = descriptions()
-    # parse arguments
-    parser = argparse.ArgumentParser(description=d, formatter_class=RawTextHelpFormatter)
-    parser.add_argument('-inp', type=str, help="The input huge PDB file with multiple frames")
-    parser.add_argument('-out',type=str, default='ContactMap.dat',
-                        help="The output file name. Default name is ContactMap.dat \n")
-    parser.add_argument('-rc',type=str,nargs='+', default=['A','1','250'],
-                        help="The receptor chains and residue index for Cmap construction.\n"
-                             "You must enter a chain name, start residue index, and end chain index.\n"
-                             "Default is: A 1 250 \n")
-    parser.add_argument('-lc', type=str, nargs='+', default=['A','1','250'],
-                        help="The ligand chains and residue index for Cmap construction.\n"
-                             "You must enter a chain name, start residue index, and end chain index.\n"
-                             "Default is: B 1 250 \n" )
-    parser.add_argument('-cutoff',type=float,default=0.35,
-                        help="Distance Cutoff for determining contacts. \n"
-                             "Default is 3.5 (angstrom). \n")
-    parser.add_argument('-atomtype',type=str,nargs='+', default=[],
-                        help="Atom types for Receptor and Ligand in Contact Map Calculation. \n"
-                             "Only selected atoms will be considered.\n"
-                             "Options: CA, Backbone, MainChain, All, non-H(All-H), lig-all. \n"
-                             "CA, alpha-carbon atoms. Backbone, backbone atoms in peptides. \n"
-                             "MainChain, including CA and N atoms. All, means all atoms.\n"
-                             "non-H, non-hydrogen atoms, all the heavy atoms. \n"
-                             "lig-all trys to consider all the atoms of a ligand (H atoms not considered). \n"
-                             "Two choices should be provided for receptor and ligand respectively. \n"
-                             "If only one atomtype given, the 2nd will be the same as 1st.\n"
-                             "Default is: [] \n")
-    parser.add_argument('-atomname1', type=str, nargs='+', default=[],
-                        help="Atom names for Recetpor in Contact Map. \n"
-                             "Default is []. ")
-    parser.add_argument('-atomname2', type=str, nargs='+', default=[],
-                        help="Atom names for Ligand in Contact Map. \n"
-                             "Default is []. ")
-    parser.add_argument('-eletype', type=str, nargs="+", default=[],
-                        help="Choose the specific elements for atom indexing to construct the cmap."
-                             "Default is empty.")
-    parser.add_argument('-switch', type=str, default='True',
-                        help="Apply a switch function for determing Ca-Ca contacts for a smooth transition. \n"
-                             "Only work with atomtype as CA. Options: True(T, t. TRUE), False(F, f, FALSE) \n"
-                             "Default is False. \n")
-    parser.add_argument('-np', default=0, type=int,
-                        help='Number of Processers for MPI. Interger value expected. \n'
-                             'If 4 is given, means using 4 cores or processers.\n'
-                             'If 1 is given, means not using MPI, using only 1 Core.\n'
-                             'Default is 1. ')
-    parser.add_argument('-test', default=0, type=int,
-                        help="Do a test with only a number of frames. For example, 4 frames. \n"
-                             "Default value is 0. ")
-    parser.add_argument('-NbyN', type=bool, default=False,
-                        help="For community analysis, calculate atom contact number, normalized. \n"
-                             "Default is False.")
-    parser.add_argument('-verbose', default=False , type=bool,
-                        help="Verbose. Default is False.")
-    parser.add_argument('-details', default=None, type=str,
-                        help="Provide detail contact information and write out to a file. \n"
-                             "Default is None."
-                        )
-    parser.add_argument('-opt', default="TimeSeries", type=str,
-                        help="Optional setting controls. Default is TimeSeries. \n"
-                             "TimeSeries, using splited files and get average cmap.\n"
-                             "Separated, create time series contact map, suitable for ligand "
-                             "protein contact information.\n"
-                             "Options: S(Separated), TS (TimeSeries).\n")
-
-    args = parser.parse_args()
-
-    if args.np > 0 :
-
-        # load the large mutiple frame pdb file
-        cmap = ContactMap(args.inp)
-
-        reference = cmap.extractReference()
-
-        # decide to print help message
-        if len(sys.argv) < 2:
-            # no enough arguements, exit now
-            parser.print_help()
-            print( "You chose non of the arguement!\nDo nothing and exit now!\n")
-            sys.exit(1)
-
-        # setup MPI environment
-        comm = MPI.COMM_WORLD
-        size = comm.Get_size()
-        rank = comm.rank
-
-        # define the atoms for contact map constructions
-        atomType = []
-
-        atomName1 = args.atomname1
-        atomName2 = args.atomname2
-
-        if len(args.atomtype) not in [1, 2]:
-            if len(args.eletype) != 0 :
-                atomType = [ cmap.findAtomTypePerEle(args.eletype, reference),
-                             cmap.findAtomTypePerEle(args.eletype, reference) ]
-            elif len(atomName1) and len(atomName2) :
-                atomType = [ args.atomname1, args.atomname2 ]
-            else :
-                print( "Define atom indexing failed")
-                sys.exit(0)
-        else :
-            atomType.append(cmap.findAtomType(args.atomtype[0], reference))
-            atomType.append(cmap.findAtomType(args.atomtype[0 + len(args.atomtype) - 1], reference))
-
-        if atomType == [['CA'],['CA']] :
-            switch = args.switch
-        else :
-            switch = False
-
-        # receptor information about residues
-        rcResNdx = defaultdict(list)
-        round = int(len(args.rc) / 3)
-        rcChains = []
-        for i in range(round):
-            rcResNdx[args.rc[i * 3]] = range(int(args.rc[i * 3 +1]),int(args.rc[i *3+2]) + 1)
-            rcChains.append(args.rc[(i + 1) * 3 - 3])
-
-        # ligand information about residues
-        lcResNdx = defaultdict(list)
-        round = int(len(args.lc) / 3)
-        lcChains = []
-        for i in range(round):
-            lcChains.append(args.lc[i*3])
-            lcResNdx[args.lc[i * 3]] = range(int(args.lc[i * 3 + 1]), int(args.lc[i * 3 + 2]) + 1)
-
-        ## start to construct map
-        receptorAtomNdx = cmap.findAtomNdx(reference, rcResNdx, rcChains, atomType[0], args.verbose)
-        ligandAtomNdx   = cmap.findAtomNdx(reference, lcResNdx, lcChains, atomType[-1], args.verbose)
-
-        if args.verbose :
-            print( "ATOM RES AND CHAIN " * 5)
-            print( lcResNdx, rcResNdx, lcChains, rcChains)
-            print( "ATOM NDX")
-            print( receptorAtomNdx, ligandAtomNdx)
-
-        # report detail interactions, verbose reports
-        if args.details :
-            cmap.subgroupCmap(reference, args.cutoff,
-                              [receptorAtomNdx, ligandAtomNdx],
-                              args.verbose, args.details
-                              )
-        else :
-            if rank == 0:
-                if args.test:
-                    pdbFileList = sorted(cmap.splitPdbFile())[: args.test]
-                else:
-                    pdbFileList = sorted(cmap.splitPdbFile())
-            else:
-                pdbFileList = None
-
-            # board cast the list of files into different threads
-            pdbFileList = comm.bcast(pdbFileList, root=0)
-            totalNumOfFiles = len(pdbFileList)
-
-            if rank == 0 :
-                load4each = int(math.ceil(float(totalNumOfFiles) / float(args.np)))
-                filesList = []
-
-                for i in range(args.np - 1) :
-                    filesList.append(pdbFileList[i * load4each : load4each * (i+1)])
-                filesList.append(pdbFileList[(args.np-1)*load4each:])
-
-                if args.verbose:
-                    print( "Full File List " * 10, pdbFileList, filesList)
-
-                if args.opt in ["S", "Separated", "separated"] :
-                    filesList = [[args.inp,]]
-                    totalNumOfFiles = 1
-            else :
-                filesList = None
-
-            ## scatter data to sub-processers/threads
-            filesList = comm.scatter(filesList, root=0)
-
-            if "lig-all" in args.lc[0] :
-                allatoms = [False, True]
-            else :
-                allatoms = [False, False]
-
-            recNames = cmap.getResidueName(filesList[0], rcResNdx, rcChains, perAtom=allatoms[0])
-            ligNames = cmap.getResidueName(filesList[0], lcResNdx, lcChains, perAtom=allatoms[1])
-
-            Cmap = cmap.cmap_ca(filesList, args.cutoff,switch,
-                                [receptorAtomNdx, ligandAtomNdx],
-                                rank, args.verbose, len(recNames)*len(ligNames),
-                                perAtom=allatoms, ccutoff=1.0, NbyN=args.NbyN
-                                )
-
-            cmap.writeFiles(Cmap, len(filesList), args.out, recNames, ligNames, rank)
-
-            overallValuesList = comm.gather(Cmap, root=0)
-
-            ## once calculation done, wrap up and write data out
-            if rank == 0 :
-                # "Wrap Up and write data to files "
-                final = np.zeros(len(Cmap))
-                for rank_values in overallValuesList :
-                    final += np.asarray(rank_values)
-
-                cmap.writeFiles(final, totalNumOfFiles, args.out, recNames, ligNames, rank='all')
-
-        if rank == 0:
-            print( "Total Time Usage: ")
-            print( datetime.now() - startTime)
-
-        print("Contact map calculation completed! Exit Now!")
-        MPI.Finalize()
-        sys.exit(1)
-"""

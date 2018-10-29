@@ -5,5 +5,5 @@
 
 git add --all
 git commit -m "update cmap"
-git push origin v1.2.0
+git push origin master
 
