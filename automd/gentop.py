@@ -342,7 +342,7 @@ class GenerateTop:
             print("ITP file for %s generated! " % outputName)
         return None
 
-    def runAntechamber(self, infile, netCharge=None):
+    def runAntechamber(self, infile, netCharge=None, filetype="gaff"):
         """
         run antechamber to generate RESP am1/bcc atomic charges, meanwhile the gaff
         parms for bonding and angles are also generated in prep and frcmod files
@@ -391,9 +391,9 @@ class GenerateTop:
 
         # run the antechamber script
         try:
-            job = sp.Popen("sh ./antechamber.sh", shell=True)
+            job = sp.Popen("sh ./antechamber.sh %s %s" % (infile, filetype), shell=True)
             job.communicate()
-        except SystemError :
+        except SystemError:
             print("Run antachamber failed.")
 
         return None

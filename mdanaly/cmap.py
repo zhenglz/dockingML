@@ -697,9 +697,9 @@ def iterload_cmap():
     for traj in trajs:
         # calculate cmap information
         contmap = ContactMap(traj, group_a, group_b, cutoff=args.cutoff)
+        print(contmap.atom_pairs_)
 
         contmap.generate_cmap(shape="array")
-        print(contmap.atom_pairs_)
 
         if contact_map.shape[0] == 0:
             contact_map = contmap.cmap_
@@ -717,8 +717,8 @@ def iterload_cmap():
 
     # save results to an output file
     results = pd.DataFrame(results)
-    results.index = rec_index
-    results.columns = lig_index
+    results.index = range(int(args.rc[1]), int(args.rc[2]) + 1)
+    results.columns = range(int(args.lc[1]), int(args.lc[2]) + 1)
 
     results.to_csv(args.o, sep=",", header=True, index=True, float_format="%.3f")
 

@@ -144,9 +144,9 @@ class SummaryPDB :
                             try :
                                 if ligName and ligName in s:
                                     netCharge += float(s.split()[-1])
-                                elif not ligName :
+                                elif not ligName:
                                     netCharge += float(s.split()[-1])
-                            except ValueError :
+                            except ValueError:
                                 netCharge += 0.0
                                 print("Last column in %s is not a float point charge value."%inputMol)
             elif extension in ['mol2']:
@@ -660,13 +660,13 @@ class FixPDB :
         return(1)
 
     def addhydrogenReduce(self, pdbin, pdbout='outputH.pdb',reduce='reduce', flipH=True,verbose=True):
-        if flipH :
+        if flipH:
             cmd = "%s -FLIP %s > %s " % (reduce, pdbin, pdbout)
-        else :
+        else:
             cmd = "%s -NOFLIP %s > %s " % (reduce, pdbin, pdbout)
         job = sp.check_output(cmd, shell=True)
 
-        if verbose :
+        if verbose:
             print(job)
 
         return 1
