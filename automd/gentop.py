@@ -342,7 +342,7 @@ class GenerateTop:
             print("ITP file for %s generated! " % outputName)
         return None
 
-    def runAntechamber(self, infile, netCharge=None, filetype="gaff"):
+    def runAntechamber(self, infile, netCharge=None, filetype="gaff", amberhome="/app/amber16"):
         """
         run antechamber to generate RESP am1/bcc atomic charges, meanwhile the gaff
         parms for bonding and angles are also generated in prep and frcmod files
@@ -381,9 +381,10 @@ class GenerateTop:
         tofile = open("antechamber.sh", 'w')
         with open(antechamber) as lines:
             for s in lines:
-                if len(s.split()) > 0 and s.split()[0] == "antechamber":
+                if len(s.split()) > 0 and "antechamber" in s.split()[0]:
+                    tofile.write("export AMBERBIN=%s/bin \n" % (amberhome))
                     # antechamber -i in.pdb -fi pdb -o prep.AMBER -fo prepi -at AMBER -pf y -s 2 -c bcc -nc 1
-                    tofile.write("antechamber -i $1 -fi %s -o prep.$2 -fo prepi -at $2 -pf y -s 2 -c bcc -nc %d \n"
+                    tofile.write("$AMBERBIN/antechamber -i $1 -fi %s -o prep.$2 -fo prepi -at $2 -pf y -s 2 -c bcc -nc %d \n"
                                  % (infile.split(".")[-1], netcharge))
                 else:
                     tofile.write(s)
@@ -393,6 +394,7 @@ class GenerateTop:
         try:
             job = sp.Popen("sh ./antechamber.sh %s %s" % (infile, filetype), shell=True)
             job.communicate()
+            print("Run antachamber completed. ")
         except SystemError:
             print("Run antachamber failed.")
 

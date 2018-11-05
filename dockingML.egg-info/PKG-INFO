@@ -1,11 +1,12 @@
 Metadata-Version: 1.0
 Name: dockingML
-Version: 1.0
+Version: 1.2.0
 Summary: Molecular dynamics analysis, Docking and Machine Learning for Computer Aid Drug discovery
 Home-page: https://github.com/zhenglz/dockingML
 Author: zhenglz
 Author-email: zhenglz@outlook.com
 License: GPL-3.0
+Description-Content-Type: UNKNOWN
 Description: # dockingML: a docking, MD, machine learning pipeline for target specific drug discovery
         <p>
         This project includes modules and scripts for docking prepare, docking results post-processing,

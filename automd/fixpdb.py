@@ -8,6 +8,7 @@ import subprocess as sp
 from collections import defaultdict
 
 from dockml import convert
+from rdkit import Chem
 
 # import modeller for loop refinement
 try:
@@ -20,7 +21,7 @@ except ImportError :
 
 class SummaryPDB :
 
-    def __init__(self, pdbfile, aminoLibFile):
+    def __init__(self, pdbfile, aminoLibFile="amino-acid.lib"):
         self.pdbfile = pdbfile
 
         if not os.path.exists(aminoLibFile) :
@@ -125,15 +126,10 @@ class SummaryPDB :
 
         try:
             from rdkit import Chem
-            if extension != "mol2":
 
-                convert.Convert("obabel").convert(input=inputMol,
-                                                  output=inputMol.split(".")[-1]+".mol2",
-                                                  verbose=True)
-                inputMol = inputMol.split(".")[-1]+".mol2"
-
-            m = Chem.MolFromMol2File(inputMol)
-            netCharge = Chem.GetFormalCharge(Mol=m) #Chem.rdmolops.GetFormalCharge(m)
+            m = Chem.MolFromPDBFile(inputMol)
+            netCharge = Chem.GetFormalCharge(m)
+            #netCharge = Chem.rdmolops.GetFormalCharge(m)
 
         except ModuleNotFoundError:
             if extension in ['pdbqt', 'pqr']:

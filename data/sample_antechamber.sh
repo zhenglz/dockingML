@@ -1,14 +1,14 @@
 #!/bin/bash
 
+
 if [ $# -ne 2 ]; then
     echo "Usage: input RED III.1  output, charge & spin & residuNAME read from Mol2"
     echo "Format: file_in(Mol2); atom_type(gaff or amber)"
     exit
 fi
 
-antechamber -i $1 -fi mol2 -o prep.$2 -fo prepi -at $2 -pf y -s 2
-#antechamber -i $1 -fi mol2 -o prep.$2 -fo prepi -at $2 -pf y -s 2 -c resp
-parmchk -i prep.$2 -f prepi -o frcmod.$2 -a Y
+$AMBERBIN/antechamber -i $1 -fi mol2 -o prep.$2 -fo prepi -at $2 -pf y -s 2
+$AMBERBIN/parmchk -i prep.$2 -f prepi -o frcmod.$2 -a Y
 grep need frcmod.$2
 
 if test -f leap.in; then
