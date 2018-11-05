@@ -36,9 +36,10 @@ class GenerateTop:
         self.leapin = "leapIn.in"
 
     def gmxTopBuilder(self, PDBFile, outputName, frcmodFile=None,
-                      prepFile=None, ionName=['Na'], ionNum=[0],
+                      prepFile=None, ionName=['Na', ], ionNum=[0, ],
                       solveBox="TIP3PBOX", boxEdge=15,
                       FField=["AMBER99SB", ], amberhome="/app/amber16",
+                      neutral=False,
                       verbose=True):
         """
         provide a coordination file, output a amber and gromacs topology file.
@@ -76,12 +77,8 @@ class GenerateTop:
         """
 
         # check AMBERHOME PATH
-        try:
-            AMBERHOME = sp.check_output("echo $AMBERHOME", shell=True)
-        except EnvironmentError:
-            print("AMBERHOME is not defined, using the default instead.")
-            AMBERHOME = amberhome
-            #sys.exit(0)
+        #print("AMBERHOME is not defined, using the default instead.")
+        AMBERHOME = amberhome
 
         if verbose:
             print("Here is amber home path: ", AMBERHOME)
@@ -94,26 +91,30 @@ class GenerateTop:
         leap_contents += self.writeFF2File(self.leapin, FField)
 
         # load amber frcmod and prep files
-        if frcmodFile and prepFile:
-            self.writePrepFrcmod2File(prepFile, frcmodFile)
-        else:
-            # prepare PDB file and load it
-            if ".pdb" in PDBFile:
-                leap_contents.append(("pdb = loadPDB  " + PDBFile + "  \n"))
+        if os.path.exists(frcmodFile) and os.path.exists(prepFile):
+            leap_contents += self.writePrepFrcmod2File(prepFile, frcmodFile)
 
-            elif ".mol2" in PDBFile:
-                # convert the mol2 file to pdb file using obabel
-                convert.Convert(obabel="obabel").convert(PDBFile, PDBFile[:-4]+"pdb", verbose=verbose)
-                leap_contents.append(("pdb = loadpdb " + PDBFile[:-4]+"pdb" + "  \n"))
+        # prepare PDB file and load it
+        if ".pdb" in PDBFile[0]:
+            leap_contents.append(("pdb = loadPDB  " + PDBFile[0] + "  \n"))
+
+        elif ".mol2" in PDBFile[0]:
+            # convert the mol2 file to pdb file using obabel
+            convert.Convert(obabel="obabel").convert(PDBFile[0], PDBFile[0][:-4]+"pdb", verbose=verbose)
+            leap_contents.append(("pdb = loadpdb " + PDBFile[0][:-4]+"pdb" + "  \n"))
 
         # input residue sequence to generate topology
-        if len(PDBFile) >= 2 and ".pdb" not in PDBFile[0]:
+        if ".pdb" not in PDBFile[0] and len(PDBFile) > 2 :
             leap_contents += self.writeSequence2File(PDBFile)
 
         # add counter ions and solvate solute into water box
-        self.writeIonInfo2File(ionName, ionNum)
+        leap_contents += self.writeIonInfo2File(ionName, ionNum)
 
-        if solveBox and boxEdge:
+        if neutral:
+            leap_contents.append("addions pdb Na+ 0 \n")
+            leap_contents.append("addions pdb Cl- 0 \n")
+
+        if len(solveBox) and boxEdge > 0 :
             leap_contents.append("solvatebox pdb %s %f \n" % (solveBox, boxEdge))
         else:
             print("\nNot setting simulation box!\n")
@@ -124,17 +125,16 @@ class GenerateTop:
         # write information to a leapin file
         with open(self.leapin, 'w') as tofile:
             for s in leap_contents:
-                tofile.writable(s)
+                tofile.write(s)
 
         if verbose:
             print("Generating a leap input file for tleap topology processing.")
 
         # run tleap
         try:
-            out = sp.check_output("%s/bin/tleap -f %s  \n" % (AMBERHOME, self.leapin), shell=True)
+            job = sp.Popen("%s/bin/tleap -f %s  \n" % (AMBERHOME, self.leapin), shell=True)
             print("Generating amber topology files! ")
-            if verbose:
-                print(out)
+            job.communicate()
         except SystemError:
             print("tleap loading failed! Exit now!")
             sys.exit(0)
@@ -143,11 +143,10 @@ class GenerateTop:
         time.sleep(2)
         if len(self.acpype):
             try:
-                out = sp.check_output("%s -b %s -x %s.prmcrd -p %s.prmtop "
-                                      %(self.acpype, outputName, outputName, outputName)
-                                      )
-                if verbose:
-                    print(out)
+                out = sp.Popen("%s -b %s -x %s.prmcrd -p %s.prmtop "%
+                               (self.acpype, outputName, outputName, outputName),
+                               shell=True)
+                out.communicate()
             except SystemError:
                 print("Converting AMBER files using ACPYPE to GMX failed! ")
         else:
@@ -173,7 +172,7 @@ class GenerateTop:
             elif ff == "AMBER99SB" or "amber99sb" == ff or "99sb" in ff.lower() :
                 leapin.append("source oldff/leaprc.ff99SB  \n")
             elif ff == "AMBER14SB" or "14" in ff:
-                leapin.append("source leaprc.ff14SB  \n")
+                leapin.append("source oldff/leaprc.ff14SB  \n")
             elif "leaprc." in ff:
                 leapin.append("source %s  \n" % ff)
             else:
@@ -210,6 +209,7 @@ class GenerateTop:
 
     def writeIonInfo2File(self, ionnames, ionnum):
         leapin = list()
+        leapin.append("source leaprc.water.tip3p \n")
         if len(ionnames) == len(ionnum) and len(ionnames):
             for i in range(len(ionnum)):
                 leapin.append("addions2 pdb %s %d \n" % (ionnames[i], ionnum[i]))

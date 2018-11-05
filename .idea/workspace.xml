@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="modify the cmap module">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dockingML.iml" afterPath="$PROJECT_DIR$/.idea/dockingML.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+    <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/automd/fixpdb.py" afterPath="$PROJECT_DIR$/automd/fixpdb.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/automd/gentop.py" afterPath="$PROJECT_DIR$/automd/gentop.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/gmx_gentop.py" afterPath="$PROJECT_DIR$/bin/gmx_gentop.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data/sample_antechamber.sh" afterPath="$PROJECT_DIR$/data/sample_antechamber.sh" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockingML.egg-info/PKG-INFO" afterPath="$PROJECT_DIR$/dockingML.egg-info/PKG-INFO" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockingML.egg-info/requires.txt" afterPath="$PROJECT_DIR$/dockingML.egg-info/requires.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mdanaly/cmap.py" afterPath="$PROJECT_DIR$/mdanaly/cmap.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/setup.py" afterPath="$PROJECT_DIR$/setup.py" />
     </list>
     <ignored path="dockingML.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -112,16 +103,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="gentop.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/automd/gentop.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="233">
-              <caret line="396" column="46" lean-forward="false" selection-start-line="396" selection-start-column="46" selection-end-line="396" selection-end-column="46" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="sample_antechamber.sh" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data/sample_antechamber.sh">
           <provider selected="true" editor-type-id="text-editor">
@@ -132,21 +113,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="gmx_gentop.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bin/gmx_gentop.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="54" column="21" lean-forward="true" selection-start-line="54" selection-start-column="21" selection-end-line="54" selection-end-column="21" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="gmxcli.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mdanaly/gmxcli.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="106">
               <caret line="69" column="90" lean-forward="false" selection-start-line="69" selection-start-column="49" selection-end-line="69" selection-end-column="90" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="gmx_ligtop.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/bin/gmx_ligtop.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1717">
+              <caret line="103" column="0" lean-forward="true" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -196,6 +177,16 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="gentop.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/automd/gentop.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1507">
+              <caret line="114" column="51" lean-forward="false" selection-start-line="114" selection-start-column="51" selection-end-line="114" selection-end-column="51" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -207,7 +198,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>datetime</find>
       <find>opt</find>
       <find>shortname</find>
       <find>pdbf</find>
@@ -237,6 +227,7 @@
       <find>formal</find>
       <find>ndx</find>
       <find>amberhome</find>
+      <find>argument</find>
     </findStrings>
     <replaceStrings>
       <replace>fn</replace>
@@ -258,7 +249,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/automd/sumpdb.py" />
         <option value="$PROJECT_DIR$/automd/__init__.py" />
         <option value="$PROJECT_DIR$/automd/shiftpdb.py" />
         <option value="$PROJECT_DIR$/dockml/__init__.py" />
@@ -309,6 +299,7 @@
         <option value="$PROJECT_DIR$/mdanaly/gmxcli.py" />
         <option value="$PROJECT_DIR$/bin/gmx_gentop.py" />
         <option value="$PROJECT_DIR$/automd/gentop.py" />
+        <option value="$PROJECT_DIR$/bin/gmx_ligtop.py" />
       </list>
     </option>
   </component>
@@ -546,13 +537,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1499093997611</updated>
-    </task>
-    <task id="LOCAL-00038" summary="update docstring in gentop module">
-      <created>1539613906089</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1539613906089</updated>
     </task>
     <task id="LOCAL-00039" summary="add a gmx angle simulator for xtc based angles">
       <created>1539620845800</created>
@@ -890,7 +874,14 @@
       <option name="project" value="LOCAL" />
       <updated>1540795176715</updated>
     </task>
-    <option name="localTasksCounter" value="87" />
+    <task id="LOCAL-00087" summary="add ligtop module for ligand topology construction">
+      <created>1541400971083</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1541400971085</updated>
+    </task>
+    <option name="localTasksCounter" value="88" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -901,7 +892,7 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32857144" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1920635" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -972,7 +963,8 @@
     <MESSAGE value="add coordination number module" />
     <MESSAGE value="modify the PCA module" />
     <MESSAGE value="modify the cmap module" />
-    <option name="LAST_COMMIT_MESSAGE" value="modify the cmap module" />
+    <MESSAGE value="add ligtop module for ligand topology construction" />
+    <option name="LAST_COMMIT_MESSAGE" value="add ligtop module for ligand topology construction" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1001,14 +993,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/mdanaly/cmap.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2720">
-          <caret line="176" column="11" lean-forward="false" selection-start-line="176" selection-start-column="11" selection-end-line="176" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bin/extract.py" />
     <entry file="file://$PROJECT_DIR$/bin/index.py" />
     <entry file="file://$PROJECT_DIR$/data/AtomType.dat">
@@ -1234,14 +1218,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/gmxcli.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="106">
-          <caret line="69" column="90" lean-forward="false" selection-start-line="69" selection-start-column="49" selection-end-line="69" selection-end-column="90" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.PyCharmCE2017.2/system/python_stubs/913087099/rdkit/Chem/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1258,10 +1234,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/mdanaly/gmxcli.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="106">
+          <caret line="69" column="90" lean-forward="false" selection-start-line="69" selection-start-column="49" selection-end-line="69" selection-end-column="90" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/automd/gentop.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="233">
-          <caret line="396" column="46" lean-forward="false" selection-start-line="396" selection-start-column="46" selection-end-line="396" selection-end-column="46" />
+        <state relative-caret-position="-1507">
+          <caret line="114" column="51" lean-forward="false" selection-start-line="114" selection-start-column="51" selection-end-line="114" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bin/gmx_ligtop.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1717">
+          <caret line="103" column="0" lean-forward="true" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
           <folding />
         </state>
       </provider>
