@@ -11,7 +11,7 @@ class DsspParser(object):
 
     def __init__(self, dssp_xpm, dt=2, ps=2, res_ndx=[0, 1, 2, 3]):
         self.input = dssp_xpm
-        self.df = None
+        self.df = np.array([])
         self.dt = dt
         self.ps = 2
 
@@ -31,10 +31,10 @@ class DsspParser(object):
 
     def dssp_part(self, b=0, e=-1):
 
-        if not self.df:
+        if not self.df.shape[0]:
             self.read_dssp()
 
-        dat = self.df[self.res_range][:, b:e:self.dt/self.ps]
+        dat = self.df[self.res_range][:, b:e:int(self.dt/self.ps)]
 
         return dat
 

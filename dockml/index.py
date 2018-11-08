@@ -360,7 +360,7 @@ class PdbIndex(object):
                                  "considered. Default is [].")
         parser.parser.add_argument('-chain', '--chainId',type=str, default= "A",
                             help="Protein chain identifier. Default chain ID is A. \n")
-        parser.parser.add_argument('-res', '--residueRange',type=int, nargs= '+',
+        parser.parser.add_argument('-res', '--residueRange', type=int, nargs= '+',
                             help="Residue sequence number for index generating. \n"
                                  "Example, -res 1 100, generateing atom index within \n"
                                  "residues 1 to 100. Default is None.")
@@ -379,7 +379,8 @@ class PdbIndex(object):
                                  "Options: True, False. \n"
                                  "Default is True.")
 
-        args = parser.parse_arguments()
+        parser.parse_arguments()
+        args = parser.args
 
         # decide to print help message
         if len(sys.argv) < 3:

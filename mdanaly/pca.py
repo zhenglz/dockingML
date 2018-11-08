@@ -745,10 +745,11 @@ def arguments():
     parser.parser.add_argument("-mode", type=str, default="general",
                                help="Input, optional. \n"
                                     "The PCA calculation mode. \n"
-                                    "Options: general, xyz, cmap \n"
+                                    "Options: general, xyz, cmap, dihedral \n"
                                     "general: perform general PCA using a well formated dataset file. \n"
                                     "xyz: perform xyz coordinate PCA analysis using a trajectory xtc file. \n"
-                                    "cmap: perform contact map PCA analysis using a trajectory xtc file. ")
+                                    "cmap: perform contact map PCA analysis using a trajectory xtc file. \n"
+                                    "dihedral: perform dihedral PCA calculation using a trajectory xtc file. \n")
     parser.parser.add_argument("-cutoff", default=0.35, type=float,
                                help="Input, optional, it works with mode =cmap \n"
                                     "The distance cutoff for contactmap calculation. Unit is nanometer.\n"

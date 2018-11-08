@@ -17,7 +17,6 @@ import mdanaly
 from mdanaly import gmxcli
 from mdanaly import pca
 import dockml.pdbIO as pio
-#import dockml.index as ndx
 from dockml import index as ndx
 
 from matplotlib import pyplot as plt
