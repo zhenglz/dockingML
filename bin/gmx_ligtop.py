@@ -72,7 +72,7 @@ if __name__ == "__main__":
         pdbin = args.f
 
     # ligand prep and frcmod files
-    ftype = "AMBER"
+    ftype = "gaff"
     frcmod = "frcmod." + ftype
     prep   = "prep." + ftype
 
