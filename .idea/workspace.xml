@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="add parse dssp module">
+    <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="fix bug in pca module">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/gmx_coordnum.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/gmx_coordnum.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/gmx_dssp.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/gmx_dssp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dockingML.egg-info/PKG-INFO" beforeDir="false" afterPath="$PROJECT_DIR$/dockingML.egg-info/PKG-INFO" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dockingML.egg-info/SOURCES.txt" beforeDir="false" afterPath="$PROJECT_DIR$/dockingML.egg-info/SOURCES.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mdanaly/angles.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/angles.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dockml/index.py" beforeDir="false" afterPath="$PROJECT_DIR$/dockml/index.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mdanaly/cmap.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/cmap.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mdanaly/coordNum.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/coordNum.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mdanaly/pca.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/pca.py" afterDir="false" />
     </list>
     <ignored path="dockingML.iws" />
@@ -50,29 +48,29 @@
           <entry key="dat" value="2" />
           <entry key="lib" value="1" />
           <entry key="md" value="1" />
-          <entry key="py" value="88" />
+          <entry key="py" value="91" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="Markdown" value="1" />
           <entry key="PLAIN_TEXT" value="3" />
-          <entry key="Python" value="88" />
+          <entry key="Python" value="91" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Python Console" value="963" />
           <entry key="md" value="1480" />
-          <entry key="py" value="44454" />
-          <entry key="txt" value="546" />
+          <entry key="py" value="45565" />
+          <entry key="txt" value="568" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Markdown" value="1480" />
-          <entry key="PLAIN_TEXT" value="546" />
-          <entry key="Python" value="45417" />
+          <entry key="PLAIN_TEXT" value="568" />
+          <entry key="Python" value="46528" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -83,18 +81,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bin/gmx_ligtop.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="61" column="107" selection-start-line="61" selection-start-column="107" selection-end-line="61" selection-end-column="107" />
-              <folding>
-                <element signature="e#23#56#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mdanaly/dssp.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -122,8 +108,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mdanaly/cmap.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-163">
-              <caret line="200" column="8" selection-start-line="200" selection-start-column="8" selection-end-line="200" selection-end-column="8" />
+            <state relative-caret-position="176">
+              <caret line="680" column="57" selection-start-line="680" selection-start-column="57" selection-end-line="680" selection-end-column="57" />
               <folding>
                 <element signature="e#426#452#0" expanded="true" />
               </folding>
@@ -131,13 +117,44 @@
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bin/gmx_coordnum.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="102">
+              <caret line="6" column="23" selection-start-line="6" selection-start-column="23" selection-end-line="6" selection-end-column="23" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/mdanaly/coordNum.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="340">
+              <caret line="80" column="79" selection-start-line="80" selection-start-column="79" selection-end-line="80" selection-end-column="79" />
+              <folding>
+                <element signature="e#25#49#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bin/gmx_cmap.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="85">
+              <caret line="5" column="15" selection-start-line="5" selection-start-column="15" selection-end-line="5" selection-end-column="15" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mdanaly/pca.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-6868">
-              <caret line="384" column="19" selection-start-line="384" selection-start-column="19" selection-end-line="384" selection-end-column="19" />
+            <state relative-caret-position="-678">
+              <caret line="306" column="53" selection-start-line="306" selection-start-column="53" selection-end-line="306" selection-end-column="53" />
               <folding>
                 <element signature="e#25#43#0" expanded="true" />
+                <element signature="e#238#6233#0" />
               </folding>
             </state>
           </provider>
@@ -155,8 +172,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dockml/index.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="279">
-              <caret line="431" column="26" selection-start-line="431" selection-start-column="26" selection-end-line="431" selection-end-column="26" />
+            <state relative-caret-position="245">
+              <caret line="142" column="62" selection-start-line="142" selection-start-column="62" selection-end-line="142" selection-end-column="62" />
             </state>
           </provider>
         </entry>
@@ -173,28 +190,6 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/automd/gentop.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6987">
-              <caret line="418" selection-start-line="418" selection-end-line="418" />
-              <folding>
-                <element signature="e#25#39#0" expanded="true" />
-                <marker date="1541605427408" expanded="true" signature="13411:14158" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/-1360645440/rdkit/Chem/rdmolops.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6970">
-              <caret line="410" column="8" selection-start-line="410" selection-start-column="8" selection-end-line="410" selection-end-column="8" />
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -206,9 +201,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>combine</find>
-      <find>clean</find>
-      <find>extr</find>
       <find>case</find>
       <find>net</find>
       <find>threshold</find>
@@ -228,14 +220,17 @@
       <find>formal</find>
       <find>ndx</find>
       <find>amberhome</find>
-      <find>argument</find>
       <find>hydrogen</find>
       <find>sp</find>
       <find>addh</find>
-      <find>args.out</find>
       <find>index</find>
       <find>pca</find>
       <find>dihedra</find>
+      <find>distmtx</find>
+      <find>argument</find>
+      <find>generate_atom_pairs</find>
+      <find>args.out</find>
+      <find>reshape</find>
     </findStrings>
     <replaceStrings>
       <replace>fn</replace>
@@ -288,7 +283,6 @@
         <option value="$PROJECT_DIR$/dockml/dock.py" />
         <option value="$PROJECT_DIR$/automd/autoMD.py" />
         <option value="$PROJECT_DIR$/bin/gmx_coordnum.py" />
-        <option value="$PROJECT_DIR$/mdanaly/coordNum.py" />
         <option value="$PROJECT_DIR$/bin/gmx_cmap.py" />
         <option value="$PROJECT_DIR$/bin/gmx_angle.py" />
         <option value="$PROJECT_DIR$/mdanaly/extract.py" />
@@ -304,10 +298,11 @@
         <option value="$PROJECT_DIR$/bin/gmx_ligtop.py" />
         <option value="$PROJECT_DIR$/mdanaly/__init__.py" />
         <option value="$PROJECT_DIR$/mdanaly/dssp.py" />
-        <option value="$PROJECT_DIR$/dockml/index.py" />
         <option value="$PROJECT_DIR$/mdanaly/angles.py" />
-        <option value="$PROJECT_DIR$/mdanaly/cmap.py" />
         <option value="$PROJECT_DIR$/mdanaly/pca.py" />
+        <option value="$PROJECT_DIR$/dockml/index.py" />
+        <option value="$PROJECT_DIR$/mdanaly/cmap.py" />
+        <option value="$PROJECT_DIR$/mdanaly/coordNum.py" />
       </list>
     </option>
   </component>
@@ -594,13 +589,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1499093997611</updated>
-    </task>
-    <task id="LOCAL-00044" summary="add a gmx angle simulator for xtc based angles">
-      <created>1539671507753</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1539671507754</updated>
     </task>
     <task id="LOCAL-00045" summary="add a gmx angle simulator for xtc based angles">
       <created>1539671536081</created>
@@ -938,7 +926,14 @@
       <option name="project" value="LOCAL" />
       <updated>1541650065149</updated>
     </task>
-    <option name="localTasksCounter" value="93" />
+    <task id="LOCAL-00093" summary="fix bug in pca module">
+      <created>1541658022070</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1541658022073</updated>
+    </task>
+    <option name="localTasksCounter" value="94" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1022,14 +1017,15 @@
     <MESSAGE value="modify the cmap module" />
     <MESSAGE value="add ligtop module for ligand topology construction" />
     <MESSAGE value="add parse dssp module" />
-    <option name="LAST_COMMIT_MESSAGE" value="add parse dssp module" />
+    <MESSAGE value="fix bug in pca module" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix bug in pca module" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/mdanaly/cmap.py</url>
-          <line>431</line>
+          <line>424</line>
           <option name="timeStamp" value="13" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1179,8 +1175,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/coordNum.py" />
-    <entry file="file://$PROJECT_DIR$/bin/gmx_coordnum.py" />
     <entry file="file://$PROJECT_DIR$/mdanaly/matrix.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2193">
@@ -1188,7 +1182,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bin/gmx_cmap.py" />
     <entry file="file://$USER_HOME$/.PyCharmCE2017.2/system/python_stubs/913087099/rdkit/Chem/rdmolops.py" />
     <entry file="file://$USER_HOME$/.PyCharmCE2017.2/system/python_stubs/913087099/rdkit/Chem/__init__.py" />
     <entry file="file://$PROJECT_DIR$/bin/gmx_gentop.py" />
@@ -1284,13 +1277,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dockml/index.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="279">
-          <caret line="431" column="26" selection-start-line="431" selection-start-column="26" selection-end-line="431" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/angles.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-51">
@@ -1305,22 +1291,54 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/bin/gmx_cmap.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="15" selection-start-line="5" selection-start-column="15" selection-end-line="5" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mdanaly/pca.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-678">
+          <caret line="306" column="53" selection-start-line="306" selection-start-column="53" selection-end-line="306" selection-end-column="53" />
+          <folding>
+            <element signature="e#25#43#0" expanded="true" />
+            <element signature="e#238#6233#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bin/gmx_coordnum.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="23" selection-start-line="6" selection-start-column="23" selection-end-line="6" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dockml/index.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="245">
+          <caret line="142" column="62" selection-start-line="142" selection-start-column="62" selection-end-line="142" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/cmap.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-163">
-          <caret line="200" column="8" selection-start-line="200" selection-start-column="8" selection-end-line="200" selection-end-column="8" />
+        <state relative-caret-position="176">
+          <caret line="680" column="57" selection-start-line="680" selection-start-column="57" selection-end-line="680" selection-end-column="57" />
           <folding>
             <element signature="e#426#452#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/pca.py">
+    <entry file="file://$PROJECT_DIR$/mdanaly/coordNum.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-6868">
-          <caret line="384" column="19" selection-start-line="384" selection-start-column="19" selection-end-line="384" selection-end-column="19" />
+        <state relative-caret-position="340">
+          <caret line="80" column="79" selection-start-line="80" selection-start-column="79" selection-end-line="80" selection-end-column="79" />
           <folding>
-            <element signature="e#25#43#0" expanded="true" />
+            <element signature="e#25#49#0" expanded="true" />
           </folding>
         </state>
       </provider>

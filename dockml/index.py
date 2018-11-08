@@ -116,9 +116,9 @@ class PdbIndex(object):
                     indexlist.append(psipair)
                 if "PSI" in dihedraltype:
                     indexlist.append(phipair)
-        else :
+        else:
             with open(inpdb) as lines:
-                for s in lines :
+                for s in lines:
                     if len(s.split()) > 1 and s.split()[0] == "ATOM" and s[21] == chain and \
                                     int(s[22:26].strip()) in resSeqNdx:
                         if atomtype == "non-hydrogen":
@@ -139,7 +139,7 @@ class PdbIndex(object):
                             if s[12:16].strip() not in self.mainchain :
                                 indexlist.append(s.split()[1])
                         else:
-                            if s[12:16].strip() in atomList :
+                            if s[12:16].strip() in atomList:
                                 indexlist.append(s.split()[1])
         return indexlist
 
@@ -166,25 +166,25 @@ class PdbIndex(object):
         if atomname :
             atomList = atomname
         else :
-            if "mainchain" in atomtype or "Main" in atomtype or "main" in atomtype :
+            if "mainchain" in atomtype or "Main" in atomtype or "main" in atomtype:
                 atomList = self.mainchain
 
-            elif "CA" in atomtype or "ca" in atomtype or "Ca" in atomtype or "alpha" in atomtype :
+            elif "CA" in atomtype or "ca" in atomtype or "Ca" in atomtype or "alpha" in atomtype:
                 atomList = self.ca
 
-            elif "backbone" in atomtype or "Back" in atomtype or "bone" in atomtype :
+            elif "backbone" in atomtype or "Back" in atomtype or "bone" in atomtype:
                 atomList = self.backbone
 
-            elif "all" in atomtype :
+            elif "all" in atomtype:
                 atomtype = "all-atom"
 
-            elif "no hy" in atomtype or "non-hy" in atomtype :
+            elif "no hy" in atomtype or "non-hy" in atomtype or "heavy":
                 atomtype = "non-hydrogen"
 
-            elif "side" in atomtype or "Sidechain" in atomtype or "sidechain" in atomtype :
+            elif "side" in atomtype or "Sidechain" in atomtype or "sidechain" in atomtype:
                 atomtype = "side-chain"
 
-            elif "PSI" in atomtype or "PHI" in atomtype or "phi" in atomtype or 'psi' in atomtype :
+            elif "PSI" in atomtype or "PHI" in atomtype or "phi" in atomtype or 'psi' in atomtype:
                 atomtype = "dihedral"
 
         return atomList, atomtype

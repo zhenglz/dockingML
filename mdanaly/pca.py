@@ -305,6 +305,8 @@ class PCA(object):
 
         # using sklearn, perform PCA analysis based on scaled dataset
         print("Perform PCA decompostion now ...... ")
+        if self.n_components > self.X_scaled.shape[1]:
+            self.n_components = self.X_scaled.shape[1]
         pca_obj = decomposition.PCA(n_components=self.n_components)
         pca_obj.fit(self.X_scaled)
 
@@ -617,14 +619,16 @@ def gen_dihedrals(args):
     d = """
     Performing dihedral PCA. 
     """
-    args = arguments()
+    args = arguments(d=d)
 
     elements = angles.read_index(args.n, angle_type="dihedral")
 
     dih_angles = np.array([])
 
+    print("Loading xtc trajectory file now ......")
     trajs = gmxcli.read_xtc(args.f, args.s, chunk=100, stride=int(args.dt / args.ps))
 
+    print("Calculating dihedral angles ...... ")
     for traj in trajs:
         dang = angles.ComputeAngles(traj)
         if dih_angles.shape[0] == 0:
@@ -723,28 +727,29 @@ def xyz_pca(args):
     run_pca(dat, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio)
 
 
-def dihedral_pac(args):
+def dihedral_pca(args):
+    """
+    Perform PCA calculation based on dihedral angles
+
+    Parameters
+    ----------
+    args: Argparse object
+        the arguments used for calculation.
+
+    Returns
+    -------
+
+    """
 
     dih_angles = gen_dihedrals(args)
-
-    print(dih_angles.shape)
-
     dih_angles = datset_subset(dih_angles, begin=args.b, end=args.e)
 
-
+    # perform PCA calculation
     run_pca(dih_angles, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio)
 
 
-def arguments():
+def arguments(d="Descriptions."):
     # prepare gmx style argument for pca calculation
-    d = """
-    Perform PCA analysis of the xyz coordinates of selected atoms
-
-    Example: 
-    Print help information
-    gmx_pca.py -h
-
-    """
     parser = gmxcli.GromacsCommanLine(d=d)
 
     parser.arguments()
@@ -785,25 +790,21 @@ def arguments():
 
 
 def gmxpca():
-
-    args = arguments()
+    d = """
+    Perform PCA calculation. 
+    """
+    args = arguments(d=d)
 
     if args.mode == "xyz":
         xyz_pca(args=args)
 
-        return None
-
     elif args.mode == "general":
         general_pca(args=args)
-
-        return None
 
     elif args.mode == "cmap":
         cmap_pca(args=args)
 
-        return None
-
     elif args.mode == "dihedral":
-        dihedral_pac(args=args)
+        dihedral_pca(args=args)
 
-        return None
+    return None
