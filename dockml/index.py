@@ -419,13 +419,13 @@ class PdbIndex(object):
             atomlist,atomtype = self.atomList(args.atomtype, args.atomname)
 
         ## generate index
-        atomndx = self.res_index(inpdb=args.pdbfile, chain=args.chainId,
-                                 residueNdx= args.residueRange, atomList=atomlist,
+        atomndx = self.res_index(inpdb=args.f, chain=args.chainId,
+                                 residueNdx=args.residueRange, atomList=atomlist,
                                  atomtype=atomtype, dihedraltype=args.dihedralType
                                  )
         if args.appendFile:
             append = 'a'
-        else :
+        else:
             append = 'wb'
         tofile = open(args.output, append)
 
