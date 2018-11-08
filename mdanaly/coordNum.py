@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from dockml import index
-from dockml import pdbIO
-import mdtraj as mt
-import numpy as np
 from mdanaly import gmxcli
 from mdanaly import cmap
 import pandas as pd
-from dockml import index as ndx
+import numpy as np
 
 
 def arguments():
@@ -15,7 +12,9 @@ def arguments():
     Calculate coordination number between molecules. 
     
     Examples:
-    
+    Caculate the coordination number between two parts in a system only considering non hydrogen atoms
+    gmx_coordnum.py -f test_traj_dt1ns.xtc -s reference.pdb -o coordnum -rc " " 1 41 
+                    -lc " " 42 137 -atomtype heavy heavy -dt 4
     
     """
 
@@ -49,10 +48,10 @@ def run_coord_number():
 
     # TODO: define a way to select atom slices
     # define the atom indices
-    indx = ndx.PdbIndex()
+    indx = index.PdbIndex()
     atomList, atomType = indx.atomList(args.atomtype[0], atomname=[])
     group_a = indx.res_index(args.s, args.rc[0], atomType, [int(args.rc[1]), int(args.rc[2])], atomList,)
-    #group_a = np.array(group_a)
+
     atomList, atomType = indx.atomList(args.atomtype[1], atomname=[])
     group_b = indx.res_index(args.s, args.lc[0], atomType, [int(args.lc[1]), int(args.lc[2])], atomList, )
 

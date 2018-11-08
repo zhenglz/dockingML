@@ -107,7 +107,10 @@ the following in your $HOME/.bashrc file:</p>
 #### export PATH=$HOME/applications/python2.7/lib/python2.7/site-packages/dockingML/bin:$PATH
 
 <p> to generate cmap</p>
-<p> $ cmap.py -h  </p>
-<p> $ cmap.py -inp protein.pdb -out cmap.dat </p>
-<p> $ cmap.py -inp protein.pdb </p>
+<p> $ gmx_cmap.py -h  </p>
+<p> $ gmx_cmap.py -inp protein.pdb -out cmap.dat </p>
+<p> $ gmx_cmap.py -inp protein.pdb </p>
+<img src="./data/example_cmap.png" alt="example contactmap">
 
+### community network work analysis example
+#### working flow:

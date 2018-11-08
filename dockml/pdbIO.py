@@ -3,7 +3,6 @@
 import os
 import numpy as np
 import pandas as pd
-import linecache
 from collections import defaultdict
 
 
@@ -70,13 +69,13 @@ class rewritePDB(object):
         newline = inline[:22] + resseqstring + inline[26:]
         return newline
 
-    def atomSeqChanger(self, inline, atomseq) :
+    def atomSeqChanger(self, inline, atomseq):
         atomseqstring = " " * (5 - len(str(atomseq))) + str(atomseq)
         newline = inline[:6] + atomseqstring + inline[11:]
         return newline
 
-    def resNameChanger(self, inline, resname) :
-        resnamestr = " " * ( 4 - len(str(resname) ) ) + str(resname)
+    def resNameChanger(self, inline, resname):
+        resnamestr = " " * (4 - len(str(resname))) + str(resname)
         newline = inline[:17] + resnamestr + inline[20:]
         return newline
 
@@ -84,12 +83,22 @@ class rewritePDB(object):
         newline = inline[:21] + str(chainid) + inline[22:]
         return newline
 
+    def atomNameChanger(self, inline, new_atom_name):
+        newline = inline[:12] + "%4s" % new_atom_name + inline[16:]
+        return newline
+
     def combinePDBFromLines(self, output, lines):
         """
         combine a list of lines to a pdb file
-        :param output:
-        :param lines:
-        :return:
+
+        Parameters
+        ----------
+        output
+        lines
+
+        Returns
+        -------
+
         """
 
         with open(output, "wb") as tofile :
@@ -130,7 +139,7 @@ class rewritePDB(object):
                 ln_source += 1
 
         # reorder the crd_pdb pdblines, according to the atomseq_pdb lines
-        with open(atomseq_pdb) as lines :
+        with open(atomseq_pdb) as lines:
             for s in [x for x in lines if ("ATOM" in x or "HETATM" in x)]:
                 newline = crd_list[s.split()[2]]
                 tofile.write(newline)
@@ -139,7 +148,6 @@ class rewritePDB(object):
         tofile.close()
 
         if ln_source != ln_target:
-            #pwd = os.getcwd()
             print("Error: Number of lines in source and target pdb files are not equal. (%s %s)"%(input, atomseq_pdb))
 
         # re-sequence the atom index
@@ -149,7 +157,9 @@ class rewritePDB(object):
 
         return None
 
-class parsePDB :
+
+class parsePDB(object):
+
     """
     parse pdb file
     """
@@ -173,6 +183,7 @@ class parsePDB :
             self.nucleic = PROJECT_ROOT + '/../data/nucleic-acid.lib'
 
     def readDomainRes(self, filein):
+
         '''
         load the domain data file, return a list of domain residue information
         :param filein:

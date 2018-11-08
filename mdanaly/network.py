@@ -3,67 +3,112 @@
 import numpy as np
 from matplotlib import pyplot as plt
 import networkx as nx
-
 import collections
-import os, sys
+import os
+import sys
 import argparse
 from argparse import RawTextHelpFormatter
-
 from dockml import pdbIO
 
-class CommunityHandler :
-    def __init__(self) :
+
+class CommunityHandler(object):
+
+    def __init__(self):
         pass
 
     def readCommunityFile(self, filein, nres_cutoff=6):
         """
         read community output file, set a cutoff for least number of community
+
+        Parameters
+        ----------
+        filein: str,
+            the commu file generated using gncommunities
+        nres_cutoff: int,
+            when a node with few residues (<nres_cutoff), ignore the node
+
+        Returns
+        -------
+        comm: list,
+            the communities and their related residues index (starting from zero)
+
         """
         comm = []
-        with open(filein) as lines :
-            for s in lines :
-                if "The residues in community" in s :
+        with open(filein) as lines:
+            for s in lines:
+                if "The residues in community" in s:
                     resi = s.split(":")[-1].split()
-                    resi = [ (int(x)) for x in resi ]
-                    if len(resi) >= nres_cutoff :
+                    resi = [(int(x)) for x in resi]
+                    if len(resi) >= nres_cutoff:
                         comm.append(resi)
         return comm
 
 
-class ParseCommunity :
+class ParseCommunity(object):
+    """
+    Parse community information.
+
+    Parameters
+    ----------
+    commu: str,
+        the commu file generated using gncommunities
+
+    Attributes
+    ----------
+    community: str,
+        the commu file generated using gncommunities
+
+    Methods
+    -------
+
+    """
 
     def __init__(self, commu):
         self.community = commu
 
-        if not os.path.exists(self.community) :
+        if not os.path.exists(self.community):
             print("File not exists: ", self.community)
             sys.exit(0)
 
     def parseCommunities(self):
         """
         input a community information file, return the community data
-        :param filen (self.community): str, a output community information from gncommunities software
-        :return: tuple, ( number_of_communities, { commu_id : residue list })
+
+        Returns
+        -------
+        community, modularity: tuple, ( number_of_communities, { commu_id : residue list })
         """
+
         modularity = 0.0
         community = collections.defaultdict(list)
-        with open(self.community) as lines :
-            for s in lines :
-                if "The optimum number of communities" in s :
+        with open(self.community) as lines:
+            for s in lines:
+                if "The optimum number of communities" in s:
                     #no_commu = int(s.split()[6])
                     modularity = float(s.split()[-1])
 
-                elif "The residues in community" in s :
+                elif "The residues in community" in s:
                     community[int(s.split()[4])] = [int(x) for x in s.split(":")[-1].split()]
 
-        return (community, modularity)
+        return community, modularity
 
     def genNodeEdges(self, filein, community, output=""):
         """
         input a betweenness file, return community information
-        :param filein: str, betweeness data set, matrix format
-        :param community: list, community compositions, list of lists
-        :return: a betweenness summed community matrix
+
+        Parameters
+        ----------
+        filein: str,
+            betweeness data set, matrix format
+        community: list,
+            community compositions, list of lists
+        output: str,
+            the output file name
+
+        Returns
+        -------
+        commu:
+            a betweenness summed community matrix
         """
 
         dat = np.loadtxt(filein, comments="#")
@@ -71,14 +116,14 @@ class ParseCommunity :
 
         commbetw = []
 
-        for comm1 in community :
-            for comm2 in community :
-                if comm1 == comm2 :
+        for comm1 in community:
+            for comm2 in community:
+                if comm1 == comm2:
                     commbetw += [0.0]
                 else :
                     btw = 0.0
-                    for i in comm1 :
-                        for j in comm2 :
+                    for i in comm1:
+                        for j in comm2:
                             btw += dat[i][j]
                     commbetw += [btw]
 
@@ -89,7 +134,9 @@ class ParseCommunity :
 
         return commu
 
-class NetworkPrepare :
+
+class NetworkPrepare(object):
+
     def __init__(self):
         pass
 
@@ -156,7 +203,9 @@ class NetworkPrepare :
 
         return (ratio_indomain, ratio_outof)
 
-class NetworkDraw :
+
+class NetworkDraw(object):
+
     def __init__(self):
         pass
 
@@ -232,16 +281,17 @@ class NetworkDraw :
         for x in nodes:
             node_labels[x] = str(x)
         edge_widths = []
-        t = [ edge_widths.append(x[2]) for x in node_edges ]
+        t = [edge_widths.append(x[2]) for x in node_edges]
         edge_widths = [x * lwfactor for x in edge_widths]
 
         node_pos = {}
         for i in nodes:
             node_pos[i] = positions[i]
 
-        nx.draw_networkx_nodes(G, node_pos, nodelist=nodes, node_size=node_sizes, node_color=node_colors, alpha=1.0, edgecolors='black')
+        nx.draw_networkx_nodes(G, node_pos, nodelist=nodes, node_size=node_sizes,
+                               node_color=node_colors, alpha=1.0, edgecolors='black')
         nx.draw_networkx_edges(G, pos=node_pos, edge_color='black', width=edge_widths)
-        if len(showlabel) :
+        if len(showlabel):
             node_labels = showlabel
             nx.draw_networkx_labels(G, pos=node_pos, labels=node_labels, font_size=fsize)
 
@@ -250,52 +300,72 @@ class NetworkDraw :
 
         plt.show()
 
-        return 1
+        return None
 
     def arguemnets(self):
         d = '''
         Community analysis and network plot.
         Calculate the communities from a Cmap of a protein or other biomolecules simulations.
+        
+        Example:
+        Show help information
+        network.py -h
+        
+        Generate community figure
+        network.py -betw betweenness.dat -com commu -domf domain_information.dat -nsf 100 -lwf 0.0001 -fig 
+        output_figure.pdf -pos postions.dat 
         '''
 
         parser = argparse.ArgumentParser(description=d, formatter_class=RawTextHelpFormatter)
         parser.add_argument('-node_edges', type=str, default='node-edges-x.dat',
-                            help="File contains node-edges information. \n"
+                            help="Input, optional. \n"
+                                 "File contains node-edges information. \n"
                                  "Default is node-edges.dat. If this file not exist, \n"
                                  "Another node-edge file will be generated from betweenness and community.\n")
         parser.add_argument('-betw', default="betweenness.dat", type=str,
-                            help="A matrix file contain betweenness information. \n")
-        parser.add_argument('-com', default='community.dat', type=str,
-                            help="A result file from gncommunity analysis. \n")
+                            help="Input. Default is betweenness.dat \n"
+                                 "A matrix file contain betweenness information. \n")
+        parser.add_argument('-com', default='commun', type=str,
+                            help="Input. Default is commu . \n"
+                                 "A result file from gncommunity analysis. \n")
         parser.add_argument('-domf', type=str, default='domains.dat',
-                            help="Domains and their residue information. \n")
+                            help="Input. Default is domains.dat. \n"
+                                 "Domains and their residue information. \n")
         parser.add_argument('-nsf', type=float, default=100,
-                            help="Node size factor. Multiple this number with number of \n"
+                            help="Input, optional. Default is 100. \n"
+                                 "Node size factor. Multiple this number with number of \n"
                                  "Residues in a community to determine the node size.\n"
                                  "Default value is 100. \n")
         parser.add_argument('-lwf', type=float, default=0.001,
-                            help="Edge linewidth size factor. Multiple this number with the \n"
+                            help="Input, optional. Default is 0.001. "
+                                 "Edge linewidth size factor. Multiple this number with the \n"
                                  "betweenness in a community to determine the edge size.\n"
                                  "Default value is 0.001 \n")
         parser.add_argument('-fig', type=str, default='',
-                            help="Output the plt figure as a file. Default is figure_1.pdf.\n")
+                            help="Output, default is empty. \n"
+                                 "Output the plt figure as a file. Default is figure_1.pdf.\n")
         parser.add_argument('-dpi', type=int, default=2000,
-                            help="Output file DPI. Default is 2000. \n")
-        parser.add_argument('-label', default=[], type=str, nargs="+",
-                            help="Add labels to nodes. Default is Void. \n")
+                            help="Input, optional. \n"
+                                 "Output file DPI. Default is 2000. \n")
+        parser.add_argument('-label', default=False, type=lambda x: (str(x).lower() == "true"),
+                            help="Input, optional. Default is True. \n"
+                                 "Add labels to nodes. Default is Void. \n")
         parser.add_argument('-fsize', default=14, type=int,
-                            help="Font size of labels. Default is 16. \n")
+                            help="Input, optional. \n"
+                                 "Font size of labels. Default is 16. \n")
         parser.add_argument('-cols', default=['red', 'blue', 'yellow', 'green', 'cyan', 'orange', 'navy',
                                               'pink', 'olive', 'purple', 'firebrick', 'brown'],
                             type=str, nargs="+",
-                            help="Colors for the nodes. Default is r b y g c o navy pink, olive \n")
+                            help="Input, optional. Default is red blue yellow green cyan orange navy pink, olive \n"
+                                 "Colors for the nodes. \n")
         parser.add_argument('-pos', default='pos.dat', type=str,
-                            help="A file contains positions of the nodes. Default is pos.dat. \n"
+                            help="Input, optional. Default is pos.dat \n"
+                                 "A file contains positions of the nodes. Default is pos.dat. \n"
                                  "If this file is not existed, default postions will be used. \n")
         parser.add_argument('-nres_cutoff', default=6, type=int,
-                            help="If in a community, number of residues is less than this number,\n"
-                                 "the community will be ignored. \n"
-                                 "Default value is 6. \n")
+                            help="Input, optional. Default value is 6. \n"
+                                 "If in a community, number of residues is less than this number,\n"
+                                 "the community will be ignored. \n")
 
         args, unknown = parser.parse_known_args()
 
@@ -306,7 +376,7 @@ class NetworkDraw :
 
         return args
 
-def workingflow() :
+def workingflow():
 
     d = '''
     The working flow of drawing community network
@@ -332,8 +402,8 @@ def workingflow() :
     '''
     print(d)
 
-def main() :
-    #os.chdir(os.getcwd())
+
+def main():
 
     nwd = NetworkDraw()
     nwp = NetworkPrepare()
@@ -343,51 +413,46 @@ def main() :
 
     comm, modu = nio.parseCommunities()
 
-    comm_res = [ comm[x] for x in comm.keys()
-                 if len(comm[x]) >= args.nres_cutoff ]
+    comm_res = [comm[x] for x in comm.keys()
+                if len(comm[x]) >= args.nres_cutoff]
 
-    nodes_resnum = [ len(x) for x in comm_res ]
+    nodes_resnum = [len(x) for x in comm_res]
 
     # report node residue compositions
-    for i in range(len(nodes_resnum)) :
+    for i in range(len(nodes_resnum)):
         shiftx = 4
         print("Community (node) %d  Number of residues %d "
               % (i, nodes_resnum[i]))
-        #print("Number of residues %d"%nodes_resnum[i])
 
-        info = nwp.resInDomains(args.domf, [ x+shiftx for x in comm_res[i]])
+        info = nwp.resInDomains(args.domf, [x+shiftx for x in comm_res[i]])
 
         print("Ratio in domain : \n", info[0])
         print("Ratio in community: \n", info[1])
 
     # generate node-edge information [(node_i, node_j, connectivity)]
-    if os.path.exists(args.node_edges) :
+    if os.path.exists(args.node_edges):
         node_edges = nwp.parseNodeEdges(args.node_edges)
-    else :
+    else:
         node_edges = []
-        edges = nio.genNodeEdges(args.betw, comm_res )
+        edges = nio.genNodeEdges(args.betw, comm_res)
         nodes = range(edges.shape[0])
 
-        for i in nodes :
-            for j in nodes :
-                if i < j :
+        for i in nodes:
+            for j in nodes:
+                if i < j:
                     node_edges.append((i, j, edges[i][j]))
-                else :
-                    pass
-
-    #print(node_edges)
 
     nodes = range(len(nodes_resnum))
 
     colors = args.cols
-    if os.path.exists(colors[0]) :
+    if os.path.exists(colors[0]):
         colors = nwd.readColors(colors[0])
 
     print(colors)
 
-    if os.path.exists(args.pos) :
+    if os.path.exists(args.pos):
         positions = nwd.readPos(args.pos)
-    else :
+    else:
         positions = [
             (0.1, 0.1),
             (0.05, 0.3),
@@ -401,8 +466,13 @@ def main() :
             (0.15, 0.4),
         ] * 2
 
+    if args.label:
+        labels = [str(x) for x in range(len(nodes))]
+    else:
+        labels = []
+
     nwd.drawNetwork(node_edges, nodes, nodes_resnum,
-                    args.nsf, args.lwf, args.label,
+                    args.nsf, args.lwf, labels,
                     args.fig, args.dpi, args.fsize,
                     positions, colors,
                     )
