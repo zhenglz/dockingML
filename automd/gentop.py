@@ -6,6 +6,7 @@ import argparse
 from argparse import RawDescriptionHelpFormatter, RawTextHelpFormatter
 from dockml import convert
 import time
+from rdkit import Chem
 from automd import fixpdb
 
 class GenerateTop:
@@ -399,6 +400,41 @@ class GenerateTop:
             print("Run antachamber failed.")
 
         return None
+
+    def addHydrogen(self, pdbfile, output, method="rdkit"):
+        """
+        Add hydrogens to a molecule
+
+        Parameters
+        ----------
+        pdbfile: str, input
+            the pdb file for hydrogen adding
+        output: str, output
+            the output file name
+        method: str, default is rdkit
+            the hydrogen adding method
+
+        Returns
+        -------
+
+        """
+
+        if method == "rdkit":
+            mol = Chem.MolFromPDBFile(pdbfile)
+            mol2 = Chem.AddHs(mol, addCoords=True)
+
+            writer = Chem.PDBWriter(output)
+            writer.write(mol2)
+
+            writer.close()
+
+        else:
+            cmd = "reduce %s > %s " % (pdbfile, output)
+
+            job = sp.Popen(cmd, shell=True)
+            job.communicate()
+
+        return 0
 
     def trimHydrogen(self, reduce, pdbin, pdbout, verbose=False):
         """

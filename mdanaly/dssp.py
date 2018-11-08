@@ -3,6 +3,8 @@
 from mdanaly import gmxcli
 import numpy as np
 import os
+import pandas as pd
+import math
 
 
 class DsspParser(object):
@@ -17,22 +19,22 @@ class DsspParser(object):
 
     def read_dssp(self):
         dat = []
-        #self.df = np.loadtxt(self.input, comments=["/", "#", "*"])
+
         if os.path.exists(self.input):
             with open(self.input) as lines:
                 for s in lines:
-                    if "/*" not in s:
-                        dat.append(list(s))
-        self.df = np.array(dat)
+                    if "/*" not in s and len(s.split(",")) <= 2:
+                        dat.append(s.split(",")[0].strip("\""))
+        self.df = pd.DataFrame(dat).values
 
         return self
 
-    def dssp_part(self, ):
+    def dssp_part(self, b=0, e=-1):
 
         if not self.df:
             self.read_dssp()
 
-        dat = self.df[self.res_range][:, ::self.dt/self.ps]
+        dat = self.df[self.res_range][:, b:e:self.dt/self.ps]
 
         return dat
 
@@ -57,7 +59,8 @@ def parse_dssp():
     args = arguments()
 
     dssp = DsspParser(args.f, args.dt, args.ps, list(range(args.res[0]-1, args.res[1])))
-    dat = dssp.dssp_part()
+    dssp.read_dssp()
+    dat = dssp.dssp_part(b=int(args.b/args.ps), e=math.floor(args.e/args.ps))
 
-    np.savetxt(args.o, dat, delimiter=",",)
+    np.savetxt(args.o, dat, delimiter=",", fmt="%1s")
 

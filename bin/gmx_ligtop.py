@@ -58,9 +58,16 @@ if __name__ == "__main__":
     os.system(cmd)
 
     if args.addH:
-        fpdb = fixpdb.FixPDB()
-        fpdb.addhydrogenReduce(args.f, "H_"+args.f, args.amberhome+"/bin/reduce", flipH=False, verbose=True)
+        #fpdb = fixpdb.FixPDB()
+        #fpdb.addhydrogenReduce(args.f, "H_"+args.f, args.amberhome+"/bin/reduce", flipH=False, verbose=True)
         pdbin = "H_"+args.f
+        gtop = gentop.GenerateTop()
+        try:
+            gtop.addHydrogen(args.f, output=pdbin, method='rdkit')
+        except RuntimeError:
+            fpdb = fixpdb.FixPDB()
+            fpdb.addhydrogenReduce(args.f, "H_" + args.f, args.amberhome + "/bin/reduce",
+                                   flipH=False, verbose=True)
     else:
         pdbin = args.f
 
