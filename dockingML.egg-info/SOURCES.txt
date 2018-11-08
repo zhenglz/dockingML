@@ -38,6 +38,7 @@ mdanaly/__init__.py
 mdanaly/angles.py
 mdanaly/cmap.py
 mdanaly/coordNum.py
+mdanaly/dssp.py
 mdanaly/dynamics.py
 mdanaly/extract.py
 mdanaly/gmxcli.py

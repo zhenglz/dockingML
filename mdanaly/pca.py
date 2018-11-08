@@ -364,7 +364,7 @@ class PCA(object):
         self.eigvalues_ = eigval_
         self.eigvalues_ratio_ = self.pca_obj.explained_variance_ratio_
 
-        return None
+        return self
 
     def eigvectors(self):
         """
@@ -382,7 +382,7 @@ class PCA(object):
 
         self.eigvectors_ = eigvect_
 
-        return None
+        return self
 
 
 def datset_subset(dat, begin, end):
@@ -406,14 +406,16 @@ def datset_subset(dat, begin, end):
     """
 
     # TODO: add a check whether the datatype is pandas dataframe
-
-    X = dat.copy
+    if isinstance(dat, pd.DataFrame):
+        X = dat.copy()
+    else:
+        X = pd.DataFrame(dat)
 
     # slice the dataset
     if begin > 0:
         X = X[X.index >= begin]
     if end > 0 and end > begin:
-        X = X[X.index <= begin]
+        X = X[X.index <= end]
 
     return X
 
@@ -449,11 +451,10 @@ def iterload_xyz_coordinates(xtcfile, top, chunk, stride, atom_selection="name C
 
     xyz = np.array([])
 
-    for traj in trajs:
+    for i, traj in enumerate(trajs):
         copca = cmap.CoordinatesXYZ(traj, top, atom_selection)
-        # copca.superimpose()
 
-        if xyz.shape[0] == 0:
+        if i == 0:
             xyz = copca.xyz_coordinates()
         else:
             xyz = np.concatenate((xyz, copca.xyz_coordinates()), axis=0)
@@ -522,9 +523,9 @@ def load_dataset(fn, skip_index=True, sep=","):
 
     # load dataset, assign the index information
     if skip_index:
-        X = pd.read_csv(fn, sep=",", header=0, index_col=0)
+        X = pd.read_csv(fn, sep=sep, header=0, index_col=0)
     else:
-        X = pd.read_csv(fn, sep=",", header=0)
+        X = pd.read_csv(fn, sep=sep, header=0)
 
     return X
 
@@ -580,7 +581,7 @@ def gen_cmap(args):
 
     # TODO: add a residue based selection module here
 
-    atoms_selections = args.selct.split()
+    atoms_selections = args.select.split()
     if len(atoms_selections) == 2:
         atoms_selections = atoms_selections
     else:
@@ -591,19 +592,23 @@ def gen_cmap(args):
     atom_grp_a = top.select("name %s" % atoms_selections[0])
     atom_grp_b = top.select("name %s" % atoms_selections[1])
 
+    print("Iterloading xtc trajectory file ...... ")
     trajs = gmxcli.read_xtc(xtc=args.f, top=args.s, chunk=1000, stride=int(args.dt/args.ps))
 
     cmap_dat = np.array([])
 
-    for traj in trajs:
+    print("Computing contactmap ...... ")
+    for i, traj in enumerate(trajs):
         contmap = cmap.ContactMap(traj=traj, group_a=atom_grp_a, group_b=atom_grp_b, cutoff=args.cutoff)
+        contmap.generate_cmap()
 
-        if cmap_dat.shape[0] == 0:
+        if i == 0:
             cmap_dat = contmap.cmap_
         else:
-            cmap_dat = np.concatenate((cmap_dat, contmap.cmap_), axis=1)
+            cmap_dat = np.concatenate((cmap_dat, contmap.cmap_), axis=0)
 
     cmap_dat = pd.DataFrame(cmap_dat)
+    print(cmap_dat.head())
 
     return cmap_dat
 
@@ -621,15 +626,15 @@ def gen_dihedrals(args):
     trajs = gmxcli.read_xtc(args.f, args.s, chunk=100, stride=int(args.dt / args.ps))
 
     for traj in trajs:
-
         dang = angles.ComputeAngles(traj)
-        if dih_angles.shape == 0:
+        if dih_angles.shape[0] == 0:
             dih_angles = dang.get_dihedral_angles(elements)
         else:
-            dih_angles = np.concatenate((dih_angles, dang.get_dihedral_angles(elements)))
+            dih_angles = np.concatenate((dih_angles, dang.get_dihedral_angles(elements)), axis=0)
 
-    dih_angles = pd.DataFrame(dih_angles)
-    dih_angles.index = np.arange(dih_angles.shape[0]) * args.dt
+    if not isinstance(dih_angles, pd.DataFrame):
+        dih_angles = pd.DataFrame(dih_angles)
+        dih_angles.index = np.arange(dih_angles.shape[0]) * args.dt
 
     return dih_angles
 
@@ -689,7 +694,6 @@ def xyz_pca(args):
     """
     Perform xyz coordinate based PCA calculation based on Gromacs XTC files.
 
-
     Parameters
     ----------
     args: argparse object,
@@ -723,7 +727,10 @@ def dihedral_pac(args):
 
     dih_angles = gen_dihedrals(args)
 
+    print(dih_angles.shape)
+
     dih_angles = datset_subset(dih_angles, begin=args.b, end=args.e)
+
 
     run_pca(dih_angles, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio)
 

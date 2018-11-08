@@ -264,6 +264,12 @@ def gmxangle():
 
     else:
         print("Some of the input files are not existed. Input again.")
+        if not os.path.exists(args.n):
+            print("Index file is not provided. Run again.")
+        if not os.path.exists(args.f):
+            print("Xtc trajectory file is not provided. Run again.")
+        if not os.path.exists(args.s):
+            print("Reference file is not provided. Run again.")
 
     sys.exit(1)
 
