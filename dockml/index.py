@@ -427,7 +427,7 @@ class PdbIndex(object):
             append = 'a'
         else:
             append = 'wb'
-        tofile = open(args.output, append)
+        tofile = open(args.o, append)
 
         if args.groupName:
             tofile.write('[ %s ] \n' % (args.groupName.strip()))
