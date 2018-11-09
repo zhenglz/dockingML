@@ -93,11 +93,12 @@ interactions. <p>
 </p>
 
 ### 4 Rescoring large screening poses and select high potent ligands
-<p>The ligand-receptor complex structure could be used to extract their interaction
+The ligand-receptor complex structure could be used to extract their interaction
 figureprints, which could be used for machine learning based classification. The 
 classification model then could be used to predict potential receptor binding 
 molecules.
- </p>
+
+ <img src="./data/drug_screen.png" alt="ML aided docking rescoring">
 
 # Usage examples 
 ## 1. mdanaly examples
