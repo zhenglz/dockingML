@@ -111,7 +111,7 @@ class ParseCommunity(object):
             a betweenness summed community matrix
         """
 
-        dat = np.loadtxt(filein, comments="#")
+        dat = np.loadtxt(filein, comments="#", skiprows=1)
         dat = list(dat)
 
         commbetw = []
@@ -201,7 +201,7 @@ class NetworkPrepare(object):
         ratio_outof = sorted(ratio_outof.items(), key=lambda x: x[1], reverse=True)
         ratio_indomain = sorted(ratio_indomain.items(), key=lambda x:x[1], reverse=True)
 
-        return (ratio_indomain, ratio_outof)
+        return ratio_indomain, ratio_outof
 
 
 class NetworkDraw(object):
@@ -349,7 +349,7 @@ class NetworkDraw(object):
                                  "Output file DPI. Default is 2000. \n")
         parser.add_argument('-label', default=False, type=lambda x: (str(x).lower() == "true"),
                             help="Input, optional. Default is True. \n"
-                                 "Add labels to nodes. Default is Void. \n")
+                                 "Add labels to nodes. Default is False. \n")
         parser.add_argument('-fsize', default=14, type=int,
                             help="Input, optional. \n"
                                  "Font size of labels. Default is 16. \n")
@@ -361,11 +361,20 @@ class NetworkDraw(object):
         parser.add_argument('-pos', default='pos.dat', type=str,
                             help="Input, optional. Default is pos.dat \n"
                                  "A file contains positions of the nodes. Default is pos.dat. \n"
-                                 "If this file is not existed, default postions will be used. \n")
+                                 "If this file is not existed, default postions will be used. \n"
+                                 "Example position.dat file content: \n"
+                                 "0  0.1 0.1 \n"
+                                 "1  0.4 0.2 \n"
+                                 "2  0.3 0.15 \n")
         parser.add_argument('-nres_cutoff', default=6, type=int,
                             help="Input, optional. Default value is 6. \n"
                                  "If in a community, number of residues is less than this number,\n"
                                  "the community will be ignored. \n")
+        parser.add_argument('-seq_start', default=1, type=int,
+                            help="Input, optional. Default is 1. "
+                                 "For reporting the residue composition in each node, you need to provide\n"
+                                 "a domain.dat file for domain information. Provide the first residue sequence \n"
+                                 "number for domain residue composition interpretation. \n")
 
         args, unknown = parser.parse_known_args()
 
@@ -420,11 +429,11 @@ def main():
 
     # report node residue compositions
     for i in range(len(nodes_resnum)):
-        shiftx = 4
+        shift_res = args.seq_start
         print("Community (node) %d  Number of residues %d "
               % (i, nodes_resnum[i]))
 
-        info = nwp.resInDomains(args.domf, [x+shiftx for x in comm_res[i]])
+        info = nwp.resInDomains(args.domf, [x+shift_res for x in comm_res[i]])
 
         print("Ratio in domain : \n", info[0])
         print("Ratio in community: \n", info[1])

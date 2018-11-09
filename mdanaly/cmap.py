@@ -9,7 +9,7 @@
 # Date: 23 Nov 2017                                 #
 #####################################################
 
-import glob, math, sys, os
+import math, os
 import numpy as np
 import pandas as pd
 import mdanaly
@@ -22,7 +22,6 @@ from dockml import index as ndx
 from matplotlib import pyplot as plt
 from collections import defaultdict
 from datetime import datetime
-from mpi4py import MPI
 import mdtraj as mt
 
 

@@ -59,6 +59,16 @@ Amber format topology files are created and converted to GMX format
 
     $ gmx_ligtop -f ligand.pdb -ff gaff -p ligand -amberhome /home/applications/amber16
 
+Additional tools are required for fully functional dockml module.
+
+These tools are:
+    
+    vina: for molecular docking
+    openbabel: for molecule format converting
+    acpype: for molecular topology format converting
+    pdb2pqr: optional, for molecular format converting
+    amber/AmberTools: for molecule topology construction
+
 ### 3. Protein Ligand Complex simulation
 The complex is then subjected to gromacs for product simulation. 
 From python calling system 
