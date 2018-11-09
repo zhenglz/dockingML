@@ -45,8 +45,9 @@ class GromacsCommanLine(object):
                                          formatter_class=RawTextHelpFormatter)
 
         parser.add_argument("-f", type=str, default="md.xtc",
-                            help="Input. Options: .xtc, .pdb \n"
-                                 "The xtc trajectory file name. ")
+                            help="Input. Options: .xtc, .pdb, .xvg, .xpm \n"
+                                 "The input file name. For this option, the input \n"
+                                 "file format is depended on the type of analysis. \n")
         parser.add_argument("-s", type=str, default="reference.pdb",
                             help="Input. Options: .pdb \n"
                                  "Reference pdb file, where topology information holds. ")

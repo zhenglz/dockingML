@@ -23,8 +23,8 @@ class DsspParser(object):
         if os.path.exists(self.input):
             with open(self.input) as lines:
                 for s in lines:
-                    if "/*" not in s and len(s.split(",")) <= 2:
-                        dat.append(s.split(",")[0].strip("\""))
+                    if "/*" not in s and len(s.split()) <= 2:
+                        dat.append(list(s.split(",")[0].strip("\"")))
         self.df = pd.DataFrame(dat).values
 
         return self
@@ -33,8 +33,10 @@ class DsspParser(object):
 
         if not self.df.shape[0]:
             self.read_dssp()
-
-        dat = self.df[self.res_range][:, b:e:int(self.dt/self.ps)]
+        try:
+            dat = self.df[self.res_range][:, b:e:int(self.dt/self.ps)]
+        except IndexError:
+            dat = self.df[self.res_range][:, b::int(self.dt/self.ps)]
 
         return dat
 
