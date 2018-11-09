@@ -232,34 +232,46 @@ class NetworkDraw(object):
         :return: list, list of strings
         """
         colors = []
-        with open(filein) as lines :
-            for s in [ x for x in lines if "#" not in x ] :
+        with open(filein) as lines:
+            for s in [x for x in lines if "#" not in x]:
                 colors += s.split()[-1]
 
         return colors
 
     def drawNetwork(self, node_edges, nodes, nodes_resnum,
                     nodefactor=300, lwfactor=0.001,
-                    showlabel=[], fig=None, DPI=2000,
+                    showlabel={}, fig=None, DPI=2000,
                     fsize=20, positions=[], colors=[],
                     ):
+        """Draw network plot based on weighted node edges
 
+        Parameters
+        ----------
+        node_edges: a list of sets, []
+        nodes: list, int
+            the nodes
+        nodes_resnum: list, int
+            the list of residues in each node
+        nodefactor: float,
+            the scaling factor for each node
+        lwfactor: float,
+            the scaling factor for each edge
+        showlabel: dict,
+            the node-label information
+        fig: str,
+            the output file name
+        DPI: int,
+            the output file resolution
+        fsize: int,
+            the fontsize for the labels
+        positions: list
 
-        '''
-        Draw network plot based on weighted node edges
-        :param node_edges: a list of sets, []
-        :param nodes:
-        :param nodes_resnum:
-        :param nodefactor:
-        :param lwfactor:
-        :param showlabel:
-        :param fig:
-        :param DPI:
-        :param fsize:
-        :param positions:
-        :param colors:
-        :return:
-        '''
+        colors: list
+
+        Returns
+        -------
+
+        """
 
         if len(colors) == 0:
             cols = ['red', 'blue', 'yellow', 'green', 'cyan', 'orange', 'gray', 'pink', 'megenta'] * 2
@@ -291,7 +303,7 @@ class NetworkDraw(object):
         nx.draw_networkx_nodes(G, node_pos, nodelist=nodes, node_size=node_sizes,
                                node_color=node_colors, alpha=1.0, edgecolors='black')
         nx.draw_networkx_edges(G, pos=node_pos, edge_color='black', width=edge_widths)
-        if len(showlabel):
+        if len(showlabel.keys()):
             node_labels = showlabel
             nx.draw_networkx_labels(G, pos=node_pos, labels=node_labels, font_size=fsize)
 
@@ -314,6 +326,12 @@ class NetworkDraw(object):
         Generate community figure
         network.py -betw betweenness.dat -com commu -domf domain_information.dat -nsf 100 -lwf 0.0001 -fig 
         output_figure.pdf -pos postions.dat 
+        
+        Add labels in the plot:
+        network.py -betw betweenness.dat -com commu -domf domain_information.dat -nsf 100 -lwf 0.0001 -fig 
+        output_figure.pdf -pos postions.dat -label True
+        network.py -betw betweenness.dat -com commu -domf domain_information.dat -nsf 100 -lwf 0.0001 -fig 
+        output_figure.pdf -pos postions.dat -label 0 1 2 3 4 5 6 7 8 9 10 11
         '''
 
         parser = argparse.ArgumentParser(description=d, formatter_class=RawTextHelpFormatter)
@@ -347,9 +365,12 @@ class NetworkDraw(object):
         parser.add_argument('-dpi', type=int, default=2000,
                             help="Input, optional. \n"
                                  "Output file DPI. Default is 2000. \n")
-        parser.add_argument('-label', default=False, type=lambda x: (str(x).lower() == "true"),
-                            help="Input, optional. Default is True. \n"
-                                 "Add labels to nodes. Default is False. \n")
+        parser.add_argument('-label', default=[], type=str, nargs="+",
+                            help="Input, optional. Default is empty. \n"
+                                 "Add labels to nodes. Provide a list of labels for each nodes. \n"
+                                 "Examples (4 communities): 0 1 2 3 \n"
+                                 "Another exp. (3 communities): HNH RuvC CTD \n"
+                                 "If you provide True, the default labeling method would be used.\n")
         parser.add_argument('-fsize', default=14, type=int,
                             help="Input, optional. \n"
                                  "Font size of labels. Default is 16. \n")
@@ -384,6 +405,7 @@ class NetworkDraw(object):
             sys.exit(1)
 
         return args
+
 
 def workingflow():
 
@@ -475,10 +497,16 @@ def main():
             (0.15, 0.4),
         ] * 2
 
-    if args.label:
-        labels = [str(x) for x in range(len(nodes))]
-    else:
-        labels = []
+    labels = dict()
+    if len(args.label):
+        if args.label[0] in ["True", "true", "t", "T"]:
+            labels = dict(zip(nodes, [str(x) for x in nodes]))
+        else:
+            try:
+                labels = dict(zip(nodes, args.labels))
+            except IOError:
+                print("Your input for labels is not correct. Ignore the labels now. ")
+
 
     nwd.drawNetwork(node_edges, nodes, nodes_resnum,
                     args.nsf, args.lwf, labels,
