@@ -266,18 +266,6 @@ class ContactMap(object):
         return self
 
 
-class DistanceMatrixMap(ContactMap):
-
-    def __init__(self, traj, group_a, group_b, cutoff):
-        ContactMap(traj, group_a, group_b, cutoff)
-
-    def distance_matrix(self):
-        if not self.distmtx_computed_:
-            self.distance_matrix()
-
-        return self
-
-
 class DrawCMap(object):
 
     def __init__(self):
@@ -634,28 +622,21 @@ def arguments():
                                     "Apply a switch function for determing Ca-Ca contacts for a smooth transition. \n"
                                     "Only work with atomtype as CA. Options: True(T, t. TRUE), False(F, f, FALSE) \n"
                                     "Default is False. \n")
-    parser.parser.add_argument('-np', default=0, type=int,
-                               help='Number of Processers for MPI. Interger value expected. \n'
-                                    'If 4 is given, means using 4 cores or processers.\n'
-                                    'If 1 is given, means not using MPI, using only 1 Core.\n'
-                                    'Default is 1. ')
-    parser.parser.add_argument('-test', default=0, type=int,
-                               help="Do a test with only a number of frames. For example, 4 frames. \n"
-                                    "Default value is 0. ")
     parser.parser.add_argument('-NbyN', type=bool, default=False,
-                               help="For community analysis, calculate atom contact number, normalized. \n"
+                               help="Not implemented yet. \n"
+                                    "For community analysis, calculate atom contact number, normalized. \n"
                                     "Default is False.")
     parser.parser.add_argument('-verbose', default=False , type=bool,
                                help="Verbose. Default is False.")
     parser.parser.add_argument('-details', default=None, type=str,
                                help="Provide detail contact information and write out to a file. \n"
                                     "Default is None.")
-    parser.parser.add_argument('-opt', default="TimeSeries", type=str,
-                               help="Optional setting controls. Default is TimeSeries. \n"
-                                    "TimeSeries, using splited files and get average cmap.\n"
+    parser.parser.add_argument('-opt', default="TS", type=str,
+                               help="Optional setting controls. Default is A. \n"
+                                    "Average, calculating the average cmap along the simulations.\n"
                                     "Separated, create time series contact map, suitable for ligand "
-                                    "protein contact information.\n"
-                                    "Options: S(Separated), TS (TimeSeries).\n")
+                                    "protein contact information along time.\n"
+                                    "Options: S(Separated), A(Average).\n")
 
     parser.parse_arguments()
 
@@ -705,13 +686,18 @@ def iterload_cmap():
     contact_map = pca.datset_subset(contact_map, args.b, args.e)
 
     # get mean cmap data
-    results = np.mean(contact_map, axis=0).reshape((rec_index, lig_index))
+    if args.opt in ['A', 'a', 'average', 'Average']:
+        results = np.mean(contact_map, axis=0).reshape((rec_index, lig_index))
+        results = pd.DataFrame(results)
+        results.index = range(int(args.rc[1]), int(args.rc[2]) + 1)
+        results.columns = range(int(args.lc[1]), int(args.lc[2]) + 1)
+    else:
+        results = contact_map
+        results = pd.DataFrame(results)
+        results.index = np.arange(results.shape[0]) * args.dt
+        results.columns = ["c_" + str(x) for x in np.arange(results.shape[1])]
 
     # save results to an output file
-    results = pd.DataFrame(results)
-    results.index = range(int(args.rc[1]), int(args.rc[2]) + 1)
-    results.columns = range(int(args.lc[1]), int(args.lc[2]) + 1)
-
     results.to_csv(args.o, sep=",", header=True, index=True, float_format="%.3f")
 
     print("Total Time Usage: ")
