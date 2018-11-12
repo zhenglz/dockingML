@@ -307,12 +307,13 @@ class PCA(object):
         print("Perform PCA decompostion now ...... ")
         if self.n_components > self.X_scaled.shape[1]:
             self.n_components = self.X_scaled.shape[1]
+
         pca_obj = decomposition.PCA(n_components=self.n_components)
-        pca_obj.fit(self.X_scaled)
+        pca_obj.fit(Xs)
 
         # train and transform the dataset
         print("Transform dataset now ...... ")
-        self.X_transformed_ = pca_obj.transform(X)
+        self.X_transformed_ = pca_obj.transform(Xs)
         self.trained_ = True
 
         self.pca_obj = pca_obj
@@ -322,7 +323,7 @@ class PCA(object):
         self.eigvalues()
         self.eigvectors()
 
-        return pca_obj
+        return self
 
     def transform(self, X):
         """
@@ -335,19 +336,15 @@ class PCA(object):
 
         Returns
         -------
-        X_transformed: numpy, ndarray, shape=[N, M_1]
-            transformed dataset, N is number of samples
-            M_1 is number of reduced dimensions, M_1 == n_components
+        self: the object itself
 
         """
 
-        if self.trained_:
-            return self.pca_obj.transform(X)
-        else:
+        if not self.trained_:
             print("Your pca object is not trained yet. Training it now ...")
-            pca_obj = self.fit(X)
+            self.fit(X)
 
-            return pca_obj.transform(X)
+        return self.pca_obj.transform(X)
 
     def eigvalues(self):
         """
@@ -454,6 +451,7 @@ def iterload_xyz_coordinates(xtcfile, top, chunk, stride, atom_selection="name C
     xyz = np.array([])
 
     for i, traj in enumerate(trajs):
+
         copca = cmap.CoordinatesXYZ(traj, top, atom_selection)
 
         if i == 0:
@@ -610,7 +608,6 @@ def gen_cmap(args):
             cmap_dat = np.concatenate((cmap_dat, contmap.cmap_), axis=0)
 
     cmap_dat = pd.DataFrame(cmap_dat)
-    print(cmap_dat.head())
 
     return cmap_dat
 
@@ -693,6 +690,7 @@ def general_pca(args):
     run_pca(dat, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio)
 
     return None
+
 
 def xyz_pca(args):
     """

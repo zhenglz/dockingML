@@ -501,6 +501,9 @@ def main():
                              "Min X value if calculating PMF. In the process of PMF calculation,\n"
                              "the normalized probabilities would be used. To avoid divide by zero \n"
                              "error, a minimum value of x should be used. \n")
+    parser.add_argument('-timescale', default=0.002, type=float,
+                        help="Input, optional. Default is 0.002.\n"
+                             "The timescale for scatter plot. \n")
     args, unknown = parser.parse_known_args()
     plotType = sys.argv[1]
 
@@ -687,7 +690,7 @@ def main():
     elif plotType in ['2D', '2d', '2ds']:
         plot2dScatter(args.data, xlim=args.xlim, ylim=args.ylim,
                       xcol=args.xycol[0], ycol=args.xycol[1],
-                      colors=args.colors[0], timescale=0.001, cmaptype=args.cmaptype,
+                      colors=args.colors[0], timescale=args.timescale, cmaptype=args.cmaptype,
                       xlab=args.xlab, ylab=args.ylab, title=args.title,
                       xscale=args.xyscale[0], yscale=args.xyscale[1],
                       xshift=args.xshift, yshift=args.yshift, marker=args.marker[0],
