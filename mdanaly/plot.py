@@ -332,11 +332,11 @@ def plot1Dhistogram(filename, color,
 
 def histBins(files, num_bins=20, xcol=1, xscale=1.0, xstart=0, xshift=0, sep=","):
     X, bins = [], []
-    for f in files :
+    for f in files:
         x = np.loadtxt(f, comments=["#", '@'], usecols=[int(xcol)], delimiter=sep, skiprows=1)[xstart:] * xscale + xshift
         X = X + list(x)
 
-    for i in range(num_bins) :
+    for i in range(num_bins):
         bins.append(np.min(X) + float(i) * (np.max(X) - np.min(X)) / float(num_bins))
     return bins
 
