@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="fix bug in plot module">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mdanaly/pca.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/pca.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mdanaly/plot.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/plot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/methyl_rrm/explained_variance_ratio.dat" beforeDir="false" afterPath="$PROJECT_DIR$/test/methyl_rrm/explained_variance_ratio.dat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/methyl_rrm/output.csv" beforeDir="false" afterPath="$PROJECT_DIR$/test/methyl_rrm/output.csv" afterDir="false" />
-    </list>
+    <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="fix bug in plot module" />
     <ignored path="dockingML.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -63,7 +57,7 @@
         <counts>
           <entry key="Python Console" value="1240" />
           <entry key="md" value="3411" />
-          <entry key="py" value="49769" />
+          <entry key="py" value="49784" />
           <entry key="txt" value="627" />
         </counts>
       </usages-collector>
@@ -71,7 +65,7 @@
         <counts>
           <entry key="Markdown" value="3411" />
           <entry key="PLAIN_TEXT" value="627" />
-          <entry key="Python" value="51009" />
+          <entry key="Python" value="51024" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -177,8 +171,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mdanaly/pca.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="109">
-              <caret line="707" lean-forward="true" selection-start-line="707" selection-end-line="707" />
+            <state relative-caret-position="262">
+              <caret line="662" column="62" selection-start-line="662" selection-start-column="62" selection-end-line="662" selection-end-column="62" />
               <folding>
                 <element signature="e#25#43#0" expanded="true" />
                 <element signature="e#238#6233#0" />
@@ -591,13 +585,6 @@
       <option name="presentableId" value="Default" />
       <updated>1499093997611</updated>
     </task>
-    <task id="LOCAL-00056" summary="all coordinate pca module">
-      <created>1539751226934</created>
-      <option name="number" value="00056" />
-      <option name="presentableId" value="LOCAL-00056" />
-      <option name="project" value="LOCAL" />
-      <updated>1539751226935</updated>
-    </task>
     <task id="LOCAL-00057" summary="add coordinate pca module">
       <created>1539753853311</created>
       <option name="number" value="00057" />
@@ -934,7 +921,14 @@
       <option name="project" value="LOCAL" />
       <updated>1542038085334</updated>
     </task>
-    <option name="localTasksCounter" value="105" />
+    <task id="LOCAL-00105" summary="fix bug in plot module">
+      <created>1542040617452</created>
+      <option name="number" value="00105" />
+      <option name="presentableId" value="LOCAL-00105" />
+      <option name="project" value="LOCAL" />
+      <updated>1542040617453</updated>
+    </task>
+    <option name="localTasksCounter" value="106" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1354,8 +1348,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/pca.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="109">
-          <caret line="707" lean-forward="true" selection-start-line="707" selection-end-line="707" />
+        <state relative-caret-position="262">
+          <caret line="662" column="62" selection-start-line="662" selection-start-column="62" selection-end-line="662" selection-end-column="62" />
           <folding>
             <element signature="e#25#43#0" expanded="true" />
             <element signature="e#238#6233#0" />

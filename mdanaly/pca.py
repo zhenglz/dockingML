@@ -689,8 +689,6 @@ def general_pca(args):
     # run pca and write result to outputs
     run_pca(dat, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio)
 
-    return None
-
 
 def xyz_pca(args):
     """
