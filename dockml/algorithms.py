@@ -7,6 +7,7 @@ basic math algorithms
 
 import math
 import numpy as np
+import pandas as pd
 
 class BasicAlgorithm :
 
@@ -59,6 +60,17 @@ class BasicAlgorithm :
         if x < minX:
             x = minX / 2.0
         return -1.0 * kbt * np.log(x / max)
+
+    def pmf2d(self, X, Y, minX, kbt=2.5, bins=20):
+
+        hist, edges_1, edges_2= np.histogram2d(X, Y, bins=bins)
+        hist = hist / np.max(hist)
+
+        hist = pd.DataFrame(hist)
+        hist = hist.replace(0.0, minX).values
+        pmf = -1.0 * kbt * np.log(hist / np.max(hist))
+
+        return edges_1, edges_2, pmf
 
     def entropy1D(self, x, nbins=20, kbt=1.0):
         """

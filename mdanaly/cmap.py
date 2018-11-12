@@ -9,11 +9,7 @@
 # Date: 23 Nov 2017                                 #
 #####################################################
 
-import math, os
-import numpy as np
-import pandas as pd
 import mdanaly
-
 from mdanaly import gmxcli
 from mdanaly import pca
 import dockml.pdbIO as pio
@@ -23,6 +19,9 @@ from matplotlib import pyplot as plt
 from collections import defaultdict
 from datetime import datetime
 import mdtraj as mt
+import math, os
+import numpy as np
+import pandas as pd
 
 
 class CoordinatesXYZ(object):
@@ -254,6 +253,14 @@ class ContactMap(object):
         return self
 
     def coord_num(self):
+        """
+        Calculate the coordinate number using mdtraj
+
+        Returns
+        -------
+        self: the object itself
+
+        """
         # TODO: calculation coordination numbers
         if not self.distmtx_computed_:
             self.generate_cmap(shape="array")
