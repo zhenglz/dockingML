@@ -81,7 +81,7 @@ if __name__ == "__main__":
     if not (os.path.exists(prep) and os.path.exists(frcmod)):
         # formal charge or net charge of a molecule
         spdb = fixpdb.SummaryPDB(pdbin)
-        net_charge = spdb.netCharges(pdbin, "SUB")
+        net_charge = spdb.netCharges(pdbin, "UNL")
         gtop.runAntechamber(pdbin, net_charge, ftype, amberhome=args.amberhome)
 
     gtop.gmxTopBuilder(

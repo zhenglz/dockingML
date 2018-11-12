@@ -145,7 +145,7 @@ def plot2dFes(filename, dtype=[], zlim=[],
 
         z = np.reshape(fes[:,2], (y_size, x_size))
 
-    if pmf :
+    if pmf:
         # PMF
         algo = dockml.BasicAlgorithm()
         # vectorize the PMF function, and try to apply it to all element of a list
@@ -162,7 +162,7 @@ def plot2dFes(filename, dtype=[], zlim=[],
         plt.contourf(x, y, z, level, cmap=cm_cmap[cmaptypes.index(cmaptype)])
 
     plt.colorbar(label=label, )
-    if len(zlim) :
+    if len(zlim):
         plt.clim(vmin=zlim[0], vmax=zlim[1])
 
     # labels
@@ -454,10 +454,10 @@ def main():
 
     parser.add_argument('-fsize', default=12, type=int,
                         help="Font size of the labels. \n"
-                             "Default is 12." )
-    parser.add_argument('-pmf', default=False, type=bool,
-                        help="From probability to generate PMF. \n"
-                             "Default is False. ")
+                             "Default is 12.")
+    parser.add_argument('-pmf', default=False, type=lambda x: (str(x).lower() == "true"),
+                        help="Whether from probability to generate PMF. \n"
+                             "Default is False. Options: True, False.")
     parser.add_argument('-minX', default=1.0, type=float,
                         help="Min X value if calculating PMF.\n"
                              "Default is 1.0 .\n")

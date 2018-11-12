@@ -507,7 +507,6 @@ def main():
             except IOError:
                 print("Your input for labels is not correct. Ignore the labels now. ")
 
-
     nwd.drawNetwork(node_edges, nodes, nodes_resnum,
                     args.nsf, args.lwf, labels,
                     args.fig, args.dpi, args.fsize,
