@@ -399,7 +399,7 @@ def datset_subset(dat, begin, end):
 
     Returns
     -------
-    X: pandas DataFrame,
+    X: pd.DataFrame,
         the processed dataset
 
     """
@@ -576,6 +576,8 @@ def gen_cmap(args):
 
     Returns
     -------
+    cmap_dat: pd.DataFrame,
+        the contactmap along the time
 
     """
 
@@ -661,6 +663,10 @@ def cmap_pca(args):
 
     # process the begin end information
     contmap = datset_subset(contmap, begin=args.b, end=args.e)
+    print(contmap.shape, contmap.head())
+
+    contmap = contmap.loc[:, (contmap != 0).any(axis=0)]
+    print(contmap.shape, contmap.head())
 
     # run pca and write result to outputs
     run_pca(contmap, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio)

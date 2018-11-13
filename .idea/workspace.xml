@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="fix bug in plot module" />
+    <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="fix bug in plot module">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mdanaly/pca.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/pca.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/methyl_rrm/explained_variance_ratio.dat" beforeDir="false" afterPath="$PROJECT_DIR$/test/methyl_rrm/explained_variance_ratio.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/methyl_rrm/output.csv" beforeDir="false" afterPath="$PROJECT_DIR$/test/methyl_rrm/output.csv" afterDir="false" />
+    </list>
     <ignored path="dockingML.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -57,7 +62,7 @@
         <counts>
           <entry key="Python Console" value="1240" />
           <entry key="md" value="3411" />
-          <entry key="py" value="49784" />
+          <entry key="py" value="49931" />
           <entry key="txt" value="627" />
         </counts>
       </usages-collector>
@@ -65,7 +70,7 @@
         <counts>
           <entry key="Markdown" value="3411" />
           <entry key="PLAIN_TEXT" value="627" />
-          <entry key="Python" value="51024" />
+          <entry key="Python" value="51171" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -171,8 +176,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mdanaly/pca.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="262">
-              <caret line="662" column="62" selection-start-line="662" selection-start-column="62" selection-end-line="662" selection-end-column="62" />
+            <state relative-caret-position="296">
+              <caret line="668" column="38" selection-start-line="668" selection-start-column="38" selection-end-line="668" selection-end-column="38" />
               <folding>
                 <element signature="e#25#43#0" expanded="true" />
                 <element signature="e#238#6233#0" />
@@ -585,20 +590,6 @@
       <option name="presentableId" value="Default" />
       <updated>1499093997611</updated>
     </task>
-    <task id="LOCAL-00057" summary="add coordinate pca module">
-      <created>1539753853311</created>
-      <option name="number" value="00057" />
-      <option name="presentableId" value="LOCAL-00057" />
-      <option name="project" value="LOCAL" />
-      <updated>1539753853311</updated>
-    </task>
-    <task id="LOCAL-00058" summary="add coordinate pca module">
-      <created>1539788384711</created>
-      <option name="number" value="00058" />
-      <option name="presentableId" value="LOCAL-00058" />
-      <option name="project" value="LOCAL" />
-      <updated>1539788384712</updated>
-    </task>
     <task id="LOCAL-00059" summary="add coordinate pca module">
       <created>1539788836796</created>
       <option name="number" value="00059" />
@@ -928,11 +919,25 @@
       <option name="project" value="LOCAL" />
       <updated>1542040617453</updated>
     </task>
-    <option name="localTasksCounter" value="106" />
+    <task id="LOCAL-00106" summary="fix bug in plot module">
+      <created>1542053851553</created>
+      <option name="number" value="00106" />
+      <option name="presentableId" value="LOCAL-00106" />
+      <option name="project" value="LOCAL" />
+      <updated>1542053851553</updated>
+    </task>
+    <task id="LOCAL-00107" summary="fix bug in plot module">
+      <created>1542053877060</created>
+      <option name="number" value="00107" />
+      <option name="presentableId" value="LOCAL-00107" />
+      <option name="project" value="LOCAL" />
+      <updated>1542053877061</updated>
+    </task>
+    <option name="localTasksCounter" value="108" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="-1" width="1362" height="641" extended-state="6" />
+    <frame x="-1" y="-1" width="1362" height="641" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18698579" />
@@ -1348,8 +1353,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/pca.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="262">
-          <caret line="662" column="62" selection-start-line="662" selection-start-column="62" selection-end-line="662" selection-end-column="62" />
+        <state relative-caret-position="296">
+          <caret line="668" column="38" selection-start-line="668" selection-start-column="38" selection-end-line="668" selection-end-column="38" />
           <folding>
             <element signature="e#25#43#0" expanded="true" />
             <element signature="e#238#6233#0" />
