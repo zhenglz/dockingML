@@ -198,7 +198,7 @@ class ContactMap(object):
 
         return self
 
-    def generate_cmap(self, shape='array'):
+    def generate_cmap(self, shape='array', switch=False):
         """
         Calculate atom cmap data.
 
@@ -207,6 +207,8 @@ class ContactMap(object):
         shape: str,
             the type of cmap output, array like or matrix like.
             Default is array. Options are: array, matrix
+        switch: bool, default is False
+            apply a switch function to the contact map calculation
 
         Returns
         -------
@@ -544,37 +546,32 @@ def descriptions():
 
         Generating contact probability Map (Cmap)
 
-        Input a multi-frame pdb (MFPDB file) file to construct a contact probability map.
-        This MFPDB have multiple models in a single file, and all the structures should
-        stay whole, broken structures will cause inaccurate results.
-        All the frames in MFPDB do not consider PBC conditions, you should keep structures
+        Input a gromacs trajectory file (.xtc) to construct a contact probability map.
+        All the structures should stay whole, broken structures will cause inaccurate results.
+        All the frames in trajectory file do not consider PBC conditions, you should keep structures
         as a whole.
 
         If some arguements not given, default values would be used.
 
         Usage:
         1. Show help information
-        python ContactMap.py -h
+        gmx_cmap.py -h
 
         2. Construct a Ca-Ca Cmap for a protein chain
-        python ContactMap.py -inp MF_pro.pdb -out Cmap.dat -rc A 1 250
-        -lc A 1 250 -cutoff 3.5 -switch T -atomtype CA
+        gmx_cmap -f traj.xtc -out Cmap.dat -rc A 1 250
+        -lc A 1 250 -cutoff 0.5 -switch T -atomtype CA
 
         3. Generate a full-atom Cmap for a poly-peptide chain
-        python ContactMap.py -inp MF_pro.pdb -out Cmap.dat -rc A 1 250
-        -lc A 1 250 -cutoff 3.5 -atomtype all all
+        gmx_cmap -f traj.xtc -o Cmap.dat -rc A 1 250
+        -lc A 1 250 -cutoff 0.5 -atomtype all all
 
         4. Construct a Cmap between a small ligand and a protein
-        python ContactMap.py -inp MF_pro.pdb -out Cmap.dat -rc A 1 250
-        -lc A 251 251 -cutoff 3.5 -atomtype all all
+        gmx_cmap -f traj.xtc -o Cmap.dat -rc A 1 250
+        -lc A 251 251 -cutoff 0.5 -atomtype all all
 
         5. Construct a Cmap between a small ligand and a protein, Ca-allatom
-        python ContactMap.py -inp MF_pro.pdb -out Cmap.dat -rc A 1 250
-        -lc A 251 251 -cutoff 3.5 -atomtype CA all
-
-        6. Construct a cmap between a protein chain with MPI
-        mpirun -np 4 python ContactMap.py -inp MF_pro.pdb -out Cmap.dat -rc A 1 250
-        -lc A 251 251 -cutoff 3.5 -atomtype CA all -np 4
+        gmx_cmap -f traj.xtc -out Cmap.dat -rc A 1 250
+        -lc A 251 251 -cutoff 0.5 -atomtype CA all
 
         '''
     return d
@@ -597,8 +594,9 @@ def arguments():
                                     "You must enter a chain name, start residue index, and end chain index.\n"
                                     "Default is: B 1 250 \n")
     parser.parser.add_argument('-cutoff',type=float,default=0.35,
-                               help="Distance Cutoff for determining contacts. \n"
-                                    "Default is 3.5 (angstrom). \n")
+                               help="Input, optional. \n"
+                                    "Distance Cutoff for determining contacts. \n"
+                                    "Default is 0.35 (nanometer). \n")
     parser.parser.add_argument('-atomtype', type=str, nargs='+', default=[],
                                help="Input, optional. \n"
                                     "Atom types for Receptor and Ligand in Contact Map Calculation. \n"
@@ -621,8 +619,8 @@ def arguments():
                                     "Default is []. ")
     parser.parser.add_argument('-eletype', type=str, nargs="+", default=[],
                                help="Input, optional. \n"
-                                    "Choose the specific elements for atom indexing to construct the cmap."
-                                    "Default is empty.")
+                                    "Choose the specific elements for atom indexing to construct the cmap.\n"
+                                    "Default is [].\n")
     parser.parser.add_argument('-switch', type=str, default='True',
                                help="Input, optional. \n"
                                     "Apply a switch function for determing Ca-Ca contacts for a smooth transition. \n"
@@ -631,8 +629,8 @@ def arguments():
     parser.parser.add_argument('-NbyN', type=bool, default=False,
                                help="Not implemented yet. \n"
                                     "For community analysis, calculate atom contact number, normalized. \n"
-                                    "Default is False.")
-    parser.parser.add_argument('-verbose', default=False , type=bool,
+                                    "Default is False. \n")
+    parser.parser.add_argument('-v', default=False , type=lambda x: (str(x).lower() == "true"),
                                help="Verbose. Default is False.")
     parser.parser.add_argument('-details', default=None, type=str,
                                help="Provide detail contact information and write out to a file. \n"
@@ -640,7 +638,7 @@ def arguments():
     parser.parser.add_argument('-opt', default="TS", type=str,
                                help="Optional setting controls. Default is A. \n"
                                     "Average, calculating the average cmap along the simulations.\n"
-                                    "Separated, create time series contact map, suitable for ligand "
+                                    "Separated, create time series contact map, suitable for ligand \n"
                                     "protein contact information along time.\n"
                                     "Options: S(Separated), A(Average).\n")
 
@@ -649,7 +647,20 @@ def arguments():
     return parser.args
 
 
+def verbose(verbose=True, s=""):
+    if verbose:
+        print(s)
+
+
 def iterload_cmap():
+    """
+    Load large trajectory iteratively using mdtraj.iterload function,
+    then generate contact map from the trajectories.
+
+    Returns
+    -------
+
+    """
 
     # for calculation time counting
     startTime = datetime.now()
@@ -659,6 +670,7 @@ def iterload_cmap():
 
     contact_map = np.array([])
 
+    verbose(args.v, "Atom selecting ......")
     # TODO: atom selection method required
     indx = ndx.PdbIndex()
     atomList, atomType = indx.atomList(args.atomtype[0], atomname=args.atomname1)
@@ -673,11 +685,13 @@ def iterload_cmap():
     rec_index = int(args.rc[2]) - int(args.rc[1]) + 1
     lig_index = int(args.lc[2]) - int(args.lc[1]) + 1
 
+    verbose(args.v, "Loading trajectory ......")
     # read gromacs trajectory
     trajs = gmxcli.read_xtc(args.f, args.s, chunk=100, stride=int(args.dt/args.ps))
 
     for i, traj in enumerate(trajs):
         # calculate cmap information
+        verbose(args.v, "Generate cmap for chunk #5d ......" % i)
         contmap = ContactMap(traj, group_a, group_b, cutoff=args.cutoff)
         contmap.generate_cmap(shape="array")
 
@@ -687,6 +701,7 @@ def iterload_cmap():
             contact_map = np.concatenate((contact_map, contmap.cmap_), axis=0)
 
     # subset the results
+    verbose(args.v, "Preparing output file ......")
     contact_map = pd.DataFrame(contact_map)
     contact_map.index = np.arange(contact_map.shape[0]) * args.dt
     contact_map = pca.datset_subset(contact_map, args.b, args.e)
@@ -704,6 +719,7 @@ def iterload_cmap():
         results.columns = ["c_" + str(x) for x in np.arange(results.shape[1])]
 
     # save results to an output file
+    verbose(args.v, "Writing output now ...... ")
     results.to_csv(args.o, sep=",", header=True, index=True, float_format="%.3f")
 
     print("Total Time Usage: ")

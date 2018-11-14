@@ -663,10 +663,8 @@ def cmap_pca(args):
 
     # process the begin end information
     contmap = datset_subset(contmap, begin=args.b, end=args.e)
-    print(contmap.shape, contmap.head())
 
     contmap = contmap.loc[:, (contmap != 0).any(axis=0)]
-    print(contmap.shape, contmap.head())
 
     # run pca and write result to outputs
     run_pca(contmap, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio)
@@ -764,10 +762,10 @@ def arguments(d="Descriptions."):
                                     "xyz: perform xyz coordinate PCA analysis using a trajectory xtc file. \n"
                                     "cmap: perform contact map PCA analysis using a trajectory xtc file. \n"
                                     "dihedral: perform dihedral PCA calculation using a trajectory xtc file. \n")
-    parser.parser.add_argument("-cutoff", default=0.35, type=float,
+    parser.parser.add_argument("-cutoff", default=0.5, type=float,
                                help="Input, optional, it works with mode =cmap \n"
                                     "The distance cutoff for contactmap calculation. Unit is nanometer.\n"
-                                    "Default is 0.35. ")
+                                    "Default is 0.5. ")
     parser.parser.add_argument("-proj", type=int, default=2,
                                help="Input, optional. \n"
                                     "How many number of dimensions to output. \n"
