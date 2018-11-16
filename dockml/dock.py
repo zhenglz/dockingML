@@ -12,13 +12,13 @@ from dockml import convert
 
 class VinaDocking(object):
 
-    def __init__(self):
-        pass
+    def __init__(self, vinaexe="vina"):
+        self.vina = vinaexe
 
     def runVina(self, vinaexe, receptor, ligand,
                 output='result.pdbqt', logfile='result.log',
                 ncpu=1, exhaustiveness=32,
-                center=[0 ,0 ,0], sizes=[40 ,40 ,40],
+                center=[0, 0, 0], sizes=[40, 40, 40],
                 no_modes=20, en_range=5, seed=-1,
                 ):
         """
@@ -64,7 +64,7 @@ class VinaDocking(object):
                            '--log %s --out %s --cpu %d '
                            '--exhaustiveness %d --num_modes %d '
                            '--energy_range %d --seed %d ' %
-                           (vinaexe, receptor, ligand,
+                           (self.vina, receptor, ligand,
                             center[0], center[1], center[2],
                             sizes[0], sizes[1], sizes[2],
                             logfile, output, ncpu,
@@ -78,7 +78,7 @@ class VinaDocking(object):
             print("Docking molecule %s to %s using %s failed. \n"
                   "Check your input and logfile.")
 
-            job = sp.check_output('%s --help ' %vinaexe)
+            job = sp.check_output('%s --help ' % self.vina)
             print(job)
 
         return None

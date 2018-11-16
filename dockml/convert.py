@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-import sys
 import subprocess as sp
 
 
@@ -28,20 +27,32 @@ class Convert(object):
         print("Make sure you have openbabel installed and path exported.")
 
     def convert(self, input, output, verbose=True):
-        '''
+        """
         convert one format to another, keep hydrogens
-        :param verbose:
-        :return:
-        '''
-        try :
-            if os.path.exists(input) :
+
+        Parameters
+        ----------
+        input: str,
+            input file name
+        output: str,
+            output file name
+        verbose: bool,
+            verbose print option
+
+        Returns
+        -------
+
+        """
+
+        try:
+            if os.path.exists(input):
                 status = sp.check_output("%s %s -O %s " % (self.obabel, input, output), shell=True)
                 if verbose:
                     print(status)
-            else :
+            else:
                 print(input + " is not exist!!!\nExit Now!")
-                #sys.exit(0)
-        except FileNotFoundError :
+
+        except FileNotFoundError:
             print("Converting file %s failed! "%input)
 
         return 1

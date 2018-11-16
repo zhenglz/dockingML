@@ -183,20 +183,28 @@ class parsePDB(object):
             self.nucleic = PROJECT_ROOT + '/../data/nucleic-acid.lib'
 
     def readDomainRes(self, filein):
-
-        '''
+        """
         load the domain data file, return a list of domain residue information
-        :param filein:
-        :return: list of list (3 elements), domain-residue-range information
-        '''
+
+        Parameters
+        ----------
+        filein: str,
+            input file name
+
+        Returns
+        -------
+        drange: list of list (3 elements),
+            domain-residue-range information
+        """
+
         drange = []
 
-        try :
+        try:
             with open(filein) as lines:
                 for s in lines:
                     if "#" not in s:
                         d = [s.split()[0]]
-                        d += [ int(x) for x in s.split()[1:] ]
+                        d += [int(x) for x in s.split()[1:]]
                         drange.append(d)
         except:
             raise FileNotFoundError
@@ -206,8 +214,11 @@ class parsePDB(object):
     def getStdProRes(self):
         """
         get the standard protein residue list
-        :param param:
-        :return:
+
+        Parameters
+        ----------
+        resname: list of str,
+            standard residue name list
         """
 
         with open(self.prores) as lines :
@@ -220,7 +231,11 @@ class parsePDB(object):
     def shortRes2LongRes(self):
         """
         convert the short single-character residue name to long 3-code name
-        :return: dict, { shortname: longname}
+
+        Parameters
+        ----------
+        resmap: dict,
+            { shortname: longname}
         """
 
         resmap = {}
@@ -235,7 +250,10 @@ class parsePDB(object):
     def longRes2ShortRes(self):
         """
         convert the long 3-code name to short single-character residue name
-        :return: dict, { longname: shortname }
+
+        Parameters
+        ----------
+        resmap: dict, { longname: shortname }
         """
 
         resmap = {}
@@ -250,8 +268,11 @@ class parsePDB(object):
     def pdbListInfor(self, pdbList):
         """
         get a list of information from a rcsb database pdb file
-        :param pdbList:
-        :return:
+
+        Parameters
+        ----------
+        pdbInfor: pd.DataFrame,
+            the pdb information for each atom
         """
         #pdbInfor = defaultdict(list)
         pdbCode, resolution, ligandName, Ktype, Kvalue = [], [], [], [], []
@@ -264,10 +285,10 @@ class parsePDB(object):
                     Ktype.append(s.split()[-1][:2])
                     Kvalue.append(s.split()[-1][3:])
         pdbInfor = pd.DataFrame({
-            "PDBCode" : pdbCode,
-            "Resolution" : np.asarray(resolution ),
-            "LigandName" : ligandName,
-            "AffinityType" : Ktype,
+            "PDBCode": pdbCode,
+            "Resolution": np.asarray(resolution),
+            "LigandName": ligandName,
+            "AffinityType": Ktype,
             "AffinityValue": Kvalue,
         })
 
@@ -401,17 +422,26 @@ class parsePDB(object):
     def getResNamesList(self, pdbin, chains):
         """
         get a list of residue names in specific chains
-        :param pdbin:
-        :param chains:
-        :return:
+
+        Parameters
+        ----------
+        pdbin: str,
+            input pdb file name
+        chains: list of str,
+            chain identifiers
+
+        Returns
+        -------
+        resname: list of str,
+            the list of residue names
         """
 
-        with open(pdbin) as lines :
-            lines = [ x for x in lines if (x[:4] in ["ATOM", "HETA"] and x[21] in chains)]
+        with open(pdbin) as lines:
+            lines = [x for x in lines if (x[:4] in ["ATOM", "HETA"] and x[21] in chains)]
 
             resname = []
-            for s in lines :
-                if s.split()[3] not in resname :
+            for s in lines:
+                if s.split()[3] not in resname:
                     resname.append(s.split()[3])
 
         return resname
@@ -447,11 +477,12 @@ class parsePDB(object):
 
         atominf = self.atomInformation(pdbin)
         # ndx in atominf keys are string
-        atomndx = [str(x) for x in sorted([ x for x in atominf.keys()])]
+        atomndx = [str(x) for x in sorted([x for x in atominf.keys()])]
 
         return atomndx
 
-class handlePBC :
+
+class handlePBC(object):
     def __init__(self):
         pass
 
@@ -524,7 +555,8 @@ class handlePBC :
         else :
             return False
 
-class coordinatesPDB :
+
+class coordinatesPDB(object):
     def __init__(self):
         pass
 
