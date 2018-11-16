@@ -15,11 +15,12 @@ try:
     from modeller import *
     from modeller.automodel import *
     MODELLER_EXIST = True
-except ImportError :
+except ImportError:
     print("Warning: Modeller is not well imported, some features may not work. ")
     MODELLER_EXIST = False
 
-class SummaryPDB :
+
+class SummaryPDB(object):
 
     def __init__(self, pdbfile, aminoLibFile="amino-acid.lib"):
         self.pdbfile = pdbfile
@@ -426,7 +427,8 @@ class SummaryPDB :
 
         return extMissSeq
 
-class FixPDB :
+
+class FixPDB(object):
     def __init__(self):
         pass
 
