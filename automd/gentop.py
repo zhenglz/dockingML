@@ -178,7 +178,6 @@ class GenerateTop:
                 leapin.append("source %s  \n" % ff)
             else:
                 print("ff not in amber ff library. Pass")
-
         return leapin
 
     def writePrepFrcmod2File(self, prepFile, frcmodFile):
