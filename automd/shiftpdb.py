@@ -150,7 +150,8 @@ class simulationModeller(object):
 
     def shift_xyz(self, vectors, output="new.pdb",
                   inplace=False, newchain="",
-                  chainID=['A'], residueList=[]):
+                  chainID=['A'], residueList=[],
+                  res_seq="1"):
         """
         Shift molecules translational
 
@@ -187,6 +188,7 @@ class simulationModeller(object):
 
                     line = rwPBD.xyzChanger(s, vectors)
                     line = rwPBD.chainIDChanger(line, newchain)
+                    line = rwPBD.resSeqChanger(line, res_seq)
                     tofile.write(line)
                 else:
                     if inplace:
