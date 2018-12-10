@@ -176,6 +176,21 @@ class PlaneFit :
         return distance
 
 class LineFit :
+    """
+    Perform line fitting related calculations.
+
+    Parameters
+    ----------
+    points: list, ndarray, or pd.Series
+        the input coordinates
+
+    Attributes
+    ----------
+
+    Methods
+    -------
+
+    """
     def __init__(self, points):
         self.points = np.asarray(points)
 
@@ -189,6 +204,35 @@ class LineFit :
         datamean = self.points.mean(axis=0)
         uu, dd, vv = np.linalg.svd(self.points - datamean)
 
-
         return vv[0] / np.sqrt(sum([x ** 2 for x in vv[0]]))
         #return vv[0]
+
+    def unit_vector(self, vector):
+        """ Returns the unit vector of the vector.  """
+        return vector / np.linalg.norm(vector)
+
+    def angle_between(self, v1, v2):
+        '''Returns the angle in radians between vectors 'v1' and 'v2'::
+
+                >>> angle_between((1, 0, 0), (0, 1, 0))
+                1.5707963267948966
+                >>> angle_between((1, 0, 0), (1, 0, 0))
+                0.0
+                >>> angle_between((1, 0, 0), (-1, 0, 0))
+                3.141592653589793'''
+
+        v1_u = self.unit_vector(v1)
+        v2_u = self.unit_vector(v2)
+        return np.arccos(np.clip(np.dot(v1_u, v2_u), -1.0, 1.0))
+
+    def dotproduct(self, v1, v2):
+        return np.dot(v1, v2)
+
+    def length(self, v):
+        return np.sqrt(self.dotproduct(v, v))
+
+    def vector_angle(self, v1, v2):
+        radian = np.arccos(self.dotproduct(v1, v2) / (self.length(v1) * self.length(v2)))
+        degree = radian / np.pi * 180.0
+
+        return degree
