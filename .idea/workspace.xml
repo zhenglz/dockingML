@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="update shiftPDB module">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dockingML.iml" afterPath="$PROJECT_DIR$/.idea/dockingML.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+    <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockingML.egg-info/PKG-INFO" afterPath="$PROJECT_DIR$/dockingML.egg-info/PKG-INFO" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockml/algorithms.py" afterPath="$PROJECT_DIR$/dockml/algorithms.py" />
     </list>
     <ignored path="dockingML.iws" />
@@ -99,8 +96,8 @@
       <file leaf-file-name="algorithms.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/dockml/algorithms.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3825">
-              <caret line="225" column="4" lean-forward="true" selection-start-line="225" selection-start-column="4" selection-end-line="225" selection-end-column="4" />
+            <state relative-caret-position="408">
+              <caret line="33" column="20" lean-forward="false" selection-start-line="33" selection-start-column="20" selection-end-line="33" selection-end-column="20" />
               <folding>
                 <element signature="e#78#89#0" expanded="true" />
               </folding>
@@ -313,7 +310,7 @@
     <option name="x" value="8" />
     <option name="y" value="31" />
     <option name="width" value="1360" />
-    <option name="height" value="636" />
+    <option name="height" value="798" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -567,13 +564,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1499093997611</updated>
-    </task>
-    <task id="LOCAL-00063" summary="add coordinate pca module">
-      <created>1539789391119</created>
-      <option name="number" value="00063" />
-      <option name="presentableId" value="LOCAL-00063" />
-      <option name="project" value="LOCAL" />
-      <updated>1539789391119</updated>
     </task>
     <task id="LOCAL-00064" summary="add coordinate pca module">
       <created>1539790034007</created>
@@ -911,11 +901,18 @@
       <option name="project" value="LOCAL" />
       <updated>1542358398882</updated>
     </task>
-    <option name="localTasksCounter" value="112" />
+    <task id="LOCAL-00112" summary="update shiftPDB module">
+      <created>1544409176826</created>
+      <option name="number" value="00112" />
+      <option name="presentableId" value="LOCAL-00112" />
+      <option name="project" value="LOCAL" />
+      <updated>1544409176827</updated>
+    </task>
+    <option name="localTasksCounter" value="113" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="8" y="31" width="1360" height="636" extended-state="0" />
+    <frame x="8" y="31" width="1360" height="798" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -1330,8 +1327,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/dockml/algorithms.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3825">
-          <caret line="225" column="4" lean-forward="true" selection-start-line="225" selection-start-column="4" selection-end-line="225" selection-end-column="4" />
+        <state relative-caret-position="408">
+          <caret line="33" column="20" lean-forward="false" selection-start-line="33" selection-start-column="20" selection-end-line="33" selection-end-column="20" />
           <folding>
             <element signature="e#78#89#0" expanded="true" />
           </folding>
