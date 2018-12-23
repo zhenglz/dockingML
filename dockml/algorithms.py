@@ -9,7 +9,8 @@ import math
 import numpy as np
 import pandas as pd
 
-class BasicAlgorithm :
+
+class BasicAlgorithm(object):
 
     def __init__(self):
         pass
@@ -113,11 +114,24 @@ class BasicAlgorithm :
 
         return entropy
 
-class PlaneFit :
-    def __init__(self):
-        pass
 
-    def fitPlane(self, points):
+class PlaneFit(object):
+    """
+
+    Parameters
+    ----------
+    points: ndarray, M*3
+        input points, in np.ndarray shape
+
+    Methods
+    -------
+
+    """
+
+    def __init__(self, points):
+        self.points = points
+
+    def fitPlane(self):
         """
         fit some points to a plane
         https://math.stackexchange.com/questions/99299/best-fitting-plane-given-a-set-of-points
@@ -126,14 +140,19 @@ class PlaneFit :
         Ax + By + Cz + D = 0
         we need to determine [a, b, c]
         A B C D = a  b -1 c
-        :param points: ndarray, M*3
-        :return: array, [a, b, c]
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        fit: array, [a, b, c]
         """
 
         # prepare dataset
-        xs = np.array(points)[:, 0]
-        ys = np.array(points)[:, 1]
-        zs = np.array(points)[:, 2]
+        xs = np.array(self.points)[:, 0]
+        ys = np.array(self.points)[:, 1]
+        zs = np.array(self.points)[:, 2]
 
         tmp_A = []
         tmp_B = []
@@ -144,12 +163,12 @@ class PlaneFit :
         B = np.matrix(tmp_B).T
         A = np.matrix(tmp_A)
 
-        # do fit
+        # do fit, fit points to a plane
         fit = (A.T * A).I * A.T * B
         errors = B - A * fit
         residual = np.linalg.norm(errors)
 
-        return fit
+        return fit, residual
 
     def point_distance(self, params, point):
         """
@@ -158,9 +177,18 @@ class PlaneFit :
         the function of a function Ax + By + Cz + D = 0
         P (x0, y0, z0 ) to the plane
         distance (x0*A + y0*B + z0*C + D)/sqrt(A^2 + B^2 + C^2)
-        :param params: list, a list of parameters (A, B, D), while C=-1
-        :param point: list, x y z coordinates of a point
-        :return: float, distance
+
+        Parameters
+        ----------
+        params: np.array,
+            a list of parameters (A, B, D), while C=-1
+        point: list, or np.array,
+            x y z coordinates of a point
+
+        Returns
+        -------
+        distance: float,
+            the distance of a point to a defined plane
         """
 
         distance = math.sqrt(params[0] ** 2 + params[1] ** 2 + 1)
@@ -173,7 +201,8 @@ class PlaneFit :
 
         return distance
 
-class LineFit :
+
+class LineFit(object):
     """
     Perform line fitting related calculations.
 
@@ -197,40 +226,52 @@ class LineFit :
         given a list of atoms (with xyz coordinate)
         return their normalized fitting line vector
 
-        :return: list, vector
+        Return
+        line_vector: list, vector
         """
         datamean = self.points.mean(axis=0)
         uu, dd, vv = np.linalg.svd(self.points - datamean)
 
         return vv[0] / np.sqrt(sum([x ** 2 for x in vv[0]]))
-        #return vv[0]
 
     def unit_vector(self, vector):
-        """ Returns the unit vector of the vector.  """
+        """ Returns the unit vector of the vector.
+
+        Parameters
+        ----------
+        vector: np.array,
+            a vector,
+
+        Returns
+        -------
+        unit_vector: np.array,
+            the result unit vector
+
+        """
         return vector / np.linalg.norm(vector)
 
     def angle_between(self, v1, v2):
-        '''Returns the angle in radians between vectors 'v1' and 'v2'::
+        """Returns the angle in radians between vectors 'v1' and 'v2'::
 
                 >>> angle_between((1, 0, 0), (0, 1, 0))
                 1.5707963267948966
                 >>> angle_between((1, 0, 0), (1, 0, 0))
                 0.0
                 >>> angle_between((1, 0, 0), (-1, 0, 0))
-                3.141592653589793'''
+                3.141592653589793
+
+        Parameters
+        ----------
+        v1: list,
+        v2: list,
+
+        Returns
+        -------
+        angle: float,
+            the cross angle of two lines, in radian unit
+
+        """
 
         v1_u = self.unit_vector(v1)
         v2_u = self.unit_vector(v2)
         return np.arccos(np.clip(np.dot(v1_u, v2_u), -1.0, 1.0))
-
-    def dotproduct(self, v1, v2):
-        return np.dot(v1, v2)
-
-    def length(self, v):
-        return np.sqrt(self.dotproduct(v, v))
-
-    def vector_angle(self, v1, v2):
-        radian = np.arccos(self.dotproduct(v1, v2) / (self.length(v1) * self.length(v2)))
-        degree = radian / np.pi * 180.0
-
-        return degree

@@ -1,6 +1,5 @@
 numpy
 pandas
-mpi4py
 sklearn
 matplotlib
 networkx

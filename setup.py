@@ -25,7 +25,7 @@ setup(name='dockingML',
       install_requires=[
           'numpy',
           'pandas',
-          'mpi4py',
+#          'mpi4py',
           'sklearn',
           'matplotlib',
           'networkx',

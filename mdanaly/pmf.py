@@ -5,7 +5,23 @@ import sys
 import argparse
 from argparse import RawTextHelpFormatter
 
-class PMF :
+
+class PMF(object):
+    """
+    Perform PMF calculation
+    pmf = -RT * ln p_i
+
+    Parameters
+    ----------
+
+    Attributes
+    ----------
+
+    Methods
+    -------
+
+    """
+
     def __init__(self):
         pass
 
@@ -13,13 +29,24 @@ class PMF :
         """
         give a 2d array, calculate the 2d distribution
         and then calculate its PMF fes
-        :param data:
-        :param nbins:
-        :param xcol:
-        :param ycol:
-        :return:
+
+        Parameters
+        ----------
+        data
+        nbins
+        xcol
+        ycol
+        RT: float,
+            Gas constant * Absolution temperature
+
+        Returns
+        -------
+        pmf
+        x
+        y
+
         """
-        data = np.array(data)
+        data = np.asarray(data)
 
         # calculate 2d probability distributions
         hist2d, edges1, edges2 = np.histogram2d(data[:, xcol], data[:, ycol], bins=nbins)
@@ -30,9 +57,9 @@ class PMF :
         prob = hist2d / max_val
 
         # Assign the half_of_the_min to the zero elements
-        prob[ prob == 0.0 ] = ( min_val / (-1.0 * RT)) / max_val
+        prob[prob == 0.0] = (min_val / (-1.0 * RT)) / max_val
 
-        pmf = RT * np.log(prob)
+        pmf = RT * np.log2(prob)
 
         x = np.repeat(edges1[:-1], pmf.shape[0])
         x = np.reshape(x, (pmf.shape[0], pmf.shape[1]))
@@ -46,9 +73,19 @@ class PMF :
         """
         give a 1d array, calculate the 1d distribution
         and then calculate its PMF fes
-        :param data:
-        :param nbins:
-        :return:
+
+        Parameters
+        ----------
+        data: np.ndarray,
+            input data set
+        nbins: int,
+            number of bins for probability distribution
+        RT: float,
+            Gas constant * Absolution temperature
+
+        Returns
+        -------
+
         """
 
         # probability distribution
@@ -64,7 +101,8 @@ class PMF :
 
         return pmf, edges
 
-def arguments() :
+
+def arguments():
     d = '''
         Transform a 2D data (time series) file into a PMF matrix
         (Only numerical data files are accepted)
@@ -86,22 +124,23 @@ def arguments() :
 
     args = parser.parse_args()
 
-    if len(sys.argv) < 2 :
+    if len(sys.argv) < 2:
         print(d)
         parser.print_help()
         sys.exit(0)
 
     return args
 
-def main() :
+
+def main():
     args = arguments()
 
     dataf = args.dat
     nb = args.numbins
-    if len(args.out) :
+    if len(args.out):
         out = args.out
-    else :
-        out  = "pmf_"+dataf
+    else:
+        out = "pmf_"+dataf
 
     df = np.loadtxt(dataf, comments=["#", "@"], usecols= args.cols)
 
@@ -119,3 +158,4 @@ def main() :
         print(",".join([str(x) for x in list(edges)]))
 
     np.savetxt(out, matrix, fmt="%.3f")
+
