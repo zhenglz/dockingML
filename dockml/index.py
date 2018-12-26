@@ -326,24 +326,27 @@ class PdbIndex(object):
 
         d ='''
         ################################################################
-        # Generate GMX Index from a PDB file
-        # Generate POSRES file for a PDB File or Gro File
-        # Contact  LZHENG002@E.NTU.EDU.SG
-        # Version  2.2
-        # Update Mar 23, 2017
+        # Generate GMX Index from a PDB file                           #
+        # Generate POSRES file for a PDB File                          #
+        # Contact  Zheng Liangzhen, LZHENG002@E.NTU.EDU.SG             #
+        # Version  2.3                                                 #
+        # Update Dec 26, 2018                                          #
         ################################################################
 
-        Usage examples
+        Usage examples:
 
         Generate backbone index for residue 1 to 1000 within Chain B
-        python autoMD.py index -res 1 100 -at backbone -chain B -out index.ndx
+        gmx_index -f reference.pdb -res 1 100 -at backbone -chain B -o index.ndx
 
         Generate all atom index for residue 78 to 100
-        python autoMD.py index -inp S_1.pdb -out index.ndx -at allatom -chain ' ' -res 78 100
+        gmx_index -f reference.pdb -o index.ndx -at allatom -chain ' ' -res 78 100
 
         Generate dihedral (PHI only) quadroplex index
-        python autoMD.py index -inp S_1.pdb -out index.ndx -at dihedral -chain ' ' -res 78 100 -dihedral PHI
+        gmx_index -f input.pdb -o index.ndx -at dihedral -chain ' ' -res 78 100 -dihe PHI
 
+        Note:
+        The -s option is not used. So if you provide a -s reference.pdb, nothing will 
+        be affected. 
         '''
         parser = gmxcli.GromacsCommanLine(d=d)
 
@@ -450,11 +453,12 @@ class PdbIndex(object):
             tofile.write(" \n")
             tofile.close()
 
-            if args.positionRestraint:
+            if args.posres:
                 with open('posres.itp', 'w') as tofile :
                     tofile.write("[ position_restraints ] \n; ai  funct  fcx    fcy    fcz  \n")
                     for atom in atomndx:
-                        tofile.write("%12d  1  1000  1000  1000  \n" % int(atom))
+                        tofile.write("%12d  1  1000  1000  1000  \n"
+                                     % int(atom))
 
         print("\nGenerating Index File Completed!")
         return None

@@ -1,5 +1,6 @@
 MANIFEST.in
 README.md
+setup.py
 automd/__init__.py
 automd/autoMD.py
 automd/cleanpdb.py
@@ -22,7 +23,6 @@ dockingML.egg-info/top_level.txt
 dockml/__init__.py
 dockml/algorithms.py
 dockml/classification.py
-dockml/cmd.py
 dockml/convert.py
 dockml/dock.py
 dockml/features.py
