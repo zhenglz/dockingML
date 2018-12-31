@@ -518,7 +518,7 @@ class PdbIndex(object):
             print("Reference pdb file does not exist.")
             sys.exit(0)
 
-        ## generate index
+        # generate index
         self.load_pdb()
         self.atomndx = self.res_index()
 
