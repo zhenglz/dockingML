@@ -7,9 +7,9 @@ Generate Gromacs Format Index File
 """
 
 import sys, os
-from collections import defaultdict
 from collections import OrderedDict
 from mdanaly import gmxcli
+import mdtraj as mt
 
 
 class PdbIndex(object):
@@ -48,14 +48,103 @@ class PdbIndex(object):
 
     """
 
-    def __init__(self):
-        self.backbone = ['CA', 'N']
-        self.mainchain = ['CA', 'N', 'C', 'O']
-        self.ca = ['CA']
+    def __init__(self, reference="input.pdb",
+                 chain=["A"], resSeq=[0, -1],
+                 atomtype=["CA"], dihedral=["NA"]):
+
         self.phi = ['C', 'N', 'CA', 'C']
         self.psi = ['N', 'CA', 'C', 'N']
+        self.at_direct = ["all", "none", "sidechain", "mainchain", "protein", "water", ]
 
-    def res_index(self, inpdb, chain, atomtype, residueNdx, atomList, dihedraltype=["None"]):
+        self.dihedral = dihedral
+        self.pdb = reference
+        self.top = None
+
+        # chain identifiers, list
+        self.chain = chain
+        self.resSeq = resSeq
+        self.at = atomtype
+        self.atomndx = None
+        #self.molecule = None
+
+    def load_pdb(self):
+
+        if not os.path.exists(self.pdb) :
+            print("PDB reference file %s is not existed, exit now!" % self.pdb)
+            sys.exit(0)
+
+        if self.pdb[-4:] != ".pdb":
+            print("You just loaded a file %s \nPlease provide a reference pdb file."%self.pdb)
+
+        traj = mt.load(self.pdb)
+        self.top = traj.topology
+
+        return self
+
+    def res_seq(self):
+        if len(self.resSeq) == 1:
+            self.resSeq = [self.resSeq[0], self.resSeq[0]]
+
+        if self.resSeq[1] == -1:
+            self.resSeq[1] = self.top.n_residues - self.resSeq[0] + 1
+
+        return self
+
+    def res_index(self):
+        if self.dihedral[0] != "NA":
+            indexlist = []
+            for resndx in range(self.resSeq[0], self.resSeq[-1]+1):
+                phitype = self.phi
+                phipair = [-1, -1, -1, -1]
+                phindxadd = [-1, 0, 0, 0]
+                for i in range(4):
+                    with self.pdb as lines:
+                        for s in lines:
+                            if len(s.split()) > 1 and s.split()[0] == "ATOM" \
+                                    and s[21] in self.chain \
+                                    and int(s[22:26].strip()) == resndx + phindxadd[i] \
+                                    and s[12:16].strip() == phitype[i]:
+                                phipair[i] = int(s.split()[1])
+
+                psitype = self.psi
+                psindxadd = [0, 0, 0, 1]
+                psipair = [-1, -1, -1, -1]
+                for i in range(4):
+                    with self.pdb as lines:
+                        for s in lines:
+                            if len(s.split()) > 1 and s.split()[0] == "ATOM" \
+                                    and s[21] in self.chain and \
+                                    int(s[22:26].strip()) == resndx + psindxadd[i] \
+                                    and s[12:16].strip() == psitype[i]:
+                                psipair[i] = int(s.split()[1])
+                                # break
+
+                if "PSI" in self.dihedral:
+                    psipair = [x for x in psipair if all(x) > 0]
+                    indexlist.append(psipair)
+                if "PHI" in self.dihedral:
+                    phipair = [x for x in phipair if all(x) > 0]
+                    indexlist.append(phipair)
+
+        else:
+
+            if self.at in self.at_direct:
+                names = self.at + " and"
+            elif self.at in ["CA", "ca"]:
+                names = "name %s and " % self.at
+            else:
+                names = ""
+
+            chains = " and ".join(["chain " + x for x in self.chain])
+            resndx = " and resid %d to %d" % (self.resSeq[0], self.resSeq[1])
+
+            selections = names + resndx + chains
+
+            indexlist = self.top.select(selections)
+
+        return indexlist
+
+    '''def res_index(self, inpdb, chain, atomtype, residueNdx, atomList, dihedraltype=["None"]):
         """Obtain atom index from a reference pdb file
         provide information including: residue indexing, atomtype, atomname
 
@@ -148,9 +237,9 @@ class PdbIndex(object):
                         else:
                             if s[12:16].strip() in atomList:
                                 indexlist.append(s.split()[1])
-        return indexlist
+        return indexlist '''
 
-    def atomList(self, atomtype, atomname):
+    '''def atomList(self, atomtype, atomname):
         """Provide information of atom type and atomname
 
         Parameters
@@ -193,19 +282,23 @@ class PdbIndex(object):
             elif "PSI" in atomtype or "PHI" in atomtype or "phi" in atomtype or 'psi' in atomtype:
                 atomtype = "dihedral"
 
-        return atomList, atomtype
+        return atomList, atomtype'''
 
-    def atomList2File(self, atomNdxList, groupName, outputNdxFile, append=True):
+    def atomList2File(self, atom_list, group_name, write_dihe=False,
+                      out_filen="output.ndx", append=True):
         """
         Save a group of atom index into a gromacs-format index file
 
         Parameters
         ----------
-        atomNdxList : list, or array, or iterable, or sequence
+        atom_list : list, or array, or iterable, or sequence
             a list of atom index to be written into the output file
-        groupName : str,
+            if write_dihe = True, atom_list is a 2d list or np.ndarry
+        group_name : str,
             the group name to be written into the output file
-        outputNdxFile : str,
+        write_dihe : bool, default = False
+            whether write dihedrals to output file
+        out_filen : str, default = 'output.ndx'
             the output file name
         append : bool, default = True
             append the content into the end of the output file,
@@ -215,23 +308,28 @@ class PdbIndex(object):
         -------
         self : returns an instance of self.
         """
-        if append :
-            tofile = open(outputNdxFile, 'a')
-        else :
-            tofile = open(outputNdxFile, 'wb')
+        if append:
+            tofile = open(out_filen, 'a')
+        else:
+            tofile = open(out_filen, 'wb')
 
-        tofile.write('[ %s ] \n'% groupName )
+        tofile.write('[ %s ] \n'% group_name)
 
-        for i, atom in enumerate(atomNdxList) :
-            tofile.write('%6d ' % int(atom))
-            if i % 15 == 0:
-                tofile.write('  \n')
+        if not write_dihe:
+            for i, atom in enumerate(atom_list):
+                tofile.write('%6d ' % int(atom))
+                if i % 15 == 0:
+                    tofile.write('  \n')
+            tofile.write("\n")
 
-        tofile.write("\n")
+        else:
+            for dihe in atom_list:
+                tofile.write("   ".join(dihe) + " \n")
+
         tofile.close()
         return self
 
-    def withSubGroup(self, isProtein=True, nucleic="nucleic-acid.lib"):
+    '''def withSubGroup(self, isProtein=True, nucleic="nucleic-acid.lib"):
 
         if not os.path.exists(nucleic):
             PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
@@ -320,7 +418,7 @@ class PdbIndex(object):
                 else:
                     pass
 
-        return atominfor
+        return atominfor'''
 
     def arguements(self) :
         """Argument Parser
@@ -358,35 +456,35 @@ class PdbIndex(object):
 
         parser.arguments()
 
-        parser.parser.add_argument('-at', '--atomtype',type=str, default ='allatom',
-                            help="Selected atom type for generating index. \n"
-                                 "Options including: allatom, mainchain, \n"
-                                 "non-hydrogen, c-alpha, backbone, sidechain, dihedral\n"
-                                 "Default choice is: allatom \n")
-        parser.parser.add_argument('-an','--atomname', type=str, default=[], nargs='+',
-                            help="Select atom by atom names. A list of atom names \n"
-                                 "could be supplied. If not given, all atom names are \n"
-                                 "considered. Default is [].")
-        parser.parser.add_argument('-chain', '--chainId',type=str, default= "A",
-                            help="Protein chain identifier. Default chain ID is A. \n")
-        parser.parser.add_argument('-res', '--residueRange', type=int, nargs= '+',
-                            help="Residue sequence number for index generating. \n"
-                                 "Example, -res 1 100, generateing atom index within \n"
-                                 "residues 1 to 100. Default is None.")
-        parser.parser.add_argument('-posres', '--positionRestraint',default=False,
-                            help="Generate a postion restraint file for selected index.\n"
-                                 "Default name is posres.itp \n")
-        parser.parser.add_argument('-dihe', '--dihedralType',default=None, type =str,
-                            help="Whether generate dihedral angles index (quadruplex).\n"
-                                 "Phi and Psi are considered. Optional choices are: \n"
-                                 "PHI, PSI, PHI_PSI, or NA. Default is NA. \n")
-        parser.parser.add_argument('-gn','--groupName', type=str, default=None,
-                            help="The name of the group of atoms selected. \n"
-                                 "Default is None.")
-        parser.parser.add_argument('-append', '--appendFile', default=True, type=bool,
-                            help="Append the group of index to the output file. \n"
-                                 "Options: True, False. \n"
-                                 "Default is True.")
+        parser.parser.add_argument('-at', type=str, default ='allatom',
+                                   help="Selected atom type for generating index. \n"
+                                   "Options including: allatom, mainchain, \n"
+                                   "non-hydrogen, c-alpha, backbone, sidechain, dihedral\n"
+                                   "Default choice is: allatom \n")
+        '''parser.parser.add_argument('-an', type=str, default=[], nargs='+',
+                           help="Select atom by atom names. A list of atom names \n"
+                           "could be supplied. If not given, all atom names are \n"
+                           "considered. Default is [].")'''
+        parser.parser.add_argument('-chain', type=str, default= "A", nargs="+",
+                                   help="Protein chain identifier. Default chain ID is [\'A\',]. ")
+        parser.parser.add_argument('-res', type=int, nargs= '+',
+                                   help="Residue sequence number for index generating. \n"
+                                   "Example, -res 1 100, generateing atom index within \n"
+                                   "residues 1 to 100. Default is None.")
+        parser.parser.add_argument('-posres', default=False,
+                                   help="Generate a postion restraint file for selected index.\n"
+                                   "Default name is posres.itp \n")
+        parser.parser.add_argument('-dihe', default=None, type =str,
+                                   help="Whether generate dihedral angles index (quadruplex).\n"
+                                   "Phi and Psi are considered. Optional choices are: \n"
+                                   "PHI, PSI, PHI_PSI, or NA. Default is NA. \n")
+        parser.parser.add_argument('-gn', type=str, default=None,
+                                   help="The name of the group of atoms selected. \n"
+                                   "Default is None.")
+        parser.parser.add_argument('-append', default=True, type=bool,
+                                   help="Append the group of index to the output file. \n"
+                                   "Options: True, False. \n"
+                                   "Default is True.")
 
         parser.parse_arguments()
         args = parser.args
@@ -406,64 +504,47 @@ class PdbIndex(object):
         """
         args = self.arguements()
 
-        if len(args.residueRange) == 2:
-            residueNdx = range(args.residueRange[0], args.residueRange[-1] + 1)
-        elif len(args.residueRange) == 1:
-            residueNdx = range(args.residueRange[0], args.residueRange[0] + 1)
-        elif len(args.residueRange) > 2:
-            residueNdx = args.residueRange
+        self.resSeq = args.res
+        self.res_seq()
+
+        self.at = args.at
+        self.dihedral = args.dihedral
+
+        if os.path.exists(args.f):
+            self.pdb = args.f
+        elif os.path.exists(args.s):
+            self.pdb = args.s
         else:
-            print("\nNumber of residue id is not correct. \nExit Now. ")
-            residueNdx = None
-            sys.exit(1)
-
-        if args.dihedralType:
-
-            atomlist,atomtype = self.atomList(args.dihedralType, args.atomname)
-        else :
-            atomlist,atomtype = self.atomList(args.atomtype, args.atomname)
+            print("Reference pdb file does not exist.")
+            sys.exit(0)
 
         ## generate index
-        atomndx = self.res_index(inpdb=args.f, chain=args.chainId,
-                                 residueNdx=args.residueRange, atomList=atomlist,
-                                 atomtype=atomtype, dihedraltype=args.dihedralType
-                                 )
-        if args.appendFile:
+        self.load_pdb()
+        self.atomndx = self.res_index()
+
+        if args.append:
             append = 'a'
         else:
             append = 'wb'
         tofile = open(args.o, append)
 
-        if args.groupName:
-            tofile.write('[ %s ] \n' % (args.groupName.strip()))
+        if args.dihedral[0] != "NA":
+            write_dihedral = True
         else:
-            tofile.write('[ %s_%d_%d ] \n' % (args.chainId, args.residueRange[0], args.residueRange[-1]))
+            write_dihedral = False
 
-        if atomtype == "dihedral":
-            for index in atomndx:
-                for i in range(4):
-                    tofile.write("%5d " % index[i])
-                tofile.write("  \n")
+        self.atomList2File(self.atomndx, group_name=args.gn, write_dihe=write_dihedral,
+                           out_filen=args.o, append=append)
 
-        else:
-            i = 0
-            for atom in atomndx:
-                i += 1
-                tofile.write('%4s ' % atom)
-                if i % 15 == 0:
-                    tofile.write('  \n')
-            tofile.write(" \n")
-            tofile.close()
-
-            if args.posres:
-                with open('posres.itp', 'w') as tofile :
-                    tofile.write("[ position_restraints ] \n; ai  funct  fcx    fcy    fcz  \n")
-                    for atom in atomndx:
-                        tofile.write("%12d  1  1000  1000  1000  \n"
-                                     % int(atom))
+        if args.posres:
+            with open('posres.itp', 'w') as tofile:
+                tofile.write("[ position_restraints ] \n; ai  funct  fcx    fcy    fcz  \n")
+                for atom in self.atomndx:
+                    tofile.write("%12d  1  1000  1000  1000  \n"
+                                 % int(atom))
 
         print("\nGenerating Index File Completed!")
-        return None
+        return self
 
 
 class GmxIndex(object):
