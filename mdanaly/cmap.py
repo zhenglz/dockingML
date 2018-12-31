@@ -630,8 +630,8 @@ def arguments():
                                help="Not implemented yet. \n"
                                     "For community analysis, calculate atom contact number, normalized. \n"
                                     "Default is False. \n")
-    parser.parser.add_argument('-v', default=False , type=lambda x: (str(x).lower() == "true"),
-                               help="Verbose. Default is False.")
+#    parser.parser.add_argument('-v', default=False , type=lambda x: (str(x).lower() == "true"),
+#                               help="Verbose. Default is False.")
     parser.parser.add_argument('-details', default=None, type=str,
                                help="Provide detail contact information and write out to a file. \n"
                                     "Default is None.")
@@ -691,7 +691,7 @@ def iterload_cmap():
 
     for i, traj in enumerate(trajs):
         # calculate cmap information
-        verbose(args.v, "Generate cmap for chunk #5d ......" % i)
+        verbose(args.v, "Generate cmap for chunk %5d ......" % i)
         contmap = ContactMap(traj, group_a, group_b, cutoff=args.cutoff)
         contmap.generate_cmap(shape="array")
 

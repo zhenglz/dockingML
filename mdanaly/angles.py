@@ -10,8 +10,7 @@ from mdanaly import gmxcli
 
 
 class ComputeAngles(object):
-    """
-    Calculate angles or dihedral angles of a trajectory
+    """Calculate angles or dihedral angles of a trajectory
 
     Parameters
     ----------
@@ -21,15 +20,34 @@ class ComputeAngles(object):
 
     Attributes
     ----------
+    traj: mt.Trajectory,
+        the input trajectory object (from mdtraj.Trajectory object)
 
+    Methods
+    -------
+    get_angles(angle_index)
+        Calculate angles between three atoms for a trajectory
+    get_dihedral_angles(angle_index)
+        Calculate dihedral angles between four atoms for a trajectory
+
+    Examples
+    --------
+    Calculate the dihedral angle between atom 0, 1, 2, 3
+    >>> from mdanaly import angles
+    >>> import mdtraj as mt
+    >>> angl = angles.ComputeAngles(traj=traj)
+    >>> angl.get_dihedral_angles([[0, 1, 2, 3],])
+    array([[1.8847224]], dtype=float32)
+    Calculate a list of angles
+    >>> angl.get_angles([[0, 1, 3], [0, 2, 4], [3, 4, 5]])
+    array([[0.89176244, 2.0307815 , 1.8160943 ]], dtype=float32)
     """
 
     def __init__(self, traj):
         self.traj = traj
 
     def get_angles(self, angle_index):
-        """
-        calculate angles between three atoms for a trajectory
+        """calculate angles between three atoms for a trajectory
 
         Parameters
         ----------
@@ -49,17 +67,25 @@ class ComputeAngles(object):
         return angles
 
     def get_dihedral_angles(self, angle_index):
-        """
-        calculate dihedral angles between four atoms for a trajectory
+        """calculate dihedral angles between four atoms for a trajectory
 
         Parameters
         ----------
         angle_index: list, shape=[n, 4]
             the atom indices for angle calculations
 
+        Examples
+        --------
+        Calculate the dihedral angle between atom 0, 1, 2, 3
+        >>> from mdanaly import angles
+        >>> import mdtraj as mt
+        >>> angl = angles.ComputeAngles(traj=traj)
+        >>> angl.get_dihedral_angles([[0, 1, 2, 3],])
+        array([[1.8847224]], dtype=float32)
+
         Returns
         -------
-        angles: numpy ndarray, shape=[N, M]
+        angles: np.ndarray, shape=[N, M]
             angles, N is number of frames, M is the number
             of the angles per frame
 
@@ -70,21 +96,20 @@ class ComputeAngles(object):
         return angles
 
 
-def read_index(ndx, angle_type):
-    """
-    read gromacs index file and get atom indices
+def read_index(ndx="index.ndx", angle_type="dihedral"):
+    """read gromacs index file and get atom indices
 
     Parameters
     ----------
-    ndx: str,
-        input gromacs index file
-    angle_type: str,
-        input angle type parameter, options: angle, dihedral
+    ndx: str, default = "index.ndx"
+        Input gromacs index file name
+    angle_type: str, default = "dihedral"
+        Input angle type parameter, options: angle, dihedral
 
     Returns
     -------
-    elements: ndarray, shape=[n,4] or [n, 3]
-        the atom indices for angle caculation
+    elements: np.ndarray, shape=[n,4] or [n, 3]
+        The atom indices for angle calculation. It is a 2-D array.
     """
     indexer = index.GmxIndex(index=ndx)
 
@@ -93,10 +118,11 @@ def read_index(ndx, angle_type):
         print("%3d    %s " % (i, g))
     #print("Your choice: ")
     n = int(input("Your choice:  "))
-    print("You have selected: %s" % indexer.groups[n])
+    print("You have selected: %s " % indexer.groups[n])
 
     elements = indexer.groupContent(indexer.groups[n])
 
+    # gromacs index starts from 1, while python-style index starts from 0
     elements = [int(x)-1 for x in elements]
     # if dihedral, four atoms index should be defined
     if angle_type == "dihedral":
@@ -109,8 +135,8 @@ def read_index(ndx, angle_type):
 
 def descriptions():
     d = """
-    Calculate angles of a xtc trajectory. This function is simply designed to simulation
-    gmx angle module, but provide a direct way to save the result.
+    Calculate time-series angles using a xtc trajectory. This function is simply designed to simulation
+    gmx angle module, but provide a direct and easy way to save the result.
 
     Examples:
     Print help information
@@ -128,8 +154,7 @@ def descriptions():
 
 
 def arguments(d):
-    """
-    Parse the gmx style command arguments
+    """Parse the gmx-style command arguments for angle calculations.
 
     Returns
     -------
@@ -165,19 +190,20 @@ def write_angles(angles, fout, cosine, sine, dt=2, begin=0, end=-1):
 
     Parameters
     ----------
-    angles: ndarray, shape=[N * M ]
+    angles : ndarray, shape=[N * M ]
         the angles, N is number of frames, M is the number of angles
-    fout: str,
-        output file
+    fout : str,
+        output file name, comma separated
     cosine: int,
         whether save the cosine of the angles, default is 0
-    sine: int,
+    sine : int,
         whether save the sine of the angles, default is 0
-    dt: int,
+    dt : int, default=2
         the stride of the frames were saved or angles were calculated
-
-    Returns
-    -------
+    begin : int, default = 0,
+        the beginning frame index
+    end : int, default = -1
+        the ending frame index
 
     """
     pi = 3.141592654
@@ -209,15 +235,11 @@ def write_angles(angles, fout, cosine, sine, dt=2, begin=0, end=-1):
 
 
 def gmxangle():
-    """
-    A gromacs g_angle simulator which works the same way as the gromacs tool
-
-    Parameters
-    ----------
+    """A gromacs g_angle simulator which works the same way as the gromacs tool
 
     Returns
     -------
-    angles: ndarray, shape=[N * M ]
+    angles: np.ndarray, shape=[N * M ]
         the angles, N is number of frames, M is the number of angles per frame
 
     """

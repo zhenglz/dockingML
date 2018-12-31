@@ -464,20 +464,32 @@ def iterload_xyz_coordinates(xtcfile, top, chunk, stride, atom_selection="name C
     return xyz
 
 
-def write_results(X_transformed, variance_ratio, X_out, variance_out, col_index):
-    """
-    Write PCA results into files:
+def write_results(X_transformed, variance_ratio, X_out, variance_out, col_index, eigenvector=None, eigvector_out="Eigenvectors.csv"):
+    """Write PCA results into files:
     1. transformed dataset
     2. explained variance ratio
+    3. eigenvectors (To be completed)
 
     Parameters
     ----------
-    X_transformed: numpy ndarray
-    variance_ratio: numpy array
+    X_transformed: np.ndarray, shape = [ N_samples, M_features]
+        the transformed X dataset,
+        N_samples is number of samples, M_features is number of dimensions
+    variance_ratio: np.array, shape = [ M_features, ]
+        the PCA variance ratio.
+        M_features is the number of PCs.
     X_out: str
+        the transformed dataset output file name
     variance_out: str
-    dt: int
-    col_index: numpy array
+        the output variance file name
+    col_index : np.array, shape = [ N_samples, 1]
+        the index label for output file,
+        N_sample is number of samples.
+    eigenvector : pd.DataFrame, default = None, shape = [ N_components, M_features]
+        the eigenvector for output
+        N_components is the number of PCs, M features is the original feature dimensions
+    eigvector_out : str, default = "Eigenvectors.csv"
+        the eigenvector output file name
 
     Returns
     -------
@@ -498,6 +510,13 @@ def write_results(X_transformed, variance_ratio, X_out, variance_out, col_index)
     eigval["eigval_ratio"] = variance
     eigval.to_csv(variance_out, sep=",", header=True, index=False, float_format="%.3f")
 
+    # save eigvectors to a file when necessary
+    if not eigenvector and len(eigvector_out):
+        if not isinstance(eigenvector, pd.DataFrame):
+            eigenvector = pd.DataFrame(eigenvector)
+
+        eigenvector.to_csv(eigvector_out, sep=",", header=False, index=False)
+
     return None
 
 
@@ -507,17 +526,17 @@ def load_dataset(fn, skip_index=True, sep=","):
 
     Parameters
     ----------
-    fn: str,
+    fn : str
         input dataset file name, a csv comma separated file
-    skip_index: bool,
+    skip_index : bool, default = True
         whether skip the first col and using it as index
-    sep: str,
+    sep : str, default = ","
         the delimiter or spacer in the dataset file
 
     Returns
     -------
-    X: pandas DataFrame, shape=[N, M]
-        N is number of samples, M is the number of dimensions.
+    X : pandas DataFrame, shape = [N_samples, M_features]
+        N_samples is number of samples, M_features is the number of dimensions.
 
     """
 
@@ -530,20 +549,23 @@ def load_dataset(fn, skip_index=True, sep=","):
     return X
 
 
-def run_pca(dat, proj=10, output="transformed.csv", var_ratio_out="variance_explained.dat"):
-    """
-    Perform PCA calculation given a clean dataset file.
+def run_pca(dat, proj=10, output="transformed.csv", var_ratio_out="variance_explained.dat", eigenvector_out=""):
+    """Perform PCA calculation given a clean dataset file.
+    The dataset could be xyz coordinates, general CV values, angles, dihedral angles,
+    contact map, distance matrix, or any other well-formated time-series datasets.
 
     Parameters
     ----------
-    dat: pandas DataFrame, or a numpy ndarray, shape=[N, M]
+    dat : pd.DataFrame, or a np.ndarray, shape=[N, M]
         N is the number of samples, M is the number of dimensions.
-    proj: int,
+    proj : int, default = 10
         number of projections to output
-    output: str,
+    output : str,
         the transformed or projected dataset output file name, format is csv
-    var_ratio_out: str,
+    var_ratio_out : str,
         the variance explained ratio of the eigvalues output file name
+    eigenvector_out : str, default = ""
+        the eigenvector output file name
 
     Returns
     -------
@@ -562,12 +584,12 @@ def run_pca(dat, proj=10, output="transformed.csv", var_ratio_out="variance_expl
 
     # write result
     write_results(X_transformed=X_transformed, variance_ratio=variance_ratio,
-                  X_out=output, variance_out=var_ratio_out, col_index=index_col)
+                  X_out=output, variance_out=var_ratio_out, col_index=index_col,
+                  eigenvector=pca.eigvectors_, eigvector_out=eigenvector_out)
     return None
 
 def gen_cmap(args):
-    """
-    Load a trajectory file and calculate the atom contactmap.
+    """Load a trajectory file and calculate the atom contactmap.
 
     Parameters
     ----------
@@ -576,8 +598,10 @@ def gen_cmap(args):
 
     Returns
     -------
-    cmap_dat: pd.DataFrame,
-        the contactmap along the time
+    cmap_dat: pd.DataFrame, shape = [ N, M]
+        the contactmap along the time. N is number of frames,
+        M is N_res * N_res (N_res is number of residues for cmap
+        calculations. )
 
     """
 
@@ -615,8 +639,21 @@ def gen_cmap(args):
 
 
 def gen_dihedrals(args):
+    """General dihedral angles from gromacs xtc file
+
+    Parameters
+    ----------
+    args : argparse object,
+        the arguments options
+
+    Returns
+    -------
+    di_angles: pd.DataFrame, shape = [ N, M ]
+        time-series dihedral angles. N is number of frames, M is number of
+        dihedral angles per frame.
+    """
     d = """
-    Performing dihedral PCA. 
+    General dihedral angles from xtc trajectory file.  
     """
     args = arguments(d=d)
 
@@ -703,8 +740,9 @@ def xyz_pca(args):
     args: argparse object,
         the arguments holder
 
-    Returns
+    Notes
     -------
+    If you want to generate essential dynamics movie from XYZ coordinates PCA,
 
     """
 
@@ -724,7 +762,7 @@ def xyz_pca(args):
     dat = datset_subset(dat, begin=args.b, end=args.e)
 
     # run pca and write result to outputs
-    run_pca(dat, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio)
+    run_pca(dat, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio, eigenvector_out=args.eigvect)
 
 
 def dihedral_pca(args):
@@ -749,7 +787,19 @@ def dihedral_pca(args):
 
 
 def arguments(d="Descriptions."):
-    # prepare gmx style argument for pca calculation
+    """prepare gmx-style argument for pca calculation
+
+    Parameters
+    ----------
+    d : str,
+        the description string of the module
+
+    Returns
+    -------
+    args : Argparser object,
+        the argument parser object
+
+    """
     parser = gmxcli.GromacsCommanLine(d=d)
 
     parser.arguments()
@@ -782,6 +832,11 @@ def arguments(d="Descriptions."):
                                help="Input, optional. Working with mode == general \n"
                                     "Generally, there would be an index column in the input file, choose\n"
                                     "to whether skip the index column. Default is True. ")
+    parser.parser.add_argument("-eigvect", type=str, default="",
+                               help="Output, optional. Default is empty."
+                                    "The output eigvector file name. It is only useful when"
+                                    "you want to create ensemble of essential dynamics PDB files to generate"
+                                    "a movie based on XYZ coordinates PCA. ")
 
     parser.parse_arguments()
     args = parser.args
@@ -790,6 +845,13 @@ def arguments(d="Descriptions."):
 
 
 def gmxpca():
+    """Perform PCA analysis based on coordinates (contactmap, distance matrix
+    or dihedral angles) in xtc file
+
+    Returns
+    -------
+
+    """
     d = """
     Perform PCA calculation. 
     """

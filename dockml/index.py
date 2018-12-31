@@ -13,11 +13,7 @@ from mdanaly import gmxcli
 
 
 class PdbIndex(object):
-    """
-    Input the residue number sequence, then out put the required index atoms
-
-    Parameters
-    ----------
+    """Input the residue number sequence, then out put the required index atoms
 
     Attributes
     ----------
@@ -34,9 +30,21 @@ class PdbIndex(object):
 
     Examples
     --------
+    >>> from dockml import index
+    >>> ndx = index.PdbIndex()
+    >>> ndx
+    <dockml.index.PdbIndex object at 0x2b704a297860>
+    >>> ndx.res_index("./test/input.pdb", "C", "all-atom", residueNdx=[1, 2], atomList=[])
+    ['22378', '22379', '22380', '22381', '22382', '22383', '22384', '22385', '22386', '22387', '22388', '22389', '22390',
+    '22391', '22392', '22393', '22394', '22395', '22396', '22397', '22398', '22399', '22400', '22401', '22402', '22403',
+    '22404', '22406', '22407', '22408', '22409', '22410', '22411', '22412', '22413', '22414', '22415', '22416', '22417',
+    '22418', '22419', '22420', '22421', '22422', '22423', '22424', '22425', '22426', '22427', '22428', '22429', '22430',
+    '22431', '22432', '22433', '22434', '22435', '22436', '22437']
 
     See Also
     --------
+    GmxIndex
+        parse gromacs index file
 
     """
 
@@ -48,28 +56,27 @@ class PdbIndex(object):
         self.psi = ['N', 'CA', 'C', 'N']
 
     def res_index(self, inpdb, chain, atomtype, residueNdx, atomList, dihedraltype=["None"]):
-        """
-        Obtain atom index from a reference pdb file
+        """Obtain atom index from a reference pdb file
         provide information including: residue indexing, atomtype, atomname
 
         Parameters
         ----------
-        inpdb: str,
+        inpdb : str,
             the input pdb file name
-        chain: str,
+        chain : str,
             the chain identifier in a pdb file
-        atomtype: str, options: all-atom, non-hydrogen, dihedral
+        atomtype : str, options: all-atom, non-hydrogen, dihedral
             the atom type for index generation
         residueNdx: iterable, shape = [2]
             the residue index [ start, end ]
-        atomList: list,
+        atomList : list,
             explicit atom name list
-        dihedraltype: str, options= [ PHI, PSI, PHI_PSI]
+        dihedraltype : str, options= [ PHI, PSI, PHI_PSI]
             the dihedral angle type
 
         Returns
         -------
-        indexlist: list,
+        indexlist : list,
             a list of elements (integers) in certain group
 
         """
@@ -144,21 +151,20 @@ class PdbIndex(object):
         return indexlist
 
     def atomList(self, atomtype, atomname):
-        """
-        Provide information of atom type and atomname
+        """Provide information of atom type and atomname
 
         Parameters
         ----------
-        atomtype: str,
+        atomtype : str,
             the type of atoms for groupping
-        atomname: list, iterable, or array
+        atomname : list, iterable, or array
             a list of explict atom names
 
         Returns
         -------
-        atomList: list, or iterable, or array
+        atomList : list, or iterable, or array
             a list of atom names
-        atomtype: str,
+        atomtype : str,
             the atom types for groupping
 
         """
@@ -195,19 +201,19 @@ class PdbIndex(object):
 
         Parameters
         ----------
-        atomNdxList: list, or array, or iterable, or sequence
+        atomNdxList : list, or array, or iterable, or sequence
             a list of atom index to be written into the output file
-        groupName: str,
+        groupName : str,
             the group name to be written into the output file
-        outputNdxFile: str,
+        outputNdxFile : str,
             the output file name
-        append: bool,
+        append : bool, default = True
             append the content into the end of the output file,
             if it exists
 
         Returns
         -------
-
+        self : returns an instance of self.
         """
         if append :
             tofile = open(outputNdxFile, 'a')
@@ -223,7 +229,7 @@ class PdbIndex(object):
 
         tofile.write("\n")
         tofile.close()
-        return None
+        return self
 
     def withSubGroup(self, isProtein=True, nucleic="nucleic-acid.lib"):
 
@@ -317,7 +323,7 @@ class PdbIndex(object):
         return atominfor
 
     def arguements(self) :
-        """
+        """Argument Parser
 
         Returns
         -------
@@ -394,12 +400,8 @@ class PdbIndex(object):
 
         return args
 
-    def genGMXIndex( self):
-        """
-        run geneIndex, initialize argument parser function.
-
-        Returns
-        -------
+    def genGMXIndex(self):
+        """run geneIndex, initialize argument parser function.
 
         """
         args = self.arguements()
@@ -480,6 +482,14 @@ class GmxIndex(object):
           the list of groups in the index file
     totallines: int,
           total number of lines in the index file
+
+    Methods
+    -------
+    groupsLineNumber()
+        Get the line number for each of the groups
+    groupContent(group)
+        Fetch the content in a group given its group name
+
     """
 
     def __init__(self, index):
@@ -527,8 +537,9 @@ class GmxIndex(object):
 
         Returns
         -------
-        contents.split(): list
-            the element in each group
+        elements: list
+            The element in each group. Each element in the list is
+            in str format.
 
         """
 
@@ -551,27 +562,23 @@ class GmxIndex(object):
 
         Parameters
         ----------
-        group: str,
+        group : str,
                the name of a new group
-        elements: list,
+        elements : list,
                the list containing elements of a group
-        output: str,
+        output : str, default = "output.ndx"
                the file name of an output index file
 
         Returns
         -------
-
+        self : returns an instance of self.
         """
 
         PdbIndex().atomList2File(elements, group, output)
-
+        return  self
 
 def main():
-    """
-    Entry_point of the pdb index and gromacs index modules
-
-    Returns
-    -------
+    """Entry_point of the pdb index and gromacs index modules
 
     """
 
