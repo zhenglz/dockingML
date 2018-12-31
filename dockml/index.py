@@ -144,53 +144,6 @@ class PdbIndex(object):
 
         return indexlist
 
-
-
-    '''def atomList(self, atomtype, atomname):
-        """Provide information of atom type and atomname
-
-        Parameters
-        ----------
-        atomtype : str,
-            the type of atoms for groupping
-        atomname : list, iterable, or array
-            a list of explict atom names
-
-        Returns
-        -------
-        atomList : list, or iterable, or array
-            a list of atom names
-        atomtype : str,
-            the atom types for groupping
-
-        """
-        atomList = []
-        if atomname :
-            atomList = atomname
-        else :
-            if "mainchain" in atomtype or "Main" in atomtype or "main" in atomtype:
-                atomList = self.mainchain
-
-            elif "CA" in atomtype or "ca" in atomtype or "Ca" in atomtype or "alpha" in atomtype:
-                atomList = self.ca
-
-            elif "backbone" in atomtype or "Back" in atomtype or "bone" in atomtype:
-                atomList = self.backbone
-
-            elif "all" in atomtype:
-                atomtype = "all-atom"
-
-            elif "no hy" in atomtype or "non-hy" in atomtype or "heavy":
-                atomtype = "non-hydrogen"
-
-            elif "side" in atomtype or "Sidechain" in atomtype or "sidechain" in atomtype:
-                atomtype = "side-chain"
-
-            elif "PSI" in atomtype or "PHI" in atomtype or "phi" in atomtype or 'psi' in atomtype:
-                atomtype = "dihedral"
-
-        return atomList, atomtype'''
-
     def atomList2File(self, atom_list, group_name, write_dihe=False,
                       out_filen="output.ndx", append=True):
         """
@@ -236,98 +189,7 @@ class PdbIndex(object):
         tofile.close()
         return self
 
-    '''def withSubGroup(self, isProtein=True, nucleic="nucleic-acid.lib"):
-
-        if not os.path.exists(nucleic):
-            PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
-            nucleic = os.path.join(PROJECT_ROOT, '/../data/nucleic-acid.lib')
-
-        if isProtein:
-            subgroup = {}
-            for atom in ['CA', 'N', 'C', 'O']:
-                subgroup[atom] = "mainchain"
-            for atom in ['CZ2', 'OE2', 'OE1', 'OG1', 'CD1', 'CD2', 'CG2', 'NE', 'NZ', 'OD1',
-                         'ND1', 'ND2', 'OD2', 'CB', 'CZ3', 'CG', 'CZ',
-                         'NH1', 'CE', 'CE1', 'NH2', 'CG1', 'CD', 'OH', 'OG', 'SG', 'CH2',
-                         'NE1', 'CE3', 'SD', 'NE2', 'CE2']:
-                subgroup[atom] = 'sidechain'
-
-            return subgroup
-        else:
-            xna = {}
-            try :
-                with open(nucleic) as lines:
-                    for s in lines:
-                        if "#" not in s:
-                            xna[s.split()[-1]] = s.split()[1]
-
-            except FileNotFoundError :
-                print("File %s not exist" % nucleic)
-                xna = {}
-            return xna
-
-    def atomInformation(self, pdbin, proteinres="amino-acid.lib"):
-        # elements in atom infor
-        # key: atom index
-        # value: [atomname, molecule type, is_hydrogen,  resname, resndx, chainid,(mainchian, sidechain,
-        #           sugar ring, phosphate group, base ring)]
-        atominfor = defaultdict(list)
-
-        if not os.path.exists(proteinres) :
-            PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
-            proteinres = PROJECT_ROOT + '/../data/amino-acid.lib'
-
-        with open(proteinres) as lines:
-            protRes = [s.split()[2] for s in lines if "#" not in s]
-        DNARes = ['DA', 'DT', 'DC', 'DG']
-        RNARes = ['A', 'G', 'C', 'U']
-
-        prosubgroup = self.withSubGroup(True)
-        xnasubgroup = self.withSubGroup(False)
-
-        with open(pdbin) as lines:
-            for s in lines:
-                if len(s.split()) and s[:4] in ["ATOM", "HETA"]:
-
-                    atomndx = s[6:11].strip()
-                    atomname = s[12:16].strip()
-                    resname = s[17:20].strip()
-                    resndx = int(s[22:26].strip())
-                    chain = s[21]
-                    if len(s) > 76:
-                        if s[77] != " ":
-                            element = s[77]
-                        else:
-                            element = s[13]
-                    else:
-                        element = s[13]
-
-                    hydrogen = {"H": True}
-                    is_hydrogen = hydrogen.get(s[13], False)
-
-                    if resname in protRes:
-                        moltype = "Protein"
-                    elif resname in DNARes:
-                        moltype = "DNA"
-                    elif resname in RNARes:
-                        moltype = "RNA"
-                    else:
-                        moltype = "Unknown"
-
-                    if moltype == "Protein":
-                        subgroup = prosubgroup.get(atomname, "Unknown")
-                    elif moltype in ["RNA", "DNA"]:
-                        subgroup = xnasubgroup.get(atomname, "Unknown")
-                    else:
-                        subgroup = "Unknown"
-
-                    atominfor[atomndx] = [atomname, moltype, is_hydrogen, resname, resndx, chain, subgroup, element]
-                else:
-                    pass
-
-        return atominfor'''
-
-    def arguements(self) :
+    def arguements(self):
         """Argument Parser
 
         Returns
@@ -429,19 +291,13 @@ class PdbIndex(object):
         self.load_pdb()
         self.atomndx = self.res_index()
 
-        if args.append:
-            append = 'a'
-        else:
-            append = 'wb'
-        #tofile = open(args.o, append)
-
         if args.dihedral[0] != "NA":
             write_dihedral = True
         else:
             write_dihedral = False
 
         self.atomList2File(self.atomndx, group_name=args.gn, write_dihe=write_dihedral,
-                           out_filen=args.o, append=append)
+                           out_filen=args.o, append=args.append)
 
         if args.posres:
             with open('posres.itp', 'w') as tofile:
