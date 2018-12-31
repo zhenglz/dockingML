@@ -2,14 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dockingML.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dockingML.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dockml/index.py" beforeDir="false" afterPath="$PROJECT_DIR$/dockml/index.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mdanaly/angles.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/angles.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mdanaly/cmap.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/cmap.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mdanaly/pca.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/pca.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mdanaly/dynamics.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/dynamics.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/update2github.sh" beforeDir="false" afterPath="$PROJECT_DIR$/update2github.sh" afterDir="false" />
     </list>
     <ignored path="dockingML.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,12 +25,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dockml/index.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="416">
-              <caret line="590" lean-forward="true" selection-start-line="590" selection-end-line="590" />
+            <state relative-caret-position="9979">
+              <caret line="590" selection-start-line="590" selection-end-line="590" />
               <folding>
                 <element signature="e#109#123#0" expanded="true" />
-                <element signature="e#18033#18374#0" />
-                <element signature="e#18416#18858#0" />
               </folding>
             </state>
           </provider>
@@ -50,10 +43,10 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mdanaly/cmap.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="239">
+            <state relative-caret-position="443">
               <caret line="693" column="50" selection-start-line="693" selection-start-column="50" selection-end-line="693" selection-end-column="50" />
               <folding>
                 <element signature="e#766#1759#1" />
@@ -69,7 +62,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mdanaly/network.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="376">
+            <state relative-caret-position="7276">
               <caret line="436" column="4" selection-start-line="436" selection-start-column="4" selection-end-line="436" selection-end-column="4" />
             </state>
           </provider>
@@ -79,7 +72,7 @@
         <entry file="file://$PROJECT_DIR$/bin/network.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="102">
-              <caret line="6" column="12" lean-forward="true" selection-start-line="6" selection-start-column="12" selection-end-line="6" selection-end-column="12" />
+              <caret line="6" column="12" selection-start-line="6" selection-start-column="12" selection-end-line="6" selection-end-column="12" />
             </state>
           </provider>
         </entry>
@@ -93,7 +86,7 @@
         <entry file="file://$PROJECT_DIR$/bin/gmx_pca.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="136">
-              <caret line="8" column="12" lean-forward="true" selection-start-line="8" selection-start-column="12" selection-end-line="8" selection-end-column="12" />
+              <caret line="8" column="12" selection-start-line="8" selection-start-column="12" selection-end-line="8" selection-end-column="12" />
             </state>
           </provider>
         </entry>
@@ -101,7 +94,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mdanaly/pca.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="169">
+            <state relative-caret-position="10761">
               <caret line="838" column="73" selection-start-line="838" selection-start-column="70" selection-end-line="838" selection-end-column="73" />
               <folding>
                 <element signature="e#25#43#0" expanded="true" />
@@ -114,17 +107,20 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$USER_HOME$/.conda/envs/py36/lib/python3.6/site-packages/sklearn/decomposition/pca.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-126">
+            <state relative-caret-position="8160">
               <caret line="497" column="13" selection-start-line="497" selection-start-column="13" selection-end-line="497" selection-end-column="13" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mdanaly/dynamics.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1850">
-              <caret line="210" column="95" selection-start-line="210" selection-start-column="81" selection-end-line="210" selection-end-column="95" />
+            <state relative-caret-position="17">
+              <caret line="1" column="21" selection-start-line="1" selection-start-column="21" selection-end-line="1" selection-end-column="21" />
+              <folding>
+                <element signature="e#25#38#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -199,7 +195,6 @@
         <option value="$PROJECT_DIR$/dockml/gentop.py" />
         <option value="$PROJECT_DIR$/bin/extract.py" />
         <option value="$PROJECT_DIR$/bin/index.py" />
-        <option value="$PROJECT_DIR$/mdanaly/dynamics.py" />
         <option value="$PROJECT_DIR$/mdanaly/lipids.py" />
         <option value="$PROJECT_DIR$/bin/t-SNE.py" />
         <option value="$PROJECT_DIR$/bin/lipids.py" />
@@ -242,10 +237,12 @@
         <option value="$PROJECT_DIR$/dockml/index.py" />
         <option value="$PROJECT_DIR$/mdanaly/pca.py" />
         <option value="$PROJECT_DIR$/mdanaly/cmap.py" />
+        <option value="$PROJECT_DIR$/mdanaly/dynamics.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
+    <option name="y" value="22" />
     <option name="width" value="1600" />
     <option name="height" value="838" />
   </component>
@@ -1253,25 +1250,13 @@
     <entry file="file://$PROJECT_DIR$/test/output.pdb">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/input.pdb">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/dockml/index.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="416">
-          <caret line="590" lean-forward="true" selection-start-line="590" selection-end-line="590" />
+        <state relative-caret-position="9979">
+          <caret line="590" selection-start-line="590" selection-end-line="590" />
           <folding>
             <element signature="e#109#123#0" expanded="true" />
-            <element signature="e#18033#18374#0" />
-            <element signature="e#18416#18858#0" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.conda/envs/py36/lib/python3.6/site-packages/sklearn/decomposition/pca.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-126">
-          <caret line="497" column="13" selection-start-line="497" selection-start-column="13" selection-end-line="497" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -1282,30 +1267,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bin/network.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="12" lean-forward="true" selection-start-line="6" selection-start-column="12" selection-end-line="6" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/network.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="376">
+        <state relative-caret-position="7276">
           <caret line="436" column="4" selection-start-line="436" selection-start-column="4" selection-end-line="436" selection-end-column="4" />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/bin/network.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="12" selection-start-line="6" selection-start-column="12" selection-end-line="6" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/input.pdb">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/bin/gmx_pca.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
-          <caret line="8" column="12" lean-forward="true" selection-start-line="8" selection-start-column="12" selection-end-line="8" selection-end-column="12" />
+          <caret line="8" column="12" selection-start-line="8" selection-start-column="12" selection-end-line="8" selection-end-column="12" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/pca.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
+        <state relative-caret-position="10761">
           <caret line="838" column="73" selection-start-line="838" selection-start-column="70" selection-end-line="838" selection-end-column="73" />
           <folding>
             <element signature="e#25#43#0" expanded="true" />
@@ -1314,16 +1302,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/dynamics.py">
+    <entry file="file://$USER_HOME$/.conda/envs/py36/lib/python3.6/site-packages/sklearn/decomposition/pca.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1850">
-          <caret line="210" column="95" selection-start-line="210" selection-start-column="81" selection-end-line="210" selection-end-column="95" />
+        <state relative-caret-position="8160">
+          <caret line="497" column="13" selection-start-line="497" selection-start-column="13" selection-end-line="497" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/cmap.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="239">
+        <state relative-caret-position="443">
           <caret line="693" column="50" selection-start-line="693" selection-start-column="50" selection-end-line="693" selection-end-column="50" />
           <folding>
             <element signature="e#766#1759#1" />
@@ -1331,6 +1319,16 @@
             <element signature="e#2170#2458#0" />
             <element signature="e#2518#3440#0" />
             <element signature="e#16998#21792#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mdanaly/dynamics.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="21" selection-start-line="1" selection-start-column="21" selection-end-line="1" selection-end-column="21" />
+          <folding>
+            <element signature="e#25#38#0" expanded="true" />
           </folding>
         </state>
       </provider>

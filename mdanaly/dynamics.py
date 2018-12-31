@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
+#!/usr/bin/env python
 
 import dockml
 import numpy as np
-import sklearn
-#import pyemma as pe
-import os,sys
+import sys
+import argparse
 
 
 class essentialDynamics(object):
@@ -45,13 +45,16 @@ class essentialDynamics(object):
         ----------
         pdbin
         vectors: ndarray, shape=[ M, 3]
-            a M * 3 matrix, M means num of Ca atoms
-        delta
+            a M * 3 matrix, M means num of Ca atoms or heavy atoms
+        delta: float, default=0.5
+            the stride for atom movement
 
         Returns
         -------
-        newxyzs
-        newlines
+        newxyzs : np.ndarray, shape = [ M, 3]
+            the new xyz coordinates, M is number of atoms
+        newlines : list, length = M
+            the new pdb lines, M is number of atoms
 
         """
 
@@ -74,38 +77,35 @@ class essentialDynamics(object):
         return newxyzs, newlines
 
     def genEDAEssemble(self, pdbin, pdbout, vectors, no_files=20, delta=0.5, numres=250):
-        '''
-        generate an essemble of pdb files to increase the PC motions
-        :param pdbin: input
-        :param pdbout:
-        :param vectors:
-        :param no_files:
-        :param delta:
-        :return:
-        '''
+        """Generate an essemble of pdb files to increase the PC motions
+
+        Parameters
+        ----------
+        pdbin
+        pdbout
+        vectors
+        no_files
+        delta
+        numres
+
+        Returns
+        -------
+
+        """
 
         PI = 3.14159
-        print(vectors)
-
-        if os.path.exists(vectors) :
-            newvectors = np.loadtxt(vectors, comments="#")
-            print(newvectors.shape)
-
-            #vectors = np.reshape(newvectors[:, 1], ( numres, 3 ))
-        else :
-            newvectors = vectors
 
         with open(pdbout, 'w') as tofile :
             for i in range(no_files) :
                 length = delta * np.cos(2.0 * PI * (float(i) / float(no_files)) - PI )
                 print(length)
                 tofile.write("MODEL   %d \n"%i)
-                t, nlines = self.pdbIncreaseMotion(pdbin, newvectors, delta=length)
+                t, nlines = self.pdbIncreaseMotion(pdbin, vector, delta=length)
                 for x in nlines :
                     tofile.write(x)
                 tofile.write("ENDMDL  \n")
 
-        return 1
+        return self
 
     def averageVectors(self, vectors, resindex):
         '''
@@ -201,26 +201,40 @@ class essentialDynamics(object):
 
         return coms
 
-if __name__ == "__main__" :
 
-    if len(sys.argv) < 5 :
-        d = '''
-        Generate EDA ensemble of conformations with PCA eigenvectors
-        
-        Usage:
-        python dynamics.py input.pdb output.pdb eigenvectors.dat number_of_files delta_stepsize
-        
-        Example:
-        
-        '''
-        print(d)
-        sys.exit(0)
+if __name__ == "__main__":
 
-    inpdb = sys.argv[1]
-    outpdb = sys.argv[2]
-    vector = sys.argv[3]
-    nfiles = int(sys.argv[4])
-    delta  = float(sys.argv[5])
+    d = '''
+    Generate EDA ensemble of conformations with PCA eigenvectors
+    
+    Usage:
+    python dynamics.py input.pdb output.pdb eigenvectors.dat number_of_files delta_stepsize
+    
+    Example:
+    
+    '''
+
+    parser = argparse.ArgumentParser(description=d)
+    parser.add_argument("-f", type=str, help="Input. The reference pdb file name.")
+    parser.add_argument("-o", type=str, help="Output. The output multiple-frame pdb file name.")
+    parser.add_argument("-vect", type=str, help="Input. The eigenvector file name. Assuming that "
+                                                "this file is generated and output directly from "
+                                                "gmx_pca.py. The shape of the vector matrix is N*M, "
+                                                "where M is total number of dimensions and N is number"
+                                                "of PC projections.")
+    parser.add_argument("-nf", type=int, default=50,
+                        help="Output. The number of frames in the output file. ")
+    parser.add_argument("-delta", type=float, help="Input. Default is 0.5. \n"
+                                                   "The movement stride for the coordinates. ")
+    parser.add_argument("-pc", type=int, default=1,
+                        help="Input, optional, default is 1. Which PC eigenvectors for essential dynamics move. ")
+
+    args = parser.parse_args()
+
+    if len(sys.argv) < 2:
+        parser.print_help()
+
+    vector = np.reshape(np.loadtxt(args.vector)[args.pc -1], (-1, 3))
 
     dyn = essentialDynamics()
-    dyn.genEDAEssemble(inpdb, outpdb, vector, nfiles, delta, 1361)
+    dyn.genEDAEssemble(args.f, args.o, vector, args.nf, args.delta, vector.shape[0])
