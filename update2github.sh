@@ -5,4 +5,4 @@
 
 git add --all
 git commit -m "rewrite PdbIndex module"
-git push origin v1.2.2
+git push -u origin v1.2.2
