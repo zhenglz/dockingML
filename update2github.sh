@@ -4,6 +4,5 @@
 # https://help.github.com/articles/adding-a-file-to-a-repository-using-the-command-line/
 
 git add --all
-git commit -m "update docstring in gmx index "
-git push origin master
-
+git commit -m "rewrite PdbIndex module"
+git push origin v1.2.2

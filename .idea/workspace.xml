@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dockingML.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dockingML.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="rewrite PdbIndex module">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dockml/index.py" beforeDir="false" afterPath="$PROJECT_DIR$/dockml/index.py" afterDir="false" />
     </list>
@@ -26,8 +24,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/dockml/index.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="319">
-              <caret line="65" column="27" selection-start-line="65" selection-start-column="27" selection-end-line="65" selection-end-column="27" />
+            <state relative-caret-position="369">
+              <caret line="528" column="30" selection-start-line="528" selection-start-column="30" selection-end-line="528" selection-end-column="30" />
               <folding>
                 <element signature="e#109#123#0" expanded="true" />
                 <element signature="e#2001#2358#0" />
@@ -136,7 +134,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>conver</find>
       <find>pyemma</find>
       <find>coordinate</find>
       <find>coordinat</find>
@@ -166,6 +163,7 @@
       <find>bins</find>
       <find>print</find>
       <find>isinstance</find>
+      <find>pdb2</find>
     </findStrings>
     <replaceStrings>
       <replace>fn</replace>
@@ -539,20 +537,6 @@
       <option name="presentableId" value="Default" />
       <updated>1499093997611</updated>
     </task>
-    <task id="LOCAL-00064" summary="add coordinate pca module">
-      <created>1539790034007</created>
-      <option name="number" value="00064" />
-      <option name="presentableId" value="LOCAL-00064" />
-      <option name="project" value="LOCAL" />
-      <updated>1539790034007</updated>
-    </task>
-    <task id="LOCAL-00065" summary="add sine value for angles module">
-      <created>1539790114360</created>
-      <option name="number" value="00065" />
-      <option name="presentableId" value="LOCAL-00065" />
-      <option name="project" value="LOCAL" />
-      <updated>1539790114360</updated>
-    </task>
     <task id="LOCAL-00066" summary="add sine value for angles module">
       <created>1539790235165</created>
       <option name="number" value="00066" />
@@ -882,11 +866,25 @@
       <option name="project" value="LOCAL" />
       <updated>1544409176827</updated>
     </task>
-    <option name="localTasksCounter" value="113" />
+    <task id="LOCAL-00113" summary="rewrite PdbIndex module">
+      <created>1546277465725</created>
+      <option name="number" value="00113" />
+      <option name="presentableId" value="LOCAL-00113" />
+      <option name="project" value="LOCAL" />
+      <updated>1546277465726</updated>
+    </task>
+    <task id="LOCAL-00114" summary="rewrite PdbIndex module">
+      <created>1546277580930</created>
+      <option name="number" value="00114" />
+      <option name="presentableId" value="LOCAL-00114" />
+      <option name="project" value="LOCAL" />
+      <updated>1546277580930</updated>
+    </task>
+    <option name="localTasksCounter" value="115" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="22" width="1280" height="992" extended-state="6" />
+    <frame x="0" y="-28" width="1280" height="1052" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16679905" />
@@ -901,7 +899,7 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32954547" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.3293011" />
-      <window_info active="true" anchor="bottom" id="Python Console" order="9" visible="true" weight="0.18390805" />
+      <window_info anchor="bottom" id="Python Console" order="9" weight="0.18390805" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -958,7 +956,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fix columbic backbone energy zero bug" />
     <MESSAGE value="fix bug in atomtype count function" />
     <MESSAGE value="update gentop module" />
     <MESSAGE value="update docstring in dockml index module" />
@@ -983,7 +980,8 @@
     <MESSAGE value="fix bug in plot module" />
     <MESSAGE value="add switch function in cmap" />
     <MESSAGE value="update shiftPDB module" />
-    <option name="LAST_COMMIT_MESSAGE" value="update shiftPDB module" />
+    <MESSAGE value="rewrite PdbIndex module" />
+    <option name="LAST_COMMIT_MESSAGE" value="rewrite PdbIndex module" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1000,11 +998,6 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/automd/fixpdb.py</url>
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/dockml/index.py</url>
-          <line>286</line>
-          <option name="timeStamp" value="17" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -1258,8 +1251,8 @@
     <entry file="file://$USER_HOME$/.conda/envs/py36/lib/python3.6/site-packages/sklearn/decomposition/pca.py" />
     <entry file="file://$PROJECT_DIR$/dockml/index.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="319">
-          <caret line="65" column="27" selection-start-line="65" selection-start-column="27" selection-end-line="65" selection-end-column="27" />
+        <state relative-caret-position="369">
+          <caret line="528" column="30" selection-start-line="528" selection-start-column="30" selection-end-line="528" selection-end-column="30" />
           <folding>
             <element signature="e#109#123#0" expanded="true" />
             <element signature="e#2001#2358#0" />

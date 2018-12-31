@@ -526,7 +526,7 @@ class PdbIndex(object):
             append = 'a'
         else:
             append = 'wb'
-        tofile = open(args.o, append)
+        #tofile = open(args.o, append)
 
         if args.dihedral[0] != "NA":
             write_dihedral = True
