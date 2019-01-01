@@ -44,13 +44,11 @@ class GridBasedFeature :
         '''
 
         pndx = []
-        for res in reslist :
-            pndx+= index.PdbIndex().res_index(inpdb=self.recpdb,
-                                              chain=chain,
-                                              atomtype="non-hydrogen",
-                                              residueNdx=[res,],
-                                              atomList=[],
-                                              )
+        for res in reslist:
+            ndx = index.PdbIndex(reference=self.recpdb, chain=[chain, ],
+                                 atomtype="all", resSeq=[res,])
+            ndx.prepare_selection().res_index()
+            pndx += ndx.atomndx
 
         pocketResCoord = pio.coordinatesPDB().getAtomCrdByNdx(singleFramePDB=self.recpdb,
                                                               atomNdx=pndx)

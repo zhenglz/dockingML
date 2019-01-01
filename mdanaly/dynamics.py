@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python
 
-import dockml
+from dockml import index, coordinatesPDB, parsePDB
 import numpy as np
 import sys
 import argparse
@@ -58,7 +58,7 @@ class essentialDynamics(object):
 
         """
 
-        pdbio = dockml.coordinatesPDB()
+        pdbio = coordinatesPDB()
 
         with open(pdbin) as lines:
             lines = [x for x in lines if ("ATOM" in x or "HETATM" in x)]
@@ -132,7 +132,7 @@ class essentialDynamics(object):
         :return: tuple, (domain_average_vectors, domain names)
         '''
 
-        dom = dockml.parsePDB()
+        dom = parsePDB()
         domains = dom.readDomainRes(domainf)
 
         # domain_names
@@ -169,25 +169,24 @@ class essentialDynamics(object):
         :return: list of list, com of domains, dimension N*3
         """
 
-        dom = dockml.parsePDB()
+        dom = parsePDB()
         domains = dom.readDomainRes(domainf)
 
-        dnames = [x[0] for x in domains ]
+        dnames = [x[0] for x in domains]
 
-        pdbc = dockml.coordinatesPDB()
-        ndx = dockml.PdbIndex()
+        pdbc = coordinatesPDB()
+        #ndx = PdbIndex()
 
         coms = []
 
-        for i in range(len(domains)) :
+        for i in range(len(domains)):
 
             # get atom index of residues in a domain
-            atomindex = ndx.res_index(inpdb=ref,
-                                      chain=pdbchain,
-                                      atomtype="",
-                                      atomList=atomNames,
-                                      residueNdx=domains[i][1:],
-                                      )
+            ndx = index.PdbIndex(ref, [pdbchain, ],
+                                 resSeq=domains[i][1:],
+                                 atomtype=atomNames)
+            ndx.prepare_selection().res_index(atomNames)
+            atomindex = ndx.atomndx_mt_style
 
             # get crds of a list of atoms
             crds = pdbc.getAtomCrdByNdx(ref, atomindex)
@@ -197,7 +196,8 @@ class essentialDynamics(object):
 
             coms.append(list(com))
 
-        np.savetxt(output, np.asarray(coms), fmt="%8.3f", delimiter=" ", header=dnames, comments="#")
+        np.savetxt(output, np.asarray(coms), fmt="%8.3f", delimiter=" ",
+                   header=dnames, comments="#")
 
         return coms
 
@@ -238,3 +238,4 @@ if __name__ == "__main__":
 
     dyn = essentialDynamics()
     dyn.genEDAEssemble(args.f, args.o, vector, args.nf, args.delta, vector.shape[0])
+

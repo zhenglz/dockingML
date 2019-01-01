@@ -9,15 +9,14 @@
 # Date: 23 Nov 2017                                 #
 #####################################################
 
-import mdanaly
-from mdanaly import gmxcli
-from mdanaly import pca
-import dockml.pdbIO as pio
-from dockml import index as ndx
+from mdanaly import gmxcli, pca
+from dockml import pdbIO
+from dockml import index
 
 from matplotlib import pyplot as plt
 from collections import defaultdict
 from datetime import datetime
+
 import mdtraj as mt
 import math, os
 import numpy as np
@@ -39,23 +38,25 @@ class CoordinatesXYZ(object):
 
     Attributes
     ----------
-    topology: mdtraj.Trajectory.topology object
+    topology : mdtraj.Trajectory.topology object
         the mdtraj trajectory topology object
-    n_atoms_: int,
+    n_atoms_ : int,
         number of atoms in the trajectory
-    superimposed_: bool,
+    superimposed_ : bool,
         whether the trajectory has been superimposed
-    superpose_atom_indices: numpy array,
+    superpose_atom_indices : np.array,
         the atom indices, starting from 0, format is int
-    xyz: numpy ndarray, shape=[N, M]
+    xyz : np.ndarray, shape=[N, M]
         the original xyz coordinates of selected atoms
         N is number of samples, or frames
         M is the multiply of atoms * 3
 
     Methods
     -------
-    superimpose
-    xyz_coordinates
+    superimpose()
+        superimpose the trajectory to a reference pdb file
+    xyz_coordinates(atom_indices)
+        extract xyz coordinates given a list of atoms' indices
 
     See Also
     --------
@@ -83,7 +84,7 @@ class CoordinatesXYZ(object):
 
         Returns
         -------
-        self: the object itself
+        self : return an instance of self.
 
         """
 
@@ -98,12 +99,12 @@ class CoordinatesXYZ(object):
 
         Parameters
         ----------
-        atom_indices: numpy array,
+        atom_indices : np.array
             the atom index for selected atoms
 
         Returns
         -------
-        xyz: numpy ndarray, shape = [N, M]
+        xyz : np.ndarray, shape = [N, M]
             N is number of samples, or frames
             M is the multiply of number of atoms and 3
 
@@ -129,35 +130,43 @@ class CoordinatesXYZ(object):
 
 
 class ContactMap(object):
-    """
-    Construct a contact map with mdtraj distance matrix
+    """Construct a contact map with mdtraj distance matrix
+
+    The distance matrix for the contactmap is firstly constructed,
+    and followed by a distance cutoff comparision, 1 is given if
+    the distance in a bin of the matrix is less than the distance
+    cutoff.
 
     Parameters
     ----------
-    traj: mdtraj.Trajectory object,
-        the MDTraj trajectory object
-    group_a: list,
+    traj : mdtraj.Trajectory object,
+        the MDTraj trajectory object for distance calculation
+    group_a : list, np.array, or pd.Seris
         the list of atom index in cmap x-axis
-    group_b: list,
+    group_b : list, np.array, or pd.Seris
         the list of atom index in cmap x-axis
-    cutoff: float,
+    cutoff : float, default = 0.35
         the distance cutoff, default is 3.5 angstrom
 
     Attributes
     ----------
-    atom_group_a: list,
+    atom_group_a : list
         the list of atom index for cmap x-axis
-    atom_group_b: list,
+    atom_group_b : list
         the list of atom index for cmap y-axis
-    atom_pairs_: ndarray, shape=[N, 2]
+    atom_pairs_ : np.ndarray, shape=[N, 2]
         the atom pairs for distance calculation, N is the number
         of atom pairs.
-
-    Methods
-    -------
-    generate_atom_pairs
-    distance_matrix
-    generate_cmap
+    dist_matrix_ : np.ndarray, shape = [M, N]
+        the distance matrix, M is the number of atoms for x-axis
+        N is the number of atoms in y-axis
+    cmap_ : np.ndarray, shape = [M, N]
+        the contact map matrix, M is the number of atoms for x-axis
+        N is the number of atoms in y-axis
+    cmap_computed_ : bool
+        whether the contact map has been calculated
+    coord_number_ : int
+        the number of contact number (coordination number)
 
     """
 
@@ -186,8 +195,7 @@ class ContactMap(object):
 
         Returns
         -------
-        self.dist_matrix_: np.ndarray, shape=[A, B]
-            A is number of atoms in rec, B is number of atoms in lig
+        self: the instance itself
 
         """
         if not self.distmtx_computed_:
@@ -212,8 +220,7 @@ class ContactMap(object):
 
         Returns
         -------
-        self.cmap_: np.ndarray, shape=[N, A*B]
-            the output cmap data, with N samples, and A*B elements per sample
+        self: the instance itself
 
         """
         if not self.distmtx_computed_:
@@ -241,7 +248,7 @@ class ContactMap(object):
 
         Returns
         -------
-        self: the class itself
+        self: the instance itself
 
         """
         atom_pairs = []
@@ -260,7 +267,7 @@ class ContactMap(object):
 
         Returns
         -------
-        self: the object itself
+        self: the instance itself
 
         """
         # TODO: calculation coordination numbers
@@ -450,22 +457,23 @@ class CommunityCmap(object):
 
     def calculateNbyN(self, pdbfile, dcutoff, res1, res2, ndxlist):
 
-        cutoff = dcutoff ** 2
+        """
+        Todo: To be implemented.
 
-        cmap = mdanaly.ContactMap(pdbfile)
+        Parameters
+        ----------
+        pdbfile
+        dcutoff
+        res1
+        res2
+        ndxlist
 
-        crd1 = pio.coordinatesPDB().getAtomCrdByNdx(pdbfile, ndxlist[res1])
-        crd2 = pio.coordinatesPDB().getAtomCrdByNdx(pdbfile, ndxlist[res2])
+        Returns
+        -------
 
-        t = cmap.residueContacts(resCrd1=crd1,
-                                 resCrd2=crd2,
-                                 distcutoff=cutoff,
-                                 verbose=False,
-                                 rank=0,
-                                 NbyN=True
-                                 )
-        # print(t)
-        return t
+        """
+
+        return NotImplementedError
 
     def scatterFileList(self, ranksize, pdbFileList):
         load4each = int(math.ceil(float(len(pdbFileList)) / float(ranksize)))
@@ -672,15 +680,27 @@ def iterload_cmap():
 
     verbose(args.v, "Atom selecting ......")
     # TODO: atom selection method required
-    indx = ndx.PdbIndex()
-    atomList, atomType = indx.atomList(args.atomtype[0], atomname=args.atomname1)
-    group_a = indx.res_index(args.s, args.rc[0], atomType, [int(args.rc[1]), int(args.rc[2])], atomList,)
-    #group_a = np.array(group_a)
-    atomList, atomType = indx.atomList(args.atomtype[1], atomname=args.atomname2)
-    group_b = indx.res_index(args.s, args.lc[0], atomType, [int(args.lc[1]), int(args.lc[2])], atomList, )
+    if os.path.exists(args.s) and args.f[-4:] == ".pdb":
+        inp = args.s
+    elif os.path.exists(args.f) and args.f[-4:] == ".pdb":
+        inp = args.f
+    else:
+        inp = None
+        print("Reference pdb file is not existed. Exit now!")
+    
+    # receptor (x-axis) atom selection
+    ndx = index.PdbIndex(reference=inp, chain=[args.rc[0], ],
+                         resSeq=args.rc[1:], atomtype=args.at[0])
+    ndx.prepare_selection()
+    ndx.res_index()
+    group_a = ndx.atomndx_mt_style
 
-    group_a = [int(x) - 1 for x in group_a]
-    group_b = [int(x) - 1 for x in group_b]
+    # ligand (y-axis) atom selection
+    ndx = index.PdbIndex(reference=inp, chain=[args.lc[0], ],
+                         resSeq=args.lc[1:], atomtype=args.at[1])
+    ndx.prepare_selection()
+    ndx.res_index()
+    group_b = ndx.atomndx_mt_style
 
     rec_index = int(args.rc[2]) - int(args.rc[1]) + 1
     lig_index = int(args.lc[2]) - int(args.lc[1]) + 1

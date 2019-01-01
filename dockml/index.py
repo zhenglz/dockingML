@@ -92,6 +92,7 @@ class PdbIndex(object):
         self.resSeq = resSeq
         self.at = atomtype
         self.atomndx = None
+        self.atomndx_mt_style = None
         #self.molecule = None
 
         self.selections = [""]
@@ -225,10 +226,9 @@ class PdbIndex(object):
 
             self.selections = names + resndx + " and " + chains
 
-            indexlist = [x + self.start_atom
-                         for x in list(self.top.select(self.selections))]
+            self.atomndx_mt_style = self.top.select(self.selections)
 
-            self.atomndx = indexlist
+            self.atomndx = [x + self.start_atom for x in self.atomndx_mt_style]
 
         return self
 

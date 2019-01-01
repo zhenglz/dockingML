@@ -74,15 +74,6 @@ class ComputeAngles(object):
         angle_index: list, shape=[n, 4]
             the atom indices for angle calculations
 
-        Examples
-        --------
-        Calculate the dihedral angle between atom 0, 1, 2, 3
-        >>> from mdanaly import angles
-        >>> import mdtraj as mt
-        >>> angl = angles.ComputeAngles(traj=traj)
-        >>> angl.get_dihedral_angles([[0, 1, 2, 3],])
-        array([[1.8847224]], dtype=float32)
-
         Returns
         -------
         angles: np.ndarray, shape=[N, M]
@@ -133,7 +124,15 @@ def read_index(ndx="index.ndx", angle_type="dihedral"):
     return elements
 
 
-def descriptions():
+def arguments():
+    """Parse the gmx-style command arguments for angle calculations.
+
+    Returns
+    -------
+    args: Argparser object,
+        the argparse object holding the arguement information
+    """
+
     d = """
     Calculate time-series angles using a xtc trajectory. This function is simply designed to simulation
     gmx angle module, but provide a direct and easy way to save the result.
@@ -148,18 +147,6 @@ def descriptions():
     Calculate dihedral angles
     gmx_angles.py -f traj.xtc -n index.ndx -s reference.pdb -o dihedral_angles.csv -type dihedral -dt 10 -cos 0
 
-    """
-
-    return d
-
-
-def arguments(d):
-    """Parse the gmx-style command arguments for angle calculations.
-
-    Returns
-    -------
-    args: Argparser object,
-        the argparse object holding the arguement information
     """
 
     parser = gmxcli.GromacsCommanLine(d)
@@ -185,8 +172,7 @@ def arguments(d):
 
 
 def write_angles(angles, fout, cosine, sine, dt=2, begin=0, end=-1):
-    """
-    write angles into a file
+    """write angles (unit: degree) into a file
 
     Parameters
     ----------
@@ -246,7 +232,8 @@ def gmxangle():
 
     args = arguments(descriptions())
 
-    if os.path.exists(args.f) and os.path.exists(args.n) and os.path.exists(args.s):
+    if os.path.exists(args.f) and os.path.exists(args.n) \
+            and os.path.exists(args.s):
 
         # prepare index atom slices
         ndx = read_index(args.n, args.type)
@@ -257,7 +244,8 @@ def gmxangle():
             print(ndx)
 
         # load trajectories
-        trajs = gmxcli.read_xtc(xtc=args.f, top=args.s, chunk=1000, stride=int(args.dt / args.ps))
+        trajs = gmxcli.read_xtc(xtc=args.f, top=args.s, chunk=1000,
+                                stride=int(args.dt / args.ps))
         if args.v:
             print("Frame information: ")
             for i, traj in enumerate(trajs):

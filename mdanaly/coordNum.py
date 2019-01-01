@@ -47,16 +47,19 @@ def run_coord_number():
     args = arguments()
 
     # TODO: define a way to select atom slices
-    # define the atom indices
-    indx = index.PdbIndex()
-    atomList, atomType = indx.atomList(args.atomtype[0], atomname=[])
-    group_a = indx.res_index(args.s, args.rc[0], atomType, [int(args.rc[1]), int(args.rc[2])], atomList,)
+    # define the atom indices for receptor
+    ndx = index.PdbIndex(reference=args.s, atomtype=args.at[0], resSeq=args.rc[1:],
+                         chain=[args.rc[0]])
+    ndx.prepare_selection()
+    ndx.res_index()
+    group_a = ndx.atomndx_mt_style
 
-    atomList, atomType = indx.atomList(args.atomtype[1], atomname=[])
-    group_b = indx.res_index(args.s, args.lc[0], atomType, [int(args.lc[1]), int(args.lc[2])], atomList, )
-
-    group_a = [int(x) - 1 for x in group_a]
-    group_b = [int(x) - 1 for x in group_b]
+    # define the atom indices for ligand
+    ndx = index.PdbIndex(reference=args.s, atomtype=args.at[1], resSeq=args.lc[1:],
+                         chain=[args.lc[0]])
+    ndx.prepare_selection()
+    ndx.res_index()
+    group_b = ndx.atomndx_mt_style
 
     results = np.array([])
 
