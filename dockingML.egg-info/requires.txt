@@ -1,6 +1,6 @@
 numpy
 pandas
-sklearn
+scikit-learn
 matplotlib
 networkx
 mdtraj

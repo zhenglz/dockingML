@@ -15,46 +15,73 @@ import mdtraj as mt
 class PdbIndex(object):
     """Input the residue number sequence, then out put the required index atoms
 
+    Parameters
+    ----------
+    dihedral : list, default = ["NA"]
+        options = ["NA", "PSI", "PHI"]
+        The type of dihedrals. 'NA' indicates none dihedral angles will be
+        selected.
+    reference : str, default = 'input.pdb'
+        the input pdb file name
+    chain : list, default = [ 'A', ]
+        the chain identifiers in the pdb file name
+    atomtype : list, default = [ 'CA', ]
+        the atom names for atoms
+
     Attributes
     ----------
-    backbone: list,
-        residue backbone atom name list
-    mainchain: list,
-        residue mainchain atom name list
-    ca: list,
-        residue alpha carbon atom list
     phi: list,
         residue phi torsion angle atom name list
     psi: list
         residue psi torsion angle atom name list
+    at_direct : list,
+        the molecule types for atom selections
+    at : str
+        options: CA, ca, mainchain, sidechain, water, protein,
+        water, all, none
+        the atom type for selection.
+    atomndx : list
+        the atom index of selected molecules and residues
+    chain_ndx : list
+        The chain index list, starting from 0.
+    selections : str
+        The DSL selection quary for mt.topology.select
 
     Examples
     --------
     >>> from dockml import index
-    >>> ndx = index.PdbIndex()
-    >>> ndx
-    <dockml.index.PdbIndex object at 0x2b704a297860>
-    >>> ndx.res_index("./test/input.pdb", "C", "all-atom", residueNdx=[1, 2], atomList=[])
-    ['22378', '22379', '22380', '22381', '22382', '22383', '22384', '22385', '22386', '22387', '22388', '22389', '22390',
-    '22391', '22392', '22393', '22394', '22395', '22396', '22397', '22398', '22399', '22400', '22401', '22402', '22403',
-    '22404', '22406', '22407', '22408', '22409', '22410', '22411', '22412', '22413', '22414', '22415', '22416', '22417',
-    '22418', '22419', '22420', '22421', '22422', '22423', '22424', '22425', '22426', '22427', '22428', '22429', '22430',
-    '22431', '22432', '22433', '22434', '22435', '22436', '22437']
-
-    See Also
-    --------
-    GmxIndex
-        parse gromacs index file
+    Backend Qt5Agg is interactive backend. Turning interactive mode on.
+    >>> ndx = index.PdbIndex("./test/input.pdb", atomtype="all", chain=["C"])
+    >>> # prepare necessary parameters for index generation
+    >>> ndx.prepare_selection()
+    Out[4]: <dockml.index.PdbIndex at 0x7f7cb917a668>
+    >>> ndx.selections
+    Out[5]: ['']
+    >>> ndx.res_index()
+    Out[6]: <dockml.index.PdbIndex at 0x7f7cb917a668>
+    >>> ndx.selections
+    Out[7]: 'name  and resid 1 to 40 and chainid 0'
+    >>> len(ndx.atomndx)
+    Out[8]: 602
+    >>> ndx.chain_ndx
+    Out[9]: [0]
+    >>> ndx.chain
+    Out[10]: ['C']
+    >>> ndx.at
+    Out[11]: 'all'
+    >>> ndx.atomndx[:10]
+    Out[12]: [22407, 22408, 22409, 22410, 22411, 22412, 22413, 22414, 22415, 22416]
 
     """
 
     def __init__(self, reference="input.pdb",
-                 chain=["A"], resSeq=[0, -1],
-                 atomtype=["CA"], dihedral=["NA"]):
+                 chain=["A"], resSeq=[1, -1],
+                 atomtype="CA", dihedral=["NA"]):
 
         self.phi = ['C', 'N', 'CA', 'C']
         self.psi = ['N', 'CA', 'C', 'N']
-        self.at_direct = ["all", "none", "sidechain", "mainchain", "protein", "water", ]
+        self.at_direct = ["all", "none", "sidechain", "mainchain",
+                          "protein", "water", ]
 
         self.dihedral = dihedral
         self.pdb = reference
@@ -67,21 +94,43 @@ class PdbIndex(object):
         self.atomndx = None
         #self.molecule = None
 
-    def load_pdb(self):
+        self.selections = [""]
+        self.start_atom = 1
+        self.chain_ndx = [0, ]
 
-        if not os.path.exists(self.pdb) :
+    def load_pdb(self):
+        """Load pdb file for mdtraj processing
+
+        Returns
+        -------
+        self : return an instance of self.
+        """
+
+        if not os.path.exists(self.pdb):
             print("PDB reference file %s is not existed, exit now!" % self.pdb)
             sys.exit(0)
 
         if self.pdb[-4:] != ".pdb":
-            print("You just loaded a file %s \nPlease provide a reference pdb file."%self.pdb)
+            print("You just loaded a file %s \nPlease provide a reference pdb file."
+                  %self.pdb)
 
         traj = mt.load(self.pdb)
         self.top = traj.topology
 
+        with open(self.pdb) as lines:
+            lines = [int(x.split()[1]) for x in lines if
+                     len(x.split()) and (x.split()[0] in ["ATOM", "HETATM"])]
+            self.start_atom = lines[0]
+
         return self
 
     def res_seq(self):
+        """Residue ID index processing.
+
+        Returns
+        -------
+        self : return an instance of self.
+        """
         if len(self.resSeq) == 1:
             self.resSeq = [self.resSeq[0], self.resSeq[0]]
 
@@ -90,7 +139,40 @@ class PdbIndex(object):
 
         return self
 
-    def res_index(self):
+    def get_chains(self):
+
+        with open(self.pdb) as lines:
+            chains = set([x[21] for x in lines if x.split()[0] in ["ATOM", "HETATM"]])
+            chains = sorted(list(chains))
+
+            chain_ids = []
+            for i in self.chain:
+                chain_ids.append(chains.index(i))
+
+        self.chain_ndx = chain_ids
+
+    def prepare_selection(self):
+
+        self.load_pdb()
+        self.res_seq()
+        self.get_chains()
+
+        return self
+
+    def res_index(self, atom_list=[""]):
+        """Get atom index list from given information:
+        Resid, chain, atom_type_names
+
+        Parameters
+        ----------
+        atom_list : list, default is empty.
+            The list of atom names provided for index selection.
+
+        Returns
+        -------
+        self : return an instance of self.
+        """
+
         if self.dihedral[0] != "NA":
             indexlist = []
             for resndx in range(self.resSeq[0], self.resSeq[-1]+1):
@@ -126,28 +208,33 @@ class PdbIndex(object):
                     phipair = [x for x in phipair if all(x) > 0]
                     indexlist.append(phipair)
 
+            self.atomndx = indexlist
+
         else:
 
-            if self.at in self.at_direct:
-                names = self.at + " and"
-            elif self.at in ["CA", "ca"]:
-                names = "name %s and " % self.at
+            if atom_list.__len__() == 0:
+                if self.at in self.at_direct:
+                    names = self.at
+                else:
+                    names = "name %s " % self.at
             else:
-                names = ""
+                names = "name " + " ".join(atom_list)
 
-            chains = " and ".join(["chain " + x for x in self.chain])
+            chains = " and ".join(["chainid " + str(x) for x in self.chain_ndx])
             resndx = " and resid %d to %d" % (self.resSeq[0], self.resSeq[1])
 
-            selections = names + resndx + chains
+            self.selections = names + resndx + " and " + chains
 
-            indexlist = self.top.select(selections)
+            indexlist = [x + self.start_atom
+                         for x in list(self.top.select(self.selections))]
 
-        return indexlist
+            self.atomndx = indexlist
+
+        return self
 
     def atomList2File(self, atom_list, group_name, write_dihe=False,
                       out_filen="output.ndx", append=True):
-        """
-        Save a group of atom index into a gromacs-format index file
+        """Save a group of atom index into a gromacs-format index file
 
         Parameters
         ----------
@@ -166,7 +253,7 @@ class PdbIndex(object):
 
         Returns
         -------
-        self : returns an instance of self.
+        self : return an instance of self.
         """
         if append:
             tofile = open(out_filen, 'a')
@@ -177,9 +264,10 @@ class PdbIndex(object):
 
         if not write_dihe:
             for i, atom in enumerate(atom_list):
-                tofile.write('%6d ' % int(atom))
-                if i % 15 == 0:
+
+                if i % 15 == 0 and i != 0:
                     tofile.write('  \n')
+                tofile.write('%6d ' % int(atom))
             tofile.write("\n")
 
         else:
@@ -195,6 +283,7 @@ class PdbIndex(object):
         Returns
         -------
         args: ArgParser object
+
         """
 
         d ='''
@@ -234,16 +323,16 @@ class PdbIndex(object):
                            help="Select atom by atom names. A list of atom names \n"
                            "could be supplied. If not given, all atom names are \n"
                            "considered. Default is [].")'''
-        parser.parser.add_argument('-chain', type=str, default= "A", nargs="+",
+        parser.parser.add_argument('-chain', type=str, default=["A"], nargs="+",
                                    help="Protein chain identifier. Default chain ID is [\'A\',]. ")
-        parser.parser.add_argument('-res', type=int, nargs= '+',
+        parser.parser.add_argument('-res', type=int, nargs= '+', default=[1, -1],
                                    help="Residue sequence number for index generating. \n"
                                    "Example, -res 1 100, generateing atom index within \n"
                                    "residues 1 to 100. Default is None.")
         parser.parser.add_argument('-posres', default=False,
                                    help="Generate a postion restraint file for selected index.\n"
                                    "Default name is posres.itp \n")
-        parser.parser.add_argument('-dihe', default=None, type =str,
+        parser.parser.add_argument('-dihe', default=["NA"], type =str, nargs="+",
                                    help="Whether generate dihedral angles index (quadruplex).\n"
                                    "Phi and Psi are considered. Optional choices are: \n"
                                    "PHI, PSI, PHI_PSI, or NA. Default is NA. \n")
@@ -270,14 +359,23 @@ class PdbIndex(object):
     def genGMXIndex(self):
         """run geneIndex, initialize argument parser function.
 
+        Returns
+        -------
+        self : return an instance of self.
+
         """
         args = self.arguements()
 
+        # define residue index
         self.resSeq = args.res
-        self.res_seq()
 
+        # define chains
+        self.chain = args.chain
+
+        # define molecule name or atom name
         self.at = args.at
-        self.dihedral = args.dihedral
+        # define dihedral name
+        self.dihedral = args.dihe
 
         if os.path.exists(args.f):
             self.pdb = args.f
@@ -287,21 +385,18 @@ class PdbIndex(object):
             print("Reference pdb file does not exist.")
             sys.exit(0)
 
-        # generate index
-        self.load_pdb()
-        self.atomndx = self.res_index()
+        # prepare
+        self.prepare_selection()
+        self.res_index()
 
-        if args.dihedral[0] != "NA":
-            write_dihedral = True
-        else:
-            write_dihedral = False
-
-        self.atomList2File(self.atomndx, group_name=args.gn, write_dihe=write_dihedral,
+        self.atomList2File(self.atomndx, group_name=args.gn,
+                           write_dihe=(self.dihedral[0] != "NA"),
                            out_filen=args.o, append=args.append)
 
         if args.posres:
             with open('posres.itp', 'w') as tofile:
-                tofile.write("[ position_restraints ] \n; ai  funct  fcx    fcy    fcz  \n")
+                tofile.write("[ position_restraints ] \n"
+                             "; ai  funct  fcx    fcy    fcz  \n")
                 for atom in self.atomndx:
                     tofile.write("%12d  1  1000  1000  1000  \n"
                                  % int(atom))
