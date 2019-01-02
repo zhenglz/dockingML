@@ -10,7 +10,7 @@ import sys, os
 from collections import OrderedDict
 from mdanaly import gmxcli
 import mdtraj as mt
-
+import numpy as np
 
 class PdbIndex(object):
     """Input the residue number sequence, then out put the required index atoms
@@ -194,7 +194,7 @@ class PdbIndex(object):
                 psindxadd = [0, 0, 0, 1]
                 psipair = [-1, -1, -1, -1]
                 for i in range(4):
-                    with self.pdb as lines:
+                    with open(self.pdb) as lines:
                         for s in lines:
                             if len(s.split()) > 1 and s.split()[0] == "ATOM" \
                                     and s[21] in self.chain and \
@@ -205,9 +205,9 @@ class PdbIndex(object):
                 #indexlist.append(psipair)
 
                 # supposing atom index larger than 0
-                if "PSI" in self.dihedral and all(phipair) > 0:
+                if "PSI" in self.dihedral and all(np.array(phipair)>0) > 0:
                     indexlist.append(psipair)
-                if "PHI" in self.dihedral and all(psipair) > 0:
+                if "PHI" in self.dihedral and all(np.array(psipair)>0) > 0:
                     indexlist.append(phipair)
 
             self.atomndx = indexlist
@@ -273,7 +273,7 @@ class PdbIndex(object):
 
         else:
             for dihe in atom_list:
-                tofile.write("   ".join(dihe) + " \n")
+                tofile.write("   ".join([ str(x) for x in dihe]) + " \n")
 
         tofile.close()
         return self
