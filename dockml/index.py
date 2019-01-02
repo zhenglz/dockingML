@@ -181,13 +181,14 @@ class PdbIndex(object):
                 phipair = [-1, -1, -1, -1]
                 phindxadd = [-1, 0, 0, 0]
                 for i in range(4):
-                    with self.pdb as lines:
+                    with open(self.pdb) as lines:
                         for s in lines:
                             if len(s.split()) > 1 and s.split()[0] == "ATOM" \
                                     and s[21] in self.chain \
                                     and int(s[22:26].strip()) == resndx + phindxadd[i] \
                                     and s[12:16].strip() == phitype[i]:
                                 phipair[i] = int(s.split()[1])
+                #indexlist.append(phipair)
 
                 psitype = self.psi
                 psindxadd = [0, 0, 0, 1]
@@ -201,12 +202,12 @@ class PdbIndex(object):
                                     and s[12:16].strip() == psitype[i]:
                                 psipair[i] = int(s.split()[1])
                                 # break
+                #indexlist.append(psipair)
 
-                if "PSI" in self.dihedral:
-                    psipair = [x for x in psipair if all(x) > 0]
+                # supposing atom index larger than 0
+                if "PSI" in self.dihedral and all(phipair) > 0:
                     indexlist.append(psipair)
-                if "PHI" in self.dihedral:
-                    phipair = [x for x in phipair if all(x) > 0]
+                if "PHI" in self.dihedral and all(psipair) > 0:
                     indexlist.append(phipair)
 
             self.atomndx = indexlist

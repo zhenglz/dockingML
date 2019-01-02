@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python
 
-from dockml import index, coordinatesPDB, parsePDB
+from dockml import index
+from dockml.pdbIO import coordinatesPDB, parsePDB
 import numpy as np
 import sys
 import argparse
+from argparse import RawDescriptionHelpFormatter
 
 
 class essentialDynamics(object):
@@ -214,18 +216,21 @@ if __name__ == "__main__":
     
     '''
 
-    parser = argparse.ArgumentParser(description=d)
+    parser = argparse.ArgumentParser(description=d, formatter_class=RawDescriptionHelpFormatter)
     parser.add_argument("-f", type=str, help="Input. The reference pdb file name.")
     parser.add_argument("-o", type=str, help="Output. The output multiple-frame pdb file name.")
-    parser.add_argument("-vect", type=str, help="Input. The eigenvector file name. Assuming that "
+    parser.add_argument("-vector", type=str, help="Input. The eigenvector file name. Assuming that "
                                                 "this file is generated and output directly from "
                                                 "gmx_pca.py. The shape of the vector matrix is N*M, "
                                                 "where M is total number of dimensions and N is number"
                                                 "of PC projections.")
     parser.add_argument("-nf", type=int, default=50,
                         help="Output. The number of frames in the output file. ")
-    parser.add_argument("-delta", type=float, help="Input. Default is 0.5. \n"
-                                                   "The movement stride for the coordinates. ")
+    parser.add_argument("-delta", type=float, default=0.5,
+                        help="Input. Default is 0.5. \n"
+                             "The movement stride for the coordinates. \n"
+                             "Generally, you should choose a small delta. A large delta"
+                             "would cause distortion to the structures. ")
     parser.add_argument("-pc", type=int, default=1,
                         help="Input, optional, default is 1. Which PC eigenvectors for essential dynamics move. ")
 

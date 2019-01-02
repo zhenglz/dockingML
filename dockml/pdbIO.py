@@ -569,7 +569,7 @@ class coordinatesPDB(object):
         :return: str, a line from pdb file
         """
 
-        if "ATOM" in line or "HETATM" in line :
+        if "ATOM" in line or "HETATM" in line:
             head = line[:30]
             tail = line[54:]
 
