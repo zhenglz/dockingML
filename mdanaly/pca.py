@@ -650,10 +650,7 @@ def gen_dihedrals(args):
         time-series dihedral angles. N is number of frames, M is number of
         dihedral angles per frame.
     """
-    d = """
-    General dihedral angles from xtc trajectory file.  
-    """
-    args = arguments(d=d)
+    #args = arguments(d=d)
 
     elements = angles.read_index(args.n, angle_type="dihedral")
 
@@ -674,7 +671,7 @@ def gen_dihedrals(args):
         dih_angles = pd.DataFrame(dih_angles)
         dih_angles.index = np.arange(dih_angles.shape[0]) * args.dt
 
-    return dih_angles
+    return dih_angles, args
 
 
 def cmap_pca(args):
@@ -764,18 +761,7 @@ def xyz_pca(args):
 
 
 def dihedral_pca(args):
-    """
-    Perform PCA calculation based on dihedral angles
-
-    Parameters
-    ----------
-    args: Argparse object
-        the arguments used for calculation.
-
-    Returns
-    -------
-
-    """
+    """Perform PCA calculation based on dihedral angles"""
 
     dih_angles = gen_dihedrals(args)
     dih_angles = datset_subset(dih_angles, begin=args.b, end=args.e)
@@ -811,7 +797,7 @@ def arguments(d="Descriptions."):
     parser.arguments()
 
     parser.parser.add_argument("-mode", type=str, default="general",
-                               help="Input, optional. \n"
+                               help="Input, optional. Default is general. \n"
                                     "The PCA calculation mode. \n"
                                     "Options: general, xyz, cmap, dihedral \n"
                                     "general: perform general PCA using a well formated dataset file. \n"
@@ -819,30 +805,27 @@ def arguments(d="Descriptions."):
                                     "cmap: perform contact map PCA analysis using a trajectory xtc file. \n"
                                     "dihedral: perform dihedral PCA calculation using a trajectory xtc file. \n")
     parser.parser.add_argument("-cutoff", default=0.5, type=float,
-                               help="Input, optional, it works with mode =cmap \n"
-                                    "The distance cutoff for contactmap calculation. Unit is nanometer.\n"
-                                    "Default is 0.5. ")
+                               help="Input, optional, it works with mode =cmap. Default is 0.5. \n"
+                                    "The distance cutoff for contactmap calculation. Unit is nanometer.\n")
     parser.parser.add_argument("-proj", type=int, default=2,
-                               help="Input, optional. \n"
-                                    "How many number of dimensions to output. \n"
-                                    "Default is 2.")
-    parser.parser.add_argument("-select", type=str, default="name CA",
-                               help="Input, optional, it works with mode = xyz \n"
+                               help="Input, optional. Default is 2.\n"
+                                    "How many number of dimensions to output. \n")
+    parser.parser.add_argument("-select", type=str, default="CA CA",
+                               help="Input, optional, it works with mode = xyz or cmap \n"
                                     "Atom selected for PCA calculation. \n"
-                                    "Default is name CA.")
+                                    "Default is CA CA.")
     parser.parser.add_argument("-var_ratio", type=str, default="explained_variance_ratio.dat",
-                               help="Output, optional. \n"
-                                    "Output file name containing explained eigen values variance ratio. \n"
-                                    "Default is explained_variance_ratio.dat. ")
+                               help="Output, optional. Default is explained_variance_ratio.dat. \n"
+                                    "Output file name containing explained eigen values variance ratio. \n")
     parser.parser.add_argument("-skip_index", type=lambda x: (str(x).lower() == "true"), default=True,
-                               help="Input, optional. Working with mode == general \n"
+                               help="Input, optional. Working with mode == general. Default is True. \n"
                                     "Generally, there would be an index column in the input file, choose\n"
-                                    "to whether skip the index column. Default is True. ")
+                                    "to whether skip the index column. ")
     parser.parser.add_argument("-eigvect", type=str, default="",
-                               help="Output, optional. Default is empty."
-                                    "The output eigvector file name. It is only useful when"
-                                    "you want to create ensemble of essential dynamics PDB files to generate"
-                                    "a movie based on XYZ coordinates PCA. ")
+                               help="Output, optional. Default is empty. \n"
+                                    "The output eigvector file name. It is only useful when \n"
+                                    "you want to create ensemble of essential dynamics PDB files to generate\n"
+                                    "a movie based on XYZ coordinates PCA. \n")
 
     parser.parse_arguments()
     args = parser.args
@@ -858,9 +841,26 @@ def gmxpca():
     -------
 
     """
+
     d = """
-    Perform PCA calculation. 
+    General dihedral angles from xtc trajectory file.  
+    
+    There are several mode: cmap, xyz, dihedral, and general
+    
+    For cmap PCA, the contact map between residues will be calculated and used for PCA. You need 
+    to specify the atom type, if it is not provided, a default (CA) atom type would be used.
+    gmx_pca.py -mode cmap -f trj_dt100ps_1800to2000ns.xtc -s reference.pdb -n ../dihedral.ndx -proj 10 -select CA CA
+    
+    For xyz PCA, the selected atom xyz coordinates would be extracted and used for PCA.
+    gmx_pca.py -mode xyz -f trj_dt100ps_1800to2000ns.xtc -s reference.pdb -n ../dihedral.ndx -proj 10 -eigvect "eigenvectors.dat"
+    
+    For dihedral PCA, the dihedral angles of given indices will be calculated (in radian), and the
+    cosine and sine values then will be computed, and the dataset thus is used 
+    for PCA calculation. 
+    gmx_pca.py -mode dihedral -f mytrajecotry.xtc -s reference.pdb -n dihedral.ndx -proj 10
+
     """
+
     args = arguments(d=d)
 
     if args.mode == "xyz":
