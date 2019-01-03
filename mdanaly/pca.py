@@ -766,7 +766,8 @@ def load_dataset(fn, skip_index=True, sep=","):
     return X
 
 
-def run_pca(dat, proj=10, output="transformed.csv", var_ratio_out="variance_explained.dat", eigenvector_out="", scale="mean"):
+def run_pca(dat, proj=10, output="transformed.csv", var_ratio_out="variance_explained.dat",
+            eigenvector_out="", scale="mean"):
     """Perform PCA calculation given a clean dataset file.
     The dataset could be xyz coordinates, general CV values, angles, dihedral angles,
     contact map, distance matrix, or any other well-formated time-series datasets.
@@ -1003,7 +1004,8 @@ def dihedral_pca(args):
     dihedrals.index = dih_angles.index
 
     # perform PCA calculation
-    run_pca(dihedrals, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio, scale=args.scale_method)
+    run_pca(dihedrals, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio,
+            scale=args.scale_method, eigenvector_out=args.eigvect)
 
 
 def arguments(d="Descriptions."):
@@ -1049,7 +1051,7 @@ def arguments(d="Descriptions."):
                                help="Input, optional. Working with mode == general. Default is True. \n"
                                     "Generally, there would be an index column in the input file, choose\n"
                                     "to whether skip the index column. ")
-    parser.parser.add_argument("-eigvect", type=str, default="",
+    parser.parser.add_argument("-eigvect", type=str, default="eigenvectors.csv",
                                help="Output, optional. Default is empty. \n"
                                     "The output eigvector file name. It is only useful when \n"
                                     "you want to create ensemble of essential dynamics PDB files to generate\n"
