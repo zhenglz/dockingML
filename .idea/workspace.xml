@@ -21,24 +21,24 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bin/gmx_pca.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="12" selection-start-line="8" selection-start-column="12" selection-end-line="8" selection-end-column="12" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mdanaly/pca.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="445">
-              <caret line="514" column="48" selection-start-line="514" selection-start-column="48" selection-end-line="514" selection-end-column="48" />
+            <state relative-caret-position="1464">
+              <caret line="447" column="33" selection-start-line="447" selection-start-column="33" selection-end-line="447" selection-end-column="33" />
               <folding>
                 <element signature="e#25#43#0" expanded="true" />
                 <element signature="e#238#6233#0" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/mdanaly/cmap.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="411">
+              <caret line="244" column="8" selection-start-line="244" selection-start-column="8" selection-end-line="244" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -132,7 +132,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Comp</find>
       <find>CommunityH</find>
       <find>loadtxt</find>
       <find>ContactMap</find>
@@ -162,6 +161,7 @@
       <find>mdanaly</find>
       <find>pio</find>
       <find>res_index</find>
+      <find>run_pca</find>
     </findStrings>
     <replaceStrings>
       <replace>fn</replace>
@@ -535,20 +535,6 @@
       <option name="presentableId" value="Default" />
       <updated>1499093997611</updated>
     </task>
-    <task id="LOCAL-00073" summary="rename some modules">
-      <created>1539794110709</created>
-      <option name="number" value="00073" />
-      <option name="presentableId" value="LOCAL-00073" />
-      <option name="project" value="LOCAL" />
-      <updated>1539794110709</updated>
-    </task>
-    <task id="LOCAL-00074" summary="rename some modules">
-      <created>1539795121770</created>
-      <option name="number" value="00074" />
-      <option name="presentableId" value="LOCAL-00074" />
-      <option name="project" value="LOCAL" />
-      <updated>1539795121770</updated>
-    </task>
     <task id="LOCAL-00075" summary="add coordination number module">
       <created>1539799519947</created>
       <option name="number" value="00075" />
@@ -878,7 +864,21 @@
       <option name="project" value="LOCAL" />
       <updated>1546484428855</updated>
     </task>
-    <option name="localTasksCounter" value="122" />
+    <task id="LOCAL-00122" summary="update gmx_index module">
+      <created>1546484462802</created>
+      <option name="number" value="00122" />
+      <option name="presentableId" value="LOCAL-00122" />
+      <option name="project" value="LOCAL" />
+      <updated>1546484462804</updated>
+    </task>
+    <task id="LOCAL-00123" summary="update gmx_index module">
+      <created>1546486986699</created>
+      <option name="number" value="00123" />
+      <option name="presentableId" value="LOCAL-00123" />
+      <option name="project" value="LOCAL" />
+      <updated>1546486986699</updated>
+    </task>
+    <option name="localTasksCounter" value="124" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -897,7 +897,7 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32954547" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.32795697" />
-      <window_info active="true" anchor="bottom" id="Python Console" order="9" visible="true" weight="0.09408602" />
+      <window_info active="true" anchor="bottom" id="Python Console" order="9" visible="true" weight="0.4408602" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -1223,13 +1223,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/cmap.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8500">
-          <caret line="511" column="30" selection-start-line="511" selection-start-column="30" selection-end-line="511" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bin/gmx_pca.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
@@ -1299,10 +1292,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/mdanaly/cmap.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="411">
+          <caret line="244" column="8" selection-start-line="244" selection-start-column="8" selection-end-line="244" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/pca.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="445">
-          <caret line="514" column="48" selection-start-line="514" selection-start-column="48" selection-end-line="514" selection-end-column="48" />
+        <state relative-caret-position="1464">
+          <caret line="447" column="33" selection-start-line="447" selection-start-column="33" selection-end-line="447" selection-end-column="33" />
           <folding>
             <element signature="e#25#43#0" expanded="true" />
             <element signature="e#238#6233#0" />

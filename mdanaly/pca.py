@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import sklearn
 from sklearn import decomposition
+from sklearn import preprocessing
 from mdanaly import cmap
 from mdanaly import gmxcli
 from mdanaly import angles
@@ -217,6 +218,164 @@ class tSNE(object):
         return Y
 
 
+class Scaler(object):
+    """Dataset scaling with different methods.
+
+    Parameters
+    ----------
+    method : str, default = 'mean', options = ['mean', 'zscore', 'minmax', 'NA']
+        the scaling method for a dataset
+
+    Attributes
+    ----------
+    scaled : bool
+        whether the dataset has been fitted to the scaling instance
+    object : A scaling install
+        the scaling install. ethier a sklearn.preprocessing.StandardScaler or
+        sklearn.preprocessing.MaxMinScaler, or MeanScaler
+    X_transformed_ : np.ndarray, shape = [ N, M]
+        The dataset after scaling. N is number of samples, M is the number of dimensions.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from mdanaly import pca
+    >>> scaler = pca.Scaler(method='mean')
+    >>> x = np.array([[1, 2], [1.1, 4], [0.9, -2], [1.05, 4.5], [0.85, -4.1]])
+    >>> x1 = scaler.fit_transform(x)
+    >>> x1
+    array([[ 0.02,  1.12],
+           [ 0.12,  3.12],
+           [-0.08, -2.88],
+           [ 0.07,  3.62],
+           [-0.13, -4.98]])
+    >>> x1.std(axis=0)
+    array([0.09273618, 3.3819521 ])
+    >>> scaler
+    <mdanaly.pca.Scaler object at 0x2aeb7b8c3fd0>
+    >>> scaler.object
+    <mdanaly.pca.MeanScaler object at 0x2aeb75761a90>
+    >>> scaler.object.scaler
+    array([0.98, 0.88])
+
+    See Also
+    --------
+    MeanScaler
+
+    """
+
+    def __init__(self, method="mean"):
+        self.method = method
+
+        self.scaled_ = False
+
+        self.object = None
+
+        self.X_transformed_ = None
+
+    def fit(self, X):
+        """Fit a Scaler object
+
+        Parameters
+        ----------
+        X : np.ndarry, pd.DataFrame, shape = [ N, M]
+            The dataset for scaling. N is number of samples, M is the number of dimensions.
+
+        Returns
+        -------
+        self : the instance of self
+        """
+        if not self.scaled_:
+            if self.method == "minmax":
+                self.object = preprocessing.MinMaxScaler()
+                self.object.fit(X)
+            elif self.method == "zscore":
+                self.object = preprocessing.StandardScaler()
+                self.object.fit(X)
+            elif self.method == "mean":
+                self.object = MeanScaler()
+                self.object.fit(X)
+            else:
+                self.object = MeanScaler()
+                self.object.scaler = np.zeros(X.shape)
+                self.object.scaled_ = True
+
+        return self
+
+    def fit_transform(self, X):
+        """Fit and transform dataset X
+
+        Parameters
+        ----------
+        X : np.ndarray, pd.DataFrame, shape = [ N, M]
+            The dataset for scaling. N is number of samples, M is the number of dimensions.
+
+        Returns
+        -------
+        X_transformed : np.ndarray, pd.DataFrame, shape = [ N, M]
+            The dataset after scaling. N is number of samples, M is the number of dimensions.
+
+        """
+        self.fit(X)
+        self.X_transformed_ = self.transform(X)
+
+        return self.X_transformed_
+
+    def transform(self, X):
+        """Transform dataset X
+
+        Parameters
+        ----------
+        X : np.ndarray, pd.DataFrame, shape = [ N, M]
+            The dataset for scaling. N is number of samples, M is the number of dimensions.
+
+        Returns
+        -------
+        X_transformed : np.ndarray, pd.DataFrame, shape = [ N, M]
+            The dataset after transform. N is number of samples, M is the number of dimensions.
+
+        """
+        if not self.scaled_:
+            self.fit(X)
+        self.X_transformed_ = self.object.transform(X)
+
+        return self.X_transformed_
+
+
+class MeanScaler(Scaler):
+    """Mean value scaler.
+    The dataset X is transformed to X - X_mean
+
+    Attributes
+    ----------
+    scaler : np.array, shape = N,
+        the mean vector of the dataset. N is number of dimensions
+
+    See Also
+    --------
+    Scaler
+
+    """
+
+    def __init__(self):
+        Scaler.__init__(self)
+        self.scaler = None
+
+    def fit(self, X):
+        #self.scaler = None
+        if not self.scaled_:
+            self.scaler = X.mean(axis=0)
+        return self
+
+    def transform(self, X):
+        if not self.scaled_:
+            self.fit(X)
+
+        self.X_transformed_ = X - self.scaler
+
+        return self.X_transformed_
+
+
 class PCA(object):
     """
     A PCA module for data analysis.
@@ -242,6 +401,8 @@ class PCA(object):
     X_scaled_: numpy ndarray, shape=[N, M]
         the scaled X dataset,
         N is number of samples, M is the number of dimensions
+    scale_method_ : str, options=['mean', 'zscore', 'minmax', 'NA']
+        scale method for dataset X.
     pca_obj: sklearn decomposition PCA object,
         the pca object
     eigvalues_: numpy array,
@@ -249,21 +410,59 @@ class PCA(object):
     eigvalues_ratio: numpy array,
         the percentage ratio of the new axis variances
     eigvectors_: numpy ndarray,
-        # TODO: to to completed here
+        the eigenvectors
 
-    Methods
-    -------
-    fit
-    transform
-    eigvalues
-    eigvectors
-
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from mdanaly import pca
+    >>> x = np.array([[1, 2], [1.1, 4], [0.9, -2], [1.05, 4.5], [0.85, -4.1]])
+    >>> pca= pca.PCA(n_components=2, scale_method='mean')
+    <mdanaly.pca.PCA object at 0x2ac93aabf5c0>
+    >>> pca.fit_transform(x)
+    Dataset not scaled. Scaling the dataset now ......
+    Perform PCA decompostion now ......
+    Transform dataset now ......
+    Obtain eigvalues and eigvectors ......
+    array([[-2.0259968 ,  0.94622247],
+           [-4.02795427,  0.99276604],
+           [ 1.97524709,  0.95309964],
+           [-4.52644036,  0.92942869],
+           [ 4.07583336,  0.95920926]])
+    >>> pca.eigvalues_ratio_
+    array([9.99962049e-01, 3.79511501e-05])
+    >>> pca.eigvectors_
+    array([[-0.02671037, -0.99964321],
+           [ 0.99964321, -0.02671037]])
+    >>> from mdanaly import pca
+    >>> pca = pca.PCA(n_components=2, scale_method='zscore')
+    >>> pca.fit_transform(x)
+    Dataset not scaled. Scaling the dataset now ......
+    Perform PCA decompostion now ......
+    Transform dataset now ......
+    Obtain eigvalues and eigvectors ......
+    array([[-2.12132034, -0.70710678],
+           [-3.60624458, -2.05060967],
+           [ 0.77781746,  2.05060967],
+           [-3.92444264, -2.4395184 ],
+           [ 2.29809704,  3.50017857]])
+    >>> pca.X_scaled
+    array([[ 0.21566555,  0.33116968],
+           [ 1.29399328,  0.92254411],
+           [-0.86266219, -0.85157918],
+           [ 0.75482941,  1.07038772],
+           [-1.40182605, -1.47252233]])
+    >>> pca.eigvectors_
+    array([[-0.70710678, -0.70710678],
+           [ 0.70710678, -0.70710678]])
+    >>> pca.eigvalues_ratio_
+    array([0.98719932, 0.01280068])
     """
 
-    def __init__(self, n_components=20):
+    def __init__(self, n_components=20, scale_method="mean"):
         self.n_components = n_components
+        self.scale_method_ = scale_method
 
-        # attributes
         self.trained_ = False
         self.X_transformed_ = None
 
@@ -297,10 +496,10 @@ class PCA(object):
             Xs = X
         else:
             print("Dataset not scaled. Scaling the dataset now ...... ")
-            self.scaler_ = sklearn.preprocessing.StandardScaler()
+            self.scaler_ = Scaler(method=self.scale_method_)
             Xs = self.scaler_.fit_transform(X)
-
             self.scaled_ = True
+
         self.X_scaled = Xs
 
         # using sklearn, perform PCA analysis based on scaled dataset
@@ -309,14 +508,13 @@ class PCA(object):
             self.n_components = self.X_scaled.shape[1]
 
         pca_obj = decomposition.PCA(n_components=self.n_components)
+        self.pca_obj = pca_obj
         pca_obj.fit(Xs)
 
         # train and transform the dataset
         print("Transform dataset now ...... ")
-        self.X_transformed_ = pca_obj.transform(Xs)
+        self.X_transformed_ = self.pca_obj.transform(Xs)
         self.trained_ = True
-
-        self.pca_obj = pca_obj
 
         # get eigval and eigvect
         print("Obtain eigvalues and eigvectors ...... ")
@@ -330,13 +528,15 @@ class PCA(object):
 
         Parameters
         ----------
-        X: numpy, ndarray, shape = [ N, M]
+        X: np.ndarray, shape = [ N, M]
             the input dataset, N is number of samples,
             M is number of dimensions
 
         Returns
         -------
-        self: the object itself
+        X_transformed: np.ndarray, shape = [ N, M]
+            the transformed dataset, N is number of samples,
+            M is number of dimensions
 
         """
 
@@ -345,6 +545,26 @@ class PCA(object):
             self.fit(X)
 
         return self.pca_obj.transform(X)
+
+    def fit_transform(self, X):
+        """Fit and transform dataset X
+
+        Parameters
+        ----------
+        X : np.ndarray, shape = [ N, M]
+            the input dataset, N is number of samples,
+            M is number of dimensions
+
+        Returns
+        -------
+        X_transformed: np.ndarray, shape = [ N, M]
+            the transformed dataset, N is number of samples,
+            M is number of dimensions
+
+        """
+        self.fit(X)
+        self.X_transformed_ = self.transform(X)
+        return self.X_transformed_
 
     def eigvalues(self):
         """
@@ -546,7 +766,7 @@ def load_dataset(fn, skip_index=True, sep=","):
     return X
 
 
-def run_pca(dat, proj=10, output="transformed.csv", var_ratio_out="variance_explained.dat", eigenvector_out=""):
+def run_pca(dat, proj=10, output="transformed.csv", var_ratio_out="variance_explained.dat", eigenvector_out="", scale="NA"):
     """Perform PCA calculation given a clean dataset file.
     The dataset could be xyz coordinates, general CV values, angles, dihedral angles,
     contact map, distance matrix, or any other well-formated time-series datasets.
@@ -573,6 +793,7 @@ def run_pca(dat, proj=10, output="transformed.csv", var_ratio_out="variance_expl
 
     # calculate PCA
     pca = PCA(n_components=proj)
+    pca.scale_method_ = scale
     pca.fit(dat)
 
     # get transformed dataset
@@ -699,7 +920,7 @@ def cmap_pca(args):
     contmap = contmap.loc[:, (contmap != 0).any(axis=0)]
 
     # run pca and write result to outputs
-    run_pca(contmap, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio)
+    run_pca(contmap, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio, scale=args.scale_X)
 
 
 def general_pca(args):
@@ -757,11 +978,18 @@ def xyz_pca(args):
     dat = datset_subset(dat, begin=args.b, end=args.e)
 
     # run pca and write result to outputs
-    run_pca(dat, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio, eigenvector_out=args.eigvect)
+    run_pca(dat, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio,
+            eigenvector_out=args.eigvect, scale=args.scale_X)
 
 
 def dihedral_pca(args):
-    """Perform PCA calculation based on dihedral angles"""
+    """Perform PCA calculation based on dihedral angles
+
+    Parameters
+    ----------
+    args: argparse object,
+        the arguments holder
+    """
 
     dih_angles = gen_dihedrals(args)
     dih_angles = datset_subset(dih_angles, begin=args.b, end=args.e)
@@ -775,7 +1003,7 @@ def dihedral_pca(args):
     dihedrals.index = dih_angles.index
 
     # perform PCA calculation
-    run_pca(dihedrals, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio)
+    run_pca(dihedrals, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio, scale=args.scale_X)
 
 
 def arguments(d="Descriptions."):
@@ -826,6 +1054,13 @@ def arguments(d="Descriptions."):
                                     "The output eigvector file name. It is only useful when \n"
                                     "you want to create ensemble of essential dynamics PDB files to generate\n"
                                     "a movie based on XYZ coordinates PCA. \n")
+    parser.parser.add_argument("-scale_X", type=str, default="NA",
+                               help="Input, optional. Default is NA. \n"
+                                    "Whether scale the dataset before perform PCA calculation. \n"
+                                    "NA: do not scale dataset. \n"
+                                    "minmax: min-max scale \n"
+                                    "zscore: z-standardization \n"
+                                    "mean: substract mean values \n")
 
     parser.parse_arguments()
     args = parser.args
