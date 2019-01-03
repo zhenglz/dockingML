@@ -786,6 +786,7 @@ def dihedral_pca(args):
     cos_dih = np.cos(dih_angles.values)
     sin_dih = np.sin(dih_angles.values)
     dihedrals = np.concatenate((cos_dih, sin_dih), axis=1)
+    # pd.DataFrame
     dihedrals = pd.DataFrame(dihedrals)
     dihedrals.index = dih_angles.index
 
