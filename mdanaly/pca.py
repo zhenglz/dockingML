@@ -944,7 +944,7 @@ def general_pca(args):
     dat = datset_subset(dat, begin=args.b, end=args.e)
 
     # run pca and write result to outputs
-    run_pca(dat, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio)
+    run_pca(dat, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio, eigenvector_out=args.eigvect)
 
 
 def xyz_pca(args):
@@ -1051,7 +1051,7 @@ def arguments(d="Descriptions."):
                                help="Input, optional. Working with mode == general. Default is True. \n"
                                     "Generally, there would be an index column in the input file, choose\n"
                                     "to whether skip the index column. ")
-    parser.parser.add_argument("-eigvect", type=str, default="eigenvectors.csv",
+    parser.parser.add_argument("-eigvect", type=str, default="",
                                help="Output, optional. Default is empty. \n"
                                     "The output eigvector file name. It is only useful when \n"
                                     "you want to create ensemble of essential dynamics PDB files to generate\n"

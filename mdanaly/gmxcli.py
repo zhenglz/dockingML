@@ -20,7 +20,9 @@ class GromacsCommanLine(object):
     Attributes
     ----------
     args: argparse arguments object
-    parser
+        the arguments
+    parser : argparse parser object
+        the parser
     """
 
     def __init__(self, d=""):
@@ -103,7 +105,7 @@ class GromacsCommanLine(object):
 
 
 def read_xtc(xtc, top, chunk=100, stride=1):
-    """
+    """Read Gromacs XTC trajectory file iteratively with mdtraj.iterload
 
     Parameters
     ----------
@@ -121,9 +123,7 @@ def read_xtc(xtc, top, chunk=100, stride=1):
     trajs: list,
         a list of mdtraj trajectory object
     """
-
     trajs = []
-
     for chunk in mt.iterload(xtc, chunk=chunk, top=top, stride=stride):
         trajs.append(chunk)
 
