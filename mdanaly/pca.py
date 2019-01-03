@@ -894,11 +894,11 @@ def gen_dihedrals(args):
         else:
             dih_angles = np.concatenate((dih_angles, dang.get_dihedral_angles(elements)), axis=0)
 
-    if not isinstance(dih_angles, pd.DataFrame):
-        dih_angles = pd.DataFrame(dih_angles)
-        dih_angles.index = np.arange(dih_angles.shape[0]) * args.dt
+    #if not isinstance(dih_angles, pd.DataFrame):
+    dih_angles = pd.DataFrame(dih_angles)
+    dih_angles.index = np.arange(dih_angles.shape[0]) * args.dt
 
-    return dih_angles, args
+    return dih_angles
 
 
 def cmap_pca(args):
