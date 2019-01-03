@@ -115,6 +115,7 @@ def read_index(ndx="index.ndx", angle_type="dihedral"):
 
     # gromacs index starts from 1, while python-style index starts from 0
     elements = [int(x)-1 for x in elements]
+
     # if dihedral, four atoms index should be defined
     if angle_type == "dihedral":
         elements = np.reshape(np.array(elements), (-1, 4))

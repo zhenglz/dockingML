@@ -509,7 +509,7 @@ def write_results(X_transformed, variance_ratio, X_out, variance_out, col_index,
     eigval.to_csv(variance_out, sep=",", header=True, index=False, float_format="%.3f")
 
     # save eigvectors to a file when necessary
-    if not eigenvector and len(eigvector_out):
+    if eigenvector.shape[0] > 0 and len(eigvector_out):
         if not isinstance(eigenvector, pd.DataFrame):
             eigenvector = pd.DataFrame(eigenvector)
 
