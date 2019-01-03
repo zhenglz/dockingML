@@ -766,7 +766,7 @@ def load_dataset(fn, skip_index=True, sep=","):
     return X
 
 
-def run_pca(dat, proj=10, output="transformed.csv", var_ratio_out="variance_explained.dat", eigenvector_out="", scale="NA"):
+def run_pca(dat, proj=10, output="transformed.csv", var_ratio_out="variance_explained.dat", eigenvector_out="", scale="mean"):
     """Perform PCA calculation given a clean dataset file.
     The dataset could be xyz coordinates, general CV values, angles, dihedral angles,
     contact map, distance matrix, or any other well-formated time-series datasets.
@@ -783,6 +783,12 @@ def run_pca(dat, proj=10, output="transformed.csv", var_ratio_out="variance_expl
         the variance explained ratio of the eigvalues output file name
     eigenvector_out : str, default = ""
         the eigenvector output file name
+    scale : str, default = 'mean'
+        the scaling method used to normalize X before PCA
+        mean : substract X by its means
+        zscore : the StandardScaler, substract by its means then divided by its stds
+        minmax : the MinMaxScaler, substract by its mins then divided by its ranges
+        NA : do not perform scaling or normalization before PCA
 
     Returns
     -------
@@ -792,8 +798,8 @@ def run_pca(dat, proj=10, output="transformed.csv", var_ratio_out="variance_expl
     index_col = dat.index
 
     # calculate PCA
-    pca = PCA(n_components=proj)
-    pca.scale_method_ = scale
+    pca = PCA(n_components=proj, scale_method=scale)
+    #pca.scale_method_ = scale
     pca.fit(dat)
 
     # get transformed dataset
@@ -920,7 +926,7 @@ def cmap_pca(args):
     contmap = contmap.loc[:, (contmap != 0).any(axis=0)]
 
     # run pca and write result to outputs
-    run_pca(contmap, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio, scale=args.scale_X)
+    run_pca(contmap, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio, scale=args.scale_method)
 
 
 def general_pca(args):
@@ -979,7 +985,7 @@ def xyz_pca(args):
 
     # run pca and write result to outputs
     run_pca(dat, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio,
-            eigenvector_out=args.eigvect, scale=args.scale_X)
+            eigenvector_out=args.eigvect, scale=args.scale_method)
 
 
 def dihedral_pca(args):
@@ -1003,7 +1009,7 @@ def dihedral_pca(args):
     dihedrals.index = dih_angles.index
 
     # perform PCA calculation
-    run_pca(dihedrals, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio, scale=args.scale_X)
+    run_pca(dihedrals, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio, scale=args.scale_method)
 
 
 def arguments(d="Descriptions."):
@@ -1054,7 +1060,7 @@ def arguments(d="Descriptions."):
                                     "The output eigvector file name. It is only useful when \n"
                                     "you want to create ensemble of essential dynamics PDB files to generate\n"
                                     "a movie based on XYZ coordinates PCA. \n")
-    parser.parser.add_argument("-scale_X", type=str, default="NA",
+    parser.parser.add_argument("-scale_method", type=str, default="NA",
                                help="Input, optional. Default is NA. \n"
                                     "Whether scale the dataset before perform PCA calculation. \n"
                                     "NA: do not scale dataset. \n"
