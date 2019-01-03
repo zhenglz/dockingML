@@ -513,7 +513,7 @@ def write_results(X_transformed, variance_ratio, X_out, variance_out, col_index,
         if not isinstance(eigenvector, pd.DataFrame):
             eigenvector = pd.DataFrame(eigenvector)
 
-        eigenvector.to_csv(eigvector_out, sep=",", header=False, index=False)
+        eigenvector.to_csv(eigvector_out, sep=",", header=False, index=False, float_format="%.3f")
 
     return None
 
