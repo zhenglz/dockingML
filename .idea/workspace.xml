@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="update gmx_index module">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mdanaly/angles.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/angles.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mdanaly/pca.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/pca.py" afterDir="false" />
     </list>
     <ignored path="dockingML.iws" />
@@ -34,8 +32,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mdanaly/pca.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="394">
-              <caret line="511" column="45" selection-start-line="511" selection-start-column="45" selection-end-line="511" selection-end-column="45" />
+            <state relative-caret-position="462">
+              <caret line="515" column="96" selection-start-line="515" selection-start-column="96" selection-end-line="515" selection-end-column="96" />
               <folding>
                 <element signature="e#25#43#0" expanded="true" />
                 <element signature="e#238#6233#0" />
@@ -536,13 +534,6 @@
       <option name="presentableId" value="Default" />
       <updated>1499093997611</updated>
     </task>
-    <task id="LOCAL-00070" summary="add sine value for angles module">
-      <created>1539791672066</created>
-      <option name="number" value="00070" />
-      <option name="presentableId" value="LOCAL-00070" />
-      <option name="project" value="LOCAL" />
-      <updated>1539791672066</updated>
-    </task>
     <task id="LOCAL-00071" summary="add sine value for angles module">
       <created>1539791750822</created>
       <option name="number" value="00071" />
@@ -879,7 +870,14 @@
       <option name="project" value="LOCAL" />
       <updated>1546483867109</updated>
     </task>
-    <option name="localTasksCounter" value="119" />
+    <task id="LOCAL-00119" summary="update gmx_index module">
+      <created>1546484345963</created>
+      <option name="number" value="00119" />
+      <option name="presentableId" value="LOCAL-00119" />
+      <option name="project" value="LOCAL" />
+      <updated>1546484345963</updated>
+    </task>
+    <option name="localTasksCounter" value="120" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1302,8 +1300,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/pca.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="394">
-          <caret line="511" column="45" selection-start-line="511" selection-start-column="45" selection-end-line="511" selection-end-column="45" />
+        <state relative-caret-position="462">
+          <caret line="515" column="96" selection-start-line="515" selection-start-column="96" selection-end-line="515" selection-end-column="96" />
           <folding>
             <element signature="e#25#43#0" expanded="true" />
             <element signature="e#238#6233#0" />
