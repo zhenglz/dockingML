@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="update gmx_index module">
+    <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="add scaling methods for PCA calculation">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/gmx_pca.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/gmx_pca.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mdanaly/pca.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/pca.py" afterDir="false" />
     </list>
     <ignored path="dockingML.iws" />
@@ -21,11 +22,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bin/gmx_pca.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="8" column="8" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mdanaly/pca.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1464">
-              <caret line="447" column="33" selection-start-line="447" selection-start-column="33" selection-end-line="447" selection-end-column="33" />
+            <state relative-caret-position="-835">
+              <caret line="800" column="52" selection-start-line="800" selection-start-column="52" selection-end-line="800" selection-end-column="52" />
               <folding>
                 <element signature="e#25#43#0" expanded="true" />
                 <element signature="e#238#6233#0" />
@@ -39,15 +49,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="411">
               <caret line="244" column="8" selection-start-line="244" selection-start-column="8" selection-end-line="244" selection-end-column="8" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/mdanaly/coordNum.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1003">
-              <caret line="63" column="8" selection-start-line="63" selection-start-column="8" selection-end-line="63" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -132,7 +133,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>CommunityH</find>
       <find>loadtxt</find>
       <find>ContactMap</find>
       <find>TODO</find>
@@ -162,11 +162,13 @@
       <find>pio</find>
       <find>res_index</find>
       <find>run_pca</find>
+      <find>scale_X</find>
     </findStrings>
     <replaceStrings>
       <replace>fn</replace>
       <replace>self.threshold</replace>
       <replace>append</replace>
+      <replace>scale_method</replace>
     </replaceStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$</dir>
@@ -193,7 +195,6 @@
         <option value="$PROJECT_DIR$/mdanaly/lipids.py" />
         <option value="$PROJECT_DIR$/bin/t-SNE.py" />
         <option value="$PROJECT_DIR$/bin/lipids.py" />
-        <option value="$PROJECT_DIR$/bin/gmx_pca.py" />
         <option value="$PROJECT_DIR$/bin/gmx_plot.py" />
         <option value="$PROJECT_DIR$/mdanaly/tsne.py" />
         <option value="$PROJECT_DIR$/bin/ppdock.py" />
@@ -233,6 +234,7 @@
         <option value="$PROJECT_DIR$/mdanaly/dynamics.py" />
         <option value="$PROJECT_DIR$/dockml/index.py" />
         <option value="$PROJECT_DIR$/mdanaly/angles.py" />
+        <option value="$PROJECT_DIR$/bin/gmx_pca.py" />
         <option value="$PROJECT_DIR$/mdanaly/pca.py" />
       </list>
     </option>
@@ -534,20 +536,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1499093997611</updated>
-    </task>
-    <task id="LOCAL-00075" summary="add coordination number module">
-      <created>1539799519947</created>
-      <option name="number" value="00075" />
-      <option name="presentableId" value="LOCAL-00075" />
-      <option name="project" value="LOCAL" />
-      <updated>1539799519947</updated>
-    </task>
-    <task id="LOCAL-00076" summary="add coordination number module">
-      <created>1539799820866</created>
-      <option name="number" value="00076" />
-      <option name="presentableId" value="LOCAL-00076" />
-      <option name="project" value="LOCAL" />
-      <updated>1539799820866</updated>
     </task>
     <task id="LOCAL-00077" summary="add coordination number module">
       <created>1539800908645</created>
@@ -878,14 +866,28 @@
       <option name="project" value="LOCAL" />
       <updated>1546486986699</updated>
     </task>
-    <option name="localTasksCounter" value="124" />
+    <task id="LOCAL-00124" summary="add scaling methods for PCA calculation">
+      <created>1546495814707</created>
+      <option name="number" value="00124" />
+      <option name="presentableId" value="LOCAL-00124" />
+      <option name="project" value="LOCAL" />
+      <updated>1546495814708</updated>
+    </task>
+    <task id="LOCAL-00125" summary="add scaling methods for PCA calculation">
+      <created>1546496131845</created>
+      <option name="number" value="00125" />
+      <option name="presentableId" value="LOCAL-00125" />
+      <option name="project" value="LOCAL" />
+      <updated>1546496131845</updated>
+    </task>
+    <option name="localTasksCounter" value="126" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1600" height="838" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16656111" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16656111" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -897,7 +899,7 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32954547" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.32795697" />
-      <window_info active="true" anchor="bottom" id="Python Console" order="9" visible="true" weight="0.4408602" />
+      <window_info anchor="bottom" id="Python Console" order="9" visible="true" weight="0.17069893" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -954,7 +956,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="update gentop module" />
     <MESSAGE value="update docstring in dockml index module" />
     <MESSAGE value="update docstring in gentop module" />
     <MESSAGE value="add a gmx angle simulator for xtc based angles" />
@@ -979,7 +980,8 @@
     <MESSAGE value="update shiftPDB module" />
     <MESSAGE value="rewrite PdbIndex module" />
     <MESSAGE value="update gmx_index module" />
-    <option name="LAST_COMMIT_MESSAGE" value="update gmx_index module" />
+    <MESSAGE value="add scaling methods for PCA calculation" />
+    <option name="LAST_COMMIT_MESSAGE" value="add scaling methods for PCA calculation" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1223,13 +1225,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bin/gmx_pca.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="12" selection-start-line="8" selection-start-column="12" selection-end-line="8" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/coordNum.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1003">
@@ -1299,10 +1294,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/bin/gmx_pca.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="8" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/pca.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1464">
-          <caret line="447" column="33" selection-start-line="447" selection-start-column="33" selection-end-line="447" selection-end-column="33" />
+        <state relative-caret-position="-835">
+          <caret line="800" column="52" selection-start-line="800" selection-start-column="52" selection-end-line="800" selection-end-column="52" />
           <folding>
             <element signature="e#25#43#0" expanded="true" />
             <element signature="e#238#6233#0" />

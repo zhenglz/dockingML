@@ -799,7 +799,6 @@ def run_pca(dat, proj=10, output="transformed.csv", var_ratio_out="variance_expl
 
     # calculate PCA
     pca = PCA(n_components=proj, scale_method=scale)
-    #pca.scale_method_ = scale
     pca.fit(dat)
 
     # get transformed dataset
@@ -831,7 +830,7 @@ def gen_cmap(args):
     """
 
     # TODO: add a residue based selection module here
-
+    # select atoms indices for distance calculations
     atoms_selections = args.select.split()
     if len(atoms_selections) == 2:
         atoms_selections = atoms_selections
@@ -843,16 +842,15 @@ def gen_cmap(args):
     atom_grp_a = top.select("name %s" % atoms_selections[0])
     atom_grp_b = top.select("name %s" % atoms_selections[1])
 
+    # load the trajectory file by chunks iteratively
     print("Iterloading xtc trajectory file ...... ")
     trajs = gmxcli.read_xtc(xtc=args.f, top=args.s, chunk=1000, stride=int(args.dt/args.ps))
 
     cmap_dat = np.array([])
-
     print("Computing contactmap ...... ")
     for i, traj in enumerate(trajs):
         contmap = cmap.ContactMap(traj=traj, group_a=atom_grp_a, group_b=atom_grp_b, cutoff=args.cutoff)
         contmap.generate_cmap()
-
         if i == 0:
             cmap_dat = contmap.cmap_
         else:
@@ -883,9 +881,11 @@ def gen_dihedrals(args):
 
     dih_angles = np.array([])
 
+    # load the trajectory file by chunks iteratively
     print("Loading xtc trajectory file now ......")
     trajs = gmxcli.read_xtc(args.f, args.s, chunk=200, stride=int(args.dt / args.ps))
 
+    # calculate the dihedral angles by chunks iteratively
     print("Calculating dihedral angles ...... ")
     for traj in trajs:
         dang = angles.ComputeAngles(traj)
@@ -910,10 +910,6 @@ def cmap_pca(args):
     ----------
     args: argparse object,
         the arguments options
-
-    Returns
-    -------
-
     """
 
     # contmap is a pd.DataFrame containing the contact map information
@@ -938,9 +934,6 @@ def general_pca(args):
     args: argparse object,
         the arguments options
 
-    Returns
-    -------
-
     """
 
     # dat is a pd.DataFrame with index information
@@ -964,7 +957,8 @@ def xyz_pca(args):
 
     Notes
     -------
-    If you want to generate essential dynamics movie from XYZ coordinates PCA,
+    If you want to generate essential dynamics movie from XYZ coordinates PCA, you need to
+    save the eigenvectors for the first few PCs
 
     """
 
@@ -1074,13 +1068,9 @@ def arguments(d="Descriptions."):
     return args
 
 
-def gmxpca():
+def main():
     """Perform PCA analysis based on coordinates (contactmap, distance matrix
     or dihedral angles) in xtc file
-
-    Returns
-    -------
-
     """
 
     d = """
