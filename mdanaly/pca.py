@@ -377,9 +377,7 @@ class PCA(object):
 
         """
 
-        eigvect_ = self.pca_obj.components_
-
-        self.eigvectors_ = eigvect_
+        self.eigvectors_ = self.pca_obj.components_
 
         return self
 
@@ -581,11 +579,12 @@ def run_pca(dat, proj=10, output="transformed.csv", var_ratio_out="variance_expl
     # get transformed dataset
     X_transformed = pca.X_transformed_
     variance_ratio = pca.eigvalues_ratio_
+    eigenvectors = pca.eigvectors_
 
     # write result
     write_results(X_transformed=X_transformed, variance_ratio=variance_ratio,
                   X_out=output, variance_out=var_ratio_out, col_index=index_col,
-                  eigenvector=pca.eigvectors_, eigvector_out=eigenvector_out)
+                  eigenvector=eigenvectors, eigvector_out=eigenvector_out)
     return None
 
 def gen_cmap(args):
@@ -662,7 +661,7 @@ def gen_dihedrals(args):
     dih_angles = np.array([])
 
     print("Loading xtc trajectory file now ......")
-    trajs = gmxcli.read_xtc(args.f, args.s, chunk=100, stride=int(args.dt / args.ps))
+    trajs = gmxcli.read_xtc(args.f, args.s, chunk=200, stride=int(args.dt / args.ps))
 
     print("Calculating dihedral angles ...... ")
     for traj in trajs:
