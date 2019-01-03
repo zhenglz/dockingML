@@ -230,7 +230,7 @@ def gmxangle():
 
     """
 
-    args = arguments(descriptions())
+    args = arguments()
 
     if os.path.exists(args.f) and os.path.exists(args.n) \
             and os.path.exists(args.s):

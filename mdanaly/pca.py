@@ -782,8 +782,15 @@ def dihedral_pca(args):
     dih_angles = gen_dihedrals(args)
     dih_angles = datset_subset(dih_angles, begin=args.b, end=args.e)
 
+    # cosine and sine dihedrals
+    cos_dih = np.cos(dih_angles.values)
+    sin_dih = np.sin(dih_angles.values)
+    dihedrals = np.concatenate((cos_dih, sin_dih), axis=1)
+    dihedrals = pd.DataFrame(dihedrals)
+    dihedrals.index = dih_angles.index
+
     # perform PCA calculation
-    run_pca(dih_angles, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio)
+    run_pca(dihedrals, proj=args.proj, output=args.o, var_ratio_out=args.var_ratio)
 
 
 def arguments(d="Descriptions."):
