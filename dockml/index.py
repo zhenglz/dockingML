@@ -83,6 +83,7 @@ class PdbIndex(object):
         self.at_direct = ["all", "none", "sidechain", "mainchain",
                           "protein", "water", ]
 
+        # diheral is a list
         self.dihedral = dihedral
         self.pdb = reference
         self.top = None
@@ -141,6 +142,12 @@ class PdbIndex(object):
         return self
 
     def get_chains(self):
+        """Collection chain information.
+
+        Returns
+        -------
+        self : return an instance of itself
+        """
 
         with open(self.pdb) as lines:
             chains = set([x[21] for x in lines if x.split()[0] in ["ATOM", "HETATM"]])
@@ -152,7 +159,15 @@ class PdbIndex(object):
 
         self.chain_ndx = chain_ids
 
+        return self
+
     def prepare_selection(self):
+        """Prepare necessary information for Gromacs index generation.
+
+        Returns
+        -------
+        self: return a instance of itself
+        """
 
         self.load_pdb()
         self.res_seq()
@@ -409,18 +424,21 @@ class PdbIndex(object):
 class GmxIndex(object):
     """Parse Gromacs Index File
 
+    This class is a parser for gromacs index file. The group names and
+    their elements were parsed.
+
     Parameters
     ------------
-    index: str,
+    index : str
           the file name of the input index file
 
     Attributes
     ------------
-    ndxlines: list,
+    ndxlines : list
           the lines in the index file
-    groups: list,
+    groups : list
           the list of groups in the index file
-    totallines: int,
+    totallines : int
           total number of lines in the index file
 
     Methods
@@ -440,7 +458,8 @@ class GmxIndex(object):
             sys.exit(0)
 
         self.ndxlines   = open(self.index).readlines()
-        self.groups     = [x.split()[1] for x in self.ndxlines if ("[" in x and "]" in x)]
+        self.groups     = [x.split()[1] for x in self.ndxlines
+                           if ("[" in x and "]" in x)]
         self.totallines = len(self.ndxlines)
 
     def groupsLineNumber(self):
@@ -451,7 +470,7 @@ class GmxIndex(object):
 
         Returns
         -------
-        groupLN: orderedDict, dict
+        groupLN: collections.orderedDict, dict
                the group-line_number information
         """
 
@@ -514,8 +533,9 @@ class GmxIndex(object):
         self : returns an instance of self.
         """
 
-        PdbIndex().atomList2File(elements, group, output)
-        return  self
+        PdbIndex().atomList2File(atom_list=elements, group_name=group, out_filen=output)
+        return self
+
 
 def main():
     """Entry_point of the pdb index and gromacs index modules

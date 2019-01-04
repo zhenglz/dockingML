@@ -2,21 +2,22 @@
 
 import numpy as np
 import argparse
-import os
-import sys
+import os, sys
 from scipy import stats
 from argparse import RawTextHelpFormatter
 from matplotlib import pyplot as plt
 
 from dockml import pdbIO
 
-class MatrixHandle :
+
+class MatrixHandle(object):
+
     def __init__(self):
-        pass
+        self.current_type_ = None
+        self.next_type_ = None
 
     def reshapeMtx(self, dataf, dtype, xyshift=[0, 0]):
-        '''
-        Load a matrix file, return a ndarray matrix shape object
+        '''Load a matrix file, return a ndarray matrix shape object
         :param dataf: str, a matrix M*N file
         :param dtype:
         :param cols:
@@ -24,8 +25,11 @@ class MatrixHandle :
         :return: array, X Y Z 3 columns data array
         '''
 
+        #self.current_type_ = dtype
+
         if len(dtype):
-            data = np.loadtxt(dataf, dtype=dtype, comments=['@', '#'])
+            data = np.loadtxt(dataf, dtype=dtype,
+                              comments=['@', '#'])
         else:
             data = np.loadtxt(dataf, comments=['@', '#'])
 
@@ -387,7 +391,7 @@ def main():
 
         print("Domain-wise matrix averaging completed!")
 
-    elif args.opt == 'neib0' :
+    elif args.opt == 'neib0':
         if args.ds in ['xyz', 'XYZ', '3d']:
             data = mtxh.loadxyz(args.dat[0], args.dtype, args.xyzcol, xyshift=args.xyshift)
         elif args.ds in ['matrix', 'mtx']:

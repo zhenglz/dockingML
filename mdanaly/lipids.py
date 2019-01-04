@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os, sys
-import dockml
+from dockml.pdbIO import coordinatesPDB, handlePBC, parsePDB
 import numpy as np
 from scipy.spatial import ConvexHull
 import argparse
@@ -9,6 +9,35 @@ from argparse import RawTextHelpFormatter
 
 
 class LipidThickness(object):
+    """Lipid Thickness calculation and lipid surface calculation.
+
+    Parameters
+    ----------
+    pdb : str,
+        The input pdb file name
+    lipRes : list
+        The list of lipid residue names in the pdb file
+    headatoms : list
+        The list of head atom name list in the pdb file
+
+    Attributes
+    ----------
+    pdb
+    lip
+    head
+
+    Notes
+    -----
+    The surface area of the protein around the upper or lower
+    leaflets, could be estimated with convex hull algorithm.
+
+    References
+    ----------
+    Detail method could be found here:
+    http://scipy-cookbook.readthedocs.io/items/Finding_Convex_Hull.html
+    https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.ConvexHull.html
+
+    """
 
     def __init__(self, pdb, lipRes=['DOPC'], headatoms=["P"]):
 
@@ -34,7 +63,7 @@ class LipidThickness(object):
             lines = [x for x in lines if "ATOM" in x]
             plines = [x for x in lines if ((x[17:20] in self.lip) and (x.split()[2] in self.head))]
 
-            coord = dockml.coordinatesPDB()
+            coord = coordinatesPDB()
             zvalues = np.asarray(coord.getAtomCrdFromLines(plines))[:, 2]
 
         return zvalues
@@ -78,27 +107,35 @@ class LipidThickness(object):
         return deltaZ, middle, up_aver, low_aver
 
     def lipidsNum(self, zvalues, middle):
-        '''
-        number of lipids in upper and lower leaflet
-        :param zvalues:
-        :param middle:
-        :return:
-        '''
+        """Number of lipids in upper and lower leaflet
+
+        Parameters
+        ----------
+        zvalues : np.ndarray, or list, shape = [ N, ]
+            the Z-coordinates
+        middle : np.ndarray, or list, shape = [ N, ]
+            the middle coordinates
+
+        Returns
+        -------
+        num_upleaflet : int
+        num_lowleaflet : int
+        """
 
         upleaflet = [x for x in zvalues if x > middle]
         lowleaflet = [x for x in zvalues if x < middle]
 
         return len(upleaflet), len(lowleaflet)
 
-class AreaPerLipid :
+
+class AreaPerLipid(object):
 
     def __init__(self, pdb):
         self.pdb = pdb
 
     def proteinArea(self, proCrds, vectors, restorePBC=False):
-        """
-        Calculate protein area given a set of 2d points (xy data only)
-        convex hull algorithm.
+        """Calculate protein area given a set of 2d points (xy data only)
+        with convex hull algorithm.
 
         Detail method could be found here:
         http://scipy-cookbook.readthedocs.io/items/Finding_Convex_Hull.html
@@ -106,11 +143,11 @@ class AreaPerLipid :
 
         Parameters
         ----------
-        proCrds: ndarray,
+        proCrds : np.ndarray
             a list of xyz coordinates, 3*N array
-        vectors: list, 3 elements,
+        vectors : list, or np.array, shape = [ 3, ]
             pbc xyz vector
-        restorePBC: bool,
+        restorePBC : bool
             whether restore PBC box
 
         Returns
@@ -121,7 +158,7 @@ class AreaPerLipid :
         """
 
         if restorePBC:
-            pbc = dockml.handlePBC()
+            pbc = handlePBC()
             pbcVec = [
                 [0.0, vectors[0]],
                 [0.0, vectors[1]],
@@ -146,61 +183,92 @@ class AreaPerLipid :
             return 0.0
 
     def selectProteinAtomsCrds(self, zrange=[0, 1.0]):
-        '''
-        get protein atoms' coordinates if the protein atoms z values in zrange
-        :param zrange: list of floats, up and low boundarys
-        :return: ndarray, 3*N
-        '''
+        """get protein atoms' coordinates if the protein
+        atoms z coordinates in zrange
 
-        pdbio = dockml.parsePDB()
+        Parameters
+        ----------
+        zrange : iterable, length = 2
+            up and low boundaries
+
+        Returns
+        -------
+        selected_atoms : np.ndarray, shape = [ N, 3]
+            the xyz coordinates of selected atoms
+            N is number of atoms selected
+        """
+
+        pdbio = parsePDB()
         atominfor = pdbio.atomInformation(self.pdb)
 
         ndx = atominfor.keys()
 
         # a list of atom index, strings
-        selected_ndx = [ x for x in ndx if atominfor[x][1] == "Protein" ]
+        selected_ndx = [x for x in ndx
+                        if atominfor[x][1] == "Protein"]
 
-        cpdb = dockml.coordinatesPDB()
+        cpdb = coordinatesPDB()
         crds = np.asarray(cpdb.getAtomCrdByNdx(self.pdb, selected_ndx))
 
-        selected_crds = [ x for x in crds if ((x[2] > zrange[0]) and (x[2] < zrange[1]))]
+        selected_crds = [x for x in crds
+                         if ((x[2] > zrange[0]) and (x[2] < zrange[1]))]
 
         return np.asarray(selected_crds)
 
     def atomVdWBoundary(self, points, vcutoff=1.4):
-        '''
-        given a list of points, for each of points, find it's 4 neihboring dummy points
+        """given a list of points, for each of points,
+        find it's 4 neihboring dummy points
         to represent its vdw boundary
                    dummy2
                      |
           dummy1-- atom --  dummy3
                      |
                    dummy4
-        :param points: ndarray, 3*N
-        :param vcutoff: float, cutoff of vdw
-        :return: ndarray, 2*N
-        '''
+
+        Parameters
+        ----------
+        points : np.ndarray, shape = [ N, 3]
+            the coordinates of a list of atoms
+            N is the number of atoms
+        vcutoff : float
+            the van del waals distance cutoff
+
+        Returns
+        -------
+        dummy_atoms : np.ndarray, shape = [ 4*N, 2]
+            the coordinates of 4*N dummy atoms
+            N is the number of real atoms
+        """
 
         dummy = []
-        for p in points :
-            d_p = map(lambda x, y: [x+ vcutoff*p[0], y+vcutoff*p[1]],
-                      [-1.0, 1.0, -1.0, 1.0 ], [-1, 1.0, 1.0, -1.0]
+        for p in points:
+            d_p = map(lambda x, y: [x + vcutoff*p[0], y+vcutoff*p[1]],
+                      [-1.0, 1.0, -1.0, 1.0], [-1, 1.0, 1.0, -1.0]
                       )
             dummy += list(d_p)
 
         return np.asarray(dummy)
 
     def totalArea(self, vectors):
-        '''
-        get PBC vectors, and return the total area of the bilayer lipids
-        total area = x_length * y_length
-        :param vectors:
-        :return:
-        '''
+        """get PBC vectors, and return the total area of
+        the bilayer lipids total area = x_length * y_length
+
+        Parameters
+        ----------
+        vectors : iterable, length = 2
+            the vectors of x_length and y_length
+
+        Returns
+        -------
+        area : float
+            the total areal of lipids
+
+        """
 
         return vectors[0] * vectors[1]
 
-def arguments() :
+
+def arguments():
 
     d = '''
     Descriptions of the lipid Thickness and Lipid Per Area calculation
@@ -238,13 +306,12 @@ def arguments() :
 
     return args
 
-def main() :
+def main():
 
     args = arguments()
 
     N = args.num
     layer_step = args.layer
-    #ntype = args.pdbf
 
     # extract all files
     files = [ args.pdbf%x for x in range(1, N+1) ]
@@ -281,7 +348,7 @@ def main() :
         up_proarea = apl.proteinArea(apl.selectProteinAtomsCrds(up_zrange), pbc, restorePBC=args.restore)
         low_proarea = apl.proteinArea(apl.selectProteinAtomsCrds(low_zrange), pbc, restorePBC=args.restore)
 
-        up_alp = (total_area - up_proarea )  / float(up_num_lip)
+        up_alp = (total_area - up_proarea) / float(up_num_lip)
         low_alp = (total_area - low_proarea) / float(low_num_lip)
 
         alp_aver = (total_area * 2 - up_proarea - low_proarea) / float(up_num_lip+low_num_lip)
@@ -294,3 +361,4 @@ def main() :
     tofile.close()
 
     print("Calculations of Thickness and APL completed!")
+

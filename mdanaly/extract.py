@@ -78,7 +78,7 @@ class ExtractPDB(object):
         """
 
         lines = open(filename)
-        print( "The models of the pdb file is : ")
+        print("The models of the pdb file is : ")
         for s in lines:
             if "MODEL" in s:
                 print("    "+s[:-1])
@@ -111,7 +111,7 @@ class ExtractPDB(object):
                 elif "MODEL" in s and int(frame_no)+1 == int(s.split()[1]):
                     condition = False
                     break
-                else :
+                else:
                     condition = False
             newline.close()
             lines.close()
@@ -188,7 +188,7 @@ class ExtractPDB(object):
                     tofile = open(structname + "_" + str(filenum) + '.pdb', 'w')
                     print("START FRAME: %d " % (filenum))
 
-                elif "ENDMDL" in s :
+                elif "ENDMDL" in s:
                     tofile.write(s)
                     tofile.close()
                     filenum += 1
@@ -196,46 +196,7 @@ class ExtractPDB(object):
                 elif "ATOM" in s :
                     tofile.write(s)
 
-        return 1
-
-    '''def extract_all(self, filename, structname):
-        
-        extract all the frames into seperated mol2 (or, pdb and pdbqt) files
-
-        :param filename: the multiple-frames mol2 file
-        :param structname: the prefix of the extracted separated frames
-        :return: None
-        
-        extension = filename.split('.')[-1]
-        if extension in ['pdb', 'pdbqt', 'mol2'] :
-            try :
-                # try to loop over the file to count number of lines in the file
-                totalLineNum = sum([ 1 for line in open(filename)])
-            except IOError :
-                totalLineNum = 0
-
-            # start to extract frames
-            if totalLineNum :
-                structFirstLineIndex = self.indexCoord(filename)
-                # at the end of file, provide a sudo-next frame start line index
-                structFirstLineIndex.append(totalLineNum)
-
-                for i in range(len(structFirstLineIndex))[1:] :
-                    start_end = [structFirstLineIndex[i-1], structFirstLineIndex[i]]
-
-                    with open(structname+"_"+str(i)+"."+extension, 'wb') as tofile :
-                        # extract the specific lines from the large multiple-frame
-                        # file to write to a new file.
-                        for lndx in range(start_end[0]+1, start_end[1]+1) :
-                            tofile.write(linecache.getline(filename, lndx))
-            else :
-                print("File %s is empty. Could not extract frames. " % filename)
-        else :
-            print("PDB, PDBQT, or MOL2 file is required. ")
-            sys.exit(0)
-
-        print("Extracting all frames in mol2 file completed. ") 
-        '''
+        return None
 
     def arguments(self):
         """

@@ -10,41 +10,42 @@
 #####################################################
 
 from mdanaly import gmxcli, pca
-from dockml import pdbIO
-from dockml import index
+from dockml import pdbIO, index
 
 from matplotlib import pyplot as plt
 from collections import defaultdict
 from datetime import datetime
 
 import mdtraj as mt
-import math, os
+import math, os, sys
 import numpy as np
 import pandas as pd
 
 
 class CoordinatesXYZ(object):
-    """
-    Perform trajectory coordinates PCA analysis using mdtraj
+    """Perform trajectory coordinates PCA analysis using mdtraj
 
     Parameters
     ----------
-    traj: mdtraj.Trajectory object,
-        a mdtraj trajectory, where the coordinates are stored
-    top: str, format pdb
+    traj :
+    top : str, format pdb
         the reference pdb file name
-    atom_selection: str, default is name CA
+    atom_selection : str, default is name CA
         the atom selection for pca calculation.
 
     Attributes
     ----------
-    topology : mdtraj.Trajectory.topology object
+    traj_ : mt.Trajectory object
+        a mdtraj trajectory, where the coordinates are stored
+    ref_ : mt.Trajectory
+        The reference structure.
+    topology_ : mt.Topology object
         the mdtraj trajectory topology object
     n_atoms_ : int,
         number of atoms in the trajectory
     superimposed_ : bool,
         whether the trajectory has been superimposed
-    superpose_atom_indices : np.array,
+    superpose_atom_indices_ : np.array,
         the atom indices, starting from 0, format is int
     xyz : np.ndarray, shape=[N, M]
         the original xyz coordinates of selected atoms
@@ -65,16 +66,21 @@ class CoordinatesXYZ(object):
     """
 
     def __init__(self, traj, top, atom_selection="CA"):
-        self.traj = traj
-        self.ref = mt.load(top)
+        self.traj_ = traj
+        if os.path.exists(top):
+            self.ref_ = mt.load(top)
+        else:
+            print("Reference pdb structure %s is not existed or accessible." % top)
+            sys.exit(0)
 
         # topology
-        self.topology = self.ref.topology
+        self.topology_ = self.ref_.topology
 
-        self.n_atoms_ = self.traj.n_atoms
+        self.n_atoms_ = self.traj_.n_atoms
 
         self.superimposed_ = False
-        self.superpose_atom_indices_ = self.topology.select("name {}".format(atom_selection))
+        self.superpose_atom_indices_ = self.topology_.select(
+            "name {}".format(atom_selection))
 
         self.xyz = None
 
@@ -87,9 +93,10 @@ class CoordinatesXYZ(object):
         self : return an instance of self.
 
         """
-
-        self.traj.superpose(self.ref, frame=0, atom_indices=self.superpose_atom_indices_)
-        self.superimposed_ = True
+        if not self.superimposed_:
+            self.traj_.superpose(self.ref_, frame=0,
+                                 atom_indices=self.superpose_atom_indices_)
+            self.superimposed_ = True
 
         return self
 
@@ -114,16 +121,15 @@ class CoordinatesXYZ(object):
             atom_indices = self.superpose_atom_indices_
 
         if not self.superimposed_:
-            print("Trajectory is not superimposed. Superimpose it to reference now...")
+            print("Trajectory is not superimposed. "
+                  "Superimpose it to the reference now...")
             self.superimpose()
 
         # subset a trajectory
-        traj = self.traj.atom_slice(atom_indices=atom_indices, inplace=False)
+        traj = self.traj_.atom_slice(atom_indices=atom_indices, inplace=False)
 
         # extract the xyz coordinates
-        #xyz = traj.xyz
         xyz = traj.xyz.reshape((traj.xyz.shape[0], traj.xyz.shape[1]*3))
-
         self.xyz = xyz
 
         return xyz
@@ -139,7 +145,7 @@ class ContactMap(object):
 
     Parameters
     ----------
-    traj : mdtraj.Trajectory object,
+    traj : mt.Trajectory object,
         the MDTraj trajectory object for distance calculation
     group_a : list, np.array, or pd.Seris
         the list of atom index in cmap x-axis
@@ -150,9 +156,9 @@ class ContactMap(object):
 
     Attributes
     ----------
-    atom_group_a : list
+    atom_group_a : np.array
         the list of atom index for cmap x-axis
-    atom_group_b : list
+    atom_group_b : np.array
         the list of atom index for cmap y-axis
     atom_pairs_ : np.ndarray, shape=[N, 2]
         the atom pairs for distance calculation, N is the number
@@ -175,8 +181,8 @@ class ContactMap(object):
         self.traj = traj
         self.cutoff = cutoff
 
-        self.atom_group_a = group_a
-        self.atom_group_b = group_b
+        self.atom_group_a = np.asarray(group_a)
+        self.atom_group_b = np.asarray(group_b)
 
         self.atom_pairs_ = None
         self.generate_atom_pairs()
@@ -243,8 +249,7 @@ class ContactMap(object):
         return self
 
     def generate_atom_pairs(self):
-        """
-        Generate atom pairs list.
+        """Generate atom pairs list.
 
         Returns
         -------
@@ -270,13 +275,10 @@ class ContactMap(object):
         self: the instance itself
 
         """
-        # TODO: calculation coordination numbers
         if not self.distmtx_computed_:
             self.generate_cmap(shape="array")
 
-        coord_number = np.sum(self.cmap_, axis=1)
-
-        self.coord_number_ = coord_number
+        self.coord_number_ = np.sum(self.cmap_, axis=1)
 
         return self
 
@@ -330,26 +332,25 @@ class DrawCMap(object):
 
         # get full residue name index list
         res_labels = []
-        if len(refpdb) == 3 :
+        if len(refpdb) == 3:
 
-            ppdb = dockml.pdbIO.parsePDB("")
+            ppdb = pdbIO.parsePDB("")
             fullreslist = ppdb.getNdxForRes(refpdb[0], [refpdb[1]])
 
             shortresmap = ppdb.longRes2ShortRes()
-            fullreslist = [ x for x in fullreslist if x[2] in refpdb[1] ]
+            fullreslist = [x for x in fullreslist if x[2] in refpdb[1]]
 
-            for resk in key_res :
-                if fullreslist[resk][0] in shortresmap.keys() :
+            for resk in key_res:
+                if fullreslist[resk][0] in shortresmap.keys():
                     resseq = str(resk + refpdb[2])
                     resname= shortresmap[fullreslist[resk][0]]
                     chainid= fullreslist[resk][2]
 
-                    if yticks_showchainid :
+                    if yticks_showchainid:
                         id = resname + resseq + chainid
                     else :
                         id = resname + resseq
 
-                    #print("ID "* 5, id)
                     res_labels.append(id)
 
         # only keep the important residue cmap
@@ -362,9 +363,6 @@ class DrawCMap(object):
         print("Protein residue numbers: %d" % shapex)
         print("Time point numbers: %d"% shapey)
 
-        #x = np.reshape(np.tile(range(shapex), shapey), (shapey, shapex))
-        #y = np.asarray(range(shapey))
-        #y = np.reshape(np.tile(y, shapex), (shapex, shapey)).T
         z = np.transpose(keyres_cmap[:, 1:]).T
 
         plt.pcolormesh(z.T, cmap=plt.get_cmap(cmaptype))
@@ -375,24 +373,24 @@ class DrawCMap(object):
         plt.xlabel(xlabel, fontsize=fsize)
         plt.ylabel(ylabel, fontsize=fsize)
 
-        if len(yticks_loc) and len(yticks_labels) :
+        if len(yticks_loc) and len(yticks_labels):
             plt.yticks(yticks_loc, yticks_labels)
-        else :
-            if len(refpdb) == 3 :
+        else:
+            if len(refpdb) == 3:
                 plt.yticks(np.array(range(shapex))+0.5, res_labels)
 
-        if len(xlim) :
+        if len(xlim):
             plt.xlim(xlim)
 
-        if len(ylim) :
+        if len(ylim):
             plt.ylim(ylim)
-        else :
+        else:
             plt.ylim([0, shapex+0.5])
 
-        if len(xticks_labels) and len(xticks_loc) :
+        if len(xticks_labels) and len(xticks_loc):
             plt.xticks(xticks_loc, xticks_labels)
 
-        if len(savefig) :
+        if len(savefig):
             plt.savefig(savefig, dpi=2000)
 
         plt.show()
@@ -401,34 +399,53 @@ class DrawCMap(object):
 
 
 class CommunityCmap(object):
+    """Calculate and parse side-chain contact map for community
+    network analysis.
+
+    Parameters
+    ----------
+    cmap : str, or np.ndarray
+        str: the filename of a contact map
+        np.ndarray: a contactmap matrix np.ndarray object
+    sep : str, default = ','
+        the delimiter used in the cmap file.
+
+    Attributes
+    ----------
+    cmap_ : np.ndarray
+
+    """
 
     def __init__(self, cmap, sep=","):
 
         if os.path.isfile(cmap):
             try:
-                self.cmap = np.loadtxt(cmap, delimiter=sep, comments="#")
+                self.cmap_ = np.loadtxt(cmap, delimiter=sep, comments="#")
             except FileExistsError:
                 print("File %s not exists! " % cmap)
         else:
-            self.cmap = cmap
+            self.cmap_ = cmap
 
-    def icriticalMap(self, icritical, dat):
+    def icriticalMap(self, icritical, dat, cutoff=0.48):
         """
         Calculate whether the icritical number is suitable
 
         Parameters
         ----------
-        icritical
+        icritical : float
+            The
         dat: np.ndarray, shape = [N, M]
+            The contact map matrix, N is number of residues
 
         Returns
         -------
-        True, or False
+        is_suitable : bool
+            Whether the icritical is suitable
         """
 
         map = np.sum(np.greater(dat, icritical), axis=0) / dat.shape[0]
 
-        return (map >= 0.48) * 1.0
+        return (map >= cutoff) * 1.0
 
     def diagonalZeroed(self, cmap, xsize, outfile):
         from mdanaly import matrix
@@ -445,13 +462,12 @@ class CommunityCmap(object):
 
     def generateCmap(self):
 
-        #dat = np.loadtxt("all_cmapnbyn.csv", delimiter=",")
         Icritical = np.arange(0, 15, 1.0)
 
         for ic in Icritical:
-            imap = self.icriticalMap(ic, self.cmap)
+            imap = self.icriticalMap(ic, self.cmap_)
 
-            self.diagonalZeroed(imap, int(np.sqrt(self.cmap.shape[1])), "cmap_I_%.2f" % ic)
+            self.diagonalZeroed(imap, int(np.sqrt(self.cmap_.shape[1])), "cmap_I_%.2f" % ic)
 
         return 1
 

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from dockml import index
-from mdanaly import gmxcli
-from mdanaly import cmap
+from mdanaly import gmxcli, cmap
+
 import pandas as pd
 import numpy as np
 
