@@ -16,18 +16,21 @@ from matplotlib import pyplot as plt
 from collections import defaultdict
 from datetime import datetime
 
-import mdtraj as mt
-import math, os, sys
+import math
+import os
+import sys
 import numpy as np
 import pandas as pd
+import mdtraj as mt
 
 
 class CoordinatesXYZ(object):
-    """Perform trajectory coordinates PCA analysis using mdtraj
+    """Extract atom coordinates using mdtraj
 
     Parameters
     ----------
-    traj :
+    traj : mt.Trajectory
+        A mdtraj trajectory object as input
     top : str, format pdb
         the reference pdb file name
     atom_selection : str, default is name CA
@@ -47,7 +50,7 @@ class CoordinatesXYZ(object):
         whether the trajectory has been superimposed
     superpose_atom_indices_ : np.array,
         the atom indices, starting from 0, format is int
-    xyz : np.ndarray, shape=[N, M]
+    xyz_ : np.ndarray, shape=[N, M]
         the original xyz coordinates of selected atoms
         N is number of samples, or frames
         M is the multiply of atoms * 3
@@ -82,7 +85,7 @@ class CoordinatesXYZ(object):
         self.superpose_atom_indices_ = self.topology_.select(
             "name {}".format(atom_selection))
 
-        self.xyz = None
+        self.xyz_ = None
 
     def superimpose(self):
         """
@@ -130,7 +133,7 @@ class CoordinatesXYZ(object):
 
         # extract the xyz coordinates
         xyz = traj.xyz.reshape((traj.xyz.shape[0], traj.xyz.shape[1]*3))
-        self.xyz = xyz
+        self.xyz_ = xyz
 
         return xyz
 
@@ -165,7 +168,7 @@ class ContactMap(object):
         of atom pairs.
     dist_matrix_ : np.ndarray, shape = [M, N]
         the distance matrix, M is the number of atoms for x-axis
-        N is the number of atoms in y-axis
+        N is the number of atom pairs in y-axis
     cmap_ : np.ndarray, shape = [M, N]
         the contact map matrix, M is the number of atoms for x-axis
         N is the number of atoms in y-axis
@@ -196,8 +199,7 @@ class ContactMap(object):
         self.coord_number_ = None
 
     def distance_matrix(self):
-        """
-        Calculate the atom distance matrix.
+        """Calculate the atom distance matrix.
 
         Returns
         -------
@@ -213,8 +215,7 @@ class ContactMap(object):
         return self
 
     def generate_cmap(self, shape='array', switch=False):
-        """
-        Calculate atom cmap data.
+        """Calculate atom cmap data.
 
         Parameters
         ----------
@@ -256,13 +257,15 @@ class ContactMap(object):
         self: the instance itself
 
         """
-        atom_pairs = []
 
-        for a in self.atom_group_a:
-            for b in self.atom_group_b:
-                atom_pairs.append([a, b])
+        self.atom_group_a = np.asarray(self.atom_group_a)
+        self.atom_group_b = np.asarray(self.atom_group_b)
 
-        self.atom_pairs_ = pd.DataFrame(atom_pairs).values
+        list_a = np.repeat(self.atom_group_a, self.atom_group_b.shape[0])
+        list_b = np.repeat(self.atom_group_b, self.atom_group_a.shape[0])
+        list_b = list_b.reshape((self.atom_group_a, self.atom_group_b)).T.ravel()
+
+        self.atom_pairs_ = np.array(zip(list_a, list_b))
 
         return self
 
@@ -282,6 +285,110 @@ class ContactMap(object):
 
         return self
 
+
+class CmapNbyN(ContactMap):
+    """Generate side-chain contact map
+
+    This class is inherited from ContactMap
+
+    Parameters
+    ----------
+    traj
+    resids_a
+    resids_b
+    cutoff
+
+    Attributes
+    ----------
+    traj : mt.Trajectory
+        The input trajectory for analysis
+    atom_group_a : np.array
+        the list of atom index for cmap x-axis
+    atom_group_b : np.array
+        the list of atom index for cmap y-axis
+    atom_pairs_ : np.ndarray, shape=[N, 2]
+        the atom pairs for distance calculation, N is the number
+        of atom pairs.
+    dist_matrix_ : np.ndarray, shape = [M, N]
+        the distance matrix, M is the number of atoms for x-axis
+        N is the number of atom pairs in y-axis
+    cmap_ : np.ndarray, shape = [M, N]
+        the contact map matrix, M is the number of atoms for x-axis
+        N is the number of atoms in y-axis
+    cmap_computed_ : bool
+        whether the contact map has been calculated
+    coord_num_
+    resids_a
+    resids_b
+    top_
+
+
+    See Also
+    --------
+    ContactMap
+
+    """
+
+    def __init__(self, traj, resids_a, resids_b, cutoff=0.35):
+
+        super().__init__(traj=traj, group_a=[], group_b=[], cutoff=cutoff)
+
+        #self.traj_ = traj
+        self.resids_a_ = resids_a
+        self.resids_b_ = resids_b
+
+        self.top_ = self.traj.topology
+
+    def single_pair_dist(self, resid_a, resid_b):
+        """
+
+        Parameters
+        ----------
+        resid_a : int
+            The residue id for x-axis
+        resid_b : int
+            The residue id for y-axis
+
+        Returns
+        -------
+
+        """
+
+        atoms_list_a = self.top_.select("resid %d and siedchain" % resid_a)
+        atoms_list_b = self.top_.select("resid %d and sidechain" % resid_b)
+
+        self.atom_group_a = atoms_list_a
+        self.atom_group_b = atoms_list_b
+
+        self.generate_atom_pairs()
+        self.distance_matrix()
+
+        sum_contacts = np.sum((self.dist_matrix_ <= self.cutoff) * 1.0, axis=1)
+
+        nbyn = sum_contacts / (self.atom_group_b.shape[0] * self.atom_group_b.shape[0])
+
+        return nbyn.reshape((-1, 1))
+
+    def cmap_nby(self):
+        """The main function for residue-residue sidechain contact normalized
+        by atom number products.
+
+        Returns
+        -------
+        self : an instance of itself
+
+        """
+
+        cmap = np.array([])
+
+        for res_a in self.resids_a_:
+            for res_b in self.resids_b_:
+                nbyn = self.single_pair_dist(res_a, res_b)
+                cmap = np.concatenate((cmap, nbyn), axis=1)
+
+        self.cmap_ = cmap
+
+        return self
 
 class DrawCMap(object):
 
@@ -404,7 +511,7 @@ class CommunityCmap(object):
 
     Parameters
     ----------
-    cmap : str, or np.ndarray
+    cmap : np.ndarray, or a cmap file name
         str: the filename of a contact map
         np.ndarray: a contactmap matrix np.ndarray object
     sep : str, default = ','
@@ -426,9 +533,10 @@ class CommunityCmap(object):
         else:
             self.cmap_ = cmap
 
+        self.final_map_ = None
+
     def icriticalMap(self, icritical, dat, cutoff=0.48):
-        """
-        Calculate whether the icritical number is suitable
+        """Calculate whether the icritical map
 
         Parameters
         ----------
@@ -439,13 +547,13 @@ class CommunityCmap(object):
 
         Returns
         -------
-        is_suitable : bool
-            Whether the icritical is suitable
+
         """
 
-        map = np.sum(np.greater(dat, icritical), axis=0) / dat.shape[0]
+        self.final_map_ = np.sum(np.greater(dat, icritical), axis=0) / dat.shape[0]
+        self.final_map_ = (self.final_map_ >= cutoff) * 1.0
 
-        return (map >= cutoff) * 1.0
+        return self.final_map_
 
     def diagonalZeroed(self, cmap, xsize, outfile):
         from mdanaly import matrix
