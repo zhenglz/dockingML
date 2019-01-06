@@ -261,11 +261,15 @@ class ContactMap(object):
         self.atom_group_a = np.asarray(self.atom_group_a)
         self.atom_group_b = np.asarray(self.atom_group_b)
 
-        list_a = np.repeat(self.atom_group_a, self.atom_group_b.shape[0])
-        list_b = np.repeat(self.atom_group_b, self.atom_group_a.shape[0])
-        list_b = list_b.reshape((self.atom_group_a, self.atom_group_b)).T.ravel()
+        if self.atom_group_a.shape[0] and self.atom_group_b.shape[0]:
 
-        self.atom_pairs_ = np.array(zip(list_a, list_b))
+            list_a = np.repeat(self.atom_group_a, self.atom_group_b.shape[0])
+            list_b = np.repeat(self.atom_group_b, self.atom_group_a.shape[0])
+            list_b = list_b.reshape((self.atom_group_a, self.atom_group_b)).T.ravel()
+
+            self.atom_pairs_ = np.array(zip(list_a, list_b))
+        else:
+            self.atom_pairs_ = np.array([])
 
         return self
 
@@ -336,6 +340,7 @@ class CmapNbyN(ContactMap):
         #self.traj_ = traj
         self.resids_a_ = resids_a
         self.resids_b_ = resids_b
+        #self.chain_a_, self.chain_b_ = chain_a, chain_b
 
         self.top_ = self.traj.topology
 
@@ -354,8 +359,10 @@ class CmapNbyN(ContactMap):
 
         """
 
-        atoms_list_a = self.top_.select("resid %d and siedchain" % resid_a)
-        atoms_list_b = self.top_.select("resid %d and sidechain" % resid_b)
+        atoms_list_a = self.top_.select("resid %d and siedchain"
+                                        % (resid_a))
+        atoms_list_b = self.top_.select("resid %d and sidechain"
+                                        % (resid_b))
 
         self.atom_group_a = atoms_list_a
         self.atom_group_b = atoms_list_b
@@ -363,15 +370,17 @@ class CmapNbyN(ContactMap):
         self.generate_atom_pairs()
         self.distance_matrix()
 
-        sum_contacts = np.sum((self.dist_matrix_ <= self.cutoff) * 1.0, axis=1)
+        sum_contacts = np.sum((self.dist_matrix_ <= self.cutoff)
+                              * 1.0, axis=1)
 
-        nbyn = sum_contacts / (self.atom_group_b.shape[0] * self.atom_group_b.shape[0])
+        nbyn = sum_contacts / (self.atom_group_b.shape[0]
+                               * self.atom_group_b.shape[0])
 
         return nbyn.reshape((-1, 1))
 
-    def cmap_nby(self):
-        """The main function for residue-residue sidechain contact normalized
-        by atom number products.
+    def cmap_nbyn(self):
+        """The main function for residue-residue sidechain contact
+        normalized by atom number products.
 
         Returns
         -------
@@ -523,11 +532,13 @@ class CommunityCmap(object):
 
     """
 
-    def __init__(self, cmap, sep=","):
+    def __init__(self, cmap, sep=",", is_file=False):
 
-        if os.path.isfile(cmap):
+        if is_file and os.path.exists(cmap):
             try:
-                self.cmap_ = np.loadtxt(cmap, delimiter=sep, comments="#")
+                self.cmap_ = np.loadtxt(cmap,
+                                        delimiter=sep,
+                                        comments="#")
             except FileExistsError:
                 print("File %s not exists! " % cmap)
         else:
@@ -608,53 +619,6 @@ class CommunityCmap(object):
         filesList.append(pdbFileList[(ranksize - 1) * load4each:])
 
         return filesList
-
-    def mpiCmapNbyN(self, MAX, inpdb_prefix="S_%s.pdb",
-                    chain=" ", resindex =  [str(x) for x in range(1, 251)],
-                    cutoff=5.0, atomtype = "side-chain-noH"):
-
-        os.chdir(os.getcwd())
-
-        startTime = datetime.now()
-
-        comm = MPI.COMM_WORLD
-        size = comm.Get_size()
-        rank = comm.rank
-
-        fileList = [ inpdb_prefix % str(x) for x in range(1, MAX)]
-
-        ndxdict = defaultdict(list)
-        for res in resindex:
-            ndxdict[res] = ndx.PdbIndex().res_index(fileList[0], chain,
-                                                    residueNdx=[int(res)],
-                                                    atomtype=atomtype,
-                                                    atomList=[],
-                                                    )
-        if rank == 0:
-            pdbFileList = self.scatterFileList(size, fileList)
-        else:
-            pdbFileList = None
-
-        filesList = comm.scatter(pdbFileList, root=0)
-
-        results = []
-
-        for fn in filesList:
-            count = 0
-            print("progress file name {}, number {} out of ".format(fn, count, len(filesList)))
-
-            nbyn = [ self.calculateNbyN(fn, cutoff, x, y, ndxdict) for x in resindex for y in resindex]
-            # pair = [ [x, y] for x in resindex for y in resindex ]
-
-            results.append(nbyn)
-            count += 1
-
-        np.savetxt(str(rank) + "_res_sidechain_cmap_nbyn.csv", np.array(results), delimiter=',', fmt="%5.3f")
-
-        overallValuesList = comm.gather(results, root=0)
-        if rank == 0:
-            print("Total Time Usage: ")
-            print(datetime.now() - startTime)
 
 
 def descriptions():
@@ -784,9 +748,109 @@ def verbose(verbose=True, s=""):
         print(s)
 
 
-def iterload_cmap():
+def cmap_general(trajs, ref, rc, lc, at, cutoff=0.35, v=True):
+    """Computate general type of contact maps
+
+    Parameters
+    ----------
+    trajs
+    ref
+    rc
+    lc
+    at
+    cutoff
+    v
+
+    Returns
+    -------
+
     """
-    Load large trajectory iteratively using mdtraj.iterload function,
+
+    contact_map = np.array([])
+
+    # receptor (x-axis) atom selection
+    ndx = index.PdbIndex(reference=ref, chain=[rc[0], ],
+                         resSeq=rc[1:], atomtype=at[0])
+    ndx.prepare_selection()
+    ndx.res_index()
+    group_a = ndx.atomndx_mt_style
+
+    # ligand (y-axis) atom selection
+    ndx = index.PdbIndex(reference=ref, chain=[lc[0], ],
+                         resSeq=lc[1:], atomtype=at[1])
+    ndx.prepare_selection()
+    ndx.res_index()
+    group_b = ndx.atomndx_mt_style
+
+    for i, traj in enumerate(trajs):
+        # calculate cmap information
+        verbose(v, "Generate cmap for chunk %5d ......" % i)
+        contmap = ContactMap(traj, group_a, group_b, cutoff=cutoff)
+        contmap.generate_cmap(shape="array")
+
+        if i == 0:
+            contact_map = contmap.cmap_
+        else:
+            contact_map = np.concatenate((contact_map, contmap.cmap_),
+                                         axis=0)
+
+    return contact_map
+
+
+def cmap_nbyn(trajs, ref, rc, lc, v=True,
+              cutoff=0.35, allchains="ABCDEFGH"):
+    """Generate sidechain based contact maps.
+
+    Parameters
+    ----------
+    trajs
+    ref
+    rc
+    lc
+    v
+    cutoff
+    allchains
+
+    Returns
+    -------
+
+    """
+
+    pdb = pdbIO.parsePDB(inPDB=ref)
+    all_resids = pdb.getNdxForRes(ref, chains=allchains)
+
+    # for chain_a
+    resids_a = []
+    for i, item in enumerate(all_resids):
+        if item[2] in rc[0] and \
+                item[1] in np.arange(int(rc[1]), int(rc[2])+1):
+            resids_a.append(i)
+
+    # for chain_b
+    resids_b = []
+    for i, item in enumerate(all_resids):
+        if item[2] in lc[0] and \
+                item[1] in np.arange(int(lc[1]), int(lc[2])+1):
+            resids_a.append(i)
+
+    contact_map = np.array([])
+    for i, traj in enumerate(trajs):
+        # calculate cmap information
+        verbose(v, "Generate cmap for chunk %5d ......" % i)
+        contmap = CmapNbyN(traj, resids_a=resids_a,
+                           resids_b=resids_b, cutoff=cutoff)
+
+        contmap.cmap_nbyn()
+        if i == 0:
+            contact_map = contmap.cmap_
+        else:
+            contact_map = np.concatenate((contact_map, contmap.cmap_),
+                                         axis=0)
+
+    return contact_map
+
+def iterload_cmap():
+    """Load large trajectory iteratively using mdtraj.iterload function,
     then generate contact map from the trajectories.
 
     Returns
@@ -800,8 +864,6 @@ def iterload_cmap():
     # argument options
     args = arguments()
 
-    contact_map = np.array([])
-
     verbose(args.v, "Atom selecting ......")
     # TODO: atom selection method required
     if os.path.exists(args.s) and args.f[-4:] == ".pdb":
@@ -811,38 +873,21 @@ def iterload_cmap():
     else:
         inp = None
         print("Reference pdb file is not existed. Exit now!")
-    
-    # receptor (x-axis) atom selection
-    ndx = index.PdbIndex(reference=inp, chain=[args.rc[0], ],
-                         resSeq=args.rc[1:], atomtype=args.at[0])
-    ndx.prepare_selection()
-    ndx.res_index()
-    group_a = ndx.atomndx_mt_style
-
-    # ligand (y-axis) atom selection
-    ndx = index.PdbIndex(reference=inp, chain=[args.lc[0], ],
-                         resSeq=args.lc[1:], atomtype=args.at[1])
-    ndx.prepare_selection()
-    ndx.res_index()
-    group_b = ndx.atomndx_mt_style
 
     rec_index = int(args.rc[2]) - int(args.rc[1]) + 1
     lig_index = int(args.lc[2]) - int(args.lc[1]) + 1
 
     verbose(args.v, "Loading trajectory ......")
     # read gromacs trajectory
-    trajs = gmxcli.read_xtc(args.f, args.s, chunk=100, stride=int(args.dt/args.ps))
+    trajs = gmxcli.read_xtc(args.f, args.s, chunk=100,
+                            stride=int(args.dt/args.ps))
 
-    for i, traj in enumerate(trajs):
-        # calculate cmap information
-        verbose(args.v, "Generate cmap for chunk %5d ......" % i)
-        contmap = ContactMap(traj, group_a, group_b, cutoff=args.cutoff)
-        contmap.generate_cmap(shape="array")
-
-        if i == 0:
-            contact_map = contmap.cmap_
-        else:
-            contact_map = np.concatenate((contact_map, contmap.cmap_), axis=0)
+    if args.nbyn:
+        contact_map = cmap_nbyn(trajs, inp, args.rc, args.lc,
+                                args.v, args.cutoff, "ABCDEFGHIJK")
+    else:
+        contact_map = cmap_general(trajs, inp, args.rc, args.lc,
+                                   args.at, args.cutoff, args.v)
 
     # subset the results
     verbose(args.v, "Preparing output file ......")
@@ -860,7 +905,7 @@ def iterload_cmap():
         results = contact_map
         results = pd.DataFrame(results)
         results.index = np.arange(results.shape[0]) * args.dt
-        results.columns = ["c_" + str(x) for x in np.arange(results.shape[1])]
+        results.columns = [str(x) for x in np.arange(results.shape[1])]
 
     # save results to an output file
     verbose(args.v, "Writing output now ...... ")

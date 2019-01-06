@@ -266,8 +266,7 @@ class parsePDB(object):
         return resmap
 
     def pdbListInfor(self, pdbList):
-        """
-        get a list of information from a rcsb database pdb file
+        """get a list of information from a rcsb database pdb file
 
         Parameters
         ----------
@@ -313,7 +312,7 @@ class parsePDB(object):
                 elif "HETATM" in s :
                     if s[21] == ligandInfor[1] and s[17:20].strip() == ligandInfor[0] :
                         pdbout.write(s)
-                else :
+                else:
                     pass
 
         pdbout.close()
@@ -420,8 +419,7 @@ class parsePDB(object):
         return atominfor
 
     def getResNamesList(self, pdbin, chains):
-        """
-        get a list of residue names in specific chains
+        """get a list of residue names in specific chains
 
         Parameters
         ----------
@@ -432,7 +430,7 @@ class parsePDB(object):
 
         Returns
         -------
-        resname: list of str,
+        resname: list
             the list of residue names
         """
 
@@ -447,15 +445,16 @@ class parsePDB(object):
         return resname
 
     def getNdxForRes(self, pdbin, chains):
-        """
-        get the residue names, as well as seq ndx, and chain id
+        """get the residue names, as well as seq ndx, and chain id
+
         :param pdbin:
-        :param chains:
+        :param chains: list or str
         :return: a list of sets, [ (resname, seqid, chainid), ]
         """
 
         with open(pdbin) as lines:
-            lines = [x for x in lines if (x[:4] in ["ATOM", "HETA"] and x[21] in chains)]
+            lines = [x for x in lines if (x[:4] in ["ATOM", "HETA"]
+                                          and x[21] in chains)]
 
             reslist = []
             for s in lines:
