@@ -726,8 +726,6 @@ def arguments():
                                help="Not implemented yet. \n"
                                     "For community analysis, calculate atom contact number, normalized. \n"
                                     "Default is False. \n")
-#    parser.parser.add_argument('-v', default=False , type=lambda x: (str(x).lower() == "true"),
-#                               help="Verbose. Default is False.")
     parser.parser.add_argument('-details', default=None, type=str,
                                help="Provide detail contact information and write out to a file. \n"
                                     "Default is None.")

@@ -1,16 +1,12 @@
 # -*- coding: utf-8 -*-
 
-import sys, os
+import sys
 import mdtraj as mt
-import pandas as pd
-import numpy as np
-import argparse
-from argparse import RawTextHelpFormatter
+from argparse import ArgumentParser, RawTextHelpFormatter
 
 
 class GromacsCommanLine(object):
-    """
-    Gromacs style commond line argument API
+    """Gromacs style command line argument API
 
     Parameters
     ----------
@@ -34,17 +30,16 @@ class GromacsCommanLine(object):
         self.parser = None
 
     def arguments(self):
-        """
-        Gromacs style arguments object
+        """Gromacs style arguments object
 
         Returns
         -------
-        args: Argparser object,
+        args: Argparse.ArgumentParser object,
             the argparse object holding the arguement information
         """
 
-        parser = argparse.ArgumentParser(description=self.description,
-                                         formatter_class=RawTextHelpFormatter)
+        parser = ArgumentParser(description=self.description,
+                                formatter_class=RawTextHelpFormatter)
 
         parser.add_argument("-f", type=str, default="md.xtc",
                             help="Input. Options: .xtc, .pdb, .xvg, .xpm \n"
@@ -85,14 +80,11 @@ class GromacsCommanLine(object):
         return self
 
     def parse_arguments(self):
-        """
-        parse the arguments
+        """parse the arguments
 
         Returns
         -------
-        self: object
-            the class object
-
+        self : the instance itself
         """
         self.args = self.parser.parse_args()
 
@@ -109,19 +101,19 @@ def read_xtc(xtc, top, chunk=100, stride=1):
 
     Parameters
     ----------
-    xtc: str,
+    xtc : str
         input xtc file name
-    top: str,
+    top : str
         input topology information file, a pdb
-    chunk: int,
-        number of frame per chunk
-    stride: int,
+    chunk : int,
+        number of frames per chunk
+    stride : int,
         dt, save a frame every N number of frames
 
     Returns
     -------
-    trajs: list,
-        a list of mdtraj trajectory object
+    trajs : list,
+        a list of mdtraj.Trajectory object
     """
     trajs = []
     for chunk in mt.iterload(xtc, chunk=chunk, top=top, stride=stride):

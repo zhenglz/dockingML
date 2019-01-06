@@ -7,15 +7,16 @@ import subprocess as sp
 
 class Convert(object):
 
-    """
-    Convert structure files, using obabel (binary file)
+    """Convert structure files, using obabel (binary file)
     may change another way in future
 
     Parameters
     ----------
+    obabel
 
     Attributes
     ----------
+    obabel
 
     Methods
     -------
@@ -24,11 +25,10 @@ class Convert(object):
 
     def __init__(self,  obabel="obabel"):
         self.obabel = obabel
-        print("Make sure you have openbabel installed and path exported.")
+        print("Make sure you have open babel installed and path exported.")
 
     def convert(self, input, output, verbose=True):
-        """
-        convert one format to another, keep hydrogens
+        """convert one format to another, keep hydrogen atoms
 
         Parameters
         ----------
@@ -46,16 +46,18 @@ class Convert(object):
 
         try:
             if os.path.exists(input):
-                status = sp.check_output("%s %s -O %s " % (self.obabel, input, output), shell=True)
+                status = sp.check_output("%s %s -O %s " %
+                                         (self.obabel, input, output),
+                                         shell=True)
                 if verbose:
                     print(status)
             else:
                 print(input + " is not exist!!!\nExit Now!")
 
         except FileNotFoundError:
-            print("Converting file %s failed! "%input)
+            print("Converting file %s failed! "% input)
 
-        return 1
+        return self
 
     def removeLonePair(self, input, output):
         '''

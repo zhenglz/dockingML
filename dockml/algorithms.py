@@ -16,15 +16,32 @@ class BasicAlgorithm(object):
         pass
 
     def switchFuction( self, x, d0=7.0, m=12, n=6):
-        """
-        for countting, implement a rational switch function to enable a smooth transition
-        the function is lik  s= [1 - (x/d0)^6] / [1 - (x/d0)^12]
-        d0 is a cutoff, should be twice the larget than the distance cutoff
-        :param x: float
-        :param d0: distance cutoff, should be 2 times of normal cutoff
-        :param m: int
-        :param n: int
-        :return: float
+        """Implement a rational switch function
+        to enable a smooth transition
+
+        Parameters
+        ----------
+        x : float
+            the input distance value
+        d0 : float
+            the distance cutoff, it is usually 2 times of
+            the real distance cutoff
+        m : int
+            the exponential index of higher order
+        n : int
+            the exponential index of lower order
+
+        Returns
+        -------
+        switched_dist : float
+            the switched continuous distance
+
+        Notes
+        -----
+        the function is like:
+          s= [1 - (x/d0)^6] / [1 - (x/d0)^12]
+        d0 is a cutoff, should be twice larger than the distance cutoff
+
         """
         count = 0.0
         try:
@@ -35,15 +52,26 @@ class BasicAlgorithm(object):
         return count
 
     def exponentialFunction(self, x, exp=2.0, k=1.0, c0=0.0, bias=0.0):
-        '''
+        """The exponential function
 
-        :param x: variable
-        :param exp:  float, exponential number
-        :param k: float, constant
-        :param c0: float
-        :param bias: float, bias or intercept
-        :return: float, result
-        '''
+        Parameters
+        ----------
+        x : np.array
+            the input variable X
+        exp : float
+            the power index
+        k : float
+            the constant
+        c0 : float
+            the shift of variable X
+        bias : float
+            the intercept
+
+        Returns
+        -------
+        X_transformed : np.array
+
+        """
 
         return k * (x + c0) ** exp + bias
 
@@ -203,16 +231,19 @@ class PlaneFit(object):
 
 
 class LineFit(object):
-    """
-    Perform line fitting related calculations.
+    """Perform line fitting related calculations.
 
     Parameters
     ----------
-    points: list, ndarray, or pd.Series
-        the input coordinates
+    points: list, np.ndarray, or pd.Series, shape = [ N, M]
+        the input coordinates, N is number of points
+        and M is the number of dimensions. For euclidean axis,
+        M = 3.
 
     Attributes
     ----------
+    points : np.ndarray
+        the input coordinates
 
     Methods
     -------
@@ -222,8 +253,7 @@ class LineFit(object):
         self.points = np.asarray(points)
 
     def fit_line(self):
-        """
-        given a list of atoms (with xyz coordinate)
+        """Given a list of atoms (with xyz coordinate)
         return their normalized fitting line vector
 
         Return
@@ -253,12 +283,12 @@ class LineFit(object):
     def angle_between(self, v1, v2):
         """Returns the angle in radians between vectors 'v1' and 'v2'::
 
-                >>> angle_between((1, 0, 0), (0, 1, 0))
-                1.5707963267948966
-                >>> angle_between((1, 0, 0), (1, 0, 0))
-                0.0
-                >>> angle_between((1, 0, 0), (-1, 0, 0))
-                3.141592653589793
+        >>> angle_between((1, 0, 0), (0, 1, 0))
+        1.5707963267948966
+        >>> angle_between((1, 0, 0), (1, 0, 0))
+        0.0
+        >>> angle_between((1, 0, 0), (-1, 0, 0))
+        3.141592653589793
 
         Parameters
         ----------

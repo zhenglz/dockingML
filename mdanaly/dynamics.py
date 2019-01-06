@@ -5,43 +5,40 @@ from dockml import index
 from dockml.pdbIO import coordinatesPDB, parsePDB
 import numpy as np
 import sys
-import argparse
-from argparse import RawDescriptionHelpFormatter
+from argparse import ArgumentParser, RawDescriptionHelpFormatter
 
 
-class essentialDynamics(object):
+class EssentialDynamics(object):
 
     def __init__(self):
         pass
 
-    def transformXYZ(self, xyz, vector, delta):
-        """
-        transform xyz along a vector
+    def transform_xyz(self, xyz, vectors, delta):
+        """transform xyz along a vector
         eg. increase movements of an atom along the PC1 vectors
 
         Parameters
         ----------
-        xyz: list,
+        xyz : list,
             xyz value
-        vector: list,
+        vectors : list,
             vectors for xyz
-        delta: float,
+        delta : float,
             stride, unit nano meter
 
         Returns
         -------
-        newxyz: list,
+        newxyz : list
             new list of xyz values
 
         """
 
-        newxyz = list(map(lambda x, y: x + y*delta, xyz, vector))
+        newxyz = list(map(lambda x, y: x + y*delta, xyz, vectors))
 
         return newxyz
 
     def pdbIncreaseMotion(self, pdbin, vectors, delta=0.5):
-        """
-        increase motions of a pdb given its PC component eigenvectors
+        """Increase motions of a pdb given its PC component eigenvectors
 
         Parameters
         ----------
@@ -67,43 +64,48 @@ class essentialDynamics(object):
 
             coords = pdbio.getAtomCrdFromLines(lines)
 
-            newxyzs =[]
-            newlines=[]
+            newxyzs = []
+            newlines = []
 
             if vectors.shape[0] == len(coords):
                 for i in range(len(coords)):
-                    newxyz = self.transformXYZ(coords[i], list(vectors[i]), delta)
+                    newxyz = self.transform_xyz(coords[i], list(vectors[i]), delta)
                     newxyzs.append(newxyz)
                     newlines.append(pdbio.replaceCrdInPdbLine(lines[i], newxyz))
 
         return newxyzs, newlines
 
-    def genEDAEssemble(self, pdbin, pdbout, vectors, no_files=20, delta=0.5, numres=250):
+    def genEDA_essemble(self, pdbin, pdbout, vectors, no_files=20, delta=0.5, numres=250):
         """Generate an essemble of pdb files to increase the PC motions
 
         Parameters
         ----------
-        pdbin
-        pdbout
-        vectors
-        no_files
-        delta
-        numres
+        pdbin : str
+            Input pdb file name
+        pdbout : str
+            The output EDA ensemble pdb file name
+        vectors : np.ndarray
+            The input eigenvectors
+        no_files : int, default = 20
+            The number of pdb frames in the output ensemble
+        delta : float, default = 0.5
+            The stride size.
+        numres : int
 
         Returns
         -------
-
+        self : the instance itself
         """
 
         PI = 3.14159
 
-        with open(pdbout, 'w') as tofile :
-            for i in range(no_files) :
-                length = delta * np.cos(2.0 * PI * (float(i) / float(no_files)) - PI )
+        with open(pdbout, 'w') as tofile:
+            for i in range(no_files):
+                length = delta * np.cos(2.0 * PI * (float(i) / float(no_files)) - PI)
                 print(length)
-                tofile.write("MODEL   %d \n"%i)
+                tofile.write("MODEL   %d \n" % i)
                 t, nlines = self.pdbIncreaseMotion(pdbin, vector, delta=length)
-                for x in nlines :
+                for x in nlines:
                     tofile.write(x)
                 tofile.write("ENDMDL  \n")
 
@@ -118,11 +120,11 @@ class essentialDynamics(object):
         '''
 
         domain_vectors = []
-        for res in resindex :
+        for res in resindex:
             domain_vectors.append(vectors[res])
 
         aver_vector = np.sum(np.asarray(domain_vectors), axis=0)
-        #print(aver_vector)
+
         return aver_vector
 
     def domainWiseEigVec(self, domainf, vectors, scalefactor=1.0, output='aver-vectors.dat'):
@@ -177,7 +179,6 @@ class essentialDynamics(object):
         dnames = [x[0] for x in domains]
 
         pdbc = coordinatesPDB()
-        #ndx = PdbIndex()
 
         coms = []
 
@@ -216,23 +217,26 @@ if __name__ == "__main__":
     
     '''
 
-    parser = argparse.ArgumentParser(description=d, formatter_class=RawDescriptionHelpFormatter)
+    parser = ArgumentParser(description=d, formatter_class=RawDescriptionHelpFormatter)
     parser.add_argument("-f", type=str, help="Input. The reference pdb file name.")
-    parser.add_argument("-o", type=str, help="Output. The output multiple-frame pdb file name.")
-    parser.add_argument("-vector", type=str, help="Input. The eigenvector file name. Assuming that "
-                                                "this file is generated and output directly from "
-                                                "gmx_pca.py. The shape of the vector matrix is N*M, "
-                                                "where M is total number of dimensions and N is number"
-                                                "of PC projections.")
+    parser.add_argument("-o", type=str, help="Output. The output multiple-frame pdb "
+                                             "file name.")
+    parser.add_argument("-vector", type=str,
+                        help="Input. The eigenvector file name. Assuming that \n"
+                             "this file is generated and output directly from \n"
+                             "gmx_pca.py. The shape of the vector matrix is N*M, \n"
+                             "where M is total number of dimensions and N is number\n"
+                             "of PC projections.\n")
     parser.add_argument("-nf", type=int, default=50,
                         help="Output. The number of frames in the output file. ")
     parser.add_argument("-delta", type=float, default=0.5,
                         help="Input. Default is 0.5. \n"
                              "The movement stride for the coordinates. \n"
-                             "Generally, you should choose a small delta. A large delta"
+                             "Generally, you should choose a small delta. A large delta\n"
                              "would cause distortion to the structures. ")
     parser.add_argument("-pc", type=int, default=1,
-                        help="Input, optional, default is 1. Which PC eigenvectors for essential dynamics move. ")
+                        help="Input, optional, default is 1. \n"
+                             "Which PC eigenvectors for essential dynamics move. \n")
 
     args = parser.parse_args()
 
@@ -241,6 +245,6 @@ if __name__ == "__main__":
 
     vector = np.reshape(np.loadtxt(args.vector)[args.pc -1], (-1, 3))
 
-    dyn = essentialDynamics()
-    dyn.genEDAEssemble(args.f, args.o, vector, args.nf, args.delta, vector.shape[0])
+    dyn = EssentialDynamics()
+    dyn.genEDA_essemble(args.f, args.o, vector, args.nf, args.delta, vector.shape[0])
 
