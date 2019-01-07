@@ -864,7 +864,7 @@ def iterload_cmap():
 
     verbose(args.v, "Atom selecting ......")
     # TODO: atom selection method required
-    if os.path.exists(args.s) and args.f[-4:] == ".pdb":
+    if os.path.exists(args.s) and args.s[-4:] == ".pdb":
         inp = args.s
     elif os.path.exists(args.f) and args.f[-4:] == ".pdb":
         inp = args.f
