@@ -90,7 +90,7 @@ class PdbIndex(object):
 
         # chain identifiers, list
         self.chain = chain
-        self.resSeq = resSeq
+        self.resSeq = [ int(x) for x in resSeq]
         self.at = atomtype
         self.atomndx = None
         self.atomndx_mt_style = None

@@ -871,6 +871,7 @@ def iterload_cmap():
     else:
         inp = None
         print("Reference pdb file is not existed. Exit now!")
+        sys.exit(0)
 
     rec_index = int(args.rc[2]) - int(args.rc[1]) + 1
     lig_index = int(args.lc[2]) - int(args.lc[1]) + 1
