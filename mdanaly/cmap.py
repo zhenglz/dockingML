@@ -880,12 +880,12 @@ def iterload_cmap():
     trajs = gmxcli.read_xtc(args.f, args.s, chunk=100,
                             stride=int(args.dt/args.ps))
 
-    if args.nbyn:
+    if args.NbyN:
         contact_map = cmap_nbyn(trajs, inp, args.rc, args.lc,
                                 args.v, args.cutoff, "ABCDEFGHIJK")
     else:
         contact_map = cmap_general(trajs, inp, args.rc, args.lc,
-                                   args.at, args.cutoff, args.v)
+                                   args.atomtype, args.cutoff, args.v)
 
     # subset the results
     verbose(args.v, "Preparing output file ......")
