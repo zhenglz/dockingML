@@ -24,12 +24,14 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mdanaly/cmap.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="365">
-              <caret line="866" column="40" selection-start-line="866" selection-start-column="40" selection-end-line="866" selection-end-column="40" />
+            <state relative-caret-position="369">
+              <caret line="263" column="50" selection-start-line="263" selection-start-column="50" selection-end-line="263" selection-end-column="50" />
               <folding>
                 <element signature="e#426#457#0" expanded="true" />
-                <element signature="e#24135#25266#0" />
-                <element signature="e#25365#26570#0" />
+                <element signature="e#11105#14702#0" />
+                <element signature="e#14738#17413#0" />
+                <element signature="e#17440#19342#0" />
+                <element signature="e#19367#23997#0" />
               </folding>
             </state>
           </provider>
@@ -55,8 +57,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dockml/index.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1539">
-              <caret line="85" column="27" selection-start-line="85" selection-start-column="27" selection-end-line="85" selection-end-column="27" />
+            <state relative-caret-position="-3819">
+              <caret line="93" column="26" lean-forward="true" selection-start-line="93" selection-start-column="26" selection-end-line="93" selection-end-column="26" />
               <folding>
                 <element signature="e#109#123#0" expanded="true" />
               </folding>
@@ -226,7 +228,6 @@
         <option value="$PROJECT_DIR$/bin/gmx_pca.py" />
         <option value="$PROJECT_DIR$/mdanaly/pca.py" />
         <option value="$PROJECT_DIR$/mdanaly/extract.py" />
-        <option value="$PROJECT_DIR$/dockml/index.py" />
         <option value="$PROJECT_DIR$/mdanaly/lipids.py" />
         <option value="$PROJECT_DIR$/bin/gmx_coordnum.py" />
         <option value="$PROJECT_DIR$/mdanaly/coordNum.py" />
@@ -236,6 +237,7 @@
         <option value="$PROJECT_DIR$/dockml/convert.py" />
         <option value="$PROJECT_DIR$/dockml/algorithms.py" />
         <option value="$PROJECT_DIR$/mdanaly/dynamics.py" />
+        <option value="$PROJECT_DIR$/dockml/index.py" />
         <option value="$PROJECT_DIR$/mdanaly/cmap.py" />
       </list>
     </option>
@@ -538,20 +540,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1499093997611</updated>
-    </task>
-    <task id="LOCAL-00084" summary="modify the PCA module">
-      <created>1540794085957</created>
-      <option name="number" value="00084" />
-      <option name="presentableId" value="LOCAL-00084" />
-      <option name="project" value="LOCAL" />
-      <updated>1540794085958</updated>
-    </task>
-    <task id="LOCAL-00085" summary="modify the PCA module">
-      <created>1540794880929</created>
-      <option name="number" value="00085" />
-      <option name="presentableId" value="LOCAL-00085" />
-      <option name="project" value="LOCAL" />
-      <updated>1540794880929</updated>
     </task>
     <task id="LOCAL-00086" summary="modify the cmap module">
       <created>1540795176715</created>
@@ -882,7 +870,21 @@
       <option name="project" value="LOCAL" />
       <updated>1546875933003</updated>
     </task>
-    <option name="localTasksCounter" value="133" />
+    <task id="LOCAL-00133" summary="update sidechain contact map">
+      <created>1546876071760</created>
+      <option name="number" value="00133" />
+      <option name="presentableId" value="LOCAL-00133" />
+      <option name="project" value="LOCAL" />
+      <updated>1546876071761</updated>
+    </task>
+    <task id="LOCAL-00134" summary="update sidechain contact map">
+      <created>1546876263044</created>
+      <option name="number" value="00134" />
+      <option name="presentableId" value="LOCAL-00134" />
+      <option name="project" value="LOCAL" />
+      <updated>1546876263045</updated>
+    </task>
+    <option name="localTasksCounter" value="135" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1275,16 +1277,6 @@
     <entry file="file://$PROJECT_DIR$/dockml/mlearn.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/dockml/index.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1539">
-          <caret line="85" column="27" selection-start-line="85" selection-start-column="27" selection-end-line="85" selection-end-column="27" />
-          <folding>
-            <element signature="e#109#123#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dockml/features.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="798">
@@ -1332,14 +1324,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/dockml/index.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3819">
+          <caret line="93" column="26" lean-forward="true" selection-start-line="93" selection-start-column="26" selection-end-line="93" selection-end-column="26" />
+          <folding>
+            <element signature="e#109#123#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/cmap.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="365">
-          <caret line="866" column="40" selection-start-line="866" selection-start-column="40" selection-end-line="866" selection-end-column="40" />
+        <state relative-caret-position="369">
+          <caret line="263" column="50" selection-start-line="263" selection-start-column="50" selection-end-line="263" selection-end-column="50" />
           <folding>
             <element signature="e#426#457#0" expanded="true" />
-            <element signature="e#24135#25266#0" />
-            <element signature="e#25365#26570#0" />
+            <element signature="e#11105#14702#0" />
+            <element signature="e#14738#17413#0" />
+            <element signature="e#17440#19342#0" />
+            <element signature="e#19367#23997#0" />
           </folding>
         </state>
       </provider>

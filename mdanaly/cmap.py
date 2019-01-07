@@ -261,6 +261,8 @@ class ContactMap(object):
         self.atom_group_a = np.asarray(self.atom_group_a)
         self.atom_group_b = np.asarray(self.atom_group_b)
 
+        print(self.atom_group_a, self.atom_group_b)
+
         if self.atom_group_a.shape[0] and self.atom_group_b.shape[0]:
 
             list_a = np.repeat(self.atom_group_a, self.atom_group_b.shape[0])
