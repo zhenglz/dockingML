@@ -49,35 +49,62 @@ def run_coord_number():
 
     args = arguments()
 
-    # TODO: define a way to select atom slices
-    # define the atom indices for receptor
-    ndx = index.PdbIndex(reference=args.s, atomtype=args.atomtype[0], resSeq=args.rc[1:],
-                         chain=[args.rc[0]])
-    ndx.prepare_selection()
-    ndx.res_index()
-    group_a = ndx.atomndx_mt_style
+    resides_a, resides_b = [], []
+    group_a, group_b = [], []
 
-    # define the atom indices for ligand
-    ndx = index.PdbIndex(reference=args.s, atomtype=args.atomtype[1], resSeq=args.lc[1:],
-                         chain=[args.lc[0]])
-    ndx.prepare_selection()
-    ndx.res_index()
-    group_b = ndx.atomndx_mt_style
+    if args.byres:
+        ndx = index.PdbIndex(args.s, [args.rc[0]], args.rc[1:])
+        s, e = ndx.resid_mt_style(args.rc[0], args.rc[1], args.rc[2])
+        resides_a = np.arange(s, e+1)
+
+        ndx = index.PdbIndex(args.s, [args.lc[0]], args.lc[1:])
+        s, e = ndx.resid_mt_style(args.lc[0], args.lc[1], args.lc[2])
+        resides_b = np.arange(s, e+1)
+
+    else:
+        # TODO: define a way to select atom slices
+        # define the atom indices for receptor
+        ndx = index.PdbIndex(reference=args.s, atomtype=args.atomtype[0],
+                             resSeq=args.rc[1:],
+                             chain=[args.rc[0]])
+        ndx.prepare_selection()
+        ndx.res_index()
+        group_a = ndx.atomndx_mt_style_
+
+        # define the atom indices for ligand
+        ndx = index.PdbIndex(reference=args.s, atomtype=args.atomtype[1],
+                             resSeq=args.lc[1:],
+                             chain=[args.lc[0]])
+        ndx.prepare_selection()
+        ndx.res_index()
+        group_b = ndx.atomndx_mt_style_
 
     results = np.array([])
 
     print("Loading trajectory xtc file ...... ")
-    trajs = gmxcli.read_xtc(args.f, args.s, chunk=100, stride=int(args.dt/args.ps))
+    trajs = gmxcli.read_xtc(args.f, args.s, chunk=100,
+                            stride=int(args.dt/args.ps))
 
     print("Performing calculations ...... ")
     for i, traj in enumerate(trajs):
-        coord_num = cmap.ContactMap(traj, group_a, group_b, args.cutoff)
-        coord_num.coord_num()
 
-        if i == 0:
-            results = coord_num.coord_number_
+        if args.byres:
+            coord = cmap.CmapNbyN(traj, resids_a=resides_a,
+                                  resids_b=resides_b, cutoff=args.cutoff)
+            coord.contact_nbyn()
+            if i == 0:
+                results = coord.contacts_by_res_
+            else:
+                results = np.concatenate((results, coord.contacts_by_res_), axis=0)
+
         else:
-            results = np.concatenate((results, coord_num.coord_number_), axis=0)
+            coord = cmap.ContactMap(traj, group_a, group_b, args.cutoff)
+            coord.coord_num()
+
+            if i == 0:
+                results = coord.coord_number_
+            else:
+                results = np.concatenate((results, coord.coord_number_), axis=0)
 
     results = pd.DataFrame(results)
     results.index = np.arange(results.shape[0]) * args.dt

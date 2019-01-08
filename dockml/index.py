@@ -87,16 +87,17 @@ class PdbIndex(object):
         self.dihedral = dihedral
         self.pdb = reference
         self.top = None
+        self.pdb_lines_ = None
 
         # chain identifiers, list
         self.chain = chain
         self.resSeq = [int(x) for x in resSeq]
         self.at = atomtype
-        self.atomndx = None
-        self.atomndx_mt_style = None
+        self.atomndx_ = None
+        self.atomndx_mt_style_ = None
         #self.molecule = None
 
-        self.selections = [""]
+        self.selections_ = [""]
         self.start_atom = 1
         self.chain_ndx = [0, ]
 
@@ -141,23 +142,46 @@ class PdbIndex(object):
 
         return self
 
-    def get_chains(self):
-        """Collection chain information.
+    def resid_mt_style(self, chain, start_res, end_res):
+        """Query the 0-based resid given the chain and residue
+        sequence information.
+
+        Parameters
+        ----------
+        chain
+        start_res
+        end_res
 
         Returns
         -------
-        self : return an instance of itself
+        resid_start : int
+        resid_end : int
         """
+        if not self.resid_mapped_:
+            self.resid_mapper()
+
+        start = chain + str(start_res)
+        end = chain + str(end_res)
+
+        return self.resid_mapper_[start], self.resid_mapper_[end]
+
+    def resid_mapper(self):
+
+        chain_seq = []
 
         with open(self.pdb) as lines:
-            chains = set([x[21] for x in lines if x.split()[0] in ["ATOM", "HETATM"]])
-            chains = sorted(list(chains))
+            lines = [x for x in lines if x.split()[0] in ["ATOM", "HETATM"]]
+            self.pdb_lines_ = lines + []
+            for s in lines:
+                if s[21] + "_" + s[22:26].strip() not in chain_seq:
+                    chain_seq.append(s[21] + "_" + s[22:26].strip())
 
-            chain_ids = []
-            for i in self.chain:
-                chain_ids.append(chains.index(i))
+        resid_dict = {}
+        for i, id in enumerate(chain_seq):
+            resid_dict[id] = i
 
-        self.chain_ndx = chain_ids
+        self.resid_mapper_ = resid_dict
+        self.resid_mapped_ = True
 
         return self
 
@@ -171,7 +195,8 @@ class PdbIndex(object):
 
         self.load_pdb()
         self.res_seq()
-        self.get_chains()
+        #self.get_chains()
+        self.resid_mapper()
 
         return self
 
@@ -225,7 +250,7 @@ class PdbIndex(object):
                 if "PHI" in self.dihedral and all(np.array(psipair)>0) > 0:
                     indexlist.append(phipair)
 
-            self.atomndx = indexlist
+            self.atomndx_ = indexlist
 
         else:
 
@@ -239,16 +264,36 @@ class PdbIndex(object):
             else:
                 names = " name " + "  ".join(atom_list)
 
-            #chains = " and ".join(["chainid " + str(x) for x in self.chain_ndx])
-            resndx = "resid %d to %d" % (self.resSeq[0], self.resSeq[1])
+            start, end = self.resid_mt_style(self.chain[0],
+                                             self.resSeq[0],
+                                             self.resSeq[1])
+            resndx = "resid %d to %d" % (start, end)
 
-            self.selections = names + " and " + resndx #+ " and " + chains
+            self.selections_ = names + " and " + resndx
 
-            self.atomndx_mt_style = self.top.select(self.selections)
+            self.atomndx_mt_style_ = self.top.select(self.selections_)
+            self.atom_index_original()
 
-            self.atomndx = [x + self.start_atom for x in self.atomndx_mt_style]
+            #self.atomndx = [x + self.start_atom for x in self.atomndx_mt_style]
 
         return self
+
+    def atom_index_original(self):
+        if not self.resid_mapped_:
+            self.resid_mapper()
+
+        if not self.atomndx_mt_style_:
+            self.res_index()
+
+        try:
+            lines_selected = self.pdb_lines_[self.atomndx_mt_style_]
+            self.atomndx_ = [int(x.split()[1]) for x in lines_selected]
+        except Exception("Atom number not match!"):
+            print("Check whether you have generated the mt_style index first. ")
+            self.atomndx_ = np.array([])
+
+        return self
+
 
     def atomList2File(self, atom_list, group_name, write_dihe=False,
                       out_filen="output.ndx", append=True):
@@ -407,7 +452,7 @@ class PdbIndex(object):
         self.prepare_selection()
         self.res_index()
 
-        self.atomList2File(self.atomndx, group_name=args.gn,
+        self.atomList2File(self.atomndx_, group_name=args.gn,
                            write_dihe=(self.dihedral[0] != "NA"),
                            out_filen=args.o, append=args.append)
 
@@ -415,7 +460,7 @@ class PdbIndex(object):
             with open('posres.itp', 'w') as tofile:
                 tofile.write("[ position_restraints ] \n"
                              "; ai  funct  fcx    fcy    fcz  \n")
-                for atom in self.atomndx:
+                for atom in self.atomndx_:
                     tofile.write("%12d  1  1000  1000  1000  \n"
                                  % int(atom))
 

@@ -288,7 +288,7 @@ class ContactMap(object):
 
         """
         if not self.distmtx_computed_:
-            self.generate_cmap(shape="array")
+            self.generate_cmap(shape="array", switch=False)
 
         self.coord_number_ = np.sum(self.cmap_, axis=1)
 

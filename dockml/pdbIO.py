@@ -65,7 +65,7 @@ class rewritePDB(object):
         return 1
 
     def resSeqChanger(self, inline, resseq):
-        resseqstring = " "*(4- len(str(resseq)))+str(resseq)
+        resseqstring = " "*(4 - len(str(resseq)))+str(resseq)
         newline = inline[:22] + resseqstring + inline[26:]
         return newline
 
