@@ -13,7 +13,6 @@ from mdanaly import gmxcli, pca
 from dockml import pdbIO, index
 
 from matplotlib import pyplot as plt
-from collections import defaultdict
 from datetime import datetime
 
 import math
@@ -184,8 +183,8 @@ class ContactMap(object):
         self.traj = traj
         self.cutoff = cutoff
 
-        self.atom_group_a = np.asarray(group_a)
-        self.atom_group_b = np.asarray(group_b)
+        self.atom_group_a = group_a
+        self.atom_group_b = group_b
 
         self.atom_pairs_ = None
         self.generate_atom_pairs()
@@ -258,18 +257,16 @@ class ContactMap(object):
 
         """
 
-        self.atom_group_a = np.asarray(self.atom_group_a)
-        self.atom_group_b = np.asarray(self.atom_group_b)
+        if not isinstance(self.atom_group_a, np.ndarray):
+            self.atom_group_a = np.array(self.atom_group_a)
+            self.atom_group_b = np.array(self.atom_group_b)
 
-        print(self.atom_group_a, self.atom_group_b)
-
-        if self.atom_group_a.shape[0] and self.atom_group_b.shape[0]:
-
+        if self.atom_group_a.shape[0] > 0 and self.atom_group_b.shape[0] > 0:
             list_a = np.repeat(self.atom_group_a, self.atom_group_b.shape[0])
             list_b = np.repeat(self.atom_group_b, self.atom_group_a.shape[0])
-            list_b = list_b.reshape((self.atom_group_a, self.atom_group_b)).T.ravel()
+            list_b = list_b.reshape((self.atom_group_a.shape[0], -1)).T.ravel()
 
-            self.atom_pairs_ = np.array(zip(list_a, list_b))
+            self.atom_pairs_ = np.array(list(zip(list_a, list_b)))
         else:
             self.atom_pairs_ = np.array([])
 
@@ -725,9 +722,8 @@ def arguments():
                                     "Only work with atomtype as CA. Options: True(T, t. TRUE), False(F, f, FALSE) \n"
                                     "Default is False. \n")
     parser.parser.add_argument('-NbyN', type=bool, default=False,
-                               help="Not implemented yet. \n"
-                                    "For community analysis, calculate atom contact number, normalized. \n"
-                                    "Default is False. \n")
+                               help="Input, optional. Default is False\n"
+                                    "For community analysis, calculate atom contact number, normalized. \n")
     parser.parser.add_argument('-details', default=None, type=str,
                                help="Provide detail contact information and write out to a file. \n"
                                     "Default is None.")
@@ -753,17 +749,26 @@ def cmap_general(trajs, ref, rc, lc, at, cutoff=0.35, v=True):
 
     Parameters
     ----------
-    trajs
-    ref
-    rc
-    lc
-    at
-    cutoff
-    v
+    trajs : list of mt.trajectory objects, shape = N
+        The input chunks of trajectories, N is number of chunks
+    ref : str
+        The reference pdb file name
+    rc : list, shape = 3
+        The residue and chain identifier for x-axis
+    lc : list, shape = 3
+        The residue and chain identifier for y-axis
+    at : str
+        The atomtype of atoms used for cmap generation
+    cutoff : float, default = 0.35
+        The distance cutoff, in unit nanometer
+    v : bool, default = True
+        Whether print detail information during the calculation
 
     Returns
     -------
-
+    contact_map : np.ndarray, shape = [ N, M ]
+        The output contact map dataset
+        N is number of frames, M is number of dimensions.
     """
 
     contact_map = np.array([])
@@ -781,6 +786,8 @@ def cmap_general(trajs, ref, rc, lc, at, cutoff=0.35, v=True):
     ndx.prepare_selection()
     ndx.res_index()
     group_b = ndx.atomndx_mt_style
+
+    verbose(verbose=v, s="Atom indices have been processed ......")
 
     for i, traj in enumerate(trajs):
         # calculate cmap information
@@ -803,14 +810,20 @@ def cmap_nbyn(trajs, ref, rc, lc, v=True,
 
     Parameters
     ----------
-    trajs
-    ref
-    rc
-    lc
-    v
-    cutoff
-    allchains
-
+    trajs : list of mt.trajectory objects, shape = N
+        The input chunks of trajectories, N is number of chunks
+    ref : str
+        The reference pdb file name
+    rc : list, shape = 3
+        The residue and chain identifier for x-axis
+    lc : list, shape = 3
+        The residue and chain identifier for y-axis
+    cutoff : float, default = 0.35
+        The distance cutoff, in unit nanometer
+    v : bool, default = True
+        Whether print detail information during the calculation
+    allchains : str, default = 'ABCDEFGH'
+        All available chain identifiers in the reference pdb files
     Returns
     -------
 
@@ -849,6 +862,7 @@ def cmap_nbyn(trajs, ref, rc, lc, v=True,
 
     return contact_map
 
+
 def iterload_cmap():
     """Load large trajectory iteratively using mdtraj.iterload function,
     then generate contact map from the trajectories.
@@ -880,9 +894,13 @@ def iterload_cmap():
 
     verbose(args.v, "Loading trajectory ......")
     # read gromacs trajectory
-    trajs = gmxcli.read_xtc(args.f, args.s, chunk=100,
+    trajs = gmxcli.read_xtc(args.f, args.s, chunk=1000,
                             stride=int(args.dt/args.ps))
 
+    n_frames = sum([x.n_frames for x in trajs])
+    verbose(args.v, "Total number of frames: %d " % n_frames)
+
+    verbose(args.v, "Start calculating contact map ......")
     if args.NbyN:
         contact_map = cmap_nbyn(trajs, inp, args.rc, args.lc,
                                 args.v, args.cutoff, "ABCDEFGHIJK")
