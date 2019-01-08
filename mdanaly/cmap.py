@@ -706,7 +706,7 @@ def arguments():
                                     "The ligand chains and residue index for Cmap construction.\n"
                                     "You must enter a chain name, start residue index, and end chain index.\n"
                                     "Default is: B 1 250 \n")
-    parser.parser.add_argument('-cutoff',type=float,default=0.35,
+    parser.parser.add_argument('-cutoff',type=float, default=0.35,
                                help="Input, optional. \n"
                                     "Distance Cutoff for determining contacts. \n"
                                     "Default is 0.35 (nanometer). \n")
@@ -734,12 +734,11 @@ def arguments():
                                help="Input, optional. \n"
                                     "Choose the specific elements for atom indexing to construct the cmap.\n"
                                     "Default is [].\n")
-    parser.parser.add_argument('-switch', type=str, default='True',
-                               help="Input, optional. \n"
+    parser.parser.add_argument('-switch', type=lambda x: (str(x).lower() == "true"), default=False,
+                               help="Input, optional. Default is False. \n"
                                     "Apply a switch function for determing Ca-Ca contacts for a smooth transition. \n"
-                                    "Only work with atomtype as CA. Options: True(T, t. TRUE), False(F, f, FALSE) \n"
-                                    "Default is False. \n")
-    parser.parser.add_argument('-NbyN', type=bool, default=False,
+                                    "Only work with atomtype as CA. \n")
+    parser.parser.add_argument('-NbyN', type=lambda x: (str(x).lower() == "true"), default=False,
                                help="Input, optional. Default is False\n"
                                     "For community analysis, calculate atom contact number, normalized. \n")
     parser.parser.add_argument('-details', default=None, type=str,
