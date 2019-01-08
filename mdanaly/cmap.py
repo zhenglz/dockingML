@@ -10,7 +10,7 @@
 #####################################################
 
 from mdanaly import gmxcli, pca
-from dockml import pdbIO, index
+from dockml import pdbIO, index, algorithms
 
 from matplotlib import pyplot as plt
 from datetime import datetime
@@ -186,6 +186,10 @@ class ContactMap(object):
         self.atom_group_a = group_a
         self.atom_group_b = group_b
 
+        if not isinstance(self.atom_group_a, np.ndarray):
+            self.atom_group_a = np.array(self.atom_group_a)
+            self.atom_group_b = np.array(self.atom_group_b)
+
         self.atom_pairs_ = None
         self.generate_atom_pairs()
 
@@ -233,7 +237,13 @@ class ContactMap(object):
             self.distance_matrix()
 
         if not self.cmap_computed_:
-            cmap = (self.dist_matrix_ <= self.cutoff) * 1.0
+            if switch:
+                sf = algorithms.BasicAlgorithm()
+                vf = np.vectorize(sf.switchFuction)
+
+                cmap = vf(self.dist_matrix_, d0=self.cutoff*2.0)
+            else:
+                cmap = (self.dist_matrix_ <= self.cutoff) * 1.0
 
             if shape == "array":
                 pass
@@ -257,11 +267,7 @@ class ContactMap(object):
 
         """
 
-        if not isinstance(self.atom_group_a, np.ndarray):
-            self.atom_group_a = np.array(self.atom_group_a)
-            self.atom_group_b = np.array(self.atom_group_b)
-
-        if self.atom_group_a.shape[0] > 0 and self.atom_group_b.shape[0] > 0:
+        if bool(self.atom_group_a.shape[0]) and bool(self.atom_group_b.shape[0]):
             list_a = np.repeat(self.atom_group_a, self.atom_group_b.shape[0])
             list_b = np.repeat(self.atom_group_b, self.atom_group_a.shape[0])
             list_b = list_b.reshape((self.atom_group_a.shape[0], -1)).T.ravel()
@@ -324,7 +330,7 @@ class CmapNbyN(ContactMap):
     resids_a
     resids_b
     top_
-
+    contacts_by_res_
 
     See Also
     --------
@@ -342,6 +348,7 @@ class CmapNbyN(ContactMap):
         #self.chain_a_, self.chain_b_ = chain_a, chain_b
 
         self.top_ = self.traj.topology
+        self.contacts_by_res_ = None
 
     def single_pair_dist(self, resid_a, resid_b):
         """
@@ -375,7 +382,7 @@ class CmapNbyN(ContactMap):
         nbyn = sum_contacts / (self.atom_group_b.shape[0]
                                * self.atom_group_b.shape[0])
 
-        return nbyn.reshape((-1, 1))
+        return nbyn.reshape((-1, 1)), sum_contacts.reshape((-1, 1))
 
     def cmap_nbyn(self):
         """The main function for residue-residue sidechain contact
@@ -391,10 +398,21 @@ class CmapNbyN(ContactMap):
 
         for res_a in self.resids_a_:
             for res_b in self.resids_b_:
-                nbyn = self.single_pair_dist(res_a, res_b)
+                nbyn = self.single_pair_dist(res_a, res_b)[0]
                 cmap = np.concatenate((cmap, nbyn), axis=1)
 
         self.cmap_ = cmap
+
+        return self
+
+    def contact_nbyn(self):
+        contacts = np.array([])
+        for res_a in self.resids_a_:
+            for res_b in self.resids_b_:
+                nbyn = self.single_pair_dist(res_a, res_b)[1]
+                contacts = np.concatenate((contacts, nbyn), axis=1)
+
+        self.contacts_by_res_ = contacts
 
         return self
 
@@ -744,7 +762,7 @@ def verbose(verbose=True, s=""):
         print(s)
 
 
-def cmap_general(trajs, ref, rc, lc, at, cutoff=0.35, v=True):
+def cmap_general(trajs, ref, rc, lc, at, cutoff=0.35, v=True, switch=False):
     """Computate general type of contact maps
 
     Parameters
@@ -763,6 +781,8 @@ def cmap_general(trajs, ref, rc, lc, at, cutoff=0.35, v=True):
         The distance cutoff, in unit nanometer
     v : bool, default = True
         Whether print detail information during the calculation
+    switch : bool, default = False
+        Whether apply a switch function to have continuous contact map
 
     Returns
     -------
@@ -793,7 +813,7 @@ def cmap_general(trajs, ref, rc, lc, at, cutoff=0.35, v=True):
         # calculate cmap information
         verbose(v, "Generate cmap for chunk %5d ......" % i)
         contmap = ContactMap(traj, group_a, group_b, cutoff=cutoff)
-        contmap.generate_cmap(shape="array")
+        contmap.generate_cmap(shape="array", switch=switch)
 
         if i == 0:
             contact_map = contmap.cmap_
@@ -906,7 +926,8 @@ def iterload_cmap():
                                 args.v, args.cutoff, "ABCDEFGHIJK")
     else:
         contact_map = cmap_general(trajs, inp, args.rc, args.lc,
-                                   args.atomtype, args.cutoff, args.v)
+                                   args.atomtype, args.cutoff,
+                                   v=args.v, switch=args.switch)
 
     # subset the results
     verbose(args.v, "Preparing output file ......")

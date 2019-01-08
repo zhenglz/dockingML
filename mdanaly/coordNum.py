@@ -32,9 +32,12 @@ def arguments():
                                     "The atomtype used for contact calculation. Options: mainchain, sidechain, \n"
                                     "heavy, CA. ")
     parser.parser.add_argument("-cutoff", type=float, default=0.5,
-                               help="Input, optional. \n"
-                                    "The distance cutoff for coordination number calculation."
-                                    "Unit is nanometer, default is 0.5 ")
+                               help="Input, optional. Default = 0.5 \n"
+                                    "The distance cutoff for coordination number calculation. \n"
+                                    "Unit is nanometer.")
+    parser.parser.add_argument("-byres", type=lambda x: (str(x).lower() == "true"), default=False,
+                               help="Input, optional. Default = False. \n"
+                                    "Computate contact number per residue. ")
 
     parser.parse_arguments()
     args = parser.args
@@ -48,14 +51,14 @@ def run_coord_number():
 
     # TODO: define a way to select atom slices
     # define the atom indices for receptor
-    ndx = index.PdbIndex(reference=args.s, atomtype=args.at[0], resSeq=args.rc[1:],
+    ndx = index.PdbIndex(reference=args.s, atomtype=args.atomtype[0], resSeq=args.rc[1:],
                          chain=[args.rc[0]])
     ndx.prepare_selection()
     ndx.res_index()
     group_a = ndx.atomndx_mt_style
 
     # define the atom indices for ligand
-    ndx = index.PdbIndex(reference=args.s, atomtype=args.at[1], resSeq=args.lc[1:],
+    ndx = index.PdbIndex(reference=args.s, atomtype=args.atomtype[1], resSeq=args.lc[1:],
                          chain=[args.lc[0]])
     ndx.prepare_selection()
     ndx.res_index()

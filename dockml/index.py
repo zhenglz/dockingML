@@ -175,7 +175,7 @@ class PdbIndex(object):
 
         return self
 
-    def res_index(self, atom_list=[""]):
+    def res_index(self, atom_list=[]):
         """Get atom index list from given information:
         Resid, chain, atom_type_names
 
@@ -229,18 +229,20 @@ class PdbIndex(object):
 
         else:
 
-            if atom_list.__len__() == 0:
+            if len(atom_list) == 0:
                 if self.at in self.at_direct:
                     names = self.at
-                else:
-                    names = "name %s " % self.at
+                elif self.at in ['Heavy', 'heavy', 'non-hdyrogen', 'no-H', 'non-H']:
+                    names = "symbol != 'H'"
+                else :
+                    names = "name %s"%self.at
             else:
-                names = "name " + " ".join(atom_list)
+                names = " name " + "  ".join(atom_list)
 
-            chains = " and ".join(["chainid " + str(x) for x in self.chain_ndx])
-            resndx = " and resid %d to %d" % (self.resSeq[0], self.resSeq[1])
+            #chains = " and ".join(["chainid " + str(x) for x in self.chain_ndx])
+            resndx = "resid %d to %d" % (self.resSeq[0], self.resSeq[1])
 
-            self.selections = names + resndx + " and " + chains
+            self.selections = names + " and " + resndx #+ " and " + chains
 
             self.atomndx_mt_style = self.top.select(self.selections)
 
