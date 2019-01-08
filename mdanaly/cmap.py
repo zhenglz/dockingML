@@ -705,11 +705,10 @@ def arguments():
                                help="Input, optional. \n"
                                     "The ligand chains and residue index for Cmap construction.\n"
                                     "You must enter a chain name, start residue index, and end chain index.\n"
-                                    "Default is: B 1 250 \n")
+                                    "Default is: A 1 250 \n")
     parser.parser.add_argument('-cutoff',type=float, default=0.35,
-                               help="Input, optional. \n"
-                                    "Distance Cutoff for determining contacts. \n"
-                                    "Default is 0.35 (nanometer). \n")
+                               help="Input, optional. Default is 0.35 (nanometer). \n"
+                                    "Distance Cutoff for determining contacts. \n")
     parser.parser.add_argument('-atomtype', type=str, nargs='+', default=[],
                                help="Input, optional. \n"
                                     "Atom types for Receptor and Ligand in Contact Map Calculation. \n"
