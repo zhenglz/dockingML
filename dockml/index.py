@@ -602,6 +602,8 @@ def gen_atom_index(pdbin, chain, resSeq, atomtype=['CA'], style='mdtraj'):
     ndx.prepare_selection()
     ndx.res_index()
 
+    #print(ndx.selections_)
+
     if style == "mdtraj":
         return ndx.atomndx_mt_style_
     elif style == "original":

@@ -2,9 +2,12 @@
 
 from dockml import index
 from mdanaly import gmxcli, cmap
+from mdanaly.cmap import verbose
 
 import pandas as pd
 import numpy as np
+
+from datetime import datetime
 
 
 def arguments():
@@ -46,6 +49,15 @@ def arguments():
 
 
 def run_coord_number():
+    """
+
+
+    Examples:
+    gmx_coordnum.py -f test_traj_dt1ns.xtc -s reference.pdb -rc " " 1 40
+    -lc " " 50 70 -o coord_result.csv -atomtype all all -byres True
+    -v True -cutoff 0.5
+    """
+    startTime = datetime.now()
 
     args = arguments()
 
@@ -55,13 +67,20 @@ def run_coord_number():
     if args.byres:
         ndx = index.PdbIndex(args.s, [args.rc[0]], args.rc[1:])
         ndx.resid_mapper()
+        #print(ndx.resid_mapper_)
         s, e = ndx.resid_mt_style(args.rc[0], args.rc[1], args.rc[2])
-        resides_a = np.arange(ndx.resid_mapper_[s], ndx.resid_mapper_[e]+1)
+        #print(s, e)
+        resides_a = np.arange(s, e+1)
 
         ndx = index.PdbIndex(args.s, [args.lc[0]], args.lc[1:])
         ndx.resid_mapper()
+        #print(ndx.resid_mapper_)
         s, e = ndx.resid_mt_style(args.lc[0], args.lc[1], args.lc[2])
-        resides_b = np.arange(ndx.resid_mapper_[s], ndx.resid_mapper_[e]+1)
+        resides_b = np.arange(s, e+1)
+
+        verbose(args.v, "X-axis resids : " + " ".join([str(x) for x in resides_a]))
+        verbose(args.v, "Y-axis resids : " + " ".join([str(x) for x in resides_b]))
+
 
     else:
         # TODO: define a way to select atom slices
@@ -71,25 +90,30 @@ def run_coord_number():
                              chain=[args.rc[0]])
         ndx.prepare_selection()
         ndx.res_index()'''
-        group_a = index.gen_atom_index(args.s, [args.rc[0]], args.rc[1:], style="mdtraj")
-
+        group_a = index.gen_atom_index(pdbin=args.s, chain=[args.rc[0]],
+                                       atomtype=args.atomtype[0],
+                                       resSeq=args.rc[1:], style="mdtraj")
+        #print(group_a)
         # define the atom indices for ligand
         '''ndx = index.PdbIndex(reference=args.s, atomtype=args.atomtype[1],
                              resSeq=args.lc[1:],
                              chain=[args.lc[0]])
         ndx.prepare_selection()
         ndx.res_index()'''
-        group_b = index.gen_atom_index(args.s, [args.lc[0]], args.lc[1:], style="mdtraj")
+        group_b = index.gen_atom_index(pdbin=args.s, chain=[args.lc[0]],
+                                       atomtype=args.atomtype[-1],
+                                       resSeq=args.lc[1:], style="mdtraj")
+        verbose(args.v, "Atom indexing processing completed ......")
 
     results = np.array([])
 
-    print("Loading trajectory xtc file ...... ")
-    trajs = gmxcli.read_xtc(args.f, args.s, chunk=100,
+    verbose(args.v, "Loading trajectory xtc file ...... ")
+    trajs = gmxcli.read_xtc(args.f, args.s, chunk=1000,
                             stride=int(args.dt/args.ps))
 
-    print("Performing calculations ...... ")
+    verbose(args.v, "Performing calculations ...... ")
     for i, traj in enumerate(trajs):
-
+        verbose(args.v, "Generate coordinate number for chunk #%d trajectory "%i)
         if args.byres:
             coord = cmap.CmapNbyN(traj, resids_a=resides_a,
                                   resids_b=resides_b, cutoff=args.cutoff)
@@ -111,6 +135,8 @@ def run_coord_number():
     results = pd.DataFrame(results)
     results.index = np.arange(results.shape[0]) * args.dt
 
-    print("Saving results to output file ...... ")
+    verbose(args.v, "Saving results to output file ...... ")
     results.to_csv(args.o, sep=",", header=False, index=True, float_format="%.1f")
 
+    print("Total Time Usage: ")
+    print(datetime.now() - startTime)

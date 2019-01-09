@@ -190,7 +190,7 @@ class ContactMap(object):
             self.atom_group_a = np.array(self.atom_group_a)
             self.atom_group_b = np.array(self.atom_group_b)
 
-        self.atom_pairs_ = None
+        self.atom_pairs_ = np.array([])
         self.generate_atom_pairs()
 
         self.dist_matrix_ = None
@@ -209,11 +209,12 @@ class ContactMap(object):
         self: the instance itself
 
         """
-        if not self.distmtx_computed_:
-            distmtx = mt.compute_distances(self.traj, atom_pairs=self.atom_pairs_)
+        #if not self.distmtx_computed_:
+        distmtx = mt.compute_distances(self.traj,
+                                       self.atom_pairs_)
 
-            self.dist_matrix_ = distmtx
-            self.distmtx_computed_ = True
+        self.dist_matrix_ = distmtx
+        self.distmtx_computed_ = True
 
         return self
 
@@ -287,7 +288,7 @@ class ContactMap(object):
         self: the instance itself
 
         """
-        if not self.distmtx_computed_:
+        if not self.cmap_computed_:
             self.generate_cmap(shape="array", switch=False)
 
         self.coord_number_ = np.sum(self.cmap_, axis=1)
@@ -336,21 +337,21 @@ class CmapNbyN(ContactMap):
     --------
     ContactMap
 
+    TODO: Bugs to be fixed in this module
+
     """
 
     def __init__(self, traj, resids_a, resids_b, cutoff=0.35):
 
         super().__init__(traj=traj, group_a=[], group_b=[], cutoff=cutoff)
 
-        #self.traj_ = traj
         self.resids_a_ = resids_a
         self.resids_b_ = resids_b
-        #self.chain_a_, self.chain_b_ = chain_a, chain_b
 
         self.top_ = self.traj.topology
-        self.contacts_by_res_ = None
+        self.contacts_by_res_ = np.array([])
 
-    def single_pair_dist(self, resid_a, resid_b):
+    def single_pair_dist(self, resid_a, resid_b, atomtype=["all"]):
         """
 
         Parameters
@@ -365,26 +366,26 @@ class CmapNbyN(ContactMap):
 
         """
 
-        atoms_list_a = self.top_.select("resid %d and siedchain"
-                                        % (resid_a))
-        atoms_list_b = self.top_.select("resid %d and sidechain"
-                                        % (resid_b))
+        atoms_list_a = self.top_.select("resid %d and %s"
+                                        % (resid_a, atomtype[0]))
+        atoms_list_b = self.top_.select("resid %d and %s"
+                                        % (resid_b, atomtype[-1]))
 
         self.atom_group_a = atoms_list_a
         self.atom_group_b = atoms_list_b
 
+        #print(self.atom_group_a, self.atom_group_b)
+
         self.generate_atom_pairs()
-        self.distance_matrix()
+        #self.distance_matrix()
+        self.generate_cmap()
+        self.coord_num()
 
-        sum_contacts = np.sum((self.dist_matrix_ <= self.cutoff)
-                              * 1.0, axis=1)
+        nbyn = self.coord_number_ / self.atom_pairs_.shape[0]
 
-        nbyn = sum_contacts / (self.atom_group_b.shape[0]
-                               * self.atom_group_b.shape[0])
+        return nbyn.reshape((-1, 1)), self.coord_number_.reshape((-1, 1))
 
-        return nbyn.reshape((-1, 1)), sum_contacts.reshape((-1, 1))
-
-    def cmap_nbyn(self):
+    def cmap_nbyn(self, atomtype=['all', 'all']):
         """The main function for residue-residue sidechain contact
         normalized by atom number products.
 
@@ -398,19 +399,27 @@ class CmapNbyN(ContactMap):
 
         for res_a in self.resids_a_:
             for res_b in self.resids_b_:
-                nbyn = self.single_pair_dist(res_a, res_b)[0]
-                cmap = np.concatenate((cmap, nbyn), axis=1)
+                nbyn = self.single_pair_dist(res_a, res_b, atomtype)[0]
+                if cmap.shape[0] == 0:
+                    cmap = nbyn
+                else:
+                    cmap = np.concatenate((cmap, nbyn), axis=1)
 
         self.cmap_ = cmap
 
         return self
 
-    def contact_nbyn(self):
+    def contact_nbyn(self, atomtype=['heavy', 'heavy']):
         contacts = np.array([])
         for res_a in self.resids_a_:
             for res_b in self.resids_b_:
+                #print(res_a, res_b)
                 nbyn = self.single_pair_dist(res_a, res_b)[1]
-                contacts = np.concatenate((contacts, nbyn), axis=1)
+                #print(nbyn)
+                if contacts.shape[0] == 0:
+                    contacts = nbyn
+                else:
+                    contacts = np.concatenate((contacts, nbyn), axis=1)
 
         self.contacts_by_res_ = contacts
 
@@ -792,10 +801,12 @@ def cmap_general(trajs, ref, rc, lc, at, cutoff=0.35, v=True, switch=False):
     contact_map = np.array([])
 
     # receptor (x-axis) atom selection
-    group_a = index.gen_atom_index(pdbin=ref, chain=[rc[0], ], resSeq=rc[1:], atomtype=at[0], style="mdtraj")
+    group_a = index.gen_atom_index(pdbin=ref, chain=[rc[0], ], resSeq=rc[1:],
+                                   atomtype=at[0], style="mdtraj")
 
     # ligand (y-axis) atom selection
-    group_b = index.gen_atom_index(pdbin=ref, chain=[lc[0], ], resSeq=lc[1:], atomtype=at[-1], style="mdtraj")
+    group_b = index.gen_atom_index(pdbin=ref, chain=[lc[0], ], resSeq=lc[1:],
+                                   atomtype=at[-1], style="mdtraj")
 
     verbose(verbose=v, s="Atom indices have been processed ......")
 
@@ -815,7 +826,8 @@ def cmap_general(trajs, ref, rc, lc, at, cutoff=0.35, v=True, switch=False):
 
 
 def cmap_nbyn(trajs, ref, rc, lc, v=True,
-              cutoff=0.35, allchains="ABCDEFGH"):
+              cutoff=0.35, allchains=" ABCDEFGH",
+              atomtype=["sidechain", "sidechain"]):
     """Generate sidechain based contact maps.
 
     Parameters
@@ -842,19 +854,23 @@ def cmap_nbyn(trajs, ref, rc, lc, v=True,
     pdb = pdbIO.parsePDB(inPDB=ref)
     all_resids = pdb.getNdxForRes(ref, chains=allchains)
 
+    print(all_resids)
+
     # for chain_a
     resids_a = []
     for i, item in enumerate(all_resids):
         if item[2] in rc[0] and \
-                item[1] in np.arange(int(rc[1]), int(rc[2])+1):
+                int(item[1]) in np.arange(int(rc[1]), int(rc[2])+1):
             resids_a.append(i)
+    print(resids_a)
 
     # for chain_b
     resids_b = []
     for i, item in enumerate(all_resids):
         if item[2] in lc[0] and \
-                item[1] in np.arange(int(lc[1]), int(lc[2])+1):
-            resids_a.append(i)
+                int(item[1]) in np.arange(int(lc[1]), int(lc[2])+1):
+            resids_b.append(i)
+    print(resids_b)
 
     contact_map = np.array([])
     for i, traj in enumerate(trajs):
@@ -863,7 +879,7 @@ def cmap_nbyn(trajs, ref, rc, lc, v=True,
         contmap = CmapNbyN(traj, resids_a=resids_a,
                            resids_b=resids_b, cutoff=cutoff)
 
-        contmap.cmap_nbyn()
+        contmap.cmap_nbyn(atomtype=atomtype)
         if i == 0:
             contact_map = contmap.cmap_
         else:
@@ -913,7 +929,8 @@ def iterload_cmap():
     verbose(args.v, "Start calculating contact map ......")
     if args.NbyN:
         contact_map = cmap_nbyn(trajs, inp, args.rc, args.lc,
-                                args.v, args.cutoff, "ABCDEFGHIJK")
+                                args.v, args.cutoff,
+                                " ABCDEFGHIJK", args.atomtype)
     else:
         contact_map = cmap_general(trajs, inp, args.rc, args.lc,
                                    args.atomtype, args.cutoff,
