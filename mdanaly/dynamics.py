@@ -185,11 +185,8 @@ class EssentialDynamics(object):
         for i in range(len(domains)):
 
             # get atom index of residues in a domain
-            ndx = index.PdbIndex(ref, [pdbchain, ],
-                                 resSeq=domains[i][1:],
-                                 atomtype=atomNames)
-            ndx.prepare_selection().res_index(atomNames)
-            atomindex = ndx.atomndx_mt_style
+            atomindex = index.gen_atom_index(ref, [pdbchain, ], domains[i][1:], atomNames, "original")
+            atomindex = [str(x) for x in atomindex]
 
             # get crds of a list of atoms
             crds = pdbc.getAtomCrdByNdx(ref, atomindex)

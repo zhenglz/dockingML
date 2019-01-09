@@ -851,7 +851,7 @@ def gen_cmap(args):
     print("Computing contactmap ...... ")
     for i, traj in enumerate(trajs):
         contmap = cmap.ContactMap(traj=traj, group_a=atom_grp_a, group_b=atom_grp_b, cutoff=args.cutoff)
-        contmap.generate_cmap()
+        contmap.generate_cmap(shape="array", switch=args.switch)
         if i == 0:
             cmap_dat = contmap.cmap_
         else:
@@ -1044,6 +1044,10 @@ def arguments(d="Descriptions."):
                                help="Input, optional, it works with mode = xyz or cmap \n"
                                     "Atom selected for PCA calculation. \n"
                                     "Default is CA CA.")
+    parser.parser.add_argument("-switch", type=lambda x: (str(x).lower() == "true"), default=False,
+                               help="Input, optional. Working with mode == cmap. Default is False. \n"
+                                    "Apply a swithc function to transform the distance-based contact \n"
+                                    "to enable a smooth transition and avoid numeric artifacts. ")
     parser.parser.add_argument("-var_ratio", type=str, default="explained_variance_ratio.dat",
                                help="Output, optional. Default is explained_variance_ratio.dat. \n"
                                     "Output file name containing explained eigen values variance ratio. \n")

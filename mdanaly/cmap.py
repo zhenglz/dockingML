@@ -792,18 +792,10 @@ def cmap_general(trajs, ref, rc, lc, at, cutoff=0.35, v=True, switch=False):
     contact_map = np.array([])
 
     # receptor (x-axis) atom selection
-    ndx = index.PdbIndex(reference=ref, chain=[rc[0], ],
-                         resSeq=rc[1:], atomtype=at[0])
-    ndx.prepare_selection()
-    ndx.res_index()
-    group_a = ndx.atomndx_mt_style
+    group_a = index.gen_atom_index(pdbin=ref, chain=[rc[0], ], resSeq=rc[1:], atomtype=at[0], style="mdtraj")
 
     # ligand (y-axis) atom selection
-    ndx = index.PdbIndex(reference=ref, chain=[lc[0], ],
-                         resSeq=lc[1:], atomtype=at[1])
-    ndx.prepare_selection()
-    ndx.res_index()
-    group_b = ndx.atomndx_mt_style
+    group_b = index.gen_atom_index(pdbin=ref, chain=[lc[0], ], resSeq=lc[1:], atomtype=at[-1], style="mdtraj")
 
     verbose(verbose=v, s="Atom indices have been processed ......")
 

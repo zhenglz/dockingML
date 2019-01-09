@@ -54,30 +54,32 @@ def run_coord_number():
 
     if args.byres:
         ndx = index.PdbIndex(args.s, [args.rc[0]], args.rc[1:])
+        ndx.resid_mapper()
         s, e = ndx.resid_mt_style(args.rc[0], args.rc[1], args.rc[2])
-        resides_a = np.arange(s, e+1)
+        resides_a = np.arange(ndx.resid_mapper_[s], ndx.resid_mapper_[e]+1)
 
         ndx = index.PdbIndex(args.s, [args.lc[0]], args.lc[1:])
+        ndx.resid_mapper()
         s, e = ndx.resid_mt_style(args.lc[0], args.lc[1], args.lc[2])
-        resides_b = np.arange(s, e+1)
+        resides_b = np.arange(ndx.resid_mapper_[s], ndx.resid_mapper_[e]+1)
 
     else:
         # TODO: define a way to select atom slices
         # define the atom indices for receptor
-        ndx = index.PdbIndex(reference=args.s, atomtype=args.atomtype[0],
+        '''ndx = index.PdbIndex(reference=args.s, atomtype=args.atomtype[0],
                              resSeq=args.rc[1:],
                              chain=[args.rc[0]])
         ndx.prepare_selection()
-        ndx.res_index()
-        group_a = ndx.atomndx_mt_style_
+        ndx.res_index()'''
+        group_a = index.gen_atom_index(args.s, [args.rc[0]], args.rc[1:], style="mdtraj")
 
         # define the atom indices for ligand
-        ndx = index.PdbIndex(reference=args.s, atomtype=args.atomtype[1],
+        '''ndx = index.PdbIndex(reference=args.s, atomtype=args.atomtype[1],
                              resSeq=args.lc[1:],
                              chain=[args.lc[0]])
         ndx.prepare_selection()
-        ndx.res_index()
-        group_b = ndx.atomndx_mt_style_
+        ndx.res_index()'''
+        group_b = index.gen_atom_index(args.s, [args.lc[0]], args.lc[1:], style="mdtraj")
 
     results = np.array([])
 

@@ -12,6 +12,7 @@ from mdanaly import gmxcli
 import mdtraj as mt
 import numpy as np
 
+
 class PdbIndex(object):
     """Input the residue number sequence, then out put the required index atoms
 
@@ -55,13 +56,13 @@ class PdbIndex(object):
     >>> # prepare necessary parameters for index generation
     >>> ndx.prepare_selection()
     Out[4]: <dockml.index.PdbIndex at 0x7f7cb917a668>
-    >>> ndx.selections
+    >>> ndx.selections_
     Out[5]: ['']
     >>> ndx.res_index()
     Out[6]: <dockml.index.PdbIndex at 0x7f7cb917a668>
-    >>> ndx.selections
+    >>> ndx.selections_
     Out[7]: 'name  and resid 1 to 40 and chainid 0'
-    >>> len(ndx.atomndx)
+    >>> len(ndx.atomndx_)
     Out[8]: 602
     >>> ndx.chain_ndx
     Out[9]: [0]
@@ -69,7 +70,7 @@ class PdbIndex(object):
     Out[10]: ['C']
     >>> ndx.at
     Out[11]: 'all'
-    >>> ndx.atomndx[:10]
+    >>> ndx.atomndx_mt_style_[:10]
     Out[12]: [22407, 22408, 22409, 22410, 22411, 22412, 22413, 22414, 22415, 22416]
 
     """
@@ -87,19 +88,24 @@ class PdbIndex(object):
         self.dihedral = dihedral
         self.pdb = reference
         self.top = None
-        self.pdb_lines_ = None
+        self.pdb_lines_ = []
 
         # chain identifiers, list
         self.chain = chain
         self.resSeq = [int(x) for x in resSeq]
         self.at = atomtype
-        self.atomndx_ = None
-        self.atomndx_mt_style_ = None
+        self.atomndx_ = np.array([])
+        self.atomndx_mt_style_ = np.array([])
         #self.molecule = None
+
+        self.resid_mapper_ = {}
+        self.resid_mapped_ = False
 
         self.selections_ = [""]
         self.start_atom = 1
         self.chain_ndx = [0, ]
+
+        self.index_calculated_ = False
 
     def load_pdb(self):
         """Load pdb file for mdtraj processing
@@ -160,8 +166,8 @@ class PdbIndex(object):
         if not self.resid_mapped_:
             self.resid_mapper()
 
-        start = chain + str(start_res)
-        end = chain + str(end_res)
+        start = chain + "_" + str(start_res)
+        end = chain + "_" + str(end_res)
 
         return self.resid_mapper_[start], self.resid_mapper_[end]
 
@@ -270,11 +276,15 @@ class PdbIndex(object):
             resndx = "resid %d to %d" % (start, end)
 
             self.selections_ = names + " and " + resndx
-
-            self.atomndx_mt_style_ = self.top.select(self.selections_)
-            self.atom_index_original()
-
+            try:
+                self.atomndx_mt_style_ = self.top.select(self.selections_)
+            except:
+                print("Error: Atom indexing not successful. ")
+                #self.atomndx_mt_style_ = np.array([])
+            #self.atom_index_original()
             #self.atomndx = [x + self.start_atom for x in self.atomndx_mt_style]
+
+            self.index_calculated_ = True
 
         return self
 
@@ -282,13 +292,14 @@ class PdbIndex(object):
         if not self.resid_mapped_:
             self.resid_mapper()
 
-        if not self.atomndx_mt_style_:
-            self.res_index()
+        if not self.atomndx_mt_style_.shape[0]:
+            if not self.index_calculated_:
+                self.res_index()
 
         try:
-            lines_selected = self.pdb_lines_[self.atomndx_mt_style_]
+            lines_selected = np.array(self.pdb_lines_)[self.atomndx_mt_style_]
             self.atomndx_ = [int(x.split()[1]) for x in lines_selected]
-        except Exception("Atom number not match!"):
+        except:
             print("Check whether you have generated the mt_style index first. ")
             self.atomndx_ = np.array([])
 
@@ -451,6 +462,7 @@ class PdbIndex(object):
         # prepare
         self.prepare_selection()
         self.res_index()
+        self.atom_index_original()
 
         self.atomList2File(self.atomndx_, group_name=args.gn,
                            write_dihe=(self.dihedral[0] != "NA"),
@@ -579,9 +591,25 @@ class GmxIndex(object):
         -------
         self : returns an instance of self.
         """
-
-        PdbIndex().atomList2File(atom_list=elements, group_name=group, out_filen=output)
+        ndx = PdbIndex()
+        ndx.atomList2File(atom_list=elements, group_name=group, out_filen=output)
         return self
+
+
+def gen_atom_index(pdbin, chain, resSeq, atomtype=['CA'], style='mdtraj'):
+
+    ndx = PdbIndex(reference=pdbin, chain=chain, resSeq=resSeq, atomtype=atomtype, )
+    ndx.prepare_selection()
+    ndx.res_index()
+
+    if style == "mdtraj":
+        return ndx.atomndx_mt_style_
+    elif style == "original":
+        ndx.atom_index_original()
+        return ndx.atomndx_
+    else:
+        print("Warning: The atom indices style should be either mdtraj or original. Use mdtraj here. ")
+        return ndx.atomndx_mt_style_
 
 
 def main():
