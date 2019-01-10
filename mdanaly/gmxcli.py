@@ -42,38 +42,38 @@ class GromacsCommanLine(object):
                                 formatter_class=RawTextHelpFormatter)
 
         parser.add_argument("-f", type=str, default="md.xtc",
-                            help="Input. Options: .xtc, .pdb, .xvg, .xpm \n"
+                            help="Input. Options: .xtc, .pdb, .xvg, .xpm, .csv \n"
                                  "The input file name. For this option, the input \n"
                                  "file format is depended on the type of analysis. \n")
         parser.add_argument("-s", type=str, default="reference.pdb",
                             help="Input. Options: .pdb \n"
-                                 "Reference pdb file, where topology information holds. ")
+                                 "Reference pdb file, where topology, atom names, atom index,\n"
+                                 "and residue sequences information holds. ")
         parser.add_argument("-n", type=str, default="index.ndx",
                             help="Input, optional. Options: .ndx \n"
-                                 "Gromacs type index file, where atom indices information \n"
-                                 "holds for angle calculation. Default is index.ndx. ")
+                                 "Gromacs type index file, where atom indices information is\n"
+                                 "stored for angle calculation. Default is index.ndx. ")
         parser.add_argument("-o", type=str, default="output.csv",
                             help="Output. Options: .dat, .xvg, .csv \n"
                                  "The output file name. \n"
                                  "Default is output.csv, with header and index, \n"
                                  "as well as the comma separator. ")
         parser.add_argument("-dt", type=int, default=2,
-                            help="Input, optional. \n"
-                                 "Skip frames with a gap of dt picoseconds. \n"
-                                 "Default is 2. ")
+                            help="Input, optional. Default is 2. \n"
+                                 "Skip frames with a gap of dt picoseconds. \n")
         parser.add_argument("-ps", default=2, type=int,
                             help="Input, optional. \n"
                                  "How many picoseconds the frames are stored in\n"
                                  "trajectory file. Default is 2. ")
         parser.add_argument("-v", default=False, type=lambda x: (str(x).lower() == "true"),
-                            help="Input, optional. \n"
-                                 "Whether print detail information. Default is False. ")
+                            help="Input, optional. Default is False. \n"
+                                 "Whether print detail information. ")
         parser.add_argument("-b", default=0, type=int,
-                            help="Input, optional. \n"
-                                 "The beginning frame of the calculation. Default is 0. ")
+                            help="Input, optional. Default is 0. \n"
+                                 "The beginning frame of the calculation. ")
         parser.add_argument("-e", default=-1, type=int,
-                            help="Input, optional. \n"
-                                 "The ending frame of the calculation. Default is -1. ")
+                            help="Input, optional. Default is -1. \n"
+                                 "The ending frame of the calculation. ")
 
         self.parser = parser
 

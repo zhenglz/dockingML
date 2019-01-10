@@ -666,16 +666,17 @@ def descriptions():
         #  Generating contact probability map                                  #
         #  Author:  ZHENG Liangzhen & Mu Yuguang                               #
         #  Email:   LZHENG002@e.ntu.edu.sg                                     #
-        #  Version: V2.2                                                       #
-        #  Date:    27 Dec 2017                                                #
+        #  Version: V2.5                                                       #
+        #  Date:    Dec 2018                                                   #
         ########################################################################
 
         Generating contact probability Map (Cmap)
 
-        Input a gromacs trajectory file (.xtc) to construct a contact probability map.
+        Input a gromacs trajectory file (.xtc) or a multiple-frame pdb file
+        to construct a contact probability map.
         All the structures should stay whole, broken structures will cause inaccurate results.
-        All the frames in trajectory file do not consider PBC conditions, you should keep structures
-        as a whole.
+        All the frames in trajectory file do not consider PBC conditions, 
+        you should keep structures as a whole.
 
         If some arguements not given, default values would be used.
 
@@ -684,19 +685,19 @@ def descriptions():
         gmx_cmap.py -h
 
         2. Construct a Ca-Ca Cmap for a protein chain
-        gmx_cmap -f traj.xtc -out Cmap.dat -rc A 1 250
+        gmx_cmap -f traj.xtc ref.pdb -out Cmap.dat -rc A 1 250
         -lc A 1 250 -cutoff 0.5 -switch T -atomtype CA
 
         3. Generate a full-atom Cmap for a poly-peptide chain
-        gmx_cmap -f traj.xtc -o Cmap.dat -rc A 1 250
+        gmx_cmap -f traj.xtc ref.pdb -o Cmap.dat -rc A 1 250
         -lc A 1 250 -cutoff 0.5 -atomtype all all
 
         4. Construct a Cmap between a small ligand and a protein
-        gmx_cmap -f traj.xtc -o Cmap.dat -rc A 1 250
+        gmx_cmap -f traj.xtc ref.pdb -o Cmap.dat -rc A 1 250
         -lc A 251 251 -cutoff 0.5 -atomtype all all
 
         5. Construct a Cmap between a small ligand and a protein, Ca-allatom
-        gmx_cmap -f traj.xtc -out Cmap.dat -rc A 1 250
+        gmx_cmap -f traj.xtc -s ref.pdb -o Cmap.dat -rc A 1 250
         -lc A 251 251 -cutoff 0.5 -atomtype CA all
 
         '''
@@ -733,10 +734,6 @@ def arguments():
                                     "non-H, or non-hydrogen, all the heavy atoms. \n"
                                     "If only one atomtype given, the 2nd will be the same as 1st.\n"
                                     "Default is: CA CA \n")
-    parser.parser.add_argument('-eletype', type=str, nargs="+", default=[],
-                               help="Input, optional. \n"
-                                    "Choose the specific elements for atom indexing to construct the cmap.\n"
-                                    "Default is [].\n")
     parser.parser.add_argument('-switch', type=lambda x: (str(x).lower() == "true"), default=False,
                                help="Input, optional. Default is False. \n"
                                     "Apply a switch function to determine atom-atom contacts for a smooth transition. \n"
