@@ -9,28 +9,62 @@ docking to lower down the false positive rate. Citable paper is coming soon.
 
 
     Authors: Zheng Liangzhen, Mu Yuguang.
-    Contact: lzheng002@e.ntu.edu.sg
+    Contact: lzheng002@e.ntu.edu.sg & ygmu@ntu.edu.sg
     Institute: School of Biological Sciences, Nanyang Technological University, Singapore
 
 # How to install:
-If you have git commond in your system with internet access, you could first download the codes
+## Step 1:
+If you have git command in your system with internet access, you could first download the codes
 to local folder, say /home/john/applications.
 
-Issue the following commonds in your terminal (presumably a linux environment):
+Issue the following commands in your terminal (presumably a linux environment):
      
      $ cd /home/john/applications
-     $ git clone zhenglz@github.com/zheng/dockingML.git
+     $ git clone https://github.com/zhenglz/dockingML.git
      $ cd dockingML
      $ pip install ./
 
 Or if you have anaconda in your system, please add the following packages to your environment before you
-run the "pip install ."
-      
+run the "pip install -e ."
+       
+     $ # download the package to your machine
+     $ cd /home/john/applications
+     $ git clone https://github.com/zhenglz/dockingML.git
      $ conda create -name mdanaly python=3.6
      $ source activate mdanaly
      $ conda install pandas mpi4py numpy matplotlib sklearn networkx mdtraj
      $ cd $HOME/applications/dockingML
-     $ pip install .
+     $ pip install -e .
+     
+If you don't have git command in the system, you could install one, or
+manually download the package and unzip it.
+       
+     $ # in ubuntu
+     $ sudo apt install git
+     $ git clone https://github.com/zhenglz/dockingML.git
+     $ # or download the package and upload to your /home/john/applications
+     $ unzip dockingML-master.zip
+     $ # then execute the pip install commands as indicated previously
+
+## Step 2:
+Change the mode of the files in /home/john/applications/dockingML/bin
+
+     $ cd /home/john/applications/dockingML/bin
+     $ chmod a+x *.py 
+
+Add following command to your ~/.bashrc file:
+    
+     $ export PATH="/home/john/applications/dockingML/bin:$PATH"
+     
+Now you could safely run analysis by typing gmx_cmap.py -h or 
+gmx_pca.py -h 
+
+     $ cd /home/john/mysimulations/
+     $ ls *.xtc *.pdb
+     $ gmx_cmap.py -h
+     $ gmx_index.py -h
+     $ gmx_pca.py -h
+
 
 # The structure of the codes:
 
@@ -57,7 +91,7 @@ are calculated using AM1-BCC charge model for large set of ligands.
 The amber general force field GAFF is used for small ligand topology.
 Amber format topology files are created and converted to GMX format 
 
-    $ gmx_ligtop -f ligand.pdb -ff gaff -p ligand -amberhome /home/applications/amber16
+    $ gmx_ligtop.py -f ligand.pdb -ff gaff -p ligand -amberhome /home/applications/amber16
 
 Additional tools are required for fully functional dockml module.
 
@@ -115,22 +149,32 @@ molecules.
 # Usage examples 
 ## 1. mdanaly examples
 ### Using cmap to generate residue-residue contactmap
-<p> Add the /bin directory to your PATH. For example, the package is installed in the 
-$HOME/applications/python2.7/lib/python2.7/site-packages/dockingML, you could add
-the following in your $HOME/.bashrc file:</p>
 
-<p> to generate cmap using gmx style script </p>
+to generate cmap using gmx style script
     
-    $ gmx_cmap.py -h  
-    $ gmx_cmap.py -f protein.pdb -o cmap.dat -rc A 1 10 -lc A 1 10 -atomtype CA
-    $ gmx_cmap.py -f protein.pdb -o cmap.dat -rc A 1 10 -lc B 1 1 -atomtype heavy -opt S
+    $ gmx_cmap.py -h
+    $ # atom numbers in md.xtc and reference.pdb should be extractly the same
+    $ gmx_cmap.py -f md.xtc -s reference.pdb -o cmap.dat -rc A 1 10 -lc A 1 10 -atomtype CA CA
+    $ # use the examples in dockingML/test/methyl_rrm/ directory
+    $ gmx_cmap.py -f test_traj_dt1ns.xtc -s reference.pdb -rc " " 50 80 -lc " " 50 80 \
+    -atomtype CA CA -switch True -o cmap_50-80.csv -v True -dt 10 
+    [ Output ]:
+    Atom selecting ......
+    Loading trajectory ......
+    Number of chunks:  1
+    Total number of frames: 401 
+    Start calculating contact map ......
+    Atom indices have been processed ......
+    Generate cmap for chunk     0 ......
+    Preparing output file ......
+    Writing output now ...... 
+    Total Time Usage: 
+    0:00:07.485593
 
 <img src="./data/example_cmap.png" alt="example contactmap">
 
 ## 2. community network work analysis example
 The working flow of drawing community network. 
-
-Please cite: (to be added here.)
     
 #### 1. construct a cmap
     using distance, or LMI, DCC correlation, generating a residue-residue
@@ -168,5 +212,5 @@ PCA, or contact map based PCA, or dihedral PCA using gmx style script.
       -select CA
       
 ## 4. Generate essential dynamics essembles
-### TODO: to be implemented
+    $ dynamics.py -h
 
