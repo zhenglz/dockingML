@@ -363,6 +363,10 @@ class CmapNbyN(ContactMap):
 
         Returns
         -------
+        per_res_count_normalized : np.ndarray, shape = [N , 1]
+            Normalized residue contact numebr, N is the number of frames
+        per_res_count : np.ndarray, shape = [N , 1]
+            Per-residue contact number, N is the number of frames
 
         """
 
@@ -715,49 +719,32 @@ def arguments():
                                     "The ligand chains and residue index for Cmap construction.\n"
                                     "You must enter a chain name, start residue index, and end chain index.\n"
                                     "Default is: A 1 250 \n")
-    parser.parser.add_argument('-cutoff',type=float, default=0.35,
+    parser.parser.add_argument('-cutoff', type=float, default=0.35,
                                help="Input, optional. Default is 0.35 (nanometer). \n"
-                                    "Distance Cutoff for determining contacts. \n")
-    parser.parser.add_argument('-atomtype', type=str, nargs='+', default=[],
-                               help="Input, optional. \n"
-                                    "Atom types for Receptor and Ligand in Contact Map Calculation. \n"
+                                    "Distance Cutoff for determining contacts in cmap. \n")
+    parser.parser.add_argument('-atomtype', type=str, nargs='+', default=['CA', 'CA'],
+                               help="Input, optional. Two values should be provided. \n"
+                                    "Atom types for X-axis (receptor) and Y-axis (ligand) in Contact "
+                                    "Map Calculation. \n"
                                     "Only selected atoms will be considered.\n"
                                     "Options: CA, Backbone, MainChain, All, non-H(All-H), lig-all. \n"
                                     "CA, alpha-carbon atoms. Backbone, backbone atoms in peptides. \n"
-                                    "MainChain, including CA and N atoms. All, means all atoms.\n"
-                                    "non-H, non-hydrogen atoms, all the heavy atoms. \n"
-                                    "lig-all trys to consider all the atoms of a ligand (H atoms not considered). \n"
-                                    "Two choices should be provided for receptor and ligand respectively. \n"
+                                    "MainChain, including CA and N atoms. All, all atoms.\n"
+                                    "non-H, or non-hydrogen, all the heavy atoms. \n"
                                     "If only one atomtype given, the 2nd will be the same as 1st.\n"
-                                    "Default is: [] \n")
-    parser.parser.add_argument('-atomname1', type=str, nargs='+', default=[],
-                               help="Input, optional. \n"
-                                    "Atom names for Recetpor in Contact Map. \n"
-                                    "Default is []. ")
-    parser.parser.add_argument('-atomname2', type=str, nargs='+', default=[],
-                               help="Input, optional. \n"
-                                    "Atom names for Ligand in Contact Map. \n"
-                                    "Default is []. ")
+                                    "Default is: CA CA \n")
     parser.parser.add_argument('-eletype', type=str, nargs="+", default=[],
                                help="Input, optional. \n"
                                     "Choose the specific elements for atom indexing to construct the cmap.\n"
                                     "Default is [].\n")
     parser.parser.add_argument('-switch', type=lambda x: (str(x).lower() == "true"), default=False,
                                help="Input, optional. Default is False. \n"
-                                    "Apply a switch function for determing Ca-Ca contacts for a smooth transition. \n"
-                                    "Only work with atomtype as CA. \n")
+                                    "Apply a switch function to determine atom-atom contacts for a smooth transition. \n"
+                                    "This is often recommended to avoid arbitrary cutoff. \n")
     parser.parser.add_argument('-NbyN', type=lambda x: (str(x).lower() == "true"), default=False,
                                help="Input, optional. Default is False\n"
-                                    "For community analysis, calculate atom contact number, normalized. \n")
-    parser.parser.add_argument('-details', default=None, type=str,
-                               help="Provide detail contact information and write out to a file. \n"
-                                    "Default is None.")
-    parser.parser.add_argument('-opt', default="TS", type=str,
-                               help="Optional setting controls. Default is A. \n"
-                                    "Average, calculating the average cmap along the simulations.\n"
-                                    "Separated, create time series contact map, suitable for ligand \n"
-                                    "protein contact information along time.\n"
-                                    "Options: S(Separated), A(Average).\n")
+                                    "For community analysis, calculate residue-residue contact number,\n"
+                                    "normalized by atom number in each residue. \n")
 
     parser.parse_arguments()
 
@@ -893,9 +880,6 @@ def iterload_cmap():
     """Load large trajectory iteratively using mdtraj.iterload function,
     then generate contact map from the trajectories.
 
-    Returns
-    -------
-
     """
 
     # for calculation time counting
@@ -960,4 +944,8 @@ def iterload_cmap():
 
     print("Total Time Usage: ")
     print(datetime.now() - startTime)
+
+
+if __name__ == "__main__":
+    iterload_cmap()
 
