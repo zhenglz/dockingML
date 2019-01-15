@@ -461,7 +461,7 @@ class PdbIndex(object):
 
         # prepare
         self.prepare_selection()
-        self.res_index()
+        self.res_index(atom_name_list=args.an)
         self.atom_index_original()
 
         self.atomList2File(self.atomndx_, group_name=args.gn,
