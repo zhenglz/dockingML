@@ -1,5 +1,5 @@
 
 include README.md
-include lib/*.dat
-include lib/*.lib
+include data/*.dat
+include data/*.lib
 

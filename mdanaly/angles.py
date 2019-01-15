@@ -265,7 +265,6 @@ def gmxangle():
                 angles = cangle.get_dihedral_angles(ndx)
             else:
                 angles = np.concatenate((angles, cangle.get_dihedral_angles(ndx)), axis=0)
-                # print("Progress: %12d " % (i * traj.n_frames))
 
         if args.v:
             print("Write angles to output file: ", args.o)

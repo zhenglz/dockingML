@@ -122,8 +122,8 @@ the following in your $HOME/.bashrc file:</p>
 <p> to generate cmap using gmx style script </p>
     
     $ gmx_cmap.py -h  
-    $ gmx_cmap.py -f protein.pdb -o cmap.dat -rc A 1 10 -lc A 1 10 -atomtype CA
-    $ gmx_cmap.py -f protein.pdb -o cmap.dat -rc A 1 10 -lc B 1 1 -atomtype heavy -opt S
+    $ gmx_cmap.py -f traj.xtc -s reference.pdb -o cmap.dat -rc A 1 10 -lc A 1 10 -atomtype CA CA
+    $ gmx_cmap.py -f traj.xtc -s reference.pdb -o cmap.dat -rc A 1 10 -lc B 15 90 -atomtype CA CA -switch True
 
 <img src="./data/example_cmap.png" alt="example contactmap">
 
@@ -168,5 +168,5 @@ PCA, or contact map based PCA, or dihedral PCA using gmx style script.
       -select CA
       
 ## 4. Generate essential dynamics essembles
-### TODO: to be implemented
+### TODO: to be completed
 
