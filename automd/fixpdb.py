@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import mdanaly
 import math
 import os, sys
@@ -8,7 +11,7 @@ import subprocess as sp
 from collections import defaultdict
 
 from dockml import convert
-from rdkit import Chem
+#from rdkit import Chem
 
 # import modeller for loop refinement
 try:
@@ -27,7 +30,8 @@ class SummaryPDB(object):
 
         if not os.path.exists(aminoLibFile) :
             PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
-            DEFINITIONS_ROOT = os.path.join(PROJECT_ROOT, '../data/amino-acid.lib')
+            DEFINITIONS_ROOT = os.path.join(PROJECT_ROOT,
+                                            '../data/amino-acid.lib')
             aminoLibFile = DEFINITIONS_ROOT
 
         resShortName = {}
@@ -36,10 +40,12 @@ class SummaryPDB(object):
                 resShortName[s.split()[2]] = s.split()[3]
         self.resShortName = resShortName
 
-    def centerOfMass(self, inputMol, atomNdx, obabelexe='obabel', molBox=False):
-        """
-        Given a file (preferable PDB file format), if not, the file will be convert into a pdb file,
-        and selected atom sequence number, determine the Center Of Mass of the coordinates
+    def centerOfMass(self, inputMol, atomNdx,
+                     obabelexe='obabel', molBox=False):
+        """Given a file (preferable PDB file format), if not,
+        the file will be convert into a pdb file,
+        and selected atom sequence number, determine the
+        Center Of Mass of the coordinates
 
         Parameters
         ----------
@@ -65,8 +71,6 @@ class SummaryPDB(object):
         pdb = inputMol
         # convert the molecule file to pdb where necessary
         if inputMol.split(".")[-1] not in ['pdb', 'pdbqt']:
-            from automd import gentop
-            #gpdb = gentop.GenerateTop()
             converter = convert.Convert(obabel=obabelexe)
             converter.convert(inputMol, inputMol+".pdb")
             pdb = inputMol + ".pdb"
@@ -97,16 +101,20 @@ class SummaryPDB(object):
         return com, [xsize, ysize, zsize]
 
     def netCharges(self, inputMol, ligName=None):
-        """
-        Deduce the total net charge of a molecule (mostly a small ligand).
-        netCharges determine the net charge of a molecule, given a pdb file.
-        if the input molecule is a pdbqt (Vina input), or pqr (APBS input type),
+        """Deduce the total net charge of a molecule (mostly a
+        small ligand).
+        netCharges determine the net charge of a molecule,
+        given a pdb file.
+        if the input molecule is a pdbqt (Vina input), or pqr
+        (APBS input type),
            a molecule name (residue code) is need.
-        if a mol2 file provide, only the @<TRIPOS>ATOM field will be used, no ligand name required.
+        if a mol2 file provide, only the @<TRIPOS>ATOM field
+        will be used, no ligand name required.
 
         other formats are not supported.
 
-        last column of a pdbqt, pqr and mol2 file generally will be the atomic charge field,
+        last column of a pdbqt, pqr and mol2 file generally
+        will be the atomic charge field,
           otherwise, a ValueError exception will be rasied.
 
         Parameters
@@ -138,7 +146,7 @@ class SummaryPDB(object):
                     for s in lines:
 
                         if s.split()[0] in ["ATOM", "HETATM"] and len(s.split()) > 5:
-                            try :
+                            try:
                                 if ligName and ligName in s:
                                     netCharge += float(s.split()[-1])
                                 elif not ligName:
@@ -232,8 +240,7 @@ class SummaryPDB(object):
         return chains, resNdx, resName, resAtom, resNameNdx
 
     def getFastaSeq(self, fastaFile):
-        """
-        obtain fasta sequence from the input file
+        """obtain fasta sequence from the input file
 
         Parameters
         ----------

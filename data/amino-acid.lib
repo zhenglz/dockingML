@@ -1,4 +1,4 @@
-## this is a library of the 20 amino acid
+## this is a library of the common amino acids and their codes
 RES 1   GLY  G
 RES 2   ALA  A
 RES 3   SER  S
@@ -19,7 +19,7 @@ RES 17  GLN  Q
 RES 18  HIS  H
 RES 19  LYS  K
 RES 20  ARG  R
-RES 21  HIE H
-RES 22  HIP H
-RES 23  HID H
-RES 24  CYX C
+RES 21  HIE  H
+RES 22  HIP  H
+RES 23  HID  H
+RES 24  CYX  C

@@ -29,6 +29,7 @@ run the "pip install ."
      $ conda create -name mdanaly python=3.6
      $ source activate mdanaly
      $ conda install pandas mpi4py numpy matplotlib sklearn networkx mdtraj
+     $ conda install -c rdkit rdkit
      $ cd $HOME/applications/dockingML
      $ pip install .
 

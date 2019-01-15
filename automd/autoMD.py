@@ -3,10 +3,7 @@
 
 import os, sys
 import subprocess as sp
-from glob import glob
-from collections import *
 import linecache
-import glob
 from .gentop import GenerateTop
 
 # import modeller for loop refinement
@@ -135,6 +132,7 @@ class MolDocking(object):
                 else :
                     pass
         return prop
+
 
 def runGenTop(AMBERHOME) :
     '''

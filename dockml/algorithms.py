@@ -75,20 +75,60 @@ class BasicAlgorithm(object):
 
         return k * (x + c0) ** exp + bias
 
-    def pmf(self, x, minX, kbt=2.5, max=1.0):
+    def pmf(self, x, minX=0.5, kbt=2.5, bins=20):
+        """Calculate PMF 1D matrix given X
+
+        Parameters
+        ----------
+        x : np.ndarray, shape = [ N, 1]
+            The input data vector
+        minX : float
+            A minimium value for the probability calculation,
+            to avoid log by zero error.
+        kbt : float, default = 2.5
+            The Kb * T value. If using KJ/mol as the unit,
+            kbt is around 2.5
+        bins : int, or array like, default = 20
+            The number of bins, or pre-defined bin edges.
+
+        Returns
+        -------
+
         """
-        calculate PMF of a histogram vector
-        :param x: float
-        :param minX: float, avoid divide by zero problem
-        :param kt: float, kt=2.5 when T=300K and unit is kJ/mol
-        :param max:
-        :return: list of floats
-        """
-        if x < minX:
-            x = minX / 2.0
-        return -1.0 * kbt * np.log(x / max)
+        dist, xedge = np.histogram(x, bins=bins)
+
+        dist = dist / np.max(dist)
+        dist[dist == 0.0] = minX / np.max(dist)
+
+        return -1.0 * kbt * np.log(dist)
 
     def pmf2d(self, X, Y, minX, kbt=2.5, bins=20):
+        """Calculate PMF 2D matrix given X and y
+
+        Parameters
+        ----------
+        X : np.ndarray, or array like, shape = [N, 1]
+            The first input vector
+        Y : np.ndarray, or array like, shape = [N, 1]
+            The 2nd input vector
+        minX : float
+            A minimium value for the probability calculation,
+            to avoid log by zero error.
+        kbt : float, default = 2.5
+            The Kb * T value. If using KJ/mol as the unit,
+            kbt is around 2.5
+        bins : int, or array like, default = 20
+            The number of bins, or pre-defined bin edges.
+
+        Returns
+        -------
+        Xedge : np.ndarray
+            The edges of X-axis
+        Yedge : np.ndarray
+            The edges of Y-axis
+        pmf : np.ndarray, shape = [ nbins, nbins]
+            The PMF matrix
+        """
 
         hist, edges_1, edges_2= np.histogram2d(X, Y, bins=bins)
         hist = hist / np.max(hist)
