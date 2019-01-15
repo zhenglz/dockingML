@@ -206,7 +206,7 @@ class PdbIndex(object):
 
         return self
 
-    def res_index(self, atom_list=[]):
+    def res_index(self, atom_name_list=[]):
         """Get atom index list from given information:
         Resid, chain, atom_type_names
 
@@ -260,15 +260,15 @@ class PdbIndex(object):
 
         else:
 
-            if len(atom_list) == 0:
+            if len(atom_name_list) == 0:
                 if self.at in self.at_direct:
                     names = self.at
                 elif self.at in ['Heavy', 'heavy', 'non-hdyrogen', 'no-H', 'non-H']:
                     names = "symbol != 'H'"
-                else :
+                else:
                     names = "name %s"%self.at
             else:
-                names = " name " + "  ".join(atom_list)
+                names = " name " + "  ".join(atom_name_list)
 
             start, end = self.resid_mt_style(self.chain[0],
                                              self.resSeq[0],
@@ -393,10 +393,10 @@ class PdbIndex(object):
                                    "Options including: allatom, mainchain, \n"
                                    "non-hydrogen, c-alpha, backbone, sidechain, dihedral\n"
                                    "Default choice is: allatom \n")
-        '''parser.parser.add_argument('-an', type=str, default=[], nargs='+',
-                           help="Select atom by atom names. A list of atom names \n"
-                           "could be supplied. If not given, all atom names are \n"
-                           "considered. Default is [].")'''
+        parser.parser.add_argument('-an', type=str, default=[], nargs='+',
+                                   help="Select atom by atom names. A list of atom names \n"
+                                   "could be supplied. If not given, all atom names are \n"
+                                   "considered. Default is [].")
         parser.parser.add_argument('-chain', type=str, default=["A"], nargs="+",
                                    help="Protein chain identifier. Default chain ID is [\'A\',]. ")
         parser.parser.add_argument('-res', type=int, nargs= '+', default=[1, -1],
