@@ -268,7 +268,7 @@ class PdbIndex(object):
                 else:
                     names = "name %s"%self.at
             else:
-                names = " name " + "  ".join(atom_name_list)
+                names = "name " + "  ".join(atom_name_list)
 
             start, end = self.resid_mt_style(self.chain[0],
                                              self.resSeq[0],
