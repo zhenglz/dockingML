@@ -410,7 +410,7 @@ class PdbIndex(object):
                                    help="Whether generate dihedral angles index (quadruplex).\n"
                                    "Phi and Psi are considered. Optional choices are: \n"
                                    "PHI, PSI, PHI_PSI, or NA. Default is NA. \n")
-        parser.parser.add_argument('-gn', type=str, default=None,
+        parser.parser.add_argument('-gn', type=str, default=None, nargs='+',
                                    help="The name of the group of atoms selected. \n"
                                    "Default is None.")
         parser.parser.add_argument('-append', default=True, type=bool,
