@@ -212,7 +212,7 @@ class PdbIndex(object):
 
         Parameters
         ----------
-        atom_list : list, default is empty.
+        atom_name_list : list, default is empty.
             The list of atom names provided for index selection.
 
         Returns
@@ -276,6 +276,7 @@ class PdbIndex(object):
             resndx = "resid %d to %d" % (start, end)
 
             self.selections_ = names + " and " + resndx
+            print(self.selections_)
             try:
                 self.atomndx_mt_style_ = self.top.select(self.selections_)
             except:
@@ -410,7 +411,7 @@ class PdbIndex(object):
                                    help="Whether generate dihedral angles index (quadruplex).\n"
                                    "Phi and Psi are considered. Optional choices are: \n"
                                    "PHI, PSI, PHI_PSI, or NA. Default is NA. \n")
-        parser.parser.add_argument('-gn', type=str, default=None, nargs='+',
+        parser.parser.add_argument('-gn', type=str, default=None, 
                                    help="The name of the group of atoms selected. \n"
                                    "Default is None.")
         parser.parser.add_argument('-append', default=True, type=bool,
