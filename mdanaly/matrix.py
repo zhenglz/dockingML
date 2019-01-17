@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
 import numpy as np
-import argparse
 import os, sys
 from scipy import stats
+
+import argparse
 from argparse import RawTextHelpFormatter
 from matplotlib import pyplot as plt
 
@@ -143,13 +144,12 @@ class MatrixHandle(object):
         if not isinstance(data, np.ndarray):
             data = np.asarray(data)
 
-        num = data.shape[0]
-        for i in range(num):
-            if xrange[0] <= float(data[i][0]) < xrange[1] \
-                    and yrange[0] <= float(data[i][1]) < yrange[1]:
-                d.append(list(data[i]))
+        dat = data[data[:, 0] >= xrange[0]]
+        dat = dat[dat[:, 0] <= xrange[1]]
+        dat = dat[dat[:, 1] >= yrange[0]]
+        dat = dat[dat[:, 1] <= yrange[1]]
 
-        return np.asarray(d)
+        return dat
 
     def neiborhood2zero(self, data, neiborsize=4, xyzshift=[0, 0, 0], zscale=1.0, outtype='xyz'):
         """
@@ -363,7 +363,7 @@ def main():
             np.savetxt(args.out, data, fmt="%.5f", delimiter=" ")
         print("Transform matrix file type completed!")
 
-    elif args.opt == "extract" :
+    elif args.opt == "extract":
         if args.ds in ['xyz', 'XYZ', '3d']:
             data = mtxh.loadxyz(args.dat[0], args.dtype, args.xyzcol, xyshift=args.xyshift)
         elif args.ds in ['matrix', 'mtx'] :
@@ -375,12 +375,12 @@ def main():
         np.savetxt(args.out, d, fmt="%.5f")
         print("Extract matrix file completed!")
 
-    elif args.opt == "average" :
+    elif args.opt == "average":
         aver_data = np.array([])
         for i in range(len(args.dat)) :
             if args.ds in ['xyz', 'XYZ', '3d']:
                 data = mtxh.loadxyz(args.dat[0], args.dtype, args.xyzcol, xyshift=args.xyshift)
-            elif args.ds in ['matrix', 'mtx'] :
+            elif args.ds in ['matrix', 'mtx']:
                 data = mtxh.reshapeMtx(args.dat[0], args.dtype, xyshift=args.xyshift)
             else :
                 sys.exit(0)
@@ -409,15 +409,17 @@ def main():
         drange = []
         if os.path.exists(args.domain):
             pdb = pdbIO.parsePDB()
-            domains = pdb.readDomainRes(args.args.domain)
+            domains = pdb.readDomainRes(args.domain)
             drange = [x[1:] for x in domains]
 
         else :
-            drange = [ float(x) for x in args.drange]
+            drange = [float(x) for x in args.drange]
 
         tofile = open(args.out, 'w')
         for i in range(len(drange)):
-            tofile.write("# %d %s \n"%(i, " ".join(drange[i])))
+            tofile.write("# %d %s \n"%(i, " ".join([str(x) for x in drange[i]])))
+
+        print(drange)
 
         for i in range(len(drange)):
             for j in range(len(drange)):
@@ -425,8 +427,9 @@ def main():
                     tofile.write("%3d %3d  0.0 \n" % (i, j))
                 else:
                     d = []
-                    for r1 in range(len(drange[i])/2):
-                        for r2 in range(len(drange[j])/2):
+                    #print(len(drange[i])/2)
+                    for r1 in range(int(len(drange[i])/2)):
+                        for r2 in range(int(len(drange[j])/2)):
                             ccc = mtxh.extractDomainData(data, xrange=drange[i][2*r1:2*r1+2],
                                                          yrange=drange[j][2*r2:2*r2+2])[:, 2]
                             d += list(ccc)
