@@ -187,6 +187,26 @@ class MatrixHandle(object):
 
         return np.asarray(newdata)
 
+    def merge_matrix(self, mtx1, mtx2):
+        """Merge two matrix or arrays to have them as upper and lower diagonal.
+
+        Parameters
+        ----------
+        mtx1 : np.ndarray
+            The 1st matrix, it will be the upper diagonal.
+        mtx2 : np.ndarray
+            The 2nd matrix, it will be the lower diagonal.
+
+        Returns
+        -------
+        merged : np.ndarray
+            The merged matrix
+        """
+        upper = np.triu(mtx1, k=1)
+        lower = np.tril(mtx2, k=1)
+
+        return upper + lower
+
 def arguments():
     d = '''
     ########################################################################
@@ -280,16 +300,14 @@ def main():
             data1 = mtxh.reshapeMtx(args.dat[0], args.dtype, xyshift=args.xyshift)
             data2 = mtxh.reshapeMtx(args.dat[1], args.dtype, xyshift=args.xyshift)
 
-        else :
-            sys.exit(0)
-        if args.opt == "merge" :
-            d = np.zeros(data1.shape)
-            for i in range(data1.shape[0]) :
-                if data1[i][0] < data1[i][1] :
-                    d[i] = data1[i]
-                else :
-                    d[i] = data2[i]
-            np.savetxt(args.out, d, fmt="%.5f")
+        else:
+            print("Error: Data-shape is not specified. ")
+            data1, data2 = np.array([]), np.array([])
+
+        if args.opt == "merge":
+
+            merged = mtxh.merge_matrix(data1, data2)
+            np.savetxt(args.out, merged, fmt="%.3f", delimiter=" ")
             print( "Merge matrix file completed!")
 
         elif args.opt == "pair-t-test" :
