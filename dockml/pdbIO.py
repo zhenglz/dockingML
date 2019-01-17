@@ -183,8 +183,7 @@ class parsePDB(object):
             self.nucleic = PROJECT_ROOT + '/../data/nucleic-acid.lib'
 
     def readDomainRes(self, filein):
-        """
-        load the domain data file, return a list of domain residue information
+        """load the domain data file, return a list of domain residue information
 
         Parameters
         ----------

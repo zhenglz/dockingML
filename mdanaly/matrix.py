@@ -122,15 +122,27 @@ class MatrixHandle(object):
         return data
 
     def extractDomainData(self, data, xrange, yrange):
-        '''
-        extract specific x y data based xy range
-        :param data: float, 3D xyz array (matrix)
-        :param xrange: list, [a, b], both a and b are integers
-        :param yrange: list, [a, b]
-        :return: 3D xyz array
-        '''
+        """Extract specific x y data based xy range
+
+        Parameters
+        ----------
+        data : np.ndarray, shape = [ N, 3]
+            The input XYZ shape data frame. N is number of values.
+        xrange : list
+            The x-axis boundaries. List length must be even number.
+        yrange : list
+            The y-axis boundaries. List length must be even number.
+
+        Returns
+        -------
+        selected_array : np.ndarray, shape = [ N, 3]
+            The selected data frame.
+        """
+
         d = []
-        data = np.asarray(data)
+        if not isinstance(data, np.ndarray):
+            data = np.asarray(data)
+
         num = data.shape[0]
         for i in range(num):
             if xrange[0] <= float(data[i][0]) < xrange[1] \
@@ -167,11 +179,19 @@ class MatrixHandle(object):
             return np.reshape(newd[:, 2], (xsize, ysize))
 
     def zRangeSelect(self, data, zrange=[]):
-        """
-        select the data points whoes z values locate in the zrange
-        :param data: array, matrix data
-        :param zrange: list, the lower and upper boundary of the z values
-        :return:
+        """Select the data points whoes z values locate in the zrange
+
+        Parameters
+        ----------
+        data : np.ndarray
+            The input dataframe (matrix)
+        zrange : list
+            The upper and lower boundary of z-values
+
+        Returns
+        -------
+        selected_df : np.ndarray
+            The selected dataframe.
         """
 
         xyshape = np.asarray(data).shape
@@ -259,6 +279,9 @@ def arguments():
                         help="Ranges define domain-domain matrix data. \n"
                              "Data points are average data points. "
                         )
+    parser.add_argument('-domain', default='domain.dat', type=str,
+                        help="Input, optional. Default is domain.dat. \n"
+                             "The domain information used for domain average. \n")
     parser.add_argument('-xyzcol', type=int, nargs="+", default=[0, 1, 2],
                         help="XYZ columns in data file. Default is 0 1 2.")
     parser.add_argument('-xyshift', default=[0, 0], type=float, nargs="+",
@@ -374,7 +397,7 @@ def main():
         np.savetxt(args.out, aver_data, fmt="%.5f")
         print( "Average matrix files completed!")
 
-    elif args.opt == "domain-aver" :
+    elif args.opt == "domain-aver":
         if args.ds in ['xyz', 'XYZ', '3d']:
             data = mtxh.loadxyz(args.dat[0], args.dtype, args.xyzcol, xyshift=args.xyshift)
         elif args.ds in ['matrix', 'mtx']:
@@ -384,27 +407,30 @@ def main():
         data = data.astype(np.float)
 
         drange = []
-        if os.path.exists(args.drange[0]) :
+        if os.path.exists(args.domain):
             pdb = pdbIO.parsePDB()
-            domains = pdb.readDomainRes(args.drange[0])
+            domains = pdb.readDomainRes(args.args.domain)
+            drange = [x[1:] for x in domains]
 
-            drange = [ x[1:] for x in domains ]
-            # 2d list to 1d
-            drange = sum(drange, [])
         else :
-            drange = [ float(x) for x in args.drange ]
+            drange = [ float(x) for x in args.drange]
 
         tofile = open(args.out, 'w')
-        for i in range(int(len(drange)/2)) :
-            tofile.write("# %d %.2f %.2f \n"%(i, drange[i*2], drange[i*2+1]))
+        for i in range(len(drange)):
+            tofile.write("# %d %s \n"%(i, " ".join(drange[i])))
 
-        for i in range(int(len(drange)/2)) :
-            for j in range(int(len(drange) / 2)):
-                if args.dzero and i == j :
+        for i in range(len(drange)):
+            for j in range(len(drange)):
+                if args.dzero and i == j:
                     tofile.write("%3d %3d  0.0 \n" % (i, j))
-                else :
-                    d = mtxh.extractDomainData(data, xrange=drange[2*i:2*i+2], yrange=drange[2*j:2*j+2])
-                    tofile.write("%3d %3d %12.5f \n"%(i, j, list(np.mean(d[:, 2]))[0]))
+                else:
+                    d = []
+                    for r1 in range(len(drange[i])/2):
+                        for r2 in range(len(drange[j])/2):
+                            ccc = mtxh.extractDomainData(data, xrange=drange[i][2*r1:2*r1+2],
+                                                         yrange=drange[j][2*r2:2*r2+2])[:, 2]
+                            d += list(ccc)
+                    tofile.write("%3d %3d %12.3f \n"%(i, j, np.mean(d)))
         tofile.close()
 
         print("Domain-wise matrix averaging completed!")
