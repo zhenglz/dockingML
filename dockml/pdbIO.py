@@ -159,9 +159,24 @@ class rewritePDB(object):
 
 
 class parsePDB(object):
-
     """
-    parse pdb file
+    A pdb file parser.
+
+    Parameters
+    ----------
+    inPDB : str, default = '1a28.pdb'
+
+    Attributes
+    ----------
+    resSideChainAtoms : list
+        The sidechain atoms of all natural amino acids
+    resMainchainAtoms : list
+        The mainchain atoms of all natural amino acids
+    prores : str
+        The amino acid standard names
+    nucleic : str
+        The nucleic acid standard atom names
+
     """
     def __init__(self, inPDB='1a28.pdb'):
         self.pdbin = inPDB
@@ -183,17 +198,20 @@ class parsePDB(object):
             self.nucleic = PROJECT_ROOT + '/../data/nucleic-acid.lib'
 
     def readDomainRes(self, filein):
-        """load the domain data file, return a list of domain residue information
+        """Load the domain data file, return a list of domain residue information
 
         Parameters
         ----------
-        filein: str,
-            input file name
+        filein : str,
+            Input file name
 
         Returns
         -------
-        drange: list of list (3 elements),
-            domain-residue-range information
+        drange: list
+            List of list (>3 elements per item),
+            domain-residue-range information, example
+            [ [ 'HNH', 1, 10], ['RuvC', 11, 92, 150, 190], ['LBD', 93, 149]]
+
         """
 
         drange = []
@@ -201,22 +219,21 @@ class parsePDB(object):
         try:
             with open(filein) as lines:
                 for s in lines:
-                    if "#" not in s:
+                    if "#" not in s and len(s.split()) >= 3:
                         d = [s.split()[0]]
                         d += [int(x) for x in s.split()[1:]]
                         drange.append(d)
-        except:
-            raise FileNotFoundError
+        except FileNotFoundError:
+            print("Either the file does not exist or there are empty lines in the file. ")
 
         return drange
 
     def getStdProRes(self):
-        """
-        get the standard protein residue list
+        """Get the standard protein residue list
 
         Parameters
         ----------
-        resname: list of str,
+        resname : list
             standard residue name list
         """
 
@@ -228,8 +245,7 @@ class parsePDB(object):
         return resname
 
     def shortRes2LongRes(self):
-        """
-        convert the short single-character residue name to long 3-code name
+        """Convert the short single-character residue name to long 3-code name
 
         Parameters
         ----------
@@ -247,8 +263,7 @@ class parsePDB(object):
         return resmap
 
     def longRes2ShortRes(self):
-        """
-        convert the long 3-code name to short single-character residue name
+        """Convert the long 3-code name to short single-character residue name
 
         Parameters
         ----------
@@ -265,7 +280,7 @@ class parsePDB(object):
         return resmap
 
     def pdbListInfor(self, pdbList):
-        """get a list of information from a rcsb database pdb file
+        """Get a list of information from a rcsb database pdb file
 
         Parameters
         ----------
@@ -293,14 +308,25 @@ class parsePDB(object):
         return pdbInfor
 
     def subsetPDB(self, pdbin, proteinChains, pdbOut, ligandInfor=["SUB","A"]):
+        """Subset the pdb file and only output part of the file
+
+        Parameters
+        ----------
+        pdbin : str
+            Input pdb file name
+        proteinChains : list
+            The selected chain identifiers
+        pdbOut : str
+            The output file name
+        ligandInfor : list
+            The resname of the ligand and its chain identifier
+
+        Returns
+        -------
+        self : an instance of itself
+
         """
-        subset the pdb file and only output part of the file
-        :param pdbin:
-        :param proteinChains:
-        :param pdbOut:
-        :param ligandInfor:
-        :return:
-        """
+
         pdbout = open(pdbOut, 'w')
 
         with open(pdbin) as lines :
@@ -315,7 +341,7 @@ class parsePDB(object):
                     pass
 
         pdbout.close()
-        return 1
+        return self
 
     def withSubGroup(self, isProtein=True):
         """
@@ -559,12 +585,21 @@ class coordinatesPDB(object):
         pass
 
     def replaceCrdInPdbLine(self, line, newxyz):
-        """
-        input a line of pdb file, and a new vector of xyz values,
+        """Input a line of pdb file, and a new vector of xyz values,
         the old xyz values will be replaces, and return a new pdb line
-        :param line: str, a line from pdb file
-        :param newxyz: list, xyz values
-        :return: str, a line from pdb file
+
+        Parameters
+        ----------
+        line : str
+            A line from pdb file
+        newxyz : list, shape = [3, ]
+            The new xyz coordinates, in unit nanometer
+
+        Returns
+        -------
+        new_line : str
+            The new PDB line with new xyz coordinates
+
         """
 
         if "ATOM" in line or "HETATM" in line:
@@ -580,22 +615,43 @@ class coordinatesPDB(object):
         return newline
 
     def getAtomCrdFromLines(self, lines):
+        """Given a list of atom pbd lines, return their coordinates in a 2d list
+
+        Parameters
+        ----------
+        lines : list
+            A list of pdb lines contains coordinates
+
+        Returns
+        -------
+        coordinates : list, shape = [ N, 3]
+            The coordinates of selected pdb lines, N is the number of
+            lines.
         """
-        given a list of atom pbd lines, return their coordinates in a 2d list
-        :param lines: list of str, a list of pdb lines contains coordinates
-        :return: 2d list, list of 3 element list
-        """
-        atomCrd = list(map(lambda x: [float(x[30:38].strip()),float(x[38:46].strip()),float(x[46:54].strip())],lines))
+
+        atomCrd = list(map(lambda x: [float(x[30:38].strip()),float(x[38:46].strip()),
+                                      float(x[46:54].strip())],lines))
 
         return atomCrd
 
     def getAtomCrdByNdx(self, singleFramePDB, atomNdx=['1',]):
+        """Input a pdb file and the atom index, return the crd of the atoms
+
+        Parameters
+        ----------
+        singleFramePDB : str
+            Input pdb file name.
+        atomNdx : list
+            A lis of atoms for coordinates extraction.
+
+        Returns
+        -------
+        coordinates : list, shape = [ N, 3]
+            The coordinates for the selected lines. N is the number of
+            selected atom indices.
+
         """
-        input a pdb file and the atom index, return the crd of the atoms
-        :param singleFramePDB: file, string
-        :param atomNdx : list of str, atom index, list of strings
-        :return: atom coordinates, list
-        """
+
         atomCrd = []
         with open(singleFramePDB) as lines :
             lines = [s for s in lines if len(s) > 4 and
@@ -607,6 +663,7 @@ class coordinatesPDB(object):
                           lines)
         return list(atomCrd)
 
+
 if __name__ == "__main__" :
     os.chdir(os.getcwd())
 
@@ -615,3 +672,4 @@ if __name__ == "__main__" :
     pdbr = rewritePDB(pdbin)
 
     pdbr.pdbRewrite( pdbin, "new_"+pdbin, ' ', 1, 683)
+
