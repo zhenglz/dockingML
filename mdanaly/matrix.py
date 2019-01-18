@@ -282,6 +282,10 @@ def arguments():
     parser.add_argument('-domain', default='domain.dat', type=str,
                         help="Input, optional. Default is domain.dat. \n"
                              "The domain information used for domain average. \n")
+    parser.add_argument('-start_res', type=int, default=0,
+                        help="Input, optional. Working with -domain, default is 0. \n"
+                             "The starting residue sequence number in the cmap or \n"
+                             "correlation network. ")
     parser.add_argument('-xyzcol', type=int, nargs="+", default=[0, 1, 2],
                         help="XYZ columns in data file. Default is 0 1 2.")
     parser.add_argument('-xyshift', default=[0, 0], type=float, nargs="+",
@@ -405,6 +409,9 @@ def main():
         else:
             sys.exit(0)
         data = data.astype(np.float)
+
+        data[:, 0] = data[:, 0] + args.start_res
+        data[:, 1] = data[:, 1] + args.start_res
 
         drange = []
         if os.path.exists(args.domain):
