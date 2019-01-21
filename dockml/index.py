@@ -306,7 +306,6 @@ class PdbIndex(object):
 
         return self
 
-
     def atomList2File(self, atom_list, group_name, write_dihe=False,
                       out_filen="output.ndx", append=True):
         """Save a group of atom index into a gromacs-format index file
@@ -508,6 +507,22 @@ class GmxIndex(object):
     groupContent(group)
         Fetch the content in a group given its group name
 
+    Examples
+    --------
+    >>> # process index
+    >>> ndx = index.GmxIndex("index.ndx")
+    >>> sets = ["receptor", "ligand"]
+    >>> used_groups = []
+    >>> atom_indices = []
+    >>> for i in [0, 1]:
+    ...     print("Please select a group for %s: " % sets[i])
+    ...     for j, gn in enumerate(ndx.groups):
+    ...         print("%d : %s" % (j, gn))
+    ...
+    ...     used_groups.append(ndx.groups[int(input("Your choice: "))])
+    >>> rec_ndx = [int(x)-1 for x in ndx.groupContent(used_groups[0])]
+    >>> lig_ndx = [int(x)-1 for x in ndx.groupContent(used_groups[1])]
+
     """
 
     def __init__(self, index):
@@ -517,9 +532,9 @@ class GmxIndex(object):
             print("File {} not exists!".format(index))
             sys.exit(0)
 
-        self.ndxlines   = open(self.index).readlines()
-        self.groups     = [x.split()[1] for x in self.ndxlines
-                           if ("[" in x and "]" in x)]
+        self.ndxlines = open(self.index).readlines()
+        self.groups = [x.split()[1] for x in self.ndxlines
+                       if ("[" in x and "]" in x)]
         self.totallines = len(self.ndxlines)
 
     def groupsLineNumber(self):
@@ -617,7 +632,6 @@ def gen_atom_index(pdbin, chain, resSeq, atomtype=['CA'], style='mdtraj'):
 
 def main():
     """Entry_point of the pdb index and gromacs index modules
-
     """
 
     ndx = PdbIndex()
