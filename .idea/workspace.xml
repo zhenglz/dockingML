@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="update pdbio module">
+      <change afterPath="$PROJECT_DIR$/test/test_domainCmapPCA.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dockingML.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dockingML.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mdanaly/matrix.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/matrix.py" afterDir="false" />
     </list>
     <ignored path="dockingML.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -22,6 +24,11 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/data/nucleic-acid.lib">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data/sample_antechamber.sh">
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
@@ -34,8 +41,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dockml/algorithms.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2363">
-              <caret line="141" column="22" selection-start-line="141" selection-start-column="22" selection-end-line="141" selection-end-column="22" />
+            <state relative-caret-position="1919">
+              <caret line="101" selection-start-line="101" selection-end-line="101" />
               <folding>
                 <element signature="e#78#89#0" expanded="true" />
               </folding>
@@ -44,49 +51,46 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bin/matrix.py">
+        <entry file="file://$PROJECT_DIR$/mdanaly/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="14" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
+            <state relative-caret-position="133">
+              <caret line="7" column="21" selection-start-line="7" selection-start-column="21" selection-end-line="7" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/mdanaly/cmap.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="19">
+              <caret line="717" column="29" selection-start-line="717" selection-start-column="29" selection-end-line="717" selection-end-column="29" />
+              <folding>
+                <element signature="e#426#457#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/mdanaly/matrix.py">
+        <entry file="file://$PROJECT_DIR$/test/test_domainCmapPCA.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-351">
-              <caret line="403" column="35" lean-forward="true" selection-start-line="403" selection-start-column="35" selection-end-line="403" selection-end-column="35" />
+            <state relative-caret-position="1007">
+              <caret line="53" lean-forward="true" selection-start-line="53" selection-end-line="53" />
               <folding>
-                <element signature="e#23#41#0" expanded="true" />
+                <element signature="e#0#37#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bin/gmx_plot.py">
+        <entry file="file://$PROJECT_DIR$/dockml/index.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/mdanaly/plot.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="269">
-              <caret line="172" column="16" selection-start-line="172" selection-start-column="8" selection-end-line="172" selection-end-column="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dockml/pdbIO.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1693">
-              <caret line="675" lean-forward="true" selection-start-line="675" selection-end-line="675" />
+            <state relative-caret-position="112">
+              <caret line="512" column="8" selection-start-line="512" selection-start-column="8" selection-end-line="512" selection-end-column="8" />
+              <folding>
+                <element signature="e#109#123#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -95,7 +99,7 @@
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="527">
+              <first_editor relative-caret-position="589">
                 <caret line="31" column="35" selection-start-line="31" selection-start-column="35" selection-end-line="31" selection-end-column="35" />
               </first_editor>
               <second_editor />
@@ -106,8 +110,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/automd/fixpdb.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4080">
-              <caret line="249" column="11" selection-start-line="249" selection-start-column="11" selection-end-line="249" selection-end-column="11" />
+            <state relative-caret-position="4598">
+              <caret line="242" column="11" selection-start-line="242" selection-start-column="11" selection-end-line="242" selection-end-column="11" />
+              <folding>
+                <element signature="e#47#61#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -175,7 +182,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/dockml/mlearn.py" />
         <option value="$PROJECT_DIR$/dockml/gentop.py" />
         <option value="$PROJECT_DIR$/bin/extract.py" />
         <option value="$PROJECT_DIR$/bin/index.py" />
@@ -226,13 +232,15 @@
         <option value="$PROJECT_DIR$/dockml/algorithms.py" />
         <option value="$PROJECT_DIR$/dockml/pdbIO.py" />
         <option value="$PROJECT_DIR$/mdanaly/matrix.py" />
+        <option value="$PROJECT_DIR$/test/test_domainCmapPCA.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="y" value="22" />
-    <option name="width" value="1600" />
-    <option name="height" value="838" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-428" />
+    <option name="y" value="50" />
+    <option name="width" value="1594" />
+    <option name="height" value="834" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -240,7 +248,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -251,38 +258,13 @@
             <path>
               <item name="dockingML" type="b2602c69:ProjectViewProjectNode" />
               <item name="dockingML" type="462c0819:PsiDirectoryNode" />
-              <item name="automd" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="dockingML" type="b2602c69:ProjectViewProjectNode" />
-              <item name="dockingML" type="462c0819:PsiDirectoryNode" />
-              <item name="bin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="dockingML" type="b2602c69:ProjectViewProjectNode" />
-              <item name="dockingML" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="dockingML" type="b2602c69:ProjectViewProjectNode" />
-              <item name="dockingML" type="462c0819:PsiDirectoryNode" />
-              <item name="dockml" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="dockingML" type="b2602c69:ProjectViewProjectNode" />
-              <item name="dockingML" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="dockingML" type="b2602c69:ProjectViewProjectNode" />
-              <item name="dockingML" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="methyl_rrm" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -312,7 +294,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.amberAPI">
+  <component name="RunManager" selected="Python.test_rotateDNA">
     <configuration default="true" type="Python.Ipnb" factoryName="Jupyter Notebook">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -349,27 +331,6 @@
       <method />
     </configuration>
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
-      <module name="dockingML" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="/applications/anaconda/3/bin/python3.5" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Mol2PDB.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="amberAPI" type="PythonConfigurationType" factoryName="Python">
       <module name="dockingML" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -496,7 +457,6 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.amberAPI" />
       <item itemvalue="Python.test_rotateDNA" />
       <item itemvalue="Python.test_PRLBD_VS" />
       <item itemvalue="Python.test_features" />
@@ -870,10 +830,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="22" width="1600" height="838" extended-state="0" />
+    <frame x="-2" y="-2" width="1284" height="888" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.320456" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16521049" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -885,7 +845,7 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32954547" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.15994623" />
-      <window_info anchor="bottom" id="Python Console" order="9" visible="true" weight="0.25268817" />
+      <window_info active="true" anchor="bottom" id="Python Console" order="9" visible="true" weight="0.23622048" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -981,20 +941,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/automd/gentop.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2655">
-          <caret line="184" column="68" selection-start-line="184" selection-start-column="68" selection-end-line="184" selection-end-column="68" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dockml/convert.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="9" selection-start-line="3" selection-start-column="9" selection-end-line="3" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dockml/cmd.py" />
     <entry file="file://$PROJECT_DIR$/bin/pmf2d.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -1108,16 +1054,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/cmap.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="13414">
-          <caret line="717" column="29" selection-start-line="717" selection-start-column="29" selection-end-line="717" selection-end-column="29" />
-          <folding>
-            <element signature="e#426#457#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/gmxcli.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2071">
@@ -1145,20 +1081,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dockml/index.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
-          <caret line="270" column="26" selection-start-line="270" selection-start-column="26" selection-end-line="270" selection-end-column="26" />
-          <folding>
-            <element signature="e#109#123#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/setup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="646">
-          <caret line="34" column="28" selection-start-line="34" selection-start-column="28" selection-end-line="34" selection-end-column="28" />
+        <state relative-caret-position="297">
+          <caret line="34" column="28" selection-end-line="36" />
         </state>
       </provider>
     </entry>
@@ -1241,48 +1167,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data/drug_screen.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/elementNegativity.dat">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/nucleic-acid.lib">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/sample_antechamber.sh">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/sample_gaussian.inp">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dockml/algorithms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2363">
-          <caret line="141" column="22" selection-start-line="141" selection-start-column="22" selection-end-line="141" selection-end-column="22" />
-          <folding>
-            <element signature="e#78#89#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="527">
-            <caret line="31" column="35" selection-start-line="31" selection-start-column="35" selection-end-line="31" selection-end-column="35" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/automd/fixpdb.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4080">
-          <caret line="249" column="11" selection-start-line="249" selection-start-column="11" selection-end-line="249" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bin/gmx_plot.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -1317,6 +1201,88 @@
           <caret line="403" column="35" lean-forward="true" selection-start-line="403" selection-start-column="35" selection-end-line="403" selection-end-column="35" />
           <folding>
             <element signature="e#23#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/drug_screen.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/elementNegativity.dat">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/nucleic-acid.lib">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/sample_antechamber.sh">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/sample_gaussian.inp">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dockml/algorithms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1919">
+          <caret line="101" selection-start-line="101" selection-end-line="101" />
+          <folding>
+            <element signature="e#78#89#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mdanaly/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="7" column="21" selection-start-line="7" selection-start-column="21" selection-end-line="7" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="589">
+            <caret line="31" column="35" selection-start-line="31" selection-start-column="35" selection-end-line="31" selection-end-column="35" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/automd/fixpdb.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4598">
+          <caret line="242" column="11" selection-start-line="242" selection-start-column="11" selection-end-line="242" selection-end-column="11" />
+          <folding>
+            <element signature="e#47#61#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mdanaly/cmap.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="717" column="29" selection-start-line="717" selection-start-column="29" selection-end-line="717" selection-end-column="29" />
+          <folding>
+            <element signature="e#426#457#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dockml/index.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="112">
+          <caret line="512" column="8" selection-start-line="512" selection-start-column="8" selection-end-line="512" selection-end-column="8" />
+          <folding>
+            <element signature="e#109#123#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/test_domainCmapPCA.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1007">
+          <caret line="53" lean-forward="true" selection-start-line="53" selection-end-line="53" />
+          <folding>
+            <element signature="e#0#37#0" expanded="true" />
           </folding>
         </state>
       </provider>
