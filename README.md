@@ -19,7 +19,9 @@ to local folder, say /home/john/applications.
 Issue the following commonds in your terminal (presumably a linux environment):
      
      $ cd /home/john/applications
-     $ git clone zhenglz@github.com/zheng/dockingML.git
+     $ pip install networkx 
+     $ pip install mdtraj
+     $ git clone https://github.com/zhenglz/dockingML.git
      $ cd dockingML
      $ pip install ./
 
@@ -28,7 +30,8 @@ run the "pip install ."
       
      $ conda create -name mdanaly python=3.6
      $ source activate mdanaly
-     $ conda install pandas mpi4py numpy matplotlib sklearn networkx mdtraj
+     $ conda install -c omnia mdtraj 
+     $ conda install pandas mpi4py numpy matplotlib sklearn networkx
      $ conda install -c rdkit rdkit
      $ cd $HOME/applications/dockingML
      $ pip install .
