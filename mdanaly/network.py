@@ -503,7 +503,7 @@ def main():
             labels = dict(zip(nodes, [str(x) for x in nodes]))
         else:
             try:
-                labels = dict(zip(nodes, args.labels))
+                labels = dict(zip(nodes, args.label))
             except IOError:
                 print("Your input for labels is not correct. Ignore the labels now. ")
 
