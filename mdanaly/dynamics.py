@@ -75,7 +75,7 @@ class EssentialDynamics(object):
 
         return newxyzs, newlines
 
-    def genEDA_essemble(self, pdbin, pdbout, vectors, no_files=20, delta=0.5, numres=250):
+    def genEDA_essemble(self, pdbin, pdbout, vector, no_files=20, delta=0.5, numres=250):
         """Generate an essemble of pdb files to increase the PC motions
 
         Parameters
@@ -84,7 +84,7 @@ class EssentialDynamics(object):
             Input pdb file name
         pdbout : str
             The output EDA ensemble pdb file name
-        vectors : np.ndarray
+        vector : np.ndarray
             The input eigenvectors
         no_files : int, default = 20
             The number of pdb frames in the output ensemble

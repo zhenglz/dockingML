@@ -251,13 +251,13 @@ class PdbIndex(object):
                 #indexlist.append(psipair)
 
                 # supposing atom index larger than 0
-                if "PSI" in self.dihedral and all(np.array(phipair)>0) > 0:
+                if "PSI" in self.dihedral[0] and all(np.array(phipair)>0) > 0:
                     indexlist.append(psipair)
-                if "PHI" in self.dihedral and all(np.array(psipair)>0) > 0:
+                if "PHI" in self.dihedral[0] and all(np.array(psipair)>0) > 0:
                     indexlist.append(phipair)
 
             self.atomndx_ = indexlist
-
+            print(self.atomndx_)
         else:
 
             if len(atom_name_list) == 0:
@@ -289,20 +289,24 @@ class PdbIndex(object):
 
         return self
 
-    def atom_index_original(self):
-        if not self.resid_mapped_:
-            self.resid_mapper()
+    def atom_index_original(self, dihedral=False):
 
-        if not self.atomndx_mt_style_.shape[0]:
-            if not self.index_calculated_:
-                self.res_index()
+        if not dihedral:
+            if not self.resid_mapped_:
+                self.resid_mapper()
 
-        try:
-            lines_selected = np.array(self.pdb_lines_)[self.atomndx_mt_style_]
-            self.atomndx_ = [int(x.split()[1]) for x in lines_selected]
-        except:
-            print("Check whether you have generated the mt_style index first. ")
-            self.atomndx_ = np.array([])
+            if not self.atomndx_mt_style_.shape[0]:
+                if not self.index_calculated_:
+                    self.res_index()
+
+
+
+            try:
+                lines_selected = np.array(self.pdb_lines_)[self.atomndx_mt_style_]
+                self.atomndx_ = [int(x.split()[1]) for x in lines_selected]
+            except:
+                print("Check whether you have generated the mt_style index first. ")
+                self.atomndx_ = np.array([])
 
         return self
 
@@ -462,8 +466,8 @@ class PdbIndex(object):
         # prepare
         self.prepare_selection()
         self.res_index(atom_name_list=args.an)
-        self.atom_index_original()
-
+        self.atom_index_original(dihedral=args.dihe)
+        print(self.atomndx_)
         self.atomList2File(self.atomndx_, group_name=args.gn,
                            write_dihe=(self.dihedral[0] != "NA"),
                            out_filen=args.o, append=args.append)

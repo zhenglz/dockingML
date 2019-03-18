@@ -76,7 +76,7 @@ class rewritePDB(object):
 
     def resNameChanger(self, inline, resname):
         resnamestr = " " * (4 - len(str(resname))) + str(resname)
-        newline = inline[:17] + resnamestr + inline[20:]
+        newline = inline[:16] + resnamestr + inline[20:]
         return newline
 
     def chainIDChanger(self, inline, chainid) :
