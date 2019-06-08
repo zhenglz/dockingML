@@ -44,7 +44,7 @@ class ExtractPDB(object):
                 print("Start Model " + str(file_no))
                 file_no += 1
 
-            elif "ATOM" == s.split()[0] or "TER" == s.split()[0]:
+            elif "AT" in s.split()[0] or "TER" == s.split()[0]:
                 pdbline.write(s)
 
             elif "ENDMDL" in s:
@@ -104,7 +104,7 @@ class ExtractPDB(object):
                     newline = open(structname+"_"+str(frame_no)+".pdb", "w")
                     newline.write(s)
                     condition = True
-                elif "ATOM" in s and condition:
+                elif ("ATOM" in s or "HETATM" in s) and condition:
                     newline.write(s)
                 elif condition and "ENDMDL" in s:
                     condition = False

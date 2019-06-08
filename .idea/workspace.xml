@@ -1,26 +1,108 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="fix bug in network module">
+    <list default="true" id="2e0325f9-3fb1-48fc-9037-d193eaac7372" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/automd/constraints2itp.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/check_hydrogen_bonds.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dockingML.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dockingML.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dockml/pdbIO.py" beforeDir="false" afterPath="$PROJECT_DIR$/dockml/pdbIO.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mdanaly/dynamics.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/dynamics.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dockingML.egg-info/PKG-INFO" beforeDir="false" afterPath="$PROJECT_DIR$/dockingML.egg-info/PKG-INFO" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dockingML.egg-info/SOURCES.txt" beforeDir="false" afterPath="$PROJECT_DIR$/dockingML.egg-info/SOURCES.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mdanaly/extract.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/extract.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mdanaly/pca.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/pca.py" afterDir="false" />
     </list>
-    <ignored path="dockingML.iws" />
-    <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="CreatePatchCommitExecutor">
-    <option name="PATCH_PATH" value="" />
-  </component>
-  <component name="FavoritesManager">
-    <favorites_list name="dockingML" />
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dockml/__init__.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="68">
+              <caret line="12" column="57" selection-start-line="12" selection-start-column="57" selection-end-line="12" selection-end-column="57" />
+              <folding>
+                <element signature="e#25#53#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/setup.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="238">
+              <caret line="14" selection-start-line="14" selection-end-line="14" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/data/amino-acid.lib">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="17">
+              <caret line="1" selection-start-line="1" selection-end-line="24" selection-end-column="14" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dockml/pdbIO.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="8" selection-start-line="8" selection-end-line="157" selection-end-column="19" />
+              <folding>
+                <element signature="e#25#34#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/check_hydrogen_bonds.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
+              <folding>
+                <element signature="e#23#36#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/mdanaly/extract.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1684" />
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/automd/cleanpdb.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/automd/autoMD.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dockml/ppdock.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dockml/test.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -29,126 +111,30 @@
       </list>
     </option>
   </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>sp</find>
-      <find>addh</find>
-      <find>pca</find>
-      <find>dihedra</find>
-      <find>distmtx</find>
-      <find>argument</find>
-      <find>generate_atom_pairs</find>
-      <find>args.out</find>
-      <find>reshape</find>
-      <find>addhydrogen</find>
-      <find>resIndomain</find>
-      <find>pmf</find>
-      <find>bins</find>
-      <find>print</find>
-      <find>isinstance</find>
-      <find>pdb2</find>
-      <find>verbose</find>
-      <find>mdanaly</find>
-      <find>pio</find>
-      <find>res_index</find>
-      <find>run_pca</find>
-      <find>scale_X</find>
-      <find>gen_d</find>
-      <find>index.</find>
-      <find>index</find>
-      <find>PdbIndex</find>
-      <find>gen_cmap</find>
-      <find>gen_at</find>
-      <find>drange</find>
-      <find>extractDomainData</find>
-    </findStrings>
-    <replaceStrings>
-      <replace>fn</replace>
-      <replace>self.threshold</replace>
-      <replace>append</replace>
-      <replace>scale_method</replace>
-    </replaceStrings>
-    <dirStrings>
-      <dir>$PROJECT_DIR$</dir>
-    </dirStrings>
-  </component>
   <component name="Git.Settings">
-    <option name="PREVIOUS_COMMIT_AUTHORS">
-      <list>
-        <option value="zhenglz &lt;astrozheng@gmail.com&gt;" />
-      </list>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/dockml/gentop.py" />
-        <option value="$PROJECT_DIR$/bin/extract.py" />
-        <option value="$PROJECT_DIR$/bin/index.py" />
-        <option value="$PROJECT_DIR$/mdanaly/lipids.py" />
-        <option value="$PROJECT_DIR$/bin/t-SNE.py" />
-        <option value="$PROJECT_DIR$/bin/lipids.py" />
-        <option value="$PROJECT_DIR$/bin/gmx_plot.py" />
-        <option value="$PROJECT_DIR$/mdanaly/tsne.py" />
-        <option value="$PROJECT_DIR$/bin/ppdock.py" />
-        <option value="$PROJECT_DIR$/bin/timestamp.py" />
-        <option value="$PROJECT_DIR$/dockml/vinadock.py" />
-        <option value="$PROJECT_DIR$/bin/gmx_coordnum.py" />
-        <option value="$PROJECT_DIR$/bin/gmx_cmap.py" />
-        <option value="$PROJECT_DIR$/mdanaly/extract.py" />
-        <option value="$PROJECT_DIR$/mdanaly/timestamp.py" />
-        <option value="$PROJECT_DIR$/mdanaly/workingflow.py" />
-        <option value="$PROJECT_DIR$/data/sample_antechamber.sh" />
-        <option value="$PROJECT_DIR$/bin/gmx_gentop.py" />
-        <option value="$PROJECT_DIR$/bin/gmx_dssp.py" />
-        <option value="$PROJECT_DIR$/mdanaly/__init__.py" />
-        <option value="$PROJECT_DIR$/bin/README.md" />
-        <option value="$PROJECT_DIR$/mdanaly/dssp.py" />
-        <option value="$PROJECT_DIR$/bin/gmx_ligtop.py" />
-        <option value="$PROJECT_DIR$/mdanaly/plot.py" />
-        <option value="$PROJECT_DIR$/dockml/convert.py" />
-        <option value="$PROJECT_DIR$/dockml/dock.py" />
-        <option value="$PROJECT_DIR$/automd/shiftpdb.py" />
-        <option value="$PROJECT_DIR$/automd/gentop.py" />
-        <option value="$PROJECT_DIR$/mdanaly/pmf.py" />
-        <option value="$PROJECT_DIR$/bin/gmx_angle.py" />
-        <option value="$PROJECT_DIR$/dockml/features.py" />
-        <option value="$PROJECT_DIR$/bin/gmx_pca.py" />
+        <option value="$PROJECT_DIR$/automd/constraints2itp.py" />
         <option value="$PROJECT_DIR$/mdanaly/pca.py" />
-        <option value="$PROJECT_DIR$/mdanaly/coordNum.py" />
-        <option value="$PROJECT_DIR$/mdanaly/cmap.py" />
-        <option value="$PROJECT_DIR$/mdanaly/gmxcli.py" />
-        <option value="$PROJECT_DIR$/dockml/index.py" />
-        <option value="$PROJECT_DIR$/setup.py" />
-        <option value="$PROJECT_DIR$/MANIFEST.in" />
-        <option value="$PROJECT_DIR$/bin/genfeatures.py" />
-        <option value="$PROJECT_DIR$/mdanaly/angles.py" />
-        <option value="$PROJECT_DIR$/automd/autoMD.py" />
-        <option value="$PROJECT_DIR$/automd/fixpdb.py" />
-        <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/data/amino-acid.lib" />
-        <option value="$PROJECT_DIR$/dockml/algorithms.py" />
-        <option value="$PROJECT_DIR$/dockml/pdbIO.py" />
-        <option value="$PROJECT_DIR$/mdanaly/matrix.py" />
-        <option value="$PROJECT_DIR$/test/test_domainCmapPCA.py" />
-        <option value="$PROJECT_DIR$/mdanaly/network.py" />
-        <option value="$PROJECT_DIR$/mdanaly/dynamics.py" />
+        <option value="$PROJECT_DIR$/test/check_hydrogen_bonds.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="8" />
-    <option name="y" value="40" />
-    <option name="width" value="1362" />
-    <option name="height" value="741" />
+    <option name="x" value="82" />
+    <option name="y" value="37" />
+    <option name="width" value="1012" />
+    <option name="height" value="958" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Course" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -160,11 +146,6 @@
               <item name="dockingML" type="b2602c69:ProjectViewProjectNode" />
               <item name="dockingML" type="462c0819:PsiDirectoryNode" />
               <item name="automd" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="dockingML" type="b2602c69:ProjectViewProjectNode" />
-              <item name="dockingML" type="462c0819:PsiDirectoryNode" />
-              <item name="bin" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="dockingML" type="b2602c69:ProjectViewProjectNode" />
@@ -186,33 +167,16 @@
               <item name="dockingML" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="dockingML" type="b2602c69:ProjectViewProjectNode" />
-              <item name="dockingML" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="methyl_rrm" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
-  </component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/automd" />
-      <recent name="$PROJECT_DIR$/mdanaly" />
-      <recent name="$PROJECT_DIR$/autoMD" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/automd" />
-      <recent name="$PROJECT_DIR$/dockingML" />
-    </key>
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -226,815 +190,167 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.test_rotateDNA">
-    <configuration default="true" type="Python.Ipnb" factoryName="Jupyter Notebook">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="/applications/anaconda/3/bin/python3.5" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="dockingML" />
-      <option name="additionalOptions" value="" />
-      <option name="ipnbHost" value="127.0.0.1" />
-      <option name="ipnbPort" value="8888" />
-    </configuration>
-    <configuration default="true" type="tests" factoryName="Attests">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="dockingML" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
-      <module name="dockingML" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="/applications/anaconda/3/bin/python3.5" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Mol2PDB.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="test_PRLBD_VS" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="dockingML" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="/applications/anaconda/3/bin/python3.5" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test/test_PRLBD_VS.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="test_cmap_NbyN" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="dockingML" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="/applications/anaconda/3/bin/python3.5" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test/test_cmap_NbyN.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="test_features" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="dockingML" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="/applications/anaconda/3/bin/python3.5" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test/test_features.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="test_gridfeature" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="dockingML" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="/applications/anaconda/3/bin/python3.5" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$USER_HOME$/PRLBD/dockingML/fda_approved/test/test_gridfeature.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="test_rotateDNA" type="PythonConfigurationType" factoryName="Python">
-      <module name="dockingML" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="/applications/anaconda/3/bin/python3.5" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test/test_rotateDNA.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <list>
-      <item itemvalue="Python.test_rotateDNA" />
-      <item itemvalue="Python.test_PRLBD_VS" />
-      <item itemvalue="Python.test_cmap_NbyN" />
-      <item itemvalue="Python.test_features" />
-      <item itemvalue="Python.test_gridfeature" />
-    </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Python.test_cmap_NbyN" />
-        <item itemvalue="Python.test_gridfeature" />
-        <item itemvalue="Python.test_features" />
-        <item itemvalue="Python.test_PRLBD_VS" />
-      </list>
-    </recent_temporary>
-  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
-  <component name="TaskManager">
-    <task active="true" id="Default" summary="Default task">
-      <changelist id="ecb9d1f8-b7d3-465c-889a-527a5c76cb34" name="Default" comment="" />
-      <created>1499093997611</created>
-      <option name="number" value="Default" />
-      <option name="presentableId" value="Default" />
-      <updated>1499093997611</updated>
-    </task>
-    <task id="LOCAL-00094" summary="update readme.md">
-      <created>1541734241310</created>
-      <option name="number" value="00094" />
-      <option name="presentableId" value="LOCAL-00094" />
-      <option name="project" value="LOCAL" />
-      <updated>1541734241313</updated>
-    </task>
-    <task id="LOCAL-00095" summary="update readme.md">
-      <created>1541735624289</created>
-      <option name="number" value="00095" />
-      <option name="presentableId" value="LOCAL-00095" />
-      <option name="project" value="LOCAL" />
-      <updated>1541735624289</updated>
-    </task>
-    <task id="LOCAL-00096" summary="update readme.md">
-      <created>1541736585913</created>
-      <option name="number" value="00096" />
-      <option name="presentableId" value="LOCAL-00096" />
-      <option name="project" value="LOCAL" />
-      <updated>1541736585913</updated>
-    </task>
-    <task id="LOCAL-00097" summary="update readme.md">
-      <created>1541736697100</created>
-      <option name="number" value="00097" />
-      <option name="presentableId" value="LOCAL-00097" />
-      <option name="project" value="LOCAL" />
-      <updated>1541736697100</updated>
-    </task>
-    <task id="LOCAL-00098" summary="update dssp">
-      <created>1541741063942</created>
-      <option name="number" value="00098" />
-      <option name="presentableId" value="LOCAL-00098" />
-      <option name="project" value="LOCAL" />
-      <updated>1541741063942</updated>
-    </task>
-    <task id="LOCAL-00099" summary="update dssp">
-      <created>1541752420651</created>
-      <option name="number" value="00099" />
-      <option name="presentableId" value="LOCAL-00099" />
-      <option name="project" value="LOCAL" />
-      <updated>1541752420651</updated>
-    </task>
-    <task id="LOCAL-00100" summary="update network, fix bugs">
-      <created>1541754160003</created>
-      <option name="number" value="00100" />
-      <option name="presentableId" value="LOCAL-00100" />
-      <option name="project" value="LOCAL" />
-      <updated>1541754160003</updated>
-    </task>
-    <task id="LOCAL-00101" summary="update network, fix bugs">
-      <created>1542014547805</created>
-      <option name="number" value="00101" />
-      <option name="presentableId" value="LOCAL-00101" />
-      <option name="project" value="LOCAL" />
-      <updated>1542014547805</updated>
-    </task>
-    <task id="LOCAL-00102" summary="update network, fix bugs">
-      <created>1542038045762</created>
-      <option name="number" value="00102" />
-      <option name="presentableId" value="LOCAL-00102" />
-      <option name="project" value="LOCAL" />
-      <updated>1542038045762</updated>
-    </task>
-    <task id="LOCAL-00103" summary="fix bug in plot module">
-      <created>1542038071696</created>
-      <option name="number" value="00103" />
-      <option name="presentableId" value="LOCAL-00103" />
-      <option name="project" value="LOCAL" />
-      <updated>1542038071696</updated>
-    </task>
-    <task id="LOCAL-00104" summary="fix bug in plot module">
-      <created>1542038085333</created>
-      <option name="number" value="00104" />
-      <option name="presentableId" value="LOCAL-00104" />
-      <option name="project" value="LOCAL" />
-      <updated>1542038085334</updated>
-    </task>
-    <task id="LOCAL-00105" summary="fix bug in plot module">
-      <created>1542040617452</created>
-      <option name="number" value="00105" />
-      <option name="presentableId" value="LOCAL-00105" />
-      <option name="project" value="LOCAL" />
-      <updated>1542040617453</updated>
-    </task>
-    <task id="LOCAL-00106" summary="fix bug in plot module">
-      <created>1542053851553</created>
-      <option name="number" value="00106" />
-      <option name="presentableId" value="LOCAL-00106" />
-      <option name="project" value="LOCAL" />
-      <updated>1542053851553</updated>
-    </task>
-    <task id="LOCAL-00107" summary="fix bug in plot module">
-      <created>1542053877060</created>
-      <option name="number" value="00107" />
-      <option name="presentableId" value="LOCAL-00107" />
-      <option name="project" value="LOCAL" />
-      <updated>1542053877061</updated>
-    </task>
-    <task id="LOCAL-00108" summary="fix bug in plot module">
-      <created>1542075810529</created>
-      <option name="number" value="00108" />
-      <option name="presentableId" value="LOCAL-00108" />
-      <option name="project" value="LOCAL" />
-      <updated>1542075810529</updated>
-    </task>
-    <task id="LOCAL-00109" summary="add switch function in cmap">
-      <created>1542216127338</created>
-      <option name="number" value="00109" />
-      <option name="presentableId" value="LOCAL-00109" />
-      <option name="project" value="LOCAL" />
-      <updated>1542216127338</updated>
-    </task>
-    <task id="LOCAL-00110" summary="update shiftPDB module">
-      <created>1542355768903</created>
-      <option name="number" value="00110" />
-      <option name="presentableId" value="LOCAL-00110" />
-      <option name="project" value="LOCAL" />
-      <updated>1542355768904</updated>
-    </task>
-    <task id="LOCAL-00111" summary="update shiftPDB module">
-      <created>1542358398881</created>
-      <option name="number" value="00111" />
-      <option name="presentableId" value="LOCAL-00111" />
-      <option name="project" value="LOCAL" />
-      <updated>1542358398882</updated>
-    </task>
-    <task id="LOCAL-00112" summary="update shiftPDB module">
-      <created>1544409176826</created>
-      <option name="number" value="00112" />
-      <option name="presentableId" value="LOCAL-00112" />
-      <option name="project" value="LOCAL" />
-      <updated>1544409176827</updated>
-    </task>
-    <task id="LOCAL-00113" summary="rewrite PdbIndex module">
-      <created>1546277465725</created>
-      <option name="number" value="00113" />
-      <option name="presentableId" value="LOCAL-00113" />
-      <option name="project" value="LOCAL" />
-      <updated>1546277465726</updated>
-    </task>
-    <task id="LOCAL-00114" summary="rewrite PdbIndex module">
-      <created>1546277580930</created>
-      <option name="number" value="00114" />
-      <option name="presentableId" value="LOCAL-00114" />
-      <option name="project" value="LOCAL" />
-      <updated>1546277580930</updated>
-    </task>
-    <task id="LOCAL-00115" summary="rewrite PdbIndex module">
-      <created>1546355485353</created>
-      <option name="number" value="00115" />
-      <option name="presentableId" value="LOCAL-00115" />
-      <option name="project" value="LOCAL" />
-      <updated>1546355485354</updated>
-    </task>
-    <task id="LOCAL-00116" summary="update gmx_index module">
-      <created>1546422435335</created>
-      <option name="number" value="00116" />
-      <option name="presentableId" value="LOCAL-00116" />
-      <option name="project" value="LOCAL" />
-      <updated>1546422435336</updated>
-    </task>
-    <task id="LOCAL-00117" summary="update gmx_index module">
-      <created>1546423270805</created>
-      <option name="number" value="00117" />
-      <option name="presentableId" value="LOCAL-00117" />
-      <option name="project" value="LOCAL" />
-      <updated>1546423270806</updated>
-    </task>
-    <task id="LOCAL-00118" summary="update gmx_index module">
-      <created>1546483867108</created>
-      <option name="number" value="00118" />
-      <option name="presentableId" value="LOCAL-00118" />
-      <option name="project" value="LOCAL" />
-      <updated>1546483867109</updated>
-    </task>
-    <task id="LOCAL-00119" summary="update gmx_index module">
-      <created>1546484345963</created>
-      <option name="number" value="00119" />
-      <option name="presentableId" value="LOCAL-00119" />
-      <option name="project" value="LOCAL" />
-      <updated>1546484345963</updated>
-    </task>
-    <task id="LOCAL-00120" summary="update gmx_index module">
-      <created>1546484412413</created>
-      <option name="number" value="00120" />
-      <option name="presentableId" value="LOCAL-00120" />
-      <option name="project" value="LOCAL" />
-      <updated>1546484412413</updated>
-    </task>
-    <task id="LOCAL-00121" summary="update gmx_index module">
-      <created>1546484428854</created>
-      <option name="number" value="00121" />
-      <option name="presentableId" value="LOCAL-00121" />
-      <option name="project" value="LOCAL" />
-      <updated>1546484428855</updated>
-    </task>
-    <task id="LOCAL-00122" summary="update gmx_index module">
-      <created>1546484462802</created>
-      <option name="number" value="00122" />
-      <option name="presentableId" value="LOCAL-00122" />
-      <option name="project" value="LOCAL" />
-      <updated>1546484462804</updated>
-    </task>
-    <task id="LOCAL-00123" summary="update gmx_index module">
-      <created>1546486986699</created>
-      <option name="number" value="00123" />
-      <option name="presentableId" value="LOCAL-00123" />
-      <option name="project" value="LOCAL" />
-      <updated>1546486986699</updated>
-    </task>
-    <task id="LOCAL-00124" summary="add scaling methods for PCA calculation">
-      <created>1546495814707</created>
-      <option name="number" value="00124" />
-      <option name="presentableId" value="LOCAL-00124" />
-      <option name="project" value="LOCAL" />
-      <updated>1546495814708</updated>
-    </task>
-    <task id="LOCAL-00125" summary="add scaling methods for PCA calculation">
-      <created>1546496131845</created>
-      <option name="number" value="00125" />
-      <option name="presentableId" value="LOCAL-00125" />
-      <option name="project" value="LOCAL" />
-      <updated>1546496131845</updated>
-    </task>
-    <task id="LOCAL-00126" summary="add scaling methods for PCA calculation">
-      <created>1546505805155</created>
-      <option name="number" value="00126" />
-      <option name="presentableId" value="LOCAL-00126" />
-      <option name="project" value="LOCAL" />
-      <updated>1546505805155</updated>
-    </task>
-    <task id="LOCAL-00127" summary="add scaling methods for PCA calculation">
-      <created>1546508049173</created>
-      <option name="number" value="00127" />
-      <option name="presentableId" value="LOCAL-00127" />
-      <option name="project" value="LOCAL" />
-      <updated>1546508049173</updated>
-    </task>
-    <task id="LOCAL-00128" summary="add scaling methods for PCA calculation">
-      <created>1546508399731</created>
-      <option name="number" value="00128" />
-      <option name="presentableId" value="LOCAL-00128" />
-      <option name="project" value="LOCAL" />
-      <updated>1546508399732</updated>
-    </task>
-    <task id="LOCAL-00129" summary="add scaling methods for PCA calculation">
-      <created>1546508937361</created>
-      <option name="number" value="00129" />
-      <option name="presentableId" value="LOCAL-00129" />
-      <option name="project" value="LOCAL" />
-      <updated>1546508937361</updated>
-    </task>
-    <task id="LOCAL-00130" summary="modify index module">
-      <created>1546933633257</created>
-      <option name="number" value="00130" />
-      <option name="presentableId" value="LOCAL-00130" />
-      <option name="project" value="LOCAL" />
-      <updated>1546933633258</updated>
-    </task>
-    <task id="LOCAL-00131" summary="modify index module">
-      <created>1547053594279</created>
-      <option name="number" value="00131" />
-      <option name="presentableId" value="LOCAL-00131" />
-      <option name="project" value="LOCAL" />
-      <updated>1547053594284</updated>
-    </task>
-    <task id="LOCAL-00132" summary="modify index module">
-      <created>1547127192264</created>
-      <option name="number" value="00132" />
-      <option name="presentableId" value="LOCAL-00132" />
-      <option name="project" value="LOCAL" />
-      <updated>1547127192264</updated>
-    </task>
-    <task id="LOCAL-00133" summary="modify index module">
-      <created>1547127308903</created>
-      <option name="number" value="00133" />
-      <option name="presentableId" value="LOCAL-00133" />
-      <option name="project" value="LOCAL" />
-      <updated>1547127308903</updated>
-    </task>
-    <task id="LOCAL-00134" summary="update readme">
-      <created>1547129235531</created>
-      <option name="number" value="00134" />
-      <option name="presentableId" value="LOCAL-00134" />
-      <option name="project" value="LOCAL" />
-      <updated>1547129235531</updated>
-    </task>
-    <task id="LOCAL-00135" summary="update readme">
-      <created>1547129916681</created>
-      <option name="number" value="00135" />
-      <option name="presentableId" value="LOCAL-00135" />
-      <option name="project" value="LOCAL" />
-      <updated>1547129916681</updated>
-    </task>
-    <task id="LOCAL-00136" summary="update readme">
-      <created>1547131020048</created>
-      <option name="number" value="00136" />
-      <option name="presentableId" value="LOCAL-00136" />
-      <option name="project" value="LOCAL" />
-      <updated>1547131020049</updated>
-    </task>
-    <task id="LOCAL-00137" summary="update readme">
-      <created>1547131668187</created>
-      <option name="number" value="00137" />
-      <option name="presentableId" value="LOCAL-00137" />
-      <option name="project" value="LOCAL" />
-      <updated>1547131668188</updated>
-    </task>
-    <task id="LOCAL-00138" summary="update index atom name">
-      <created>1547562922239</created>
-      <option name="number" value="00138" />
-      <option name="presentableId" value="LOCAL-00138" />
-      <option name="project" value="LOCAL" />
-      <updated>1547562922240</updated>
-    </task>
-    <task id="LOCAL-00139" summary="update matrix module">
-      <created>1547715608782</created>
-      <option name="number" value="00139" />
-      <option name="presentableId" value="LOCAL-00139" />
-      <option name="project" value="LOCAL" />
-      <updated>1547715608788</updated>
-    </task>
-    <task id="LOCAL-00140" summary="update matrix module">
-      <created>1547716869234</created>
-      <option name="number" value="00140" />
-      <option name="presentableId" value="LOCAL-00140" />
-      <option name="project" value="LOCAL" />
-      <updated>1547716869235</updated>
-    </task>
-    <task id="LOCAL-00141" summary="update pdbio module">
-      <created>1547780546841</created>
-      <option name="number" value="00141" />
-      <option name="presentableId" value="LOCAL-00141" />
-      <option name="project" value="LOCAL" />
-      <updated>1547780546841</updated>
-    </task>
-    <task id="LOCAL-00142" summary="fix bug in network module">
-      <created>1548217503139</created>
-      <option name="number" value="00142" />
-      <option name="presentableId" value="LOCAL-00142" />
-      <option name="project" value="LOCAL" />
-      <updated>1548217503140</updated>
-    </task>
-    <option name="localTasksCounter" value="143" />
-    <servers />
-  </component>
   <component name="ToolWindowManager">
-    <frame x="8" y="40" width="1362" height="741" extended-state="0" />
+    <frame x="82" y="37" width="1012" height="958" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.31991053" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20686175" />
       <window_info id="Structure" order="1" weight="0.25" />
-      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.19354838" />
+      <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Version Control" order="7" weight="0.32954547" />
-      <window_info anchor="bottom" id="Terminal" order="8" weight="0.15994623" />
-      <window_info active="true" anchor="bottom" id="Python Console" order="9" visible="true" weight="0.251932" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Educational.CheckDetails" order="8" />
+      <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="bottom" id="Python Console" order="11" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Data View" order="3" />
     </layout>
   </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State>
-              <option name="RECENTLY_FILTERED_USER_GROUPS">
-                <collection />
-              </option>
-              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
-                <collection />
-              </option>
-              <option name="COLUMN_ORDER">
-                <list>
-                  <option value="0" />
-                  <option value="1" />
-                  <option value="2" />
-                  <option value="3" />
-                </list>
-              </option>
-            </State>
-          </value>
-        </entry>
-      </map>
-    </option>
-    <option name="RECENT_FILTERS">
-      <map>
-        <entry key="Branch">
-          <value>
-            <list />
-          </value>
-        </entry>
-        <entry key="User">
-          <value>
-            <list />
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
-  <component name="Vcs.Log.UiProperties">
-    <option name="RECENTLY_FILTERED_USER_GROUPS">
-      <collection />
-    </option>
-    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
-      <collection />
-    </option>
-  </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add coordinate pca module" />
-    <MESSAGE value="add sine value for angles module" />
-    <MESSAGE value="include gmx begin and end of trajectory" />
-    <MESSAGE value="rename some modules" />
-    <MESSAGE value="add coordination number module" />
-    <MESSAGE value="modify the PCA module" />
-    <MESSAGE value="modify the cmap module" />
-    <MESSAGE value="add ligtop module for ligand topology construction" />
-    <MESSAGE value="add parse dssp module" />
-    <MESSAGE value="fix bug in pca module" />
-    <MESSAGE value="update readme.md" />
-    <MESSAGE value="update dssp" />
-    <MESSAGE value="update network, fix bugs" />
-    <MESSAGE value="fix bug in plot module" />
-    <MESSAGE value="add switch function in cmap" />
-    <MESSAGE value="update shiftPDB module" />
-    <MESSAGE value="rewrite PdbIndex module" />
-    <MESSAGE value="update gmx_index module" />
-    <MESSAGE value="add scaling methods for PCA calculation" />
-    <MESSAGE value="modify index module" />
-    <MESSAGE value="update readme" />
-    <MESSAGE value="update index atom name" />
-    <MESSAGE value="update matrix module" />
-    <MESSAGE value="update pdbio module" />
-    <MESSAGE value="fix bug in network module" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix bug in network module" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/automd/gmxtop.py</url>
-          <line>102</line>
-          <option name="timeStamp" value="15" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/dockml/cmd.py" />
-    <entry file="file://$PROJECT_DIR$/bin/pmf2d.py">
+    <entry file="file://$PROJECT_DIR$/automd/gmxtop.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="11" selection-start-line="6" selection-start-column="11" selection-end-line="6" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/pmf.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2091">
-          <caret line="126" column="24" selection-start-line="126" selection-start-column="24" selection-end-line="126" selection-end-column="24" />
+        <state relative-caret-position="-2093">
           <folding>
-            <element signature="e#23#41#0" expanded="true" />
+            <element signature="e#0#16#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dockml/dock.py">
+    <entry file="file://$PROJECT_DIR$/automd/shiftpdb.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1258">
-          <caret line="80" column="58" selection-start-line="80" selection-start-column="58" selection-end-line="80" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.conda/envs/py36/lib/python3.6/site-packages/sklearn/decomposition/pca.py" />
-    <entry file="file://$PROJECT_DIR$/bin/network.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="6" column="12" selection-start-line="6" selection-start-column="12" selection-end-line="6" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/input.pdb">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../miniconda3/bin/gmx_index.py" />
-    <entry file="file://$PROJECT_DIR$/bin/gmx_pca.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="8" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bin/gmx_lipids.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" selection-start-line="8" selection-end-line="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bin/gmx_index.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="14" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/output.pdb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-21140">
-          <caret line="6" column="26" selection-start-line="6" selection-start-column="26" selection-end-line="6" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/dssp.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="26" column="67" selection-start-line="26" selection-start-column="67" selection-end-line="26" selection-end-column="67" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/pca.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19779">
-          <caret line="1053" column="98" selection-start-line="1053" selection-start-column="98" selection-end-line="1053" selection-end-column="98" />
+        <state relative-caret-position="-5985">
           <folding>
-            <element signature="e#25#43#0" expanded="true" />
+            <element signature="e#0#14#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/extract.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/lipids.py">
+    <entry file="file://$PROJECT_DIR$/automd/constraints2itp.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5377">
-          <caret line="288" column="61" selection-start-line="288" selection-start-column="61" selection-end-line="288" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bin/gmx_coordnum.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="6" column="22" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/gmxcli.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2071">
-          <caret line="111" selection-start-line="111" selection-end-line="111" />
+        <state relative-caret-position="867">
+          <caret line="51" column="21" selection-start-line="51" selection-start-column="21" selection-end-line="51" selection-end-column="21" />
+          <folding>
+            <element signature="e#23#33#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/mdanaly/coordNum.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2565">
-          <caret line="142" selection-start-line="142" selection-end-line="142" />
+        <state relative-caret-position="435">
+          <caret line="40" column="98" selection-start-line="40" selection-start-column="41" selection-end-line="40" selection-end-column="98" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/automd/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mdanaly/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
           <folding>
-            <element signature="e#25#49#0" expanded="true" />
+            <element signature="e#25#51#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mdanaly/pca.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17901">
+          <caret line="1061" column="53" selection-start-line="1061" selection-start-column="53" selection-end-line="1061" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mdanaly/matrix.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mdanaly/lipids.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#25#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/automd/runmd.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1921">
+          <caret line="115" selection-start-line="115" selection-end-line="115" />
+          <folding>
+            <element signature="e#25#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mdanaly/cmap.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dockml/features.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dockml/gold.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dockml/mol2IO.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="21" column="37" selection-start-line="21" selection-start-column="37" selection-end-line="21" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/automd/gentop.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3519">
+          <caret line="214" column="50" selection-start-line="214" selection-start-column="31" selection-end-line="214" selection-end-column="50" />
+          <folding>
+            <element signature="e#25#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/automd/fixpdb.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4471">
+          <caret line="272" column="43" selection-start-line="272" selection-start-column="43" selection-end-line="272" selection-end-column="43" />
+          <folding>
+            <element signature="e#47#61#0" expanded="true" />
+            <element signature="e#16461#32915#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dockml/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="12" column="57" selection-start-line="12" selection-start-column="57" selection-end-line="12" selection-end-column="57" />
+          <folding>
+            <element signature="e#25#53#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/setup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="34" column="28" selection-end-line="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MANIFEST.in">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38">
-          <caret line="2" column="12" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LICENSE">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2394" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38">
-          <caret line="2" column="19" lean-forward="true" selection-start-line="2" selection-start-column="19" selection-end-line="2" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bin/gmx_angle.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/angles.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1143">
-          <caret line="266" column="90" selection-start-line="266" selection-start-column="90" selection-end-line="266" selection-end-column="90" />
-          <folding>
-            <element signature="e#25#44#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bin/gmx_cmap.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="5" column="20" selection-start-line="5" selection-start-column="20" selection-end-line="5" selection-end-column="20" />
+        <state relative-caret-position="238">
+          <caret line="14" selection-start-line="14" selection-end-line="14" />
         </state>
       </provider>
     </entry>
@@ -1042,174 +358,44 @@
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/automd/autoMD.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="1" selection-end-column="23" />
-          <folding>
-            <element signature="e#47#61#0" expanded="true" />
-            <element signature="e#492#4695#0" />
-            <element signature="e#4728#6916#0" />
-          </folding>
-        </state>
-      </provider>
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dockml/ppdock.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dockml/test.py">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/data/amino-acid.lib">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="14" selection-start-line="7" selection-start-column="14" selection-end-line="7" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/AtomType.dat">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="33" selection-start-column="33" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/drug_screen.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/elementNegativity.dat">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/nucleic-acid.lib">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/sample_antechamber.sh">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="7" column="21" selection-start-line="7" selection-start-column="21" selection-end-line="7" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/cmap.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="717" column="29" selection-start-line="717" selection-start-column="29" selection-end-line="717" selection-end-column="29" />
-          <folding>
-            <element signature="e#426#457#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dockml/index.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="112">
-          <caret line="512" column="8" selection-start-line="512" selection-start-column="8" selection-end-line="512" selection-end-column="8" />
-          <folding>
-            <element signature="e#109#123#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/test_domainCmapPCA.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1007">
-          <caret line="53" lean-forward="true" selection-start-line="53" selection-end-line="53" />
-          <folding>
-            <element signature="e#0#37#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/sample_gaussian.inp">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dockml/algorithms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2397">
-          <caret line="141" column="22" selection-start-line="141" selection-start-column="22" selection-end-line="141" selection-end-column="22" />
-          <folding>
-            <element signature="e#78#89#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bin/matrix.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="14" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/matrix.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7514">
-          <caret line="442" column="72" selection-start-line="442" selection-start-column="72" selection-end-line="442" selection-end-column="72" />
-          <folding>
-            <element signature="e#23#41#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/network.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8449">
-          <caret line="505" column="51" selection-start-line="505" selection-start-column="51" selection-end-line="505" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bin/gmx_plot.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/plot.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2805">
-          <caret line="172" column="16" selection-start-line="172" selection-start-column="8" selection-end-line="172" selection-end-column="16" />
+        <state relative-caret-position="17">
+          <caret line="1" selection-start-line="1" selection-end-line="24" selection-end-column="14" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/dockml/pdbIO.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2516">
-          <caret line="151" selection-start-line="151" selection-end-line="151" />
+        <state relative-caret-position="136">
+          <caret line="8" selection-start-line="8" selection-end-line="157" selection-end-column="19" />
+          <folding>
+            <element signature="e#25#34#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="527">
-            <caret line="31" column="35" selection-start-line="31" selection-start-column="35" selection-end-line="31" selection-end-column="35" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/automd/fixpdb.py">
+    <entry file="file://$PROJECT_DIR$/test/check_hydrogen_bonds.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4080">
-          <caret line="249" column="11" selection-start-line="249" selection-start-column="11" selection-end-line="249" selection-end-column="11" />
+        <state relative-caret-position="204">
+          <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
+          <folding>
+            <element signature="e#23#36#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mdanaly/dynamics.py">
+    <entry file="file://$PROJECT_DIR$/mdanaly/extract.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="24" selection-start-line="7" selection-start-column="24" selection-end-line="7" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bin/genfeatures.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="10" lean-forward="true" selection-start-line="6" selection-start-column="10" selection-end-line="6" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dockml/features.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-11118">
-          <caret line="50" column="31" selection-start-line="50" selection-start-column="31" selection-end-line="50" selection-end-column="31" />
-        </state>
+        <state relative-caret-position="-1684" />
       </provider>
     </entry>
   </component>

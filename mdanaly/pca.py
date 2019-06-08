@@ -682,7 +682,8 @@ def iterload_xyz_coordinates(xtcfile, top, chunk, stride, atom_selection="name C
     return xyz
 
 
-def write_results(X_transformed, variance_ratio, X_out, variance_out, col_index, eigenvector=None, eigvector_out="Eigenvectors.csv"):
+def write_results(X_transformed, variance_ratio, X_out, variance_out,
+                  col_index, eigenvector=None, eigvector_out="Eigenvectors.csv"):
     """Write PCA results into files:
     1. transformed dataset
     2. explained variance ratio

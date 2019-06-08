@@ -4,6 +4,7 @@ setup.py
 automd/__init__.py
 automd/autoMD.py
 automd/cleanpdb.py
+automd/constraints2itp.py
 automd/fixpdb.py
 automd/gaussian.py
 automd/gentop.py
