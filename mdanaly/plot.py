@@ -6,6 +6,7 @@ import numpy as np
 import sys, os
 from argparse import RawTextHelpFormatter
 import argparse
+import pandas as pd
 
 from dockml import algorithms
 
@@ -107,14 +108,22 @@ def plot2dFes(filename, dtype=[], zlim=[],
               ) :
     # load file
     if len(dtype) :
-        fes = np.loadtxt(filename, comments=["#","@"],
-                         dtype={'names':('Rec', 'Lig', 'Cmap'), 'formats':(dtype[0], dtype[1], dtype[2])},
-                         usecols=xyzcols, delimiter=sep, skiprows=1)
+        #fes = np.loadtxt(filename, comments=["#","@"],
+        #                 dtype={'names':('Rec', 'Lig', 'Cmap'), 'formats':(dtype[0], dtype[1], dtype[2])},
+        #                 usecols=xyzcols, delimiter=sep, skiprows=1)
+        with open(filename) as lines:
+            dat = [x.split() for x in lines if (len(x) and x[0] not in ['#', '@'])]
+            fes = []
+            for _d in dat:
+                fes.append([_d[xyzcols[0]], _d[xyzcols[1]], float(_d[xyzcols[2]])])
+            #fes = np.array(fes).astype(np.float)
+            fes = pd.DataFrame(fes, columns=['Rec', 'Lig', 'Cmap'])
+
         x_size = len(set(fes['Rec']))
         y_size = len(set(fes['Lig']))
 
         #z = np.reshape(fes['Cmap'], (y_size, x_size))
-        z = np.array(fes[:, 2]).reshape((y_size, x_size))
+        z = fes.values[:, 2].reshape((y_size, x_size))
         if mesh:
             x = sorted(list(set(fes['Rec'].astype(np.float))))
             y = sorted(list(set(fes['Lig'].astype(np.float))))
@@ -382,7 +391,7 @@ def main():
                         help="Input."
                              "The input dataset filenames. Multiple files (seperated by space)\n"
                              "are accepted. \n")
-    parser.add_argument('-dtype', type=str, nargs="+", default=[],
+    parser.add_argument('-dtype', type=str, nargs="+", default=[np.float, np.float, ],
                         help="Input, optional. \n"
                              "Data type of your input file. Such as S4 and f4 ")
     parser.add_argument('-xshift', default=[0.0, ] * 20, type=float, nargs="+",

@@ -4,6 +4,7 @@ import os, sys
 from glob import glob
 import subprocess as sp
 
+
 class AutoRunMD :
 
     def __init__(self, topFile, taskName, grompp, mdrun, verbose=True, qsub=False):

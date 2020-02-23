@@ -10,6 +10,7 @@ from mdanaly import gmxcli
 from mdanaly import angles
 import mdtraj as mt
 
+
 class tSNE(object):
 
     def __init__(self):
@@ -814,6 +815,7 @@ def run_pca(dat, proj=10, output="transformed.csv", var_ratio_out="variance_expl
                   eigenvector=eigenvectors, eigvector_out=eigenvector_out)
     return None
 
+
 def gen_cmap(args):
     """Load a trajectory file and calculate the atom contactmap.
 
@@ -1087,10 +1089,12 @@ def main():
     
     For cmap PCA, the contact map between residues will be calculated and used for PCA. You need 
     to specify the atom type, if it is not provided, a default (CA) atom type would be used.
-    gmx_pca.py -mode cmap -f trj_dt100ps_1800to2000ns.xtc -s reference.pdb -n ../dihedral.ndx -proj 10 -select CA CA
+    gmx_pca.py -mode cmap -f trj_dt100ps_1800to2000ns.xtc -s reference.pdb -n ../dihedral.ndx 
+    -proj 10 -select CA CA
     
     For xyz PCA, the selected atom xyz coordinates would be extracted and used for PCA.
-    gmx_pca.py -mode xyz -f trj_dt100ps_1800to2000ns.xtc -s reference.pdb -n ../dihedral.ndx -proj 10 -eigvect "eigenvectors.dat"
+    gmx_pca.py -mode xyz -f trj_dt100ps_1800to2000ns.xtc -s reference.pdb -n ../dihedral.ndx 
+    -proj 10 -eigvect "eigenvectors.dat"
     
     For dihedral PCA, the dihedral angles of given indices will be calculated (in radian), and the
     cosine and sine values then will be computed, and the dataset thus is used 

@@ -425,6 +425,7 @@ class CmapNbyN(ContactMap):
 
         return self
 
+
 class DrawCMap(object):
 
     def __init__(self):
