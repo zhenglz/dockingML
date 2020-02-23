@@ -27,7 +27,7 @@ def main():
 
     string = sys.argv[1] + "  "
     for key in ['vdw', 'ele', 'polar', 'sasa', 'total']:
-        string += "%8.3f %8.3f " % (energies[key][0], energies[key][0])
+        string += "%8.3f %8.3f " % (energies[key][0], energies[key][1])
 
     print(string)
 

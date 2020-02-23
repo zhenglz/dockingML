@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2e0325f9-3fb1-48fc-9037-d193eaac7372" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/mdanaly/read_mmpbsa.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/automd/runmd.py" beforeDir="false" afterPath="$PROJECT_DIR$/automd/runmd.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mdanaly/cmap.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/cmap.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mdanaly/dynamics.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/dynamics.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mdanaly/pca.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/pca.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mdanaly/plot.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/plot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mdanaly/read_mmpbsa.py" beforeDir="false" afterPath="$PROJECT_DIR$/mdanaly/read_mmpbsa.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
