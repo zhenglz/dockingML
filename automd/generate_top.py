@@ -103,6 +103,8 @@ def arguments():
     parser.add_argument("-nc", default=None, type=int,
                         help="This argument only works with \n"
                              "the -c argument. Default is 0. \n")
+    parser.add_argument("-H", default="~/anaconda3", type=str,
+                        help="AMBERHOME path. Default is ~/anaconda3.")
 
     # args include the options in the argparser
     args, unknown = parser.parse_known_args()
@@ -127,6 +129,9 @@ def runGenTop(AMBERHOME="") :
 
     top = GenerateTop()
     args = arguments()
+
+    if AMBERHOME == "":
+        AMBERHOME = args.H
 
     if os.path.isdir(AMBERHOME) and os.path.exists(os.path.join(AMBERHOME, "bin/tleap")):
         try:
@@ -194,5 +199,5 @@ def runGenTop(AMBERHOME="") :
 
 if __name__ == "__main__":
 
-    runGenTop("/home/zlzzheng/apps/anaconda3")
+    runGenTop()
 
