@@ -110,6 +110,7 @@ class AutoRunMD :
 
         return(outTprFile[-4:]+".gro")
 
+
 class PrepScripts :
 
     def __init__(self, qsubScriptSample):

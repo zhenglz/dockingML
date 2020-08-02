@@ -1,0 +1,10 @@
+
+verbosity 1
+source leaprc.protein.ff14SB
+source leaprc.gaff2
+mods = loadamberparams ligand_AC.frcmod
+VWW = loadmol2 ligand_bcc_gaff2.mol2
+check VWW
+saveamberparm VWW ligand_AC.prmtop ligand_AC.inpcrd
+saveoff VWW ligand_AC.lib
+quit

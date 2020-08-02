@@ -1,0 +1,1049 @@
+Log file opened on Sun Aug  2 23:17:09 2020
+Host: haidonglan-LC2  pid: 22968  nodeid: 0  nnodes:  1
+Gromacs version:    VERSION 4.6.7
+Precision:          single
+Memory model:       64 bit
+MPI library:        MPI
+OpenMP support:     enabled
+GPU support:        disabled
+invsqrt routine:    gmx_software_invsqrt(x)
+CPU acceleration:   AVX_256
+FFT library:        fftw-3.3.2-sse2
+Large file support: enabled
+RDTSCP usage:       enabled
+Built on:           2019年 07月 29日 星期一 09:25:45 CST
+Built by:           zlzzheng@haidonglan-LC2 [CMAKE]
+Build OS/arch:      Linux 4.15.0-54-generic x86_64
+Build CPU vendor:   GenuineIntel
+Build CPU brand:    Intel(R) Xeon(R) Platinum 8180 CPU @ 2.50GHz
+Build CPU family:   6   Model: 85   Stepping: 4
+Build CPU features: aes apic avx avx2 clfsh cmov cx8 cx16 f16c fma htt lahf_lm mmx msr nonstop_tsc pcid pclmuldq pdcm pdpe1gb popcnt pse rdrnd rdtscp sse2 sse3 sse4.1 sse4.2 ssse3 tdt x2apic
+C compiler:         /usr/bin/cc GNU cc (Ubuntu 7.4.0-1ubuntu1~18.04.1) 7.4.0
+C compiler flags:   -mavx  -pthread  -Wextra -Wno-missing-field-initializers -Wno-sign-compare -Wall -Wno-unused -Wunused-value -Wno-unused-parameter -Wno-array-bounds -Wno-maybe-uninitialized -Wno-strict-overflow   -fomit-frame-pointer -funroll-all-loops -fexcess-precision=fast  -O3 -DNDEBUG
+
+
+                         :-)  G  R  O  M  A  C  S  (-:
+
+                   GROningen MAchine for Chemical Simulation
+
+                            :-)  VERSION 4.6.7  (-:
+
+        Contributions from Mark Abraham, Emile Apol, Rossen Apostolov, 
+           Herman J.C. Berendsen, Aldert van Buuren, Pär Bjelkmar,  
+     Rudi van Drunen, Anton Feenstra, Gerrit Groenhof, Christoph Junghans, 
+        Peter Kasson, Carsten Kutzner, Per Larsson, Pieter Meulenhoff, 
+           Teemu Murtola, Szilard Pall, Sander Pronk, Roland Schulz, 
+                Michael Shirts, Alfons Sijbers, Peter Tieleman,
+
+               Berk Hess, David van der Spoel, and Erik Lindahl.
+
+       Copyright (c) 1991-2000, University of Groningen, The Netherlands.
+         Copyright (c) 2001-2012,2013, The GROMACS development team at
+        Uppsala University & The Royal Institute of Technology, Sweden.
+            check out http://www.gromacs.org for more information.
+
+         This program is free software; you can redistribute it and/or
+       modify it under the terms of the GNU Lesser General Public License
+        as published by the Free Software Foundation; either version 2.1
+             of the License, or (at your option) any later version.
+
+                              :-)  mdrun_mpi  (-:
+
+
+++++ PLEASE READ AND CITE THE FOLLOWING REFERENCE ++++
+B. Hess and C. Kutzner and D. van der Spoel and E. Lindahl
+GROMACS 4: Algorithms for highly efficient, load-balanced, and scalable
+molecular simulation
+J. Chem. Theory Comput. 4 (2008) pp. 435-447
+-------- -------- --- Thank You --- -------- --------
+
+
+++++ PLEASE READ AND CITE THE FOLLOWING REFERENCE ++++
+D. van der Spoel, E. Lindahl, B. Hess, G. Groenhof, A. E. Mark and H. J. C.
+Berendsen
+GROMACS: Fast, Flexible and Free
+J. Comp. Chem. 26 (2005) pp. 1701-1719
+-------- -------- --- Thank You --- -------- --------
+
+
+++++ PLEASE READ AND CITE THE FOLLOWING REFERENCE ++++
+E. Lindahl and B. Hess and D. van der Spoel
+GROMACS 3.0: A package for molecular simulation and trajectory analysis
+J. Mol. Mod. 7 (2001) pp. 306-317
+-------- -------- --- Thank You --- -------- --------
+
+
+++++ PLEASE READ AND CITE THE FOLLOWING REFERENCE ++++
+H. J. C. Berendsen, D. van der Spoel and R. van Drunen
+GROMACS: A message-passing parallel molecular dynamics implementation
+Comp. Phys. Comm. 91 (1995) pp. 43-56
+-------- -------- --- Thank You --- -------- --------
+
+Input Parameters:
+   integrator           = steep
+   nsteps               = 500
+   init-step            = 0
+   cutoff-scheme        = Group
+   ns_type              = Grid
+   nstlist              = 10
+   ndelta               = 2
+   nstcomm              = 100
+   comm-mode            = Linear
+   nstlog               = 1000
+   nstxout              = 0
+   nstvout              = 0
+   nstfout              = 0
+   nstcalcenergy        = 100
+   nstenergy            = 1000
+   nstxtcout            = 0
+   init-t               = 0
+   delta-t              = 0.001
+   xtcprec              = 1000
+   fourierspacing       = 0.12
+   nkx                  = 0
+   nky                  = 0
+   nkz                  = 0
+   pme-order            = 4
+   ewald-rtol           = 1e-05
+   ewald-geometry       = 0
+   epsilon-surface      = 0
+   optimize-fft         = FALSE
+   ePBC                 = xyz
+   bPeriodicMols        = FALSE
+   bContinuation        = FALSE
+   bShakeSOR            = FALSE
+   etc                  = No
+   bPrintNHChains       = FALSE
+   nsttcouple           = -1
+   epc                  = No
+   epctype              = Isotropic
+   nstpcouple           = -1
+   tau-p                = 1
+   ref-p (3x3):
+      ref-p[    0]={ 0.00000e+00,  0.00000e+00,  0.00000e+00}
+      ref-p[    1]={ 0.00000e+00,  0.00000e+00,  0.00000e+00}
+      ref-p[    2]={ 0.00000e+00,  0.00000e+00,  0.00000e+00}
+   compress (3x3):
+      compress[    0]={ 0.00000e+00,  0.00000e+00,  0.00000e+00}
+      compress[    1]={ 0.00000e+00,  0.00000e+00,  0.00000e+00}
+      compress[    2]={ 0.00000e+00,  0.00000e+00,  0.00000e+00}
+   refcoord-scaling     = No
+   posres-com (3):
+      posres-com[0]= 0.00000e+00
+      posres-com[1]= 0.00000e+00
+      posres-com[2]= 0.00000e+00
+   posres-comB (3):
+      posres-comB[0]= 0.00000e+00
+      posres-comB[1]= 0.00000e+00
+      posres-comB[2]= 0.00000e+00
+   verlet-buffer-drift  = 0.005
+   rlist                = 1
+   rlistlong            = 1
+   nstcalclr            = 0
+   rtpi                 = 0.05
+   coulombtype          = Cut-off
+   coulomb-modifier     = None
+   rcoulomb-switch      = 0
+   rcoulomb             = 1
+   vdwtype              = Cut-off
+   vdw-modifier         = None
+   rvdw-switch          = 0
+   rvdw                 = 1
+   epsilon-r            = 1
+   epsilon-rf           = inf
+   tabext               = 1
+   implicit-solvent     = No
+   gb-algorithm         = Still
+   gb-epsilon-solvent   = 80
+   nstgbradii           = 1
+   rgbradii             = 1
+   gb-saltconc          = 0
+   gb-obc-alpha         = 1
+   gb-obc-beta          = 0.8
+   gb-obc-gamma         = 4.85
+   gb-dielectric-offset = 0.009
+   sa-algorithm         = Ace-approximation
+   sa-surface-tension   = 2.05016
+   DispCorr             = No
+   bSimTemp             = FALSE
+   free-energy          = no
+   nwall                = 0
+   wall-type            = 9-3
+   wall-atomtype[0]     = -1
+   wall-atomtype[1]     = -1
+   wall-density[0]      = 0
+   wall-density[1]      = 0
+   wall-ewald-zfac      = 3
+   pull                 = no
+   rotation             = FALSE
+   disre                = No
+   disre-weighting      = Conservative
+   disre-mixed          = FALSE
+   dr-fc                = 1000
+   dr-tau               = 0
+   nstdisreout          = 100
+   orires-fc            = 0
+   orires-tau           = 0
+   nstorireout          = 100
+   dihre-fc             = 0
+   em-stepsize          = 0.01
+   em-tol               = 10
+   niter                = 20
+   fc-stepsize          = 0
+   nstcgsteep           = 1000
+   nbfgscorr            = 10
+   ConstAlg             = Lincs
+   shake-tol            = 0.0001
+   lincs-order          = 4
+   lincs-warnangle      = 30
+   lincs-iter           = 1
+   bd-fric              = 0
+   ld-seed              = 1993
+   cos-accel            = 0
+   deform (3x3):
+      deform[    0]={ 0.00000e+00,  0.00000e+00,  0.00000e+00}
+      deform[    1]={ 0.00000e+00,  0.00000e+00,  0.00000e+00}
+      deform[    2]={ 0.00000e+00,  0.00000e+00,  0.00000e+00}
+   adress               = FALSE
+   userint1             = 0
+   userint2             = 0
+   userint3             = 0
+   userint4             = 0
+   userreal1            = 0
+   userreal2            = 0
+   userreal3            = 0
+   userreal4            = 0
+grpopts:
+   nrdf:        6618
+   ref-t:           0
+   tau-t:           0
+anneal:          No
+ann-npoints:           0
+   acc:	           0           0           0
+   nfreeze:           N           N           N
+   energygrp-flags[  0]: 0
+   efield-x:
+      n = 0
+   efield-xt:
+      n = 0
+   efield-y:
+      n = 0
+   efield-yt:
+      n = 0
+   efield-z:
+      n = 0
+   efield-zt:
+      n = 0
+   bQMMM                = FALSE
+   QMconstraints        = 0
+   QMMMscheme           = 0
+   scalefactor          = 1
+qm-opts:
+   ngQM                 = 0
+Using 1 MPI process
+
+Detecting CPU-specific acceleration.
+Present hardware specification:
+Vendor: GenuineIntel
+Brand:  Intel(R) Xeon(R) Platinum 8180 CPU @ 2.50GHz
+Family:  6  Model: 85  Stepping:  4
+Features: aes apic avx avx2 clfsh cmov cx8 cx16 f16c fma htt lahf_lm mmx msr nonstop_tsc pcid pclmuldq pdcm pdpe1gb popcnt pse rdrnd rdtscp sse2 sse3 sse4.1 sse4.2 ssse3 tdt x2apic
+Acceleration most likely to fit this hardware: AVX_256
+Acceleration selected at GROMACS compile time: AVX_256
+
+Table routines are used for coulomb: FALSE
+Table routines are used for vdw:     FALSE
+Cut-off's:   NS: 1   Coulomb: 1   LJ: 1
+System total charge: -1.000
+Generated table with 1000 data points for 1-4 COUL.
+Tabscale = 500 points/nm
+Generated table with 1000 data points for 1-4 LJ6.
+Tabscale = 500 points/nm
+Generated table with 1000 data points for 1-4 LJ12.
+Tabscale = 500 points/nm
+
+Enabling SPC-like water optimization for 1074 molecules.
+
+Potential shift: LJ r^-12: 0.000 r^-6 0.000, Coulomb 0.000
+Removing pbc first time
+
+++++ PLEASE READ AND CITE THE FOLLOWING REFERENCE ++++
+S. Miyamoto and P. A. Kollman
+SETTLE: An Analytical Version of the SHAKE and RATTLE Algorithms for Rigid
+Water Models
+J. Comp. Chem. 13 (1992) pp. 952-962
+-------- -------- --- Thank You --- -------- --------
+
+Initiating Steepest Descents
+Max number of connections per atom is 82
+Total number of connections is 6026
+Max number of graph edges per atom is 4
+Total number of graph edges is 4416
+Started Steepest Descents on node 0 Sun Aug  2 23:17:09 2020
+
+Steepest Descents:
+   Tolerance (Fmax)   =  1.00000e+01
+   Number of steps    =          500
+
+Grid: 5 x 5 x 5 cells
+           Step           Time         Lambda
+              0        0.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    3.29325e+01    4.52651e+01    7.33222e+01    4.30638e-01    5.49192e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.86442e+03    4.31361e+03   -4.15818e+04   -3.51969e+04   -1.20359e+04
+
+           Step           Time         Lambda
+              1        1.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    7.63376e+01    5.66559e+01    7.27008e+01    8.19526e-01    5.38620e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.84937e+03    4.25070e+03   -4.19848e+04   -3.56243e+04   -1.21474e+04
+
+           Step           Time         Lambda
+              2        2.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    8.18392e+01    5.90132e+01    7.24337e+01    1.38725e+00    5.05529e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.86181e+03    4.21731e+03   -4.22517e+04   -3.59074e+04   -1.22203e+04
+
+           Step           Time         Lambda
+              3        3.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    1.75693e+02    7.78993e+01    7.21635e+01    1.33308e+00    5.40693e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.83991e+03    4.19195e+03   -4.24799e+04   -3.60669e+04   -1.22850e+04
+
+           Step           Time         Lambda
+              4        4.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    2.09583e+02    7.99780e+01    7.23376e+01    1.90170e+00    4.81525e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.86190e+03    4.17327e+03   -4.26865e+04   -3.62394e+04   -1.23391e+04
+
+           Step           Time         Lambda
+              5        5.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    2.90124e+02    1.01804e+02    7.18110e+01    1.77234e+00    5.36520e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.83363e+03    4.16057e+03   -4.28556e+04   -3.63423e+04   -1.23846e+04
+
+           Step           Time         Lambda
+              6        6.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    3.41930e+02    9.71885e+01    7.22679e+01    2.24334e+00    4.72772e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.86294e+03    4.14766e+03   -4.30144e+04   -3.64429e+04   -1.24299e+04
+
+           Step           Time         Lambda
+              7        7.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    4.56691e+02    1.32821e+02    7.15147e+01    2.14022e+00    5.31940e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.82659e+03    4.14016e+03   -4.31452e+04   -3.64620e+04   -1.24695e+04
+
+           Step           Time         Lambda
+              8        8.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    5.73705e+02    1.28110e+02    7.21208e+01    2.52118e+00    4.66932e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.86687e+03    4.13017e+03   -4.33195e+04   -3.64993e+04   -1.25100e+04
+
+           Step           Time         Lambda
+              9        9.00000        0.00000
+
+           Step           Time         Lambda
+             10       10.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    1.05992e+01    4.52261e+01    7.13841e+01    2.35865e+00    4.92732e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.84252e+03    4.12795e+03   -4.33849e+04   -3.72356e+04   -1.25288e+04
+
+           Step           Time         Lambda
+             11       11.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    6.14439e+02    9.54129e+01    7.17256e+01    2.03782e+00    4.79961e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.86158e+03    4.10710e+03   -4.40838e+04   -3.72835e+04   -1.27201e+04
+
+           Step           Time         Lambda
+             12       12.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    6.99862e+01    5.80440e+01    7.10350e+01    2.35666e+00    4.84053e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.83201e+03    4.10723e+03   -4.41592e+04   -3.79702e+04   -1.27364e+04
+
+           Step           Time         Lambda
+             13       13.00000        0.00000
+
+           Step           Time         Lambda
+             14       14.00000        0.00000
+
+           Step           Time         Lambda
+             15       15.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    9.37871e+00    4.35265e+01    7.11861e+01    2.30970e+00    4.80853e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.84167e+03    4.10581e+03   -4.41353e+04   -3.80133e+04   -1.27505e+04
+
+           Step           Time         Lambda
+             16       16.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    1.07816e+02    6.29693e+01    7.12692e+01    2.53278e+00    4.77168e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.82976e+03    4.10386e+03   -4.44443e+04   -3.82184e+04   -1.28294e+04
+
+           Step           Time         Lambda
+             17       17.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    1.98019e+01    4.27641e+01    7.13583e+01    2.36428e+00    4.75488e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.84343e+03    4.10290e+03   -4.44831e+04   -3.83529e+04   -1.28443e+04
+
+           Step           Time         Lambda
+             18       18.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    1.74157e+02    7.25769e+01    7.11980e+01    2.48858e+00    4.73638e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.82616e+03    4.10358e+03   -4.46587e+04   -3.83612e+04   -1.28887e+04
+
+           Step           Time         Lambda
+             19       19.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    5.19502e+01    4.43159e+01    7.13504e+01    2.29680e+00    4.72625e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.84576e+03    4.10275e+03   -4.46993e+04   -3.85336e+04   -1.29040e+04
+
+           Step           Time         Lambda
+             20       20.00000        0.00000
+
+           Step           Time         Lambda
+             21       21.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    3.34362e+01    5.05192e+01    7.12408e+01    2.41733e+00    4.70885e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.83363e+03    4.10342e+03   -4.47639e+04   -3.86221e+04   -1.29206e+04
+
+           Step           Time         Lambda
+             22       22.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    8.70066e+01    4.66629e+01    7.14140e+01    2.26483e+00    4.70710e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.84739e+03    4.10336e+03   -4.48515e+04   -3.86463e+04   -1.29460e+04
+
+           Step           Time         Lambda
+             23       23.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    7.27626e+01    5.72315e+01    7.12240e+01    2.45245e+00    4.68032e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.83025e+03    4.10454e+03   -4.49252e+04   -3.87399e+04   -1.29621e+04
+
+           Step           Time         Lambda
+             24       24.00000        0.00000
+
+           Step           Time         Lambda
+             25       25.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    1.12413e+01    4.26874e+01    7.13226e+01    2.33068e+00    4.68126e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.84022e+03    4.10446e+03   -4.49476e+04   -3.88285e+04   -1.29731e+04
+
+           Step           Time         Lambda
+             26       26.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    1.14401e+02    6.31414e+01    7.12947e+01    2.44661e+00    4.64121e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.82733e+03    4.10761e+03   -4.51295e+04   -3.88968e+04   -1.30196e+04
+
+           Step           Time         Lambda
+             27       27.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    2.56827e+01    4.26041e+01    7.13911e+01    2.27939e+00    4.64856e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.84187e+03    4.10766e+03   -4.51617e+04   -3.90237e+04   -1.30319e+04
+
+           Step           Time         Lambda
+             28       28.00000        0.00000
+
+           Step           Time         Lambda
+             29       29.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    2.79616e+01    4.90302e+01    7.13237e+01    2.37022e+00    4.62624e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.83290e+03    4.10903e+03   -4.52188e+04   -3.90799e+04   -1.30474e+04
+
+           Step           Time         Lambda
+             30       30.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    4.27416e+01    4.32717e+01    7.14377e+01    2.24315e+00    4.63072e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.84315e+03    4.10997e+03   -4.52872e+04   -3.91281e+04   -1.30662e+04
+
+           Step           Time         Lambda
+             31       31.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    5.32141e+01    5.34871e+01    7.13189e+01    2.38428e+00    4.60109e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.83041e+03    4.11172e+03   -4.53495e+04   -3.91810e+04   -1.30821e+04
+
+           Step           Time         Lambda
+             32       32.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    7.75074e+01    4.55603e+01    7.14615e+01    2.20786e+00    4.61521e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.84525e+03    4.11261e+03   -4.54049e+04   -3.92041e+04   -1.30986e+04
+
+           Step           Time         Lambda
+             33       33.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    1.05903e+02    6.19853e+01    7.12753e+01    2.43460e+00    4.57620e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.82701e+03    4.11475e+03   -4.55200e+04   -3.92909e+04   -1.31141e+04
+
+           Step           Time         Lambda
+             34       34.00000        0.00000
+
+           Step           Time         Lambda
+             35       35.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    8.21386e+00    4.26975e+01    7.13597e+01    2.29216e+00    4.58437e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.83773e+03    4.11505e+03   -4.55449e+04   -3.94217e+04   -1.31216e+04
+
+           Step           Time         Lambda
+             36       36.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    1.61759e+02    6.89861e+01    7.14380e+01    2.40385e+00    4.51378e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.82356e+03    4.12588e+03   -4.58318e+04   -3.95326e+04   -1.32005e+04
+
+           Step           Time         Lambda
+             37       37.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    1.89083e+01    4.20045e+01    7.14901e+01    2.21550e+00    4.52828e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.83926e+03    4.12638e+03   -4.58584e+04   -3.97128e+04   -1.32084e+04
+
+           Step           Time         Lambda
+             38       38.00000        0.00000
+
+           Step           Time         Lambda
+             39       39.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    4.51676e+01    5.16237e+01    7.14202e+01    2.32267e+00    4.50067e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.82981e+03    4.12915e+03   -4.59113e+04   -3.97368e+04   -1.32239e+04
+
+           Step           Time         Lambda
+             40       40.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    3.43531e+01    4.24215e+01    7.15106e+01    2.18830e+00    4.51260e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.84086e+03    4.13051e+03   -4.59550e+04   -3.97880e+04   -1.32356e+04
+
+           Step           Time         Lambda
+             41       41.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    7.97632e+01    5.73444e+01    7.13973e+01    2.35830e+00    4.47859e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.82728e+03    4.13346e+03   -4.60104e+04   -3.97940e+04   -1.32507e+04
+
+           Step           Time         Lambda
+             42       42.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    6.85439e+01    4.45530e+01    7.15163e+01    2.16656e+00    4.50014e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.84320e+03    4.13486e+03   -4.60491e+04   -3.98392e+04   -1.32620e+04
+
+           Step           Time         Lambda
+             43       43.00000        0.00000
+
+           Step           Time         Lambda
+             44       44.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    1.15319e+01    4.48338e+01    7.14252e+01    2.27816e+00    4.47420e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.83344e+03    4.13641e+03   -4.60719e+04   -3.99272e+04   -1.32686e+04
+
+           Step           Time         Lambda
+             45       45.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    1.00292e+02    4.66490e+01    7.16069e+01    2.12132e+00    4.47771e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.84429e+03    4.14271e+03   -4.61943e+04   -3.99419e+04   -1.33028e+04
+
+           Step           Time         Lambda
+             46       46.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    2.82795e+01    4.84179e+01    7.14459e+01    2.28811e+00    4.43994e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.83053e+03    4.14474e+03   -4.62101e+04   -4.00400e+04   -1.33093e+04
+
+           Step           Time         Lambda
+             47       47.00000        0.00000
+
+           Step           Time         Lambda
+             48       48.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    2.26749e+01    4.17474e+01    7.15282e+01    2.18120e+00    4.44917e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.83865e+03    4.14661e+03   -4.62499e+04   -4.00820e+04   -1.33200e+04
+
+           Step           Time         Lambda
+             49       49.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    4.78948e+01    5.18502e+01    7.14498e+01    2.30373e+00    4.42054e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.82852e+03    4.14990e+03   -4.62930e+04   -4.00969e+04   -1.33326e+04
+
+           Step           Time         Lambda
+             50       50.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    4.15934e+01    4.25458e+01    7.15482e+01    2.15440e+00    4.43661e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.84032e+03    4.15182e+03   -4.63343e+04   -4.01399e+04   -1.33436e+04
+
+           Step           Time         Lambda
+             51       51.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    8.63781e+01    5.80952e+01    7.14244e+01    2.34478e+00    4.40066e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.82580e+03    4.15527e+03   -4.64714e+04   -4.02281e+04   -1.33556e+04
+
+           Step           Time         Lambda
+             52       52.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    8.27692e+01    4.54191e+01    7.15568e+01    2.12771e+00    4.42789e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.84289e+03    4.15719e+03   -4.65068e+04   -4.02605e+04   -1.33660e+04
+
+           Step           Time         Lambda
+             53       53.00000        0.00000
+
+           Step           Time         Lambda
+             54       54.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    1.12015e+01    4.43541e+01    7.14620e+01    2.24854e+00    4.40063e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.83251e+03    4.15898e+03   -4.65225e+04   -4.03577e+04   -1.33711e+04
+
+           Step           Time         Lambda
+             55       55.00000        0.00000
+
+           Step           Time         Lambda
+             56       56.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    2.67383e+01    4.16746e+01    7.15725e+01    2.14918e+00    4.40361e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.83837e+03    4.16332e+03   -4.65894e+04   -4.04015e+04   -1.33892e+04
+
+           Step           Time         Lambda
+             57       57.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    1.83776e+01    4.58789e+01    7.15115e+01    2.23388e+00    4.38246e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.83100e+03    4.16578e+03   -4.66127e+04   -4.04341e+04   -1.33966e+04
+
+           Step           Time         Lambda
+             58       58.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    4.13040e+01    4.23056e+01    7.16138e+01    2.11445e+00    4.39252e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.83974e+03    4.16940e+03   -4.66646e+04   -4.04542e+04   -1.34109e+04
+
+           Step           Time         Lambda
+             59       59.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    3.43922e+01    4.88549e+01    7.15225e+01    2.24514e+00    4.36477e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.82905e+03    4.17224e+03   -4.66911e+04   -4.04891e+04   -1.34189e+04
+
+           Step           Time         Lambda
+             60       60.00000        0.00000
+
+           Step           Time         Lambda
+             61       61.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    9.49018e+00    4.15574e+01    7.15810e+01    2.15815e+00    4.37256e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.83537e+03    4.17383e+03   -4.67152e+04   -4.05375e+04   -1.34254e+04
+
+           Step           Time         Lambda
+             62       62.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    5.07631e+01    5.13911e+01    7.15741e+01    2.23661e+00    4.34382e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.82745e+03    4.18151e+03   -4.68008e+04   -4.05725e+04   -1.34495e+04
+
+           Step           Time         Lambda
+             63       63.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    1.59280e+01    4.11601e+01    7.16383e+01    2.11849e+00    4.35566e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.83662e+03    4.18337e+03   -4.68277e+04   -4.06333e+04   -1.34567e+04
+
+           Step           Time         Lambda
+             64       64.00000        0.00000
+
+           Step           Time         Lambda
+             65       65.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    1.55256e+01    4.48213e+01    7.16052e+01    2.18188e+00    4.33939e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.83101e+03    4.18632e+03   -4.68513e+04   -4.06565e+04   -1.34643e+04
+
+           Step           Time         Lambda
+             66       66.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    2.34650e+01    4.12370e+01    7.16737e+01    2.09534e+00    4.34510e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.83749e+03    4.18993e+03   -4.68941e+04   -4.06847e+04   -1.34760e+04
+
+           Step           Time         Lambda
+             67       67.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    2.54072e+01    4.68126e+01    7.16149e+01    2.19202e+00    4.32369e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.82947e+03    4.19319e+03   -4.69177e+04   -4.07058e+04   -1.34836e+04
+
+           Step           Time         Lambda
+             68       68.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    3.87217e+01    4.19078e+01    7.17020e+01    2.07379e+00    4.33601e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.83884e+03    4.19662e+03   -4.69608e+04   -4.07276e+04   -1.34951e+04
+
+           Step           Time         Lambda
+             69       69.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    4.62676e+01    5.05007e+01    7.16075e+01    2.22058e+00    4.30775e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.82734e+03    4.20022e+03   -4.69904e+04   -4.07492e+04   -1.35036e+04
+
+           Step           Time         Lambda
+             70       70.00000        0.00000
+
+           Step           Time         Lambda
+             71       71.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    8.33847e+00    4.14918e+01    7.16602e+01    2.12903e+00    4.31638e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.83412e+03    4.20180e+03   -4.70108e+04   -4.08081e+04   -1.35089e+04
+
+           Step           Time         Lambda
+             72       72.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    6.72449e+01    5.35518e+01    7.16750e+01    2.22039e+00    4.27958e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.82526e+03    4.21605e+03   -4.71335e+04   -4.08547e+04   -1.35442e+04
+
+           Step           Time         Lambda
+             73       73.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    1.38242e+01    4.09622e+01    7.17252e+01    2.09335e+00    4.29201e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.83516e+03    4.21798e+03   -4.71566e+04   -4.09319e+04   -1.35502e+04
+
+           Step           Time         Lambda
+             74       74.00000        0.00000
+
+           Step           Time         Lambda
+             75       75.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    2.10782e+01    4.56958e+01    7.16898e+01    2.16489e+00    4.27472e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.82913e+03    4.22208e+03   -4.71809e+04   -4.09463e+04   -1.35583e+04
+
+           Step           Time         Lambda
+             76       76.00000        0.00000
+
+           Step           Time         Lambda
+             77       77.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    7.75354e+00    4.18108e+01    7.17197e+01    2.11682e+00    4.27820e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.83263e+03    4.22373e+03   -4.71962e+04   -4.09737e+04   -1.35626e+04
+
+           Step           Time         Lambda
+             78       78.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    1.39319e+01    4.39094e+01    7.18074e+01    2.10269e+00    4.23170e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.82955e+03    4.25257e+03   -4.74258e+04   -4.11696e+04   -1.36261e+04
+
+           Step           Time         Lambda
+             79       79.00000        0.00000
+
+           Step           Time         Lambda
+             80       80.00000        0.00000
+
+           Step           Time         Lambda
+             81       81.00000        0.00000
+
+           Step           Time         Lambda
+             82       82.00000        0.00000
+
+           Step           Time         Lambda
+             83       83.00000        0.00000
+
+           Step           Time         Lambda
+             84       84.00000        0.00000
+
+           Step           Time         Lambda
+             85       85.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    1.35326e+01    4.38102e+01    7.18079e+01    2.10164e+00    4.23175e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.82963e+03    4.25264e+03   -4.74263e+04   -4.11705e+04   -1.36263e+04
+
+           Step           Time         Lambda
+             86       86.00000        0.00000
+
+           Step           Time         Lambda
+             87       87.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    1.32994e+01    4.37514e+01    7.18082e+01    2.10103e+00    4.23178e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.82968e+03    4.25267e+03   -4.74265e+04   -4.11709e+04   -1.36264e+04
+
+           Step           Time         Lambda
+             88       88.00000        0.00000
+
+           Step           Time         Lambda
+             89       89.00000        0.00000
+
+           Step           Time         Lambda
+             90       90.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    1.32302e+01    4.37341e+01    7.18083e+01    2.10080e+00    4.23179e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.82969e+03    4.25268e+03   -4.74266e+04   -4.11710e+04   -1.36264e+04
+
+           Step           Time         Lambda
+             91       91.00000        0.00000
+
+           Step           Time         Lambda
+             92       92.00000        0.00000
+
+           Step           Time         Lambda
+             93       93.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    1.32097e+01    4.37290e+01    7.18083e+01    2.10072e+00    4.23179e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.82969e+03    4.25269e+03   -4.74266e+04   -4.11711e+04   -1.36264e+04
+
+           Step           Time         Lambda
+             94       94.00000        0.00000
+
+           Step           Time         Lambda
+             95       95.00000        0.00000
+
+   Energies (kJ/mol)
+           Bond          Angle    Proper Dih.  Improper Dih.          LJ-14
+    1.31971e+01    4.37258e+01    7.18084e+01    2.10069e+00    4.23180e+01
+     Coulomb-14        LJ (SR)   Coulomb (SR)      Potential Pressure (bar)
+    1.82970e+03    4.25269e+03   -4.74266e+04   -4.11711e+04   -1.36264e+04
+
+           Step           Time         Lambda
+             96       96.00000        0.00000
+
+           Step           Time         Lambda
+             97       97.00000        0.00000
+
+
+Energy minimization has stopped, but the forces have not converged to the
+requested precision Fmax < 10 (which may not be possible for your system). It
+stopped because the algorithm tried to make a new step whose size was too
+small, or there was no change in the energy since last step. Either way, we
+regard the minimization as converged to within the available machine
+precision, given your starting configuration and EM parameters.
+
+Double precision normally gives you higher accuracy, but this is often not
+needed for preparing to run molecular dynamics.
+You might need to increase your constraint accuracy, or turn
+off constraints altogether (set constraints = none in mdp file)
+
+Steepest Descents converged to machine precision in 98 steps,
+but did not reach the requested Fmax < 10.
+Potential Energy  = -4.1171094e+04
+Maximum force     =  3.2786597e+03 on atom 3
+Norm of force     =  1.0116657e+02
+
+	M E G A - F L O P S   A C C O U N T I N G
+
+ NB=Group-cutoff nonbonded kernels    NxN=N-by-N cluster Verlet kernels
+ RF=Reaction-Field  VdW=Van der Waals  QSTab=quadratic-spline table
+ W3=SPC/TIP3p  W4=TIP4p (single or pairs)
+ V&F=Potential and force  V=Potential only  F=Force only
+
+ Computing:                               M-Number         M-Flops  % Flops
+-----------------------------------------------------------------------------
+ NB Elec. [V&F]                          16.151648          16.152     0.8
+ NB VdW & Elec. [V&F]                    16.332510          16.333     0.8
+ NB VdW & Elec. [W3,V&F]                 34.566460          34.566     1.7
+ NB VdW & Elec. [W3-W3,V&F]            1480.385600        1480.386    72.7
+ 1,4 nonbonded interactions               0.013720           1.235     0.1
+ NS-Pairs                                19.255039         404.356    19.9
+ Reset In Box                             0.111034           0.333     0.0
+ Shift-X                                  0.321538           1.929     0.1
+ CG-CoM                                   0.321538           0.965     0.0
+ Bonds                                    0.005880           0.347     0.0
+ Angles                                   0.010094           1.696     0.1
+ Propers                                  0.013230           3.030     0.1
+ Impropers                                0.001764           0.367     0.0
+ Virial                                   0.325948           5.867     0.3
+ Settle                                   0.210504          67.993     3.3
+-----------------------------------------------------------------------------
+ Total                                                    2035.553   100.0
+-----------------------------------------------------------------------------
+
+
+     R E A L   C Y C L E   A N D   T I M E   A C C O U N T I N G
+
+ Computing:         Nodes   Th.     Count  Wall t (s)     G-Cycles       %
+-----------------------------------------------------------------------------
+ Neighbor search        1    1         98       0.149        0.743    38.5
+ Force                  1    1         98       0.032        0.159     8.3
+ Constraints            1    1        195       0.008        0.038     2.0
+ Rest                   1                       0.198        0.990    51.3
+-----------------------------------------------------------------------------
+ Total                  1                       0.387        1.931   100.0
+-----------------------------------------------------------------------------
+
+               Core t (s)   Wall t (s)        (%)
+       Time:        0.387        0.387      100.0
+               (steps/hour)
+Performance:       911559.8
+Finished mdrun on node 0 Sun Aug  2 23:17:09 2020

@@ -1,0 +1,16 @@
+source leaprc.gaff2 
+source leaprc.water.tip3p
+source leaprc.protein.ff14SB  
+source leaprc.water.tip3p
+loadamberparams  ligand.acpype/ligand_AC.frcmod  
+loadoff ligand.acpype/ligand_AC.lib 
+pdb = loadPDB  10gs_protein.pdb_complex.pdb  
+source leaprc.water.tip3p 
+addions pdb Na+ 0 
+addions pdb Cl- 0 
+solvatebox pdb TIP3PBOX 10.000000 
+check pdb 
+savepdb pdb complex.pdb  
+saveoff pdb complex.lib  
+saveamberparm pdb complex.prmtop complex.inpcrd 
+quit 
