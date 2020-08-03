@@ -1,0 +1,51 @@
+;
+;	User: Liangzhen Zheng
+;	Wed Nov 12 2013 11:00Am
+;	Aim: energy minimization for the MADP1-ibvRNA docking complex
+;
+title               =  madp-ibvRNA docking
+cpp                 =  /lib/cpp
+constraints         =  hbonds    ;all-bonds
+;define              =  -DFLEX_SPC
+integrator          =  steep     ;md, steepest decent
+emtol               =  100.0
+emstep              =  0.005
+dt                  =  0.002     ;in unit of ps !
+nsteps              =  1000       ; total 2 ps.
+nstcomm             =  1
+nstxout             =  0
+nstxtcout           =  500
+nstvout             =  0
+nstfout             =  0
+nstlog              =  500
+nstenergy           =  0
+nstlist             =  5
+ns_type             =  grid
+rlist               =  1.2       ;short range neighbor list
+rcoulomb            =  1.2       ;long range electrostatic cutoff 
+rvdw                =  1.2       ;van del waals cutoff
+coulombtype         =  PME       ;Reaction-Field
+fourierspacing      =  0.12
+pbc                 =  xyz
+pme_order           =  4
+optimize_fft        =  yes
+;epsilon_r           =  54
+;epsilon_rf          =  54
+;Berendsen temperature coupling is on in two groups
+;Tcoupl              =  berendsen
+;tc-grps             =  Protein  RNA
+;tau_t               =  0.1      0.1
+;ref_t    =    300.000      300.000
+; Energy monitoring
+;energygrps          =  Protein RNA
+; Isotropic pressure coupling is now on
+;Pcoupl              = berendsen
+;Pcoupltype          = anisotropic
+;tau_p               =  0.4
+;compressibility     =  4.6e-5  4.6e-5 4.6e-5  0    0    0
+;ref_p               =  1.0     1.0    1.0     1.0  1.0  1.0
+; Generate velocites is off at 300 K.
+;gen_vel             =  yes
+;gen_temp            =  300.0
+;gen_seed            =  -1;173529
+;unconstrained-start    = yes

@@ -1,0 +1,78 @@
+; Run control
+integrator          =  md
+dt                  =  0.002    ; ps !
+nsteps              =  10000000 ; total 10 ns.
+;define              =  -DPOSRES
+
+; Output control
+nstxout             =  1000
+nstvout             =  1000
+nstfout             =  1000
+nstlist             =  10
+nstlog              =  1000
+
+; Neighbor searching
+cutoff-scheme       =  Verlet
+rlist               =  5
+pbc                 =  no
+ns_type             =  simple
+
+; Electrostatics and VdW
+rvdw                = 5
+rcoulomb            = 5
+coulombtype         = cut-off
+vdwtype             = cut-off
+
+;Langevin dynamics
+bd_fric             =  0
+ld_seed             =  -1
+
+; Bonds
+constraints         = all-bonds
+lincs_order         = 4
+lincs_iter          = 1
+lincs-warnangle     = 30
+
+; Temperature and Pressure coupling
+Tcoupl              = v-rescale
+tau_t               = 1.0
+tc-grps             = Protein
+ref_t               = 300
+Pcoupl              = no
+
+; Velocity generation
+gen_vel             =  yes
+gen_temp            =  300
+gen_seed            =  173529
+
+;http://www.mail-archive.com/gmx-users@gromacs.org/msg20866.html
+
+;mine addition
+comm_mode       = angular
+nstcomm         = 10
+
+; IMPLICIT SOLVENT ALGORITHM
+implicit_solvent         = gbsa
+
+; GENERALIZED BORN ELECTROSTATICS
+; Algorithm for calculating Born radii
+gb_algorithm             = Still
+; Frequency of calculating the Born radii inside rlist
+nstgbradii               = 1
+; Cutoff for Born radii calculation; the contribution from atoms
+; between rlist and rgbradii is updated every nstlist steps
+rgbradii                 = 5
+; Dielectric coefficient of the implicit solvent
+gb_epsilon_solvent       = 80
+; Salt concentration in M for Generalized Born models
+gb_saltconc              = 0
+; Scaling factors used in the OBC GB model. Default values are OBC(II)
+gb_obc_alpha             = 1
+gb_obc_beta              = 0.8
+gb_obc_gamma             = 4.85
+gb_dielectric_offset     = 0.009
+sa_algorithm             = Ace-approximation
+; Surface tension (kJ/mol/nm^2) for the SA (nonpolar surface) part of GBSA
+; The value -1 will set default value for Still/HCT/OBC GB-models.
+sa_surface_tension       = -1
+

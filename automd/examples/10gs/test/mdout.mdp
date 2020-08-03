@@ -2,8 +2,16 @@
 ;	File 'mdout.mdp' was generated
 ;	By user: zlzzheng (1002)
 ;	On host: haidonglan-LC2
-;	At date: Sun Aug  2 23:16:57 2020
+;	At date: Mon Aug  3 18:42:14 2020
 ;
+;	Created by:
+;	                     :-) GROMACS - gmx grompp, 2018.1 (-:
+;	
+;	Executable:   /usr/bin/gmx
+;	Data prefix:  /usr
+;	Working dir:  /data1/zlzzheng/apps/git_oa/dockingML/automd/examples/10gs/test
+;	Command line:
+;	  gmx grompp -f md.mdp -c eq_1.gro -p complex_GMX.top -o md_1 -maxwarn 100
 
 ; VARIOUS PREPROCESSING OPTIONS
 ; Preprocessor information: use cpp syntax.
@@ -13,31 +21,31 @@ include                  =
 define                   = 
 
 ; RUN CONTROL PARAMETERS
-integrator               = steep
+integrator               = md
 ; Start time and timestep in ps
 tinit                    = 0
-dt                       = 0.001
-nsteps                   = 500
+dt                       = 0.002
+nsteps                   = 10000
 ; For exact run continuation or redoing part of a run
 init-step                = 0
 ; Part index is updated automatically on checkpointing (keeps files separate)
 simulation-part          = 1
 ; mode for center of mass motion removal
-comm-mode                = Linear
+comm-mode                = Angular
 ; number of steps for center of mass motion removal
-nstcomm                  = 100
+nstcomm                  = 1
 ; group(s) for center of mass motion removal
-comm-grps                = 
+comm-grps                = Protein non-Protein
 
 ; LANGEVIN DYNAMICS OPTIONS
 ; Friction coefficient (amu/ps) and random seed
 bd-fric                  = 0
-ld-seed                  = 1993
+ld-seed                  = -1
 
 ; ENERGY MINIMIZATION OPTIONS
 ; Force tolerance and initial step-size
-emtol                    = 10
-emstep                   = 0.01
+emtol                    = 100.0
+emstep                   = 0.005
 ; Max number of iterations in relax-shells
 niter                    = 20
 ; Step size (ps^2) for minimization of flexible constraints
@@ -57,41 +65,40 @@ nstfout                  = 0
 ; Output frequency for energies to log file and energy file
 nstlog                   = 1000
 nstcalcenergy            = 100
-nstenergy                = 1000
+nstenergy                = 0
 ; Output frequency and precision for .xtc file
-nstxtcout                = 0
-xtc-precision            = 1000
-; This selects the subset of atoms for the .xtc file. You can
-; select multiple groups. By default all atoms will be written.
-xtc-grps                 = 
+nstxout-compressed       = 1000
+compressed-x-precision   = 1000
+; This selects the subset of atoms for the compressed
+; trajectory file. You can select multiple groups. By
+; default, all atoms will be written.
+compressed-x-grps        = 
 ; Selection of energy groups
 energygrps               = 
 
 ; NEIGHBORSEARCHING PARAMETERS
-; cut-off scheme (group: using charge groups, Verlet: particle based cut-offs)
-cutoff-scheme            = Group
+; cut-off scheme (Verlet: particle based cut-offs, group: using charge groups)
+cutoff-scheme            = Verlet
 ; nblist update frequency
-nstlist                  = 10
+nstlist                  = 20
 ; ns algorithm (simple or grid)
-ns-type                  = Grid
+ns_type                  = grid
 ; Periodic boundary conditions: xyz, no, xy
 pbc                      = xyz
 periodic-molecules       = no
-; Allowed energy drift due to the Verlet buffer in kJ/mol/ps per atom,
+; Allowed energy error due to the Verlet buffer in kJ/mol/ps per atom,
 ; a value of -1 means: use rlist
-verlet-buffer-drift      = 0.005
+verlet-buffer-tolerance  = 0.005
 ; nblist cut-off        
-rlist                    = 1
+rlist                    = 1.2
 ; long-range cut-off for switched potentials
-rlistlong                = -1
-nstcalclr                = -1
 
 ; OPTIONS FOR ELECTROSTATICS AND VDW
 ; Method for doing electrostatics
-coulombtype              = Cut-off
+coulombtype              = PME
 coulomb-modifier         = Potential-shift-Verlet
 rcoulomb-switch          = 0
-rcoulomb                 = 1
+rcoulomb                 = 1.2
 ; Relative dielectric constant for the medium and the reaction field
 epsilon-r                = 1
 epsilon-rf               = 0
@@ -100,7 +107,7 @@ vdw-type                 = Cut-off
 vdw-modifier             = Potential-shift-Verlet
 ; cut-off lengths       
 rvdw-switch              = 0
-rvdw                     = 1
+rvdw                     = 1.2
 ; Apply long range dispersion corrections for Energy and Pressure
 DispCorr                 = No
 ; Extension of the potential lookup tables beyond the cut-off
@@ -114,11 +121,12 @@ fourier-nx               = 0
 fourier-ny               = 0
 fourier-nz               = 0
 ; EWALD/PME/PPPM parameters
-pme-order                = 4
+pme_order                = 4
 ewald-rtol               = 1e-05
+ewald-rtol-lj            = 0.001
+lj-pme-comb-rule         = Geometric
 ewald-geometry           = 3d
 epsilon-surface          = 0
-optimize-fft             = no
 
 ; IMPLICIT SOLVENT ALGORITHM
 implicit-solvent         = No
@@ -147,23 +155,23 @@ sa-surface-tension       = -1
 
 ; OPTIONS FOR WEAK COUPLING ALGORITHMS
 ; Temperature coupling  
-tcoupl                   = No
+Tcoupl                   = v-rescale
 nsttcouple               = -1
 nh-chain-length          = 10
 print-nose-hoover-chain-variables = no
 ; Groups to couple separately
-tc-grps                  = 
+tc-grps                  = Water non-Water
 ; Time constant (ps) and reference temperature (K)
-tau-t                    = 
-ref-t                    = 
+tau_t                    = 0.5      0.5
+ref_t                    = 300 300
 ; pressure coupling     
-pcoupl                   = No
-pcoupltype               = Isotropic
+Pcoupl                   = berendsen
+Pcoupltype               = isotropic
 nstpcouple               = -1
 ; Time constant (ps), compressibility (1/bar) and reference P (bar)
-tau-p                    = 1
-compressibility          = 
-ref-p                    = 
+tau_p                    = 1.0
+compressibility          = 4.6e-5
+ref_p                    = 1.0
 ; Scaling of reference coordinates, No, All or COM
 refcoord-scaling         = No
 
@@ -191,9 +199,6 @@ SAoff                    =
 SAsteps                  = 
 ; Scale factor for MM charges
 MMChargeScaleFactor      = 1
-; Optimization of QM subsystem
-bOPT                     = 
-bTS                      = 
 
 ; SIMULATED ANNEALING  
 ; Type of annealing for each temperature group (no/single/periodic)
@@ -206,12 +211,12 @@ annealing-time           =
 annealing-temp           = 
 
 ; GENERATE VELOCITIES FOR STARTUP RUN
-gen-vel                  = no
-gen-temp                 = 300
-gen-seed                 = 173529
+gen_vel                  = yes
+gen_temp                 = 300.0
+gen_seed                 = -1
 
 ; OPTIONS FOR BONDS    
-constraints              = none
+constraints              = hbonds
 ; Type of constraint algorithm
 constraint-algorithm     = Lincs
 ; Do not constrain the start configuration
@@ -246,12 +251,17 @@ wall-density             =
 wall-ewald-zfac          = 3
 
 ; COM PULLING          
-; Pull type: no, umbrella, constraint or constant-force
 pull                     = no
+
+; AWH biasing          
+awh                      = no
 
 ; ENFORCED ROTATION    
 ; Enforced rotation: No or Yes
 rotation                 = no
+
+; Group to display and/or manipulate in interactive MD session
+IMD-group                = 
 
 ; NMR refinement stuff 
 ; Distance restraints type: No, Simple or Ensemble
@@ -317,17 +327,9 @@ simulated-tempering-scaling = geometric
 sim-temp-low             = 300
 sim-temp-high            = 300
 
-; Electric fields      
-; Format is number of terms (int) and for all terms an amplitude (real)
-; and a phase angle (real)
-E-x                      = 
-E-xt                     = 
-E-y                      = 
-E-yt                     = 
-E-z                      = 
-E-zt                     = 
-
-; AdResS parameters    
+; Ion/water position swapping for computational electrophysiology setups
+; Swap positions along direction: no, X, Y, Z
+swapcoords               = no
 adress                   = no
 
 ; User defined thingies
@@ -341,3 +343,11 @@ userreal1                = 0
 userreal2                = 0
 userreal3                = 0
 userreal4                = 0
+; Electric fields
+; Format for electric-field-x, etc. is: four real variables:
+; amplitude (V/nm), frequency omega (1/ps), time for the pulse peak (ps),
+; and sigma (ps) width of the pulse. Omega = 0 means static field,
+; sigma = 0 means no pulse, leaving the field to be a cosine function.
+electric-field-x         = 0 0 0 0
+electric-field-y         = 0 0 0 0
+electric-field-z         = 0 0 0 0

@@ -1,0 +1,55 @@
+;
+;	User Zheng Liangzhen
+;	Mon Aug  3 17:12:44 2020
+;	Input file mdp parameters
+;
+title               =  nvt equlibrium for protein-ligand system
+cpp                 =  /lib/cpp
+constraints         =  hbonds ;all-bonds
+;define              =  -DPOSRES
+integrator          =  md
+emtol               =  100.0
+emstep              =  0.005
+dt                  =  0.002    ; ps !
+nsteps              =  1000000  ; total 2 ns.
+nstcomm             =  1
+nstxout             =  0
+nstxtcout           =  1000
+nstvout             =  0
+nstfout             =  0
+nstlog              =  1000
+nstenergy           =  0
+nstlist             =  20
+ns_type             =  grid
+rlist               =  1.2
+rcoulomb            =  1.2
+rvdw                =  1.2
+cutoff-scheme       =  Verlet
+coulombtype         =  PME;Reaction-Field
+fourierspacing      =  0.12
+pme_order           =  4
+optimize_fft        =  yes
+;epsilon_r           =  54
+;epsilon_rf          =  54
+
+;Berendsen temperature coupling is on in two groups
+Tcoupl              =  v-rescale
+tc-grps             =  Protein  Water_and_ions
+tau_t               =  0.5      0.5
+ref_t    =    300.000      300.000
+
+; Energy monitoring
+;energygrps          =  Protein SOL
+
+; Isotropic pressure coupling is now on
+;Pcoupl              =  berendsen
+;Pcoupltype          =  isotropic
+;tau_p               =  1.0
+;compressibility     =  4.6e-5
+;ref_p               =  1.0
+
+; Generate velocites is off at 300 K.
+gen_vel             =  yes
+gen_temp            =  300.0
+gen_seed            =  -1;173529
+;unconstrained-start    = yes
