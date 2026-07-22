@@ -1,0 +1,43 @@
+; Production NPT MD, modern GROMACS (2022+)
+; Parrinello-Rahman barostat, v-rescale thermostat, no restraints.
+title                    = Production MD, NPT, AMBER/CHARMM recommended params
+integrator               = md
+dt                       = 0.002         ; 2 fs (4 fs possible with h-bonds + virtual sites)
+nsteps                   = 250000000     ; 500 ns by default (overridden by driver)
+nstxout-compressed       = 10000         ; compressed trajectory every 20 ps
+nstvout                  = 0
+nstfout                  = 0
+nstenergy                = 5000
+nstlog                   = 5000
+continuation             = yes
+constraint_algorithm     = lincs
+constraints              = h-bonds
+lincs_iter               = 2
+lincs_order              = 4
+cutoff-scheme            = Verlet
+nstlist                  = 20
+ns_type                  = grid
+rlist                    = 1.0
+coulombtype              = PME
+rcoulomb                 = 1.0
+rvdw                     = 1.0
+vdw-modifier             = Force-switch   ; good for CHARMM; harmless for AMBER when switched off in FF
+rvdw-switch              = 0.8
+pme_order                = 4
+fourierspacing           = 0.12
+DispCorr                 = EnerPres
+Tcoupl                   = V-rescale
+tc-grps                  = Protein_Ligand Water_and_ions
+tau_t                    = 0.1        0.1
+ref_t                    = 300        300
+Pcoupl                   = Parrinello-Rahman
+Pcoupltype               = isotropic
+tau_p                    = 2.0
+compressibility          = 4.5e-5
+ref_p                    = 1.0
+gen_vel                  = no
+nstcomm                  = 100
+comm-mode                = Angular
+comm-grps                = Protein_Ligand Water_and_ions
+; Output velocities for continuation
+nstxout                  = 0

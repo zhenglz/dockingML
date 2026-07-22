@@ -1,0 +1,39 @@
+; NVT equilibration, modern GROMACS
+; use v-rescale thermostat, restrain protein+ligand heavy atoms
+title                    = NVT equilibration, restraints on protein-ligand
+integrator               = md
+dt                       = 0.002     ; ps  (2 fs)
+nsteps                   = 250000    ; 500 ps
+nstxout-compressed       = 5000
+nstvout                  = 0
+nstfout                  = 0
+nstenergy                = 5000
+nstlog                   = 5000
+continuation             = no
+constraint_algorithm     = lincs
+constraints              = h-bonds
+lincs_iter               = 2
+lincs_order              = 4
+cutoff-scheme            = Verlet
+nstlist                  = 20
+ns_type                  = grid
+rlist                    = 1.0
+coulombtype              = PME
+rcoulomb                 = 1.0
+rvdw                     = 1.0
+pme_order                = 4
+fourierspacing           = 0.12
+DispCorr                 = EnerPres
+Tcoupl                   = V-rescale
+tc-grps                  = Protein_Ligand Water_and_ions
+tau_t                    = 0.1        0.1
+ref_t                    = 300        300
+Pcoupl                   = no
+gen_vel                  = yes
+gen_temp                 = 300
+gen_seed                 = -1
+; Positional restraints on Protein and Ligand heavy atoms handled via -DPOSRES
+define                   = -DPOSRES -DPOSRES_LIG
+nstcomm                  = 100
+comm-mode                = Linear
+comm-grps                = Protein_Ligand Water_and_ions

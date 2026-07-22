@@ -1,0 +1,16 @@
+; energy minimization, modern GROMACS (2022+ / 2024+)
+; parameters chosen for protein-ligand complexes with AMBER/CHARMM force fields
+integrator               = steep     ; better for initial clashes than cg
+emtol                    = 500.0     ; kJ/(mol·nm)
+emstep                   = 0.01      ; nm
+nsteps                   = 50000
+nstlist                  = 20
+cutoff-scheme            = Verlet
+ns_type                  = grid
+rlist                    = 1.0
+coulombtype              = PME
+rcoulomb                 = 1.0
+rvdw                     = 1.0
+pme_order                = 4
+fourierspacing           = 0.12
+constraints              = h-bonds

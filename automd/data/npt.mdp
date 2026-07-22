@@ -1,60 +1,57 @@
 ;
-;	User Zheng Liangzhen
-;	Mon Aug  3 17:12:44 2020
-;	Input file mdp parameters
+;   Modernised NPT production mdp (GROMACS 2022+ compatible)
+;   Defaults chosen for AMBER/CHARMM protein-ligand systems.
+;   Authors: dockingML contributors, 2024+
 ;
-title               =  npt product run for protein-ligand system
+title               =  NPT production run (protein-ligand)
+; Preprocessing
 cpp                 =  /lib/cpp
-constraints         =  hbonds;all-bonds
-;define              =  -DPOSRES
+; Constraints: h-bonds allows 2 fs timestep (4 fs with virtual sites)
+constraints         =  h-bonds
+constraint_algorithm = lincs
+lincs_iter          =  2
+lincs_order         =  4
+; Integrator
 integrator          =  md
-emtol               =  100.0
-emstep              =  0.005
-dt                  =  0.002    ; ps !
-nsteps              =  10000000  ; total 20 ns.
-nstcomm             =  1
+dt                  =  0.002     ; ps (2 fs)
+nsteps              =  50000000  ; 100 ns by default; override in runner
+; Output control
+nstcomm             =  100
+comm-mode           =  Angular
+comm-grps           =  Protein_Ligand Water_and_ions
 nstxout             =  0
-nstxtcout           =  1000
 nstvout             =  0
 nstfout             =  0
-nstlog              =  1000
-nstenergy           =  0
+nstxout-compressed  =  10000     ; xtc every 20 ps
+nstenergy           =  5000
+nstlog              =  5000
+; Neighbour searching
 nstlist             =  20
 ns_type             =  grid
-rlist               =  1.2
-rcoulomb            =  1.2
-rvdw                =  1.2
 cutoff-scheme       =  Verlet
-coulombtype         =  PME;Reaction-Field
+pbc                 =  xyz
+rlist               =  1.0
+; Electrostatics (PME)
+coulombtype         =  PME
+rcoulomb            =  1.0
 fourierspacing      =  0.12
 pme_order           =  4
-optimize_fft        =  yes
-;epsilon_r           =  54
-;epsilon_rf          =  54
-
-;Berendsen temperature coupling is on in two groups
-Tcoupl              =  v-rescale
-tc-grps             =  Water non-Water
-tau_t               =  0.5      0.5
-ref_t    =    300.000      300.000
-
-; Energy monitoring
-energygrps          =  Water non-Water
-
-; Isotropic pressure coupling is now on
-Pcoupl              =  berendsen
+; VdW
+rvdw                =  1.0
+DispCorr            =  EnerPres
+vdw-modifier        =  Force-switch
+rvdw-switch         =  0.8
+; Temperature coupling -- V-rescale (Bussi) is strongly preferred over Berendsen
+Tcoupl              =  V-rescale
+tc-grps             =  Protein_Ligand Water_and_ions
+tau_t               =  0.1     0.1
+ref_t               =  300     300
+; Pressure coupling -- C-rescale (GROMACS 2021+) is the most robust;
+; fall back to Parrinello-Rahman for older versions by commenting out.
+Pcoupl              =  C-rescale
 Pcoupltype          =  isotropic
-tau_p               =  1.0
-compressibility     =  4.6e-5  
+tau_p               =  2.0
+compressibility     =  4.5e-5
 ref_p               =  1.0
-
-; Generate velocites is off at 300 K.
-gen_vel             =  yes
-gen_temp            =  300.0
-gen_seed            =  -1;173529
-;unconstrained-start    = yes
-
-; Center of Mass motion removal
-nstcomm             = 1000
-comm-grps           = Protein
-comm-mode           = Angular
+; Velocity generation -- off for production (continue from NPT eq)
+gen_vel             =  no

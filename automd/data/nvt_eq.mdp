@@ -1,55 +1,35 @@
-;
-;	User Zheng Liangzhen
-;	Mon Aug  3 17:12:44 2020
-;	Input file mdp parameters
-;
-title               =  nvt equlibrium for protein-ligand system
-cpp                 =  /lib/cpp
-constraints         =  hbonds ;all-bonds
-;define              =  -DPOSRES
-integrator          =  md
-emtol               =  100.0
-emstep              =  0.005
-dt                  =  0.002    ; ps !
-nsteps              =  1000000  ; total 2 ns.
-nstcomm             =  1
-nstxout             =  0
-nstxtcout           =  1000
-nstvout             =  0
-nstfout             =  0
-nstlog              =  1000
-nstenergy           =  0
-nstlist             =  20
-ns_type             =  grid
-rlist               =  1.2
-rcoulomb            =  1.2
-rvdw                =  1.2
-cutoff-scheme       =  Verlet
-coulombtype         =  PME;Reaction-Field
-fourierspacing      =  0.12
-pme_order           =  4
-optimize_fft        =  yes
-;epsilon_r           =  54
-;epsilon_rf          =  54
-
-;Berendsen temperature coupling is on in two groups
-Tcoupl              =  v-rescale
-tc-grps             =  Protein  Water_and_ions
-tau_t               =  0.5      0.5
-ref_t    =    300.000      300.000
-
-; Energy monitoring
-;energygrps          =  Protein SOL
-
-; Isotropic pressure coupling is now on
-;Pcoupl              =  berendsen
-;Pcoupltype          =  isotropic
-;tau_p               =  1.0
-;compressibility     =  4.6e-5
-;ref_p               =  1.0
-
-; Generate velocites is off at 300 K.
-gen_vel             =  yes
-gen_temp            =  300.0
-gen_seed            =  -1;173529
-;unconstrained-start    = yes
+; NVT equilibration (modern defaults)
+title               = NVT equilibration (restrained)
+integrator          = md
+dt                  = 0.002
+nsteps              = 250000    ; 500 ps
+constraints         = h-bonds
+constraint_algorithm = lincs
+lincs_iter          = 2
+lincs_order         = 4
+cutoff-scheme       = Verlet
+nstlist             = 20
+ns_type             = grid
+rlist               = 1.0
+coulombtype         = PME
+rcoulomb            = 1.0
+rvdw                = 1.0
+pme_order           = 4
+fourierspacing      = 0.12
+DispCorr            = EnerPres
+Tcoupl              = V-rescale
+tc-grps             = Protein_Ligand Water_and_ions
+tau_t               = 0.1   0.1
+ref_t               = 300   300
+Pcoupl              = no
+gen_vel             = yes
+gen_temp            = 300
+gen_seed            = -1
+nstxout-compressed  = 5000
+nstenergy           = 5000
+nstlog              = 5000
+; Restraints on heavy atoms -- define -DPOSRES and -DPOSRES_LIG when calling grompp
+define              = -DPOSRES -DPOSRES_LIG
+comm-mode           = Linear
+nstcomm             = 100
+comm-grps           = Protein_Ligand Water_and_ions

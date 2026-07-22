@@ -1,5 +1,7 @@
-
-include README.md
-include data/*.dat
-include data/*.lib
-
+include README.md LICENSE
+include setup.py
+recursive-include data *
+recursive-include automd/data *
+global-exclude __pycache__
+global-exclude *.py[cod]
+global-exclude .git/*

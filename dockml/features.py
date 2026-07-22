@@ -323,25 +323,40 @@ class BindingFeature :
 
     def getVdWParams(self) :
         '''
-        Get vdw parameters, mainly sigma and epsilon term in energy function
-        :inputFile: str, a library file containing atomic vdw parameters
-        :return:
+        Get van der Waals parameters for each atom type from the AMBER-style
+        parameter file ``AtomType.dat``.
+
+        The file stores (per atom type): atomic-number, mass, charge, ptype,
+        R*, epsilon, where:
+
+            * R*  (nm) is the distance at the LJ energy **minimum** (AMBER convention).
+            * eps (kcal/mol) is the well depth.
+
+        AMBER LJ form is::
+
+            V(r) = eps * [ (R*/r)^12 - 2*(R*/r)^6 ]
+
+        We store and return ``[rmin_Angstrom, epsilon_kJ_per_mol]`` and the
+        ``atomicVdWEnergy`` function below uses the AMBER form consistently.
         '''
-        # obtain vdw radius for different atoms
         vdwParams = defaultdict(list)
         with open(self.atomtype) as lines :
             for s in lines :
-                #param = []
-                if "#" not in s and ";" not in s :
-                    #print s.split()[-2].split("e")[0]
-                    ## in AtomType.dat nm
-                    ## nm to angstrom by multiply 10.0
-                    sigma   = float(s.split()[-2]) #.split("e")[0]) * ( 10 ** float(s.split()[-2].split("e")[1])) * 10.0
-                    epsilon = float(s.split()[-1]) #.split("e")[0]) * ( 10 ** float(s.split()[-1].split("e")[1])) * 10.0
-                    #param = [ sigma, epsilon ]
-                    vdwParams[s.split()[0]] = [sigma, epsilon]
+                if s.startswith(";") or s.startswith("#"):
+                    continue
+                toks = s.split()
+                if len(toks) < 7:
+                    continue
+                try:
+                    rstar_nm = float(toks[-2])
+                    eps_kcal = float(toks[-1])
+                except ValueError:
+                    continue
+                rstar_A = rstar_nm * 10.0     # nm -> Angstrom
+                eps_kj  = eps_kcal * 4.184   # kcal/mol -> kJ/mol
+                vdwParams[toks[0]] = [rstar_A, eps_kj]
 
-        # format of vdwParams : { "C":[C12, C6] }
+        # format : { "C":[rmin_A, eps_kJ], ... }
         return vdwParams
 
     def getElementParams(self):
@@ -517,34 +532,34 @@ class BindingFeature :
 
     def atomicVdWEnergy(self, atomtype1, atomtype2, distance) :
         """
-        Calculate atomic level Van der Waals interaction energy
-        VdW potential calculation, using combination rule 2
-        vdwParam is a dictionary list, eg. { "O": [ 0.22617E-02, 0.74158E-0.6 ]; }
-        unit of the parameters: nanometer
-        :param atomtype1:
-        :param atomtype2: dictionary, parameters of atom type and sigma epsilon
-        :param distance: float
-        :return: float, short range vdw energy
+        Calculate atomic-level van der Waals energy using the AMBER LJ form::
+
+            V(r) = eps_ij * [ (R*_ij / r)^12  -  2*(R*_ij / r)^6 ]
+
+        ``self.vdwParameters_`` stores ``[R* (Angstrom), epsilon (kJ/mol)]``
+        (R* is the minimum-energy distance, AMBER convention).  Combination
+        rules for heterogeneous pairs are the AMBER rules:
+
+            R*_ij     = R*_i + R*_j
+            eps_ij    = sqrt(eps_i * eps_j)
         """
+        t1 = atomtype1 if atomtype1 in self.vdwParameters_ else "DU"
+        t2 = atomtype2 if atomtype2 in self.vdwParameters_ else "DU"
+        Rstar_i   = self.vdwParameters_[t1][0]
+        Eps_i     = self.vdwParameters_[t1][1]
+        Rstar_j   = self.vdwParameters_[t2][0]
+        Eps_j     = self.vdwParameters_[t2][1]
 
-        Sigma_i   = self.vdwParameters_[atomtype1][0]
-        Epsilon_i = self.vdwParameters_[atomtype1][1]
-        Sigma_j   = self.vdwParameters_[atomtype2][0]
-        Epsilon_j = self.vdwParameters_[atomtype2][1]
+        # AMBER combination rules
+        rmin_ij   = Rstar_i + Rstar_j
+        eps_ij    = math.sqrt(Eps_i * Eps_j)
 
-        # combination rule 2 of vdw MM force field
-        sigma_ij   = 0.5 * ( Sigma_i + Sigma_j )
-        epsilon_ij = math.sqrt( Epsilon_i * Epsilon_j )
-
-        # Lennard-Jones Potential energy
-        # the sigma is the distance at the lowest energy point, in unit of angstrom
-        # (sigma / distance)^6
-        C6  = 4.0 * epsilon_ij * (sigma_ij**6)
-        C12 = 4.0 * epsilon_ij * (sigma_ij**12)
-        d6  = distance ** 6
-        d12 = distance ** 12
-
-        return C12 / d12 - C6 / d6
+        if distance <= 0.01:
+            return 10.0  # cap repulsion to avoid blow-up
+        rr  = rmin_ij / distance
+        rr6 = rr ** 6
+        rr12 = rr6 * rr6
+        return eps_ij * (rr12 - 2.0 * rr6)
 
     def resVdWContribution(self, alldistpairs, recatomInfor, ligatomInfor,
                            vdwParams, repulsionMax=10.0 ) :
@@ -602,29 +617,29 @@ class BindingFeature :
                 atomtype1 = recline.split()[-1]
                 atomtype2 = ligline.split()[-1]
 
-            if atomtype1 not in vdwParams.keys() :
-                if atomtype1 == " N1+" :
+            if atomtype1 not in vdwParams :
+                if atomtype1 in (" N1+", "N1+") :
                     atomtype1 = "N"
-                elif atomtype1 in ["L", "CL"]:
+                elif atomtype1 in ("L", "CL", "Cl"):
                     atomtype1 = "Cl"
-                elif atomtype1 in ["B", "BR"]:
+                elif atomtype1 in ("B", "BR", "Br"):
                     atomtype1 = "Br"
                 else :
                     atomtype1 = "DU"
-            if atomtype2 not in vdwParams.keys() :
-                if atomtype2 == " N1+":
+            if atomtype2 not in vdwParams :
+                if atomtype2 in (" N1+", "N1+"):
                     atomtype2 = "N"
-                elif atomtype2 in ["L", "CL", "Cl"]:
-                    atomtype1 = "Cl"
-                elif atomtype2 in ["B", "BR", "R", "Br"]:
-                    atomtype1 = "Br"
+                elif atomtype2 in ("L", "CL", "Cl"):
+                    atomtype2 = "Cl"
+                elif atomtype2 in ("B", "BR", "R", "Br"):
+                    atomtype2 = "Br"
                 else :
                     atomtype2 = "DU"
 
             # calculate L J potential per residue
             if alldistpairs[atom] <= self.vdwEnerCutoff :
-                # transfer angstrom to nanometer by multiplying 0.1
-                energy = self.atomicVdWEnergy(atomtype1, atomtype2, alldistpairs[atom] * 0.1, vdwParams)
+                # distance already in Angstrom; atomicVdWEnergy expects Angstrom
+                energy = self.atomicVdWEnergy(atomtype1, atomtype2, alldistpairs[atom])
             else:
                 energy = 0.0
                 #energy = self.atomicVdWEnergy(atomtype1, atomtype2, maxCutoff, vdwParams)
@@ -669,46 +684,39 @@ class BindingFeature :
                 ligline = ligatomInfor[atom.split("+")[1]]
 
                 # unrecognized atomtype occur, "dummy" atomtype is used
-                # create all the combinations of the atomtypes known
+                # PDBQT files store atom type in the last column; for plain PDB
+                # we fall back to the element symbol (column index 76-78; PDB fixed-width).
                 if self.pdbqt:
                     ligAtom = ligline.split()[-1]
-                else :
-                    #ligAtom = ligline.split()[-1]
-                    ligAtom = ligline[13]
-
-                if ligAtom not in self.vdwParameters_.keys():
-                    if ligAtom == "N1+":
-                        ligAtom = "N"
-
-                    elif ligAtom in ["L", "CL", "Cl"] :
-                        ligAtom = "Cl"
-                    elif ligAtom in ["B", "BR", "Br", "R"] :
-                        ligAtom = "Br"
-                    else:
-                        ligAtom = "DU"
-                        print("DU {}".format(ligAtom), ligline)
-
-
-                if self.pdbqt :
                     recAtom = recline.split()[-1]
                 else :
-                    #recAtom = recline.split()[-1]
-                    recAtom = recline[13]
+                    # PDB element is in cols 76-78 (0-based). Safe fallback: split()[-1]
+                    toks_l = ligline.split()
+                    toks_r = recline.split()
+                    ligAtom = toks_l[-1] if len(toks_l) >= 12 else (ligline[76:78].strip() or "DU")
+                    recAtom = toks_r[-1] if len(toks_r) >= 12 else (recline[76:78].strip() or "DU")
 
-                if recAtom not in self.vdwParameters_.keys() :
-                    if recAtom == "N1+" :
-                        recAtom = "N"
-                    elif recAtom == "CL" :
-                        recAtom = "Cl"
-                    else :
-                        recAtom = "DU"
+                # normalize halogen / charged atom types
+                if ligAtom in ("N1+", " N1+"):
+                    ligAtom = "N"
+                elif ligAtom in ("L", "CL", "Cl", "CL"):
+                    ligAtom = "Cl"
+                elif ligAtom in ("B", "BR", "Br", "R"):
+                    ligAtom = "Br"
+                if recAtom in ("N1+", " N1+"):
+                    recAtom = "N"
+                elif recAtom in ("L", "CL", "Cl"):
+                    recAtom = "Cl"
+                elif recAtom in ("B", "BR", "Br"):
+                    recAtom = "Br"
+                if ligAtom not in self.vdwParameters_:
+                    ligAtom = "DU"
+                if recAtom not in self.vdwParameters_:
+                    recAtom = "DU"
 
                 atomTypeCombination = recAtom + "_" + ligAtom
-                if atomTypeCombination not in atomTypeCounts.keys():
-                    # apply a switch function to smooth the transition
-                    atomTypeCounts[atomTypeCombination] = self.switchFuction(distance, self.distCutoff*2.0)
-                else:
-                    atomTypeCounts[atomTypeCombination] += self.switchFuction(distance, self.distCutoff*2.0)
+                sw = self.switchFuction(distance, self.distCutoff*2.0)
+                atomTypeCounts[atomTypeCombination] = atomTypeCounts.get(atomTypeCombination, 0.0) + sw
 
         return atomTypeCounts
 
@@ -823,20 +831,17 @@ class BindingFeature :
                                                                 recatomDetailInfor,
                                                                 )
             # calculate Van der Waals contributions. Backbone and SideChain are seperated
-            # this function works fine
+            # Use self.pdbqt flag; legacy call had a stray extra kwarg which is removed
             reslist2, backvan, sidevan = self.resVdWContribution(alldistpairs,
                                                                  recatomDetailInfor,
                                                                  ligatomDetailInfor,
-                                                                 vdwParams ,
-                                                                 pdbqt=False,
+                                                                 repulsionMax=10.0,
                                                                  )
 
             # for all the atomtypes combinations, what are the contacts counts given a cutoff as 6.0 angstrom?
-            # this function passes the test and works fine
             atomTypeCounts = self.contactsAtomtype(alldistpairs,
                                                    recatomDetailInfor,
                                                    ligatomDetailInfor,
-                                                   vdwParams,
                                                     )
 
             reslist3, backcol, sidecol = self.coulombE(alldistpairs,

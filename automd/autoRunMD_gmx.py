@@ -57,12 +57,83 @@ class AutoRunMD :
         return self
 
     def add_solvent(self, ingro, outgro, intop="topol", spc="spc903.gro"):
+        """
+        Add solvent (water) to the simulation box.
+        
+        Parameters
+        ----------
+        ingro : str
+            Input GRO file (typically the boxed structure)
+        outgro : str
+            Output GRO file (will contain solvent)
+        intop : str, default="topol"
+            Topology file name (will be modified to include solvent)
+        spc : str, default="spc903.gro"
+            Solvent box file name
+            
+        Returns
+        -------
+        self : AutoRunMD instance
+        """
+        
+        print(f"\n[add_solvent] 开始添加溶剂...")
+        print(f"  [add_solvent] 输入文件: {ingro}")
+        print(f"  [add_solvent] 输出文件: {outgro}")
+        print(f"  [add_solvent] 拓扑文件: {intop}")
+        print(f"  [add_solvent] 溶剂盒子文件: {spc}")
+        print(f"  [add_solvent] PROJECT_ROOT: {self.PROJECT_ROOT}")
 
-        if not os.path.exists(spc):
-            spc = os.path.join(self.PROJECT_ROOT, "data/spc903.gro")
+        # 检查输入文件是否存在
+        if not os.path.exists(ingro):
+            error_msg = f"Input file not found: {ingro}"
+            print(f"  [add_solvent] 错误: {error_msg}")
+            raise FileNotFoundError(error_msg)
+        else:
+            print(f"  [add_solvent] ✓ 输入文件存在")
 
-        cmd = "gmx solvate -cp %s -cs %s -o %s -p %s " % (ingro, spc, outgro, intop)
-        self.run_suprocess(cmd)
+        # 尝试多个位置查找spc文件
+        spc_paths = [
+            spc,  # 用户指定的路径
+            os.path.join(self.PROJECT_ROOT, "data", "spc903.gro"),  # 项目data目录
+            "/usr/share/gromacs/top/spc903.gro",  # 系统GROMACS目录
+            "/usr/local/share/gromacs/top/spc903.gro",
+            "/opt/gromacs/share/gromacs/top/spc903.gro"
+        ]
+
+        print(f"  [add_solvent] 查找溶剂盒子文件...")
+        spc_found = None
+        for i, spc_path in enumerate(spc_paths):
+            print(f"    [{i+1}] 检查: {spc_path}")
+            if spc_path and os.path.exists(spc_path):
+                spc_found = spc_path
+                print(f"  [add_solvent] ✓ 找到溶剂盒子文件: {spc_found}")
+                break
+            else:
+                print(f"    ✗ 不存在")
+
+        if not spc_found:
+            error_msg = (
+                f"Solvent box file (spc903.gro) not found.\n"
+                f"Please ensure GROMACS is installed and spc903.gro is available.\n"
+                f"Searched locations:\n"
+                + "\n".join([f"  - {p}" for p in spc_paths if p])
+                + f"\n\nOr place spc903.gro in: {os.path.join(self.PROJECT_ROOT, 'data')}"
+            )
+            print(f"  [add_solvent] 错误: {error_msg}")
+            raise FileNotFoundError(error_msg)
+
+        # 构建并运行命令
+        # 注意：使用 -cs 参数指定溶剂盒子
+        cmd = "gmx solvate -cp %s -cs %s -o %s -p %s " % (ingro, spc_found, outgro, intop)
+        print(f"  [add_solvent] 运行命令: {cmd}")
+        
+        try:
+            self.run_suprocess(cmd)
+            print(f"  [add_solvent] ✓ 溶剂添加成功")
+            print(f"  [add_solvent] 输出文件: {outgro}")
+        except Exception as e:
+            print(f"  [add_solvent] ✗ 溶剂添加失败: {e}")
+            raise
 
         return self
 

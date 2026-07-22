@@ -118,7 +118,7 @@ class AutoRunMD:
             "nsteps": [nsteps,],
             "tc-grps": groups,
             "ref_t": [temperature, ] * len(groups),
-            "gen_val": [genval, ],
+            "gen-vel": [genval, ],
             "energygrps": groups,
         }
 
